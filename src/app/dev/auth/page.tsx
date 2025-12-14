@@ -1,7 +1,7 @@
-import { createClient } from "@shared/supabase/server";
+import { createClient } from '@shared/supabase/server';
 
 const SignInActions = () => {
-  const next = encodeURIComponent("/dev/auth");
+  const next = encodeURIComponent('/dev/auth');
   const loginLink = `/api/auth/login?next=${next}`;
 
   return (
@@ -35,7 +35,7 @@ const Greeting = ({ email, name }: { email: string | null; name: string | null }
   <div className="rounded-xl border border-zinc-200 bg-white p-6 text-center">
     <p className="text-sm text-zinc-500">현재 로그인된 계정</p>
     <p className="mt-2 text-lg font-semibold text-zinc-900">
-      {name ?? email ?? "알 수 없음"}
+      {name ?? email ?? '알 수 없음'}
     </p>
     {email && (
       <p className="text-sm text-zinc-500" aria-label="email">
@@ -61,7 +61,7 @@ export default async function Home() {
             AI Bouquet Maker
           </p>
           <h1 className="text-2xl font-bold text-zinc-900">
-            {isSignedIn ? "환영합니다!" : "시작하려면 로그인하세요"}
+            {isSignedIn ? '환영합니다!' : '시작하려면 로그인하세요'}
           </h1>
           <p className="text-sm text-zinc-500">
             구글 계정 하나로 로그인/회원가입을 빠르게 끝낼 수 있어요.

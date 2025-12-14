@@ -1,15 +1,15 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from 'next/server';
 
-import { createClient } from "@shared/supabase/server";
+import { createClient } from '@shared/supabase/server';
 
-import { buildCallbackUrl, resolveProvider } from "../helpers";
+import { buildCallbackUrl, resolveProvider } from '../helpers';
 
 export async function GET(request: NextRequest) {
   try {
     const provider = resolveProvider(
-      request.nextUrl.searchParams.get("provider")
+      request.nextUrl.searchParams.get('provider'),
     );
-    const next = request.nextUrl.searchParams.get("next");
+    const next = request.nextUrl.searchParams.get('next');
     const supabase = await createClient();
 
     const { data, error } = await supabase.auth.signInWithOAuth({
@@ -20,13 +20,13 @@ export async function GET(request: NextRequest) {
     });
 
     if (error || !data?.url) {
-      throw new Error(error?.message ?? "로그인을 시작할 수 없어요.");
+      throw new Error(error?.message ?? '로그인을 시작할 수 없어요.');
     }
 
     return NextResponse.redirect(data.url, { status: 302 });
   } catch (error) {
     const message =
-      error instanceof Error ? error.message : "로그인 요청을 처리할 수 없어요.";
+      error instanceof Error ? error.message : '로그인 요청을 처리할 수 없어요.';
 
     return NextResponse.json({ error: message }, { status: 400 });
   }
