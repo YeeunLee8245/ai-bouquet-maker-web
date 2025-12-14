@@ -2,11 +2,14 @@ import { defineConfig, globalIgnores } from 'eslint/config';
 import nextVitals from 'eslint-config-next/core-web-vitals';
 import nextTs from 'eslint-config-next/typescript';
 import stylistic from '@stylistic/eslint-plugin';
+// eslint-plugin-tailwindcss는 Tailwind CSS v4와 호환되지 않아 주석 처리
+// import tailwindcss from 'eslint-plugin-tailwindcss';
 
 const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
   // Override default ignores of eslint-config-next.
+
   globalIgnores([
     // Default ignores of eslint-config-next:
     '.next/**',

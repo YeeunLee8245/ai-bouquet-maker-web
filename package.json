@@ -9,15 +9,19 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint ./src",
+    "lint:debug": "eslint ./src --debug",
+    "lint:fix": "eslint ./src --fix"
   },
   "dependencies": {
+    "@tailwindcss/vite": "^4.1.18",
     "axios": "^1.13.2",
     "next": "16.0.7",
     "react": "19.2.1",
     "react-dom": "19.2.0"
   },
   "devDependencies": {
+    "@eslint/js": "^9.39.2",
     "@stylistic/eslint-plugin": "^5.6.1",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
@@ -25,7 +29,8 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.0.7",
-    "tailwindcss": "^4",
-    "typescript": "^5"
+    "tailwindcss": "^4.1.17",
+    "typescript": "^5",
+    "typescript-eslint": "^8.49.0"
   }
 }
