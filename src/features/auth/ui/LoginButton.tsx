@@ -1,9 +1,9 @@
-import React from 'react'
+import React from 'react';
 
 const LoginButton = () => {
   return (
     <div>LoginButton</div>
-  )
-}
+  );
+};
 
-export default LoginButton
+export default LoginButton;
