@@ -1,3 +1,60 @@
+/**
+ * @swagger
+ * /api/auth/logout:
+ *   get:
+ *     tags:
+ *       - Auth
+ *     summary: 로그아웃 (리다이렉트)
+ *     description: |
+ *       현재 사용자를 로그아웃하고 지정된 경로로 리다이렉트합니다.
+ *       `next`가 없으면 `/login`으로 이동합니다.
+ *     parameters:
+ *       - in: query
+ *         name: next
+ *         required: false
+ *         schema:
+ *           type: string
+ *         description: 로그아웃 후 리다이렉트할 경로
+ *     responses:
+ *       302:
+ *         description: 로그아웃 후 목적지로 리다이렉트
+ *       500:
+ *         description: 로그아웃 실패
+ *
+ *   post:
+ *     tags:
+ *       - Auth
+ *     summary: 로그아웃 (JSON)
+ *     description: |
+ *       현재 사용자를 로그아웃하고 JSON으로 다음 목적지를 반환합니다.
+ *     requestBody:
+ *       required: false
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               next:
+ *                 type: string
+ *                 example: /login
+ *     responses:
+ *       200:
+ *         description: 로그아웃 성공
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 next:
+ *                   type: string
+ *                   example: /login
+ *       500:
+ *         description: 로그아웃 실패
+ */
+
 import { NextRequest, NextResponse } from 'next/server';
 
 import { createClient } from '@shared/supabase/server';

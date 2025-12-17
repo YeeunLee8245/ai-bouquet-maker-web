@@ -1,3 +1,34 @@
+/**
+ * @swagger
+ * /api/auth/login:
+ *   get:
+ *     tags:
+ *       - Auth
+ *     summary: OAuth로 로그인
+ *     description: 인증을 위해 OAuth 제공자로 리다이렉트합니다
+ *     parameters:
+ *       - in: query
+ *         name: provider
+ *         required: true
+ *         schema:
+ *           type: string
+ *           enum:
+ *             - google
+ *             - github
+ *         description: 'OAuth 제공자 (예: google, github)'
+ *       - in: query
+ *         name: next
+ *         required: false
+ *         schema:
+ *           type: string
+ *         description: 로그인 완료 후 리다이렉트할 경로
+ *     responses:
+ *       302:
+ *         description: OAuth 제공자로 리다이렉트
+ *       400:
+ *         description: 잘못된 요청
+ */
+
 import { NextRequest, NextResponse } from 'next/server';
 
 import { createClient } from '@shared/supabase/server';

@@ -1,3 +1,16 @@
+/**
+ * @swagger
+ * /api/auth/signin:
+ *   post:
+ *     tags:
+ *       - Auth
+ *     summary: OAuth로 로그인
+ *     description: 인증을 위해 OAuth 제공자로 리다이렉트합니다
+ *     responses:
+ *       302:
+ *         description: OAuth 제공자로 리다이렉트
+ */
+
 import { NextRequest, NextResponse } from 'next/server';
 
 import { createClient } from '@shared/supabase/server';
