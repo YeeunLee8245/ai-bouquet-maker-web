@@ -8,6 +8,7 @@
  *     description: |
  *       현재 사용자를 로그아웃하고 지정된 경로로 리다이렉트합니다.
  *       `next`가 없으면 `/login`으로 이동합니다.
+ *       브라우저에서 직접 이동하거나 링크를 눌렀을 때 사용하세요.
  *     parameters:
  *       - in: query
  *         name: next
@@ -27,6 +28,7 @@
  *     summary: 로그아웃 (JSON)
  *     description: |
  *       현재 사용자를 로그아웃하고 JSON으로 다음 목적지를 반환합니다.
+ *       fetch/AJAX 기반 로그아웃 버튼 등에서 사용하세요.
  *     requestBody:
  *       required: false
  *       content:
@@ -73,6 +75,7 @@ const signOut = async () => {
 };
 
 export const GET = async (request: NextRequest) => {
+  // 사용자가 브라우저에서 직접 이동할 때 호출되어 로그아웃 후 목적지로 리다이렉트
   try {
     await signOut();
     const next = request.nextUrl.searchParams.get('next');
@@ -94,6 +97,7 @@ export const GET = async (request: NextRequest) => {
 };
 
 export const POST = async (request: NextRequest) => {
+  // 클라이언트가 fetch로 호출할 때 사용하며 JSON으로 다음 경로를 반환
   const body = await request.json().catch(() => ({} as { next?: string }));
 
   try {

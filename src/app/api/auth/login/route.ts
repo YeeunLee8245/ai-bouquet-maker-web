@@ -14,8 +14,8 @@
  *           type: string
  *           enum:
  *             - google
- *             - github
- *         description: 'OAuth 제공자 (예: google, github)'
+ *             - kakao
+ *         description: 'OAuth 제공자 (예: google, kakao)'
  *       - in: query
  *         name: next
  *         required: false

@@ -3,6 +3,7 @@
 import { useEffect, useRef } from 'react';
 import SwaggerUIBundle from 'swagger-ui-dist/swagger-ui-bundle';
 import 'swagger-ui-dist/swagger-ui.css';
+import './swagger.css';
 
 export default function ApiDocsPage() {
   const elRef = useRef<HTMLDivElement>(null);
@@ -19,5 +20,9 @@ export default function ApiDocsPage() {
     });
   }, []);
 
-  return <div ref={elRef} />;
+  return (
+    <div className="swagger-page">
+      <div ref={elRef} />
+    </div>
+  );
 }
