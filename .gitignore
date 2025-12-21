@@ -13,6 +13,3 @@
 
 # environment variables
 /.env*
-
-# package-lock.json
-package-lock.json
