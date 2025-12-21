@@ -1,3 +1,6 @@
+# macOS
+.DS_Store
+
 # next.js
 /.next/
 /out/
@@ -10,4 +13,6 @@
 
 # environment variables
 /.env*
+
+# package-lock.json
 package-lock.json
