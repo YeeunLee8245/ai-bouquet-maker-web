@@ -20,12 +20,15 @@
       }
     ],
     "paths": {
+      "@/*": ["./*"],
       "@app/*": ["app/*"],
       "@processes/*": ["processes/*"],
       "@widgets/*": ["widgets/*"],
       "@features/*": ["features/*"],
       "@entities/*": ["entities/*"],
-      "@shared/*": ["shared/*"]
+      "@shared/*": ["shared/*"],
+      "@services/*": ["services/*"],
+      "@hooks/*": ["hooks/*"]
     }
   },
   "include": [
