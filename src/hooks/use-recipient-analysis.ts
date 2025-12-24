@@ -20,7 +20,6 @@ interface RecommendAPIResponse {
     };
     score: number;
     matchedTags: string[];
-    reason: string;
   }>;
   ranked: Array<{
     flower_id: number;

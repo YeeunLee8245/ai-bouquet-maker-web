@@ -56,10 +56,45 @@ import type { EmotionAnalysisResponse, RecipientAnalysisResponse } from '@/lib/o
  *                   $ref: '#/components/schemas/EmotionAnalysisResponse'
  *                 recommendations:
  *                   type: array
- *                   description: 추천된 꽃 목록
+ *                   description: |
+ *                     UI 렌더링용 추천 꽃 목록.
+ *                     꽃 이름, 이미지, 매칭된 태그 등 사용자에게 보여줄 정보를 포함합니다.
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       flower:
+ *                         type: object
+ *                         properties:
+ *                           id:
+ *                             type: integer
+ *                           name_ko:
+ *                             type: string
+ *                           image_url:
+ *                             type: string
+ *                             nullable: true
+ *                       score:
+ *                         type: number
+ *                         description: 추천 점수
+ *                       matchedTags:
+ *                         type: array
+ *                         items:
+ *                           type: string
+ *                         description: 매칭된 감정/상황 태그
  *                 ranked:
  *                   type: array
- *                   description: 점수 기반 순위 목록
+ *                   description: |
+ *                     DB 저장용 추천 데이터.
+ *                     꽃 ID와 점수만 포함하여 가볍게 저장합니다.
+ *                     사용자가 꽃을 선택한 후 user_recommendations_ranked 테이블에 저장할 때 사용됩니다.
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       flower_id:
+ *                         type: integer
+ *                       flower_meaning_id:
+ *                         type: integer
+ *                       score:
+ *                         type: number
  *       400:
  *         description: 잘못된 요청
  *       500:

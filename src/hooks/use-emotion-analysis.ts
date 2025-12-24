@@ -19,7 +19,6 @@ interface RecommendAPIResponse {
     };
     score: number;
     matchedTags: string[];
-    reason: string;
   }>;
   ranked: Array<{
     flower_id: number;
@@ -97,13 +96,13 @@ export function useEmotionAnalysis(): UseEmotionAnalysisReturn {
           inputText: text,
         }));
         sessionStorage.setItem('recommendationMessage', result.analysis.message || '');
-        
+
         if (result.analysis.title) {
           sessionStorage.setItem('recommendationTitle', result.analysis.title);
         }
 
         const inferredRecipient =
-          result.analysis.recipient ||
+          (result.analysis as { recipient?: string }).recipient ||
           result.analysis.tags?.relation_tags?.[0] ||
           '';
         if (inferredRecipient) {
