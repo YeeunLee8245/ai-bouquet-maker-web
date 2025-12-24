@@ -2,20 +2,31 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { getUser } from '@/lib/auth';
 import { analyzeEmotion } from '@services/emotion-analysis';
-import { analyzeRecipient } from '@services/recipient-analysis';
 import { getRecommendationsFromAnalysis } from '@/lib/recommendation';
-import type { EmotionAnalysisResponse, RecipientAnalysisResponse } from '@/lib/openai';
 
 /**
  * @swagger
- * /api/recommend:
+ * /api/recommend/ai/emotion:
  *   post:
  *     tags:
  *       - Recommend
- *     summary: 통합 꽃 추천 API
+ *     summary: AI 감정 기반 꽃 추천
  *     description: |
- *       텍스트를 분석하여 꽃을 추천하고 DB에 저장합니다.
- *       한 번의 호출로 분석 → 추천 → 저장까지 완료됩니다.
+ *       사용자의 감정/상황 텍스트를 AI가 분석하여 꽃을 추천합니다.
+ *
+ *       ## 점수 계산 방식
+ *
+ *       | 요소 | 가중치 | 설명 |
+ *       |------|--------|------|
+ *       | emotion_tags 매칭 | **6점** | 감정 태그 매칭 (최우선) |
+ *       | situation_tags 매칭 | **5점** | 상황 태그 매칭 |
+ *       | relation_tags 매칭 | **3점** | 관계 태그 매칭 |
+ *       | style_tags 매칭 | **2점** | 스타일 태그 매칭 |
+ *       | AI 추천 꽃 보너스 | **+18점** | AI가 직접 추천한 꽃 |
+ *       | 추천 색상 매칭 | **+6점** | AI 추천 색상과 일치 |
+ *       | 대표 꽃말 보너스 | **+2점** | is_primary가 true인 꽃말 |
+ *
+ *       **계절 필터링**: 현재 계절에 맞는 꽃만 추천
  *     requestBody:
  *       required: true
  *       content:
@@ -23,20 +34,14 @@ import type { EmotionAnalysisResponse, RecipientAnalysisResponse } from '@/lib/o
  *           schema:
  *             type: object
  *             required:
- *               - type
  *               - text
  *             properties:
- *               type:
- *                 type: string
- *                 enum: [emotion, recipient]
- *                 description: 분석 타입 (감정 기반 / 대상 기반)
- *                 example: "emotion"
  *               text:
  *                 type: string
  *                 minLength: 10
  *                 maxLength: 1000
- *                 description: 분석할 텍스트
- *                 example: "친구의 생일을 축하해주고 싶어요"
+ *                 description: 분석할 감정/상황 텍스트
+ *                 example: "요즘 많이 지쳐있어서 위로받고 싶어요"
  *     responses:
  *       200:
  *         description: 추천 성공
@@ -56,45 +61,10 @@ import type { EmotionAnalysisResponse, RecipientAnalysisResponse } from '@/lib/o
  *                   $ref: '#/components/schemas/EmotionAnalysisResponse'
  *                 recommendations:
  *                   type: array
- *                   description: |
- *                     UI 렌더링용 추천 꽃 목록.
- *                     꽃 이름, 이미지, 매칭된 태그 등 사용자에게 보여줄 정보를 포함합니다.
- *                   items:
- *                     type: object
- *                     properties:
- *                       flower:
- *                         type: object
- *                         properties:
- *                           id:
- *                             type: integer
- *                           name_ko:
- *                             type: string
- *                           image_url:
- *                             type: string
- *                             nullable: true
- *                       score:
- *                         type: number
- *                         description: 추천 점수
- *                       matchedTags:
- *                         type: array
- *                         items:
- *                           type: string
- *                         description: 매칭된 감정/상황 태그
+ *                   description: UI 렌더링용 추천 꽃 목록
  *                 ranked:
  *                   type: array
- *                   description: |
- *                     DB 저장용 추천 데이터.
- *                     꽃 ID와 점수만 포함하여 가볍게 저장합니다.
- *                     사용자가 꽃을 선택한 후 user_recommendations_ranked 테이블에 저장할 때 사용됩니다.
- *                   items:
- *                     type: object
- *                     properties:
- *                       flower_id:
- *                         type: integer
- *                       flower_meaning_id:
- *                         type: integer
- *                       score:
- *                         type: number
+ *                   description: DB 저장용 추천 데이터
  *       400:
  *         description: 잘못된 요청
  *       500:
@@ -103,16 +73,9 @@ import type { EmotionAnalysisResponse, RecipientAnalysisResponse } from '@/lib/o
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { type, text } = body;
+    const { text } = body;
 
-    // 1. 입력 검증
-    if (!type || !['emotion', 'recipient'].includes(type)) {
-      return NextResponse.json(
-        { error: 'type은 "emotion" 또는 "recipient"이어야 합니다.' },
-        { status: 400 },
-      );
-    }
-
+    // 입력 검증
     if (!text || typeof text !== 'string') {
       return NextResponse.json(
         { error: '텍스트를 입력해주세요.' },
@@ -134,25 +97,19 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // 2. AI 분석
-    let analysis: EmotionAnalysisResponse | RecipientAnalysisResponse;
-    if (type === 'emotion') {
-      analysis = await analyzeEmotion(text);
-    } else {
-      analysis = await analyzeRecipient(text);
-    }
+    // AI 분석
+    const analysis = await analyzeEmotion(text);
 
-    // 3. 점수 계산 및 꽃 추천
-    const { recommendations, ranked } = await getRecommendationsFromAnalysis(analysis, type);
+    // 점수 계산 및 꽃 추천
+    const { recommendations, ranked } = await getRecommendationsFromAnalysis(analysis, 'emotion');
 
-    // 4. 로그인 사용자면 DB에 저장
+    // 로그인 사용자면 DB에 저장
     let recommendationId: string | null = null;
     const user = await getUser();
 
     if (user) {
       const supabase = await createClient();
 
-      // public.users에서 사용자 ID 조회
       const { data: publicUser, error: userError } = await supabase
         .from('users')
         .select('id')
@@ -160,12 +117,11 @@ export async function POST(request: NextRequest) {
         .single();
 
       if (!userError && publicUser) {
-        // recommendations 테이블에 저장
         const { data: newRecommendation, error: saveError } = await supabase
           .from('recommendations')
           .insert({
             user_id: publicUser.id,
-            recommendation_type: type,
+            recommendation_type: 'emotion',
             input_text: text,
             analysis_result: analysis,
             recommended_flowers: ranked,
@@ -182,7 +138,6 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // 5. 응답 반환
     return NextResponse.json({
       success: true,
       recommendation_id: recommendationId,
@@ -190,13 +145,13 @@ export async function POST(request: NextRequest) {
       recommendations,
       ranked,
       metadata: {
-        type,
+        type: 'emotion',
         input_text: text,
         flower_count: recommendations.length,
       },
     });
   } catch (error) {
-    console.error('Recommend API Error:', error);
+    console.error('AI Emotion Recommend Error:', error);
     return NextResponse.json(
       { error: '추천 중 오류가 발생했습니다.' },
       { status: 500 },

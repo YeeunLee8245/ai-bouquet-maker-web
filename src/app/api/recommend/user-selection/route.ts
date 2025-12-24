@@ -4,7 +4,7 @@ import { getUser } from '@/lib/auth';
 
 /**
  * @swagger
- * /api/recommend/selection:
+ * /api/recommend/user-selection:
  *   post:
  *     tags:
  *       - Recommend

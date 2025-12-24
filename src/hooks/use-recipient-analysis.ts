@@ -68,14 +68,11 @@ export function useRecipientAnalysis(): UseRecipientAnalysisReturn {
         return;
       }
 
-      // 통합 API 호출 (분석 + 추천 + 저장 한번에)
-      const response = await fetch('/api/recommend', {
+      // AI 대상 맞춤 추천 API 호출
+      const response = await fetch('/api/recommend/ai/recipient', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          type: 'recipient',
-          text: description,
-        }),
+        body: JSON.stringify({ text: description }),
       });
 
       const result: RecommendAPIResponse = await response.json();

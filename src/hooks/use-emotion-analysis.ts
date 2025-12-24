@@ -67,14 +67,11 @@ export function useEmotionAnalysis(): UseEmotionAnalysisReturn {
         return;
       }
 
-      // 통합 API 호출 (분석 + 추천 + 저장 한번에)
-      const response = await fetch('/api/recommend', {
+      // AI 감정 기반 추천 API 호출
+      const response = await fetch('/api/recommend/ai/emotion', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          type: 'emotion',
-          text,
-        }),
+        body: JSON.stringify({ text }),
       });
 
       const result: RecommendAPIResponse = await response.json();

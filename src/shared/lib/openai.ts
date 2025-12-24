@@ -27,6 +27,7 @@ export interface EmotionAnalysisResponse {
   tags: AnalysisTags;
   recommend_flowers: RecommendFlower[];
   message: string;
+  recipient?: string;
 }
 
 export interface RecipientAnalysisResponse extends EmotionAnalysisResponse {
