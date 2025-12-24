@@ -14,7 +14,8 @@ import { getRecommendationsFromAnalysis } from '@/lib/recommendation';
  *     description: |
  *       사용자의 감정/상황 텍스트를 AI가 분석하여 꽃을 추천합니다.
  *
- *       ## 점수 계산 방식
+ *       <details>
+ *       <summary>📊 점수 계산 방식 (클릭하여 펼치기)</summary>
  *
  *       | 요소 | 가중치 | 설명 |
  *       |------|--------|------|
@@ -27,6 +28,7 @@ import { getRecommendationsFromAnalysis } from '@/lib/recommendation';
  *       | 대표 꽃말 보너스 | **+2점** | is_primary가 true인 꽃말 |
  *
  *       **계절 필터링**: 현재 계절에 맞는 꽃만 추천
+ *       </details>
  *     requestBody:
  *       required: true
  *       content:
@@ -52,26 +54,76 @@ import { getRecommendationsFromAnalysis } from '@/lib/recommendation';
  *               properties:
  *                 success:
  *                   type: boolean
- *                   example: true
  *                 recommendation_id:
  *                   type: string
  *                   format: uuid
- *                   description: 저장된 추천 ID (로그인 시에만)
+ *                   nullable: true
  *                 analysis:
- *                   $ref: '#/components/schemas/EmotionAnalysisResponse'
+ *                   type: object
  *                 recommendations:
  *                   type: array
- *                   description: UI 렌더링용 추천 꽃 목록
  *                 ranked:
  *                   type: array
- *                   description: DB 저장용 추천 데이터
+ *                 metadata:
+ *                   type: object
+ *             example:
+ *               success: true
+ *               recommendation_id: "18561ccb-20c4-4bdb-8905-ec2647f471c5"
+ *               analysis:
+ *                 title: "위로의 꽃"
+ *                 tags:
+ *                   emotion_tags: ["위로", "희망"]
+ *                   situation_tags: []
+ *                   relation_tags: []
+ *                   style_tags: []
+ *                 recommend_flowers:
+ *                   - flower_name: "안개꽃"
+ *                     color: "하양"
+ *                     reason: "순수하고 편안한 느낌을 줍니다."
+ *                 message: "힘든 날이 지나가고, 당신에게 평화가 찾아오길 바랍니다."
+ *                 recipient: ""
+ *               recommendations:
+ *                 - flower:
+ *                     id: 12
+ *                     name_ko: "안개꽃"
+ *                     image_url: "gypsophila.jpg"
+ *                   score: 26
+ *                   matchedTags: ["위로", "AI 추천", "하양 컬러"]
+ *                 - flower:
+ *                     id: 5
+ *                     name_ko: "프리지아"
+ *                     image_url: "freesia.jpg"
+ *                   score: 18
+ *                   matchedTags: ["희망"]
+ *               ranked:
+ *                 - flower_id: 12
+ *                   flower_meaning_id: 24
+ *                   score: 26
+ *                 - flower_id: 5
+ *                   flower_meaning_id: 10
+ *                   score: 18
+ *               metadata:
+ *                 type: "emotion"
+ *                 input_text: "요즘 많이 지쳐있어서 위로받고 싶어요"
+ *                 flower_count: 2
  *       400:
  *         description: 잘못된 요청
+ *       401:
+ *         description: 인증 필요 (로그인 필수)
  *       500:
  *         description: 서버 오류
  */
 export async function POST(request: NextRequest) {
   try {
+    // 인증 확인 (AI 추천은 로그인 필수)
+    const user = await getUser();
+    if (!user) {
+      return NextResponse.json(
+        { error: '로그인이 필요한 서비스입니다.' },
+        { status: 401 },
+      );
+    }
+
     const body = await request.json();
     const { text } = body;
 
@@ -103,41 +155,36 @@ export async function POST(request: NextRequest) {
     // 점수 계산 및 꽃 추천
     const { recommendations, ranked } = await getRecommendationsFromAnalysis(analysis, 'emotion');
 
-    // 로그인 사용자면 DB에 저장
+    // DB에 저장 (이미 인증된 사용자)
     let recommendationId: string | null = null;
-    const user = await getUser();
+    const supabase = await createClient();
 
-    if (user) {
-      const supabase = await createClient();
+    const { data: publicUser, error: userError } = await supabase
+      .from('users')
+      .select('id')
+      .eq('auth_id', user.id)
+      .single();
 
-      const { data: publicUser, error: userError } = await supabase
-        .from('users')
+    if (!userError && publicUser) {
+      const { data: newRecommendation, error: saveError } = await supabase
+        .from('recommendations')
+        .insert({
+          user_id: publicUser.id,
+          recommendation_type: 'emotion',
+          input_text: text,
+          analysis_result: analysis,
+          recommended_flowers: ranked,
+          created_at: new Date().toISOString(),
+        })
         .select('id')
-        .eq('auth_id', user.id)
         .single();
 
-      if (!userError && publicUser) {
-        const { data: newRecommendation, error: saveError } = await supabase
-          .from('recommendations')
-          .insert({
-            user_id: publicUser.id,
-            recommendation_type: 'emotion',
-            input_text: text,
-            analysis_result: analysis,
-            recommended_flowers: ranked,
-            created_at: new Date().toISOString(),
-          })
-          .select('id')
-          .single();
-
-        if (!saveError && newRecommendation) {
-          recommendationId = newRecommendation.id;
-        } else {
-          console.error('Failed to save recommendation:', saveError);
-        }
+      if (!saveError && newRecommendation) {
+        recommendationId = newRecommendation.id;
+      } else {
+        console.error('Failed to save recommendation:', saveError);
       }
     }
-
     return NextResponse.json({
       success: true,
       recommendation_id: recommendationId,

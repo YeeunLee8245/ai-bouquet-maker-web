@@ -1,18 +1,22 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getCardRecommendations, getAvailableRelationships, getAvailableOccasions, getAllOccasions } from '@/lib/card-recommendation';
+import { createClient } from '@/lib/supabase/server';
+import { getUser } from '@/lib/auth';
+import { getCardRecommendations } from '@/lib/card-recommendation';
 
 /**
  * @swagger
  * /api/recommend/preset:
- *   post:
+ *   get:
  *     tags:
  *       - Recommend
  *     summary: 카드 선택 기반 꽃 추천
  *     description: |
- *       대상(relationship)과 상황(occasion) 카드를 선택하여 꽃을 추천받습니다.
+ *       대상(relationship)과 상황(occasion)을 선택하여 꽃을 추천받습니다.
  *       AI를 사용하지 않고 DB 기반 고정 점수 계산 방식을 사용합니다.
+ *       URL 공유가 가능하며, 조회 기록이 DB에 저장됩니다.
  *
- *       ## 점수 계산 방식
+ *       <details>
+ *       <summary>📊 점수 계산 방식 (클릭하여 펼치기)</summary>
  *
  *       | 요소 | 점수 | 설명 |
  *       |------|------|------|
@@ -24,41 +28,24 @@ import { getCardRecommendations, getAvailableRelationships, getAvailableOccasion
  *       | 회피 특성 | **-15점** | avoidTraits에 해당하면 감점 |
  *
  *       **계절 필터링**: 현재 계절에 맞는 꽃만 추천
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - relationship
- *               - occasion
- *             properties:
- *               relationship:
- *                 type: string
- *                 enum: [parents, lover, friend, colleague, teacher, elder, child]
- *                 description: |
- *                   대상 선택
- *                   - parents: 부모님
- *                   - lover: 연인
- *                   - friend: 친구
- *                   - colleague: 직장동료/상사
- *                   - teacher: 선생님/스승
- *                   - elder: 어르신
- *                   - child: 아이/조카
- *                 example: "lover"
- *               occasion:
- *                 type: string
- *                 enum: [birthday, anniversary, congratulation, sympathy, recovery, apology, proposal, graduation_admission, holiday, teachersday, promotion, retirement]
- *                 description: |
- *                   상황 선택
- *                   - birthday: 생일
- *                   - anniversary: 기념일
- *                   - congratulation: 축하
- *                   - graduation_admission: 졸업/입학
- *                   - holiday: 명절
- *                   - 등등
- *                 example: "birthday"
+ *       </details>
+ *     parameters:
+ *       - in: query
+ *         name: relationship
+ *         schema:
+ *           type: string
+ *           enum: [parents, lover, friend, colleague, teacher, elder, child]
+ *         required: true
+ *         description: 대상 선택
+ *         example: "lover"
+ *       - in: query
+ *         name: occasion
+ *         schema:
+ *           type: string
+ *           enum: [birthday, anniversary, congratulation, sympathy, recovery, apology, proposal, graduation_admission, holiday, teachersday, promotion, retirement]
+ *         required: true
+ *         description: 상황 선택
+ *         example: "birthday"
  *     responses:
  *       200:
  *         description: 추천 성공
@@ -66,89 +53,57 @@ import { getCardRecommendations, getAvailableRelationships, getAvailableOccasion
  *           application/json:
  *             schema:
  *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
- *                 recommendations:
- *                   type: array
- *                   description: UI 렌더링용 추천 꽃 목록
- *                 ranked:
- *                   type: array
- *                   description: DB 저장용 추천 데이터
- *                 metadata:
- *                   type: object
- *                   properties:
- *                     relationship:
- *                       type: string
- *                     occasion:
- *                       type: string
- *                     flower_count:
- *                       type: integer
+ *             example:
+ *               success: true
+ *               recommendation_id: "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+ *               recommendations:
+ *                 - flower:
+ *                     id: 28
+ *                     name_ko: "안스리움"
+ *                     image_url: "anthurium.jpg"
+ *                   score: 17
+ *                   matchedTags: ["사랑", "행복", "분홍 컬러"]
+ *                   inSeason: true
+ *                 - flower:
+ *                     id: 1
+ *                     name_ko: "장미"
+ *                     image_url: "rose.jpg"
+ *                   score: 16
+ *                   matchedTags: ["사랑", "상황 추천 꽃"]
+ *                   inSeason: true
+ *               ranked:
+ *                 - flower_id: 28
+ *                   flower_meaning_id: 58
+ *                   score: 17
+ *               metadata:
+ *                 type: "preset"
+ *                 relationship: "lover"
+ *                 occasion: "birthday"
+ *                 flower_count: 2
  *       400:
  *         description: 잘못된 요청
  *       404:
  *         description: 해당 조건에 맞는 꽃 없음
  *       500:
  *         description: 서버 오류
- *   get:
- *     tags:
- *       - Recommend
- *     summary: 카드 기반 추천 선택지(대상,상황) 목록 조회
- *     description: |
- *       사용 가능한 대상(relationship) 목록과 상황(occasion) 목록을 조회합니다.
- *
- *       - relationship 파라미터 없음: 관계 목록 + 전체 상황 목록 반환
- *       - relationship 파라미터 있음: 해당 관계에 맞는 상황 목록만 반환
- *     parameters:
- *       - in: query
- *         name: relationship
- *         schema:
- *           type: string
- *         required: false
- *         description: 관계 타입 (선택사항)
- *         example: "lover"
- *     responses:
- *       200:
- *         description: 옵션 목록 반환
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                 relationships:
- *                   type: array
- *                   items:
- *                     type: object
- *                     properties:
- *                       value:
- *                         type: string
- *                       label:
- *                         type: string
- *                       description:
- *                         type: string
- *                 occasions:
- *                   type: array
- *                   description: relationship 파라미터가 있을 때만 반환
  */
-export async function POST(request: NextRequest) {
+export async function GET(request: NextRequest) {
   try {
-    const body = await request.json();
-    const { relationship, occasion } = body;
+    const { searchParams } = new URL(request.url);
+    const relationship = searchParams.get('relationship');
+    const occasion = searchParams.get('occasion');
 
     // 입력 검증
-    if (!relationship || typeof relationship !== 'string') {
+    if (!relationship) {
       return NextResponse.json(
-        { error: 'relationship을 선택해주세요.' },
+        { error: 'relationship 파라미터가 필요합니다.' },
         { status: 400 },
       );
     }
 
-    if (!occasion || typeof occasion !== 'string') {
+    if (!occasion) {
       return NextResponse.json(
-        { error: 'occasion을 선택해주세요.' },
+        { error: 'occasion 파라미터가 필요합니다.' },
         { status: 400 },
       );
     }
@@ -163,8 +118,51 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // DB에 저장 (비회원도 저장)
+    let recommendationId: string | null = null;
+
+    try {
+      const supabase = await createClient();
+      const user = await getUser();
+
+      let userId: string | null = null;
+
+      if (user) {
+        const { data: publicUser } = await supabase
+          .from('users')
+          .select('id')
+          .eq('auth_id', user.id)
+          .single();
+
+        userId = publicUser?.id || null;
+      }
+
+      const { data: newRecommendation, error: saveError } = await supabase
+        .from('recommendations')
+        .insert({
+          user_id: userId,
+          recommendation_type: 'preset',
+          input_text: `${relationship}:${occasion}`,
+          relationship,
+          occasion,
+          recommended_flowers: ranked,
+          created_at: new Date().toISOString(),
+        })
+        .select('id')
+        .single();
+
+      if (!saveError && newRecommendation) {
+        recommendationId = newRecommendation.id;
+      } else if (saveError) {
+        console.error('Save error:', saveError);
+      }
+    } catch (dbError) {
+      console.error('Failed to save preset recommendation:', dbError);
+    }
+
     return NextResponse.json({
       success: true,
+      recommendation_id: recommendationId,
       recommendations,
       ranked,
       metadata: {
@@ -175,41 +173,9 @@ export async function POST(request: NextRequest) {
       },
     });
   } catch (error) {
-    console.error('Select Recommend API Error:', error);
+    console.error('Preset Recommend API Error:', error);
     return NextResponse.json(
       { error: '추천 중 오류가 발생했습니다.' },
-      { status: 500 },
-    );
-  }
-}
-
-export async function GET(request: NextRequest) {
-  try {
-    const { searchParams } = new URL(request.url);
-    const relationship = searchParams.get('relationship');
-
-    // relationship 파라미터가 있으면 해당 관계에 맞는 상황만 반환
-    if (relationship) {
-      const occasions = getAvailableOccasions(relationship);
-      return NextResponse.json({
-        success: true,
-        occasions,
-      });
-    }
-
-    // relationship 파라미터가 없으면 전체 관계 + 전체 상황 목록 반환
-    const relationships = getAvailableRelationships();
-    const occasions = getAllOccasions();
-
-    return NextResponse.json({
-      success: true,
-      relationships,
-      occasions,
-    });
-  } catch (error) {
-    console.error('Select Options API Error:', error);
-    return NextResponse.json(
-      { error: '옵션 조회 중 오류가 발생했습니다.' },
       { status: 500 },
     );
   }
