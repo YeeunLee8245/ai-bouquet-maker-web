@@ -2,7 +2,7 @@
   font-size: 20px;
   font-weight: 500;
   line-height: 28px;
-  letter-spacing: -0.4%;
+  letter-spacing: -0.08px;;
 }
 
 @utility text-title-medium {
@@ -32,7 +32,6 @@
 @utility text-boxy-xsmall {
   font-size: 12px;
   font-weight: 400;
-  line-height: auto;
 }
 
 @utility text-label-large {
@@ -45,7 +44,7 @@
   font-size: 16px;
   font-weight: 400;
   line-height: 20px;
-  letter-spacing: -0.4%;
+  letter-spacing: -0.064px;;
 }
 
 @utility text-label-small {
@@ -63,5 +62,4 @@
 @utility text-caption-medium {
   font-size: 12px;
   font-weight: 400;
-  line-height: auto;
 }

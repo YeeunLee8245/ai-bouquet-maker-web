@@ -13,6 +13,15 @@
     "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic",
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
     sans-serif;
+
+  /**
+   * Breakpoints
+   * - 모바일: ~ 767px(default)
+   * - 타블렛: 768px ~ 1023px
+   * - PC: 1024px ~
+   */
+  --breakpoint-tablet: 768px;
+  --breakpoint-pc: 1024px;
 }
 
 @theme inline {

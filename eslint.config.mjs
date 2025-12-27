@@ -2,6 +2,7 @@ import { defineConfig, globalIgnores } from 'eslint/config';
 import nextVitals from 'eslint-config-next/core-web-vitals';
 import nextTs from 'eslint-config-next/typescript';
 import stylistic from '@stylistic/eslint-plugin';
+import unusedImports from 'eslint-plugin-unused-imports';
 // eslint-plugin-tailwindcss는 Tailwind CSS v4와 호환되지 않아 주석 처리
 // import tailwindcss from 'eslint-plugin-tailwindcss';
 
@@ -20,6 +21,7 @@ const eslintConfig = defineConfig([
   {
     plugins: {
       stylistic,
+      'unused-imports': unusedImports,
     },
     rules: {
       // Stylistic 규칙들
@@ -54,7 +56,20 @@ const eslintConfig = defineConfig([
 
       // 범용적으로 많이 쓰이는 기본 규칙들 (코드 품질 관련)
       'no-console': ['warn', { allow: ['warn', 'error'] }],
-      'no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
+      
+      // unused-imports 플러그인 규칙
+      'no-unused-vars': 'off', // unused-imports/no-unused-vars로 대체
+      'unused-imports/no-unused-imports': 'error', // 사용하지 않는 import 자동 삭제
+      'unused-imports/no-unused-vars': [
+        'warn',
+        {
+          vars: 'all',
+          varsIgnorePattern: '^_',
+          args: 'after-used',
+          argsIgnorePattern: '^_',
+        },
+      ],
+      
       'prefer-const': 'error',
       'no-var': 'error',
       'object-shorthand': 'error',
