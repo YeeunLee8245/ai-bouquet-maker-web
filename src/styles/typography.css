@@ -1,0 +1,67 @@
+@utility text-text-title-large {
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 28px;
+  letter-spacing: -0.4%;
+}
+
+@utility text-title-medium {
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 24px;
+}
+
+@utility text-body-large {
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+}
+
+@utility text-body-medium {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+}
+
+@utility text-body-small {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 24px;
+}
+
+@utility text-boxy-xsmall {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: auto;
+}
+
+@utility text-label-large {
+  font-size: 17px;
+  font-weight: 500;
+  line-height: 24px;
+}
+
+@utility text-label-medium {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: -0.4%;
+}
+
+@utility text-label-small {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+}
+
+@utility text-label-xsmall {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+}
+
+@utility text-caption-medium {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: auto;
+}

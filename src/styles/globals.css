@@ -5,6 +5,8 @@
 
 @import "tailwindcss";
 
+@import "./typography.css";
+
 @theme {
   --font-sans: "Wanted Sans Variable", "Wanted Sans",
     -apple-system, BlinkMacSystemFont, system-ui, "Segoe UI",
