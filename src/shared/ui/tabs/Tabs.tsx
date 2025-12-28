@@ -2,9 +2,9 @@
 
 import * as React from 'react';
 import { TabsContext, useTabsCtx } from './context';
-import type { TabsProps, TabsListProps, TabsTriggerProps, TabsContentProps } from './types';
+import type { TTabsProps, TTabsListProps, TTabsTriggerProps, TTabsContentProps } from './types';
 
-function TabsRoot({ value, defaultValue, onValueChange, children }: TabsProps) {
+function TabsRoot({ value, defaultValue, onValueChange, children }: TTabsProps) {
   const current = defaultValue ?? value;
 
   const setValue = React.useCallback(
@@ -23,7 +23,7 @@ function TabsRoot({ value, defaultValue, onValueChange, children }: TabsProps) {
   );
 }
 
-const TabsList = React.forwardRef<HTMLDivElement, TabsListProps>(
+const TabsList = React.forwardRef<HTMLDivElement, TTabsListProps>(
   ({ children, ...props }, ref) => {
     return (
       <div ref={ref} role="tablist" {...props}>
@@ -34,7 +34,7 @@ const TabsList = React.forwardRef<HTMLDivElement, TabsListProps>(
 );
 TabsList.displayName = 'Tabs.List';
 
-const TabsTrigger = React.forwardRef<HTMLButtonElement, TabsTriggerProps>(
+const TabsTrigger = React.forwardRef<HTMLButtonElement, TTabsTriggerProps>(
   ({ value, children, ...props }, ref) => {
     const { value: active, setValue, idBase } = useTabsCtx();
     const selected = active === value;
@@ -70,7 +70,7 @@ const TabsTrigger = React.forwardRef<HTMLButtonElement, TabsTriggerProps>(
 );
 TabsTrigger.displayName = 'Tabs.Trigger';
 
-const TabsContent = React.forwardRef<HTMLDivElement, TabsContentProps>(
+const TabsContent = React.forwardRef<HTMLDivElement, TTabsContentProps>(
   ({ value, children, ...props }, ref) => {
     const { value: active, idBase } = useTabsCtx();
     const selected = active === value;
