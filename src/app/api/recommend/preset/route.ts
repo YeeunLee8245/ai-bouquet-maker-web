@@ -15,6 +15,11 @@ import { getCardRecommendations } from '@/lib/card-recommendation';
  *       AI를 사용하지 않고 DB 기반 고정 점수 계산 방식을 사용합니다.
  *       URL 공유가 가능하며, 조회 기록이 DB에 저장됩니다.
  *
+ *       **사용 예시:**
+ *       - `GET /api/recommend/preset?relationship=lover&occasion=birthday`
+ *       - `GET /api/recommend/preset?relationship=parents&occasion=anniversary`
+ *
+ *
  *       <details>
  *       <summary>📊 점수 계산 방식 (클릭하여 펼치기)</summary>
  *
