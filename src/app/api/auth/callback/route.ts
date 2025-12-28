@@ -7,7 +7,8 @@ import { resolveNextDestination } from '../helpers';
 const LOGIN_PATH = '/login';
 
 const redirectToLogin = (request: NextRequest, message: string) => {
-  const url = resolveNextDestination(request.url, LOGIN_PATH, LOGIN_PATH);
+  const urlString = resolveNextDestination(request.url, LOGIN_PATH, LOGIN_PATH);
+  const url = new URL(urlString);
   url.searchParams.set('error', message);
 
   return NextResponse.redirect(url);
