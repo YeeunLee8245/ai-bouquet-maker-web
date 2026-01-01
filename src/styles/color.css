@@ -1,0 +1,18 @@
+@theme {
+  /** Neutral */
+  --color-white: #ffffff;
+  --color-gray-50:#F5F5F4 ;
+  --color-gray-100:#EAEBEB ;
+  --color-gray-200: #CACDCE;
+  --color-gray-400: #808789;
+  --color-gray-700: #2B2D24;
+
+  /** Primary */
+  --color-primary-100: #DDE4E3;
+  --color-primary-200: #CCD6D6;
+  --color-primary-400: #78918F;
+  --color-primary-600: #607472;
+
+  /** etc(action) */
+  --color-error: #E86652;
+}

@@ -1,65 +1,201 @@
-@utility text-text-title-large {
-  font-size: 20px;
-  font-weight: 500;
-  line-height: 28px;
-  letter-spacing: -0.08px;;
+@theme {
+  /**
+   * Typography - Font Sizes
+   */
+  --font-size-ui-xxxsm: 12px;
+  --font-size-ui-xxsm: 12px;
+  --font-size-ui-xsm: 14px;
+  --font-size-ui-sm: 14px;
+  --font-size-ui-md: 16px;
+  --font-size-ui-lg: 17px;
+  --font-size-title-md: 18px;
+  --font-size-title-lg: 20px;
+  --font-size-body-xsm: 14px;
+  --font-size-body-sm: 14px;
+  --font-size-body-md: 16px;
+  --font-size-body-lg: 16px;
+
+  /**
+   * Typography - Font Weights
+   */
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+
+  /**
+   * Typography - Line Heights / Spacing
+   */
+  --font-spacing-xsm: 16px;
+  --font-spacing-sm: 20px;
+  --font-spacing-md: 24px;
+  --line-title-lg: 28px;
 }
 
-@utility text-title-medium {
-  font-size: 18px;
-  font-weight: 500;
-  line-height: 24px;
+/* UI Typography Styles */
+
+@utility text-ui-log {
+  font-size: var(--font-size-ui-xxsm);
+  font-style: normal;
+  font-weight: var(--font-weight-medium);
+  line-height: var(--font-spacing-xsm); /* 133.333% */
 }
 
-@utility text-body-large {
-  font-size: 16px;
-  font-weight: 500;
-  line-height: 24px;
+@utility text-ui-placeholder {
+  font-size: var(--font-size-ui-md);
+  font-style: normal;
+  font-weight: var(--font-weight-regular);
+  line-height: var(--font-spacing-md); /* 150% */
 }
 
-@utility text-body-medium {
-  font-size: 16px;
-  font-weight: 400;
-  line-height: 24px;
+@utility text-ui-notice {
+  font-size: var(--font-size-ui-xxxsm);
+  font-style: normal;
+  font-weight: var(--font-weight-regular);
+  line-height: var(--font-spacing-xsm); /* 133.333% */
 }
 
-@utility text-body-small {
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 24px;
+@utility text-ui-label-md {
+  font-size: var(--font-size-ui-md);
+  font-style: normal;
+  font-weight: var(--font-weight-regular);
+  line-height: var(--font-spacing-md); /* 150% */
 }
 
-@utility text-boxy-xsmall {
-  font-size: 12px;
-  font-weight: 400;
+@utility text-ui-label-sm {
+  font-size: var(--font-size-ui-sm);
+  font-style: normal;
+  font-weight: var(--font-weight-medium);
+  line-height: var(--font-spacing-sm); /* 142.857% */
 }
 
-@utility text-label-large {
-  font-size: 17px;
-  font-weight: 500;
-  line-height: 24px;
+@utility text-ui-filter-sm {
+  font-size: var(--font-size-ui-xsm);
+  font-style: normal;
+  font-weight: var(--font-weight-regular);
+  line-height: var(--font-spacing-sm); /* 142.857% */
 }
 
-@utility text-label-medium {
-  font-size: 16px;
-  font-weight: 400;
-  line-height: 20px;
-  letter-spacing: -0.064px;;
+@utility text-ui-textbox-lg {
+  font-size: var(--font-size-ui-md);
+  font-style: normal;
+  font-weight: var(--font-weight-medium);
+  line-height: var(--font-spacing-md); /* 150% */
 }
 
-@utility text-label-small {
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 20px;
+@utility text-ui-textbox-md {
+  font-size: var(--font-size-ui-sm);
+  font-style: normal;
+  font-weight: var(--font-weight-medium);
+  line-height: var(--font-spacing-sm); /* 142.857% */
 }
 
-@utility text-label-xsmall {
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 20px;
+@utility text-ui-textbox-sm {
+  font-size: var(--font-size-ui-xsm);
+  font-style: normal;
+  font-weight: var(--font-weight-regular);
+  line-height: var(--font-spacing-sm); /* 142.857% */
 }
 
-@utility text-caption-medium {
-  font-size: 12px;
-  font-weight: 400;
+@utility text-ui-cta-lg {
+  font-size: var(--font-size-ui-lg);
+  font-style: normal;
+  font-weight: var(--font-weight-medium);
+  line-height: var(--font-spacing-md); /* 141.176% */
+}
+
+@utility text-ui-cta-md {
+  font-size: var(--font-size-ui-sm);
+  font-style: normal;
+  font-weight: var(--font-weight-medium);
+  line-height: var(--font-spacing-sm); /* 142.857% */
+}
+
+@utility text-ui-cta-sm {
+  font-size: var(--font-size-ui-sm);
+  font-style: normal;
+  font-weight: var(--font-weight-medium);
+  line-height: var(--font-spacing-sm); /* 142.857% */
+}
+
+@utility text-ui-step-lg {
+  font-size: var(--font-size-ui-md);
+  font-style: normal;
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-title-lg); /* 140% */
+  letter-spacing: -0.08px;
+}
+
+@utility text-ui-tap-lg {
+  font-size: var(--font-size-ui-md);
+  font-style: normal;
+  font-weight: var(--font-weight-medium);
+  line-height: var(--font-spacing-md); /* 150% */
+}
+
+@utility text-ui-tap-md {
+  font-size: var(--font-size-ui-md);
+  font-style: normal;
+  font-weight: var(--font-weight-regular);
+  line-height: var(--font-spacing-md); /* 150% */
+}
+
+@utility text-ui-textbtn-md {
+  font-size: var(--font-size-ui-sm);
+  font-style: normal;
+  font-weight: var(--font-weight-medium);
+  line-height: var(--font-spacing-sm); /* 142.857% */
+}
+
+@utility text-ui-textbtn-sm {
+  font-size: var(--font-size-ui-xsm);
+  font-style: normal;
+  font-weight: var(--font-weight-regular);
+  line-height: var(--font-spacing-sm); /* 142.857% */
+}
+
+/* Title Typography Styles */
+
+@utility text-title-lg {
+  font-size: var(--font-size-title-lg);
+  font-style: normal;
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-title-lg); /* 140% */
+  letter-spacing: -0.08px;
+}
+
+@utility text-title-md {
+  font-size: var(--font-size-title-md);
+  font-style: normal;
+  font-weight: var(--font-weight-medium);
+  line-height: var(--font-spacing-md); /* 133.333% */
+  letter-spacing: -0.08px;
+}
+
+/* Body Typography Styles */
+
+@utility text-body-lg {
+  font-size: var(--font-size-body-lg);
+  font-style: normal;
+  font-weight: var(--font-weight-medium);
+  line-height: var(--font-spacing-md); /* 150% */
+}
+
+@utility text-body-md {
+  font-size: var(--font-size-body-md);
+  font-style: normal;
+  font-weight: var(--font-weight-regular);
+  line-height: var(--font-spacing-md); /* 150% */
+}
+
+@utility text-body-sm {
+  font-size: var(--font-size-body-sm);
+  font-style: normal;
+  font-weight: var(--font-weight-regular);
+  line-height: var(--font-spacing-md); /* 171.429% */
+}
+
+@utility text-body-xsm {
+  font-size: var(--font-size-body-xsm);
+  font-style: normal;
+  font-weight: var(--font-weight-regular);
+  line-height: var(--font-spacing-sm); /* 142.857% */
 }
