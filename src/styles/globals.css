@@ -25,24 +25,19 @@
   --breakpoint-pc: 1024px;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: var(--color-gray-50);
+  --foreground: var(--color-gray-700);
 }
 
 body {
+  /**
+  TODO: yeeun
+  (태리님께 PC, Tablet width 제한 여부 확인 필요)
+  */
+  width: 360px;
+  margin: 0 auto;
   background: var(--background);
   color: var(--foreground);
+  position: relative;
 }
