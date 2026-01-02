@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { DIRECTORY_SEASON_LIST } from '../_datas';
 import { IDirectoryEventHub } from '../_types';
 import SeasonSwitchToggle from './SeasonSwitchToggle';
+import { TooltipButton } from '@/shared/ui/button';
 
 interface IProps {
   eventHub: IDirectoryEventHub;
@@ -40,6 +41,7 @@ function DirectorySeasonFilter({ eventHub, defaultSelectedSeasons = [] }: IProps
             } } />
         ))}
       </span>
+      <TooltipButton position='bottom-left' msg='초기 값은 현재 계절이에요.'/>
     </div>
   );
 }

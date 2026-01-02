@@ -9,7 +9,7 @@ type TProps = {
 
 function DirectoryFilterContainer({ eventHub }: TProps) {
   return (
-    <div>
+    <div className='flex flex-col gap-2'>
       <DirectoryColorFilter eventHub={eventHub} defaultSelectedColors={[DIRECTORY_COLOR_LIST[0].id]} />
       <DirectorySeasonFilter eventHub={eventHub} defaultSelectedSeasons={[DIRECTORY_SEASON_LIST[0].id]} />
     </div>
