@@ -20,7 +20,7 @@ const buttonSizes: Record<TProps['size'], string> = {
 
 function Button({ children, size, onClick, className }: TProps) {
   return (
-    <button className={`${buttonSizes[size]} ${className}`} onClick={onClick}>
+    <button className={`cursor-pointer ${buttonSizes[size]} ${className}`} onClick={onClick}>
       {children}
     </button>
   );
