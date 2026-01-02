@@ -1,12 +1,14 @@
 import ColorSwitchToggle from '@/shared/ui/button/ColorSwitchToggle';
 import { DIRECTORY_COLOR_LIST } from '../_datas';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { IDirectoryEventHub } from '../_types';
 
 interface IProps {
-  defaultSelectedColors: string[];
+  eventHub: IDirectoryEventHub;
+  defaultSelectedColors?: string[];
 }
 
-function DirectoryColorFilter({ defaultSelectedColors = [] }: IProps) {
+function DirectoryColorFilter({ eventHub, defaultSelectedColors = [] }: IProps) {
   // 선택된 색상 id 목록
   const [selectedColors, setSelectedColors] = useState<Set<string>>(new Set(defaultSelectedColors));
 
@@ -22,9 +24,13 @@ function DirectoryColorFilter({ defaultSelectedColors = [] }: IProps) {
     });
   };
 
+  useEffect(() => {
+    eventHub.onClickColorFilter?.(Array.from(selectedColors));
+  }, [eventHub, selectedColors]);
+
   return (
     <div className="flex items-center gap-2">
-      <span className='text-ui-label-md'>색상</span>
+      <span className='px-1 text-ui-label-md'>색상</span>
       <span className='ml-2 flex items-center justify-center gap-2 my-micro'>
         {DIRECTORY_COLOR_LIST.map(({ id, colorHex }) => (
           <ColorSwitchToggle
