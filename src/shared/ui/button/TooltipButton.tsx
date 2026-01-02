@@ -3,10 +3,10 @@ import TooltipIcon from '@/shared/assets/icons/tooltip.svg';
 import { ITooltipButtonProps, TooltipPosition } from './types';
 // TODO: yeeun 스타일 수정 필요
 const positionStyles: Record<TooltipPosition, string> = {
-  'top-right': 'bottom-full mb-[6px]',
-  'top-left': 'bottom-full mb-[6px]',
-  'bottom-right': 'top-full mt-[6px]',
-  'bottom-left': 'top-full mt-[6px]',
+  'top-right': 'bottom-full left-0 mb-[6px]',
+  'top-left': 'bottom-full right-0 mb-[6px]',
+  'bottom-right': 'top-full left-0 mt-[6px]',
+  'bottom-left': 'top-full right-0 mt-[6px]',
 };
 
 function TooltipButton({ msg, position = 'bottom-right' }: ITooltipButtonProps) {
@@ -34,18 +34,11 @@ function TooltipButton({ msg, position = 'bottom-right' }: ITooltipButtonProps) 
         // 왼쪽 경계 체크
         newPosition.left = '0';
         newPosition.right = 'auto';
-      } else {
-        // 기본 위치
-        if (position.includes('right')) {
-          newPosition.left = '0';
-        } else {
-          newPosition.right = '0';
-        }
       }
 
       setAdjustedPosition(newPosition);
     }
-  }, [position]);
+  }, []);
 
   return (
     <div
