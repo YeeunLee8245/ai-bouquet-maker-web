@@ -1,5 +1,6 @@
 'use client';
 
+import { cn } from '@/shared/utils/styles';
 import * as React from 'react';
 
 type TProps = {
@@ -97,14 +98,14 @@ export function ScrollToTopButton({
       type="button"
       onClick={onClick}
       aria-label="Scroll to top"
-      className={[
-        'fixed z-float p-3 rounded-5',
+      className={cn(
+        'absolute z-float p-3 rounded-5',
         'bg-primary-400 text-white hover:bg-primary-600',
         pos,
         // 안 보일 때는 숨기기
-        visible ? '' : 'opacity-0 pointer-events-none',
-        className ?? '',
-      ].join(' ')}
+        !visible && 'opacity-0 pointer-events-none',
+        className,
+      )}
     >
       {children}
     </button>

@@ -5,9 +5,9 @@ import ArrowUpIcon from '@/shared/assets/icons/up_arrow.svg';
 export default function FlowerDirectoryLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className='relative h-full flex flex-col'>
-      <div className='relative flex-1 overflow-y-auto'>
+      <div className='flex-1 overflow-y-auto'>
         {children}
-        <ScrollToTopButton className=''>
+        <ScrollToTopButton className='bottom-[144px]'>
           <ArrowUpIcon />
         </ScrollToTopButton>
       </div>
