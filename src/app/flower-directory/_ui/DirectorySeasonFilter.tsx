@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { DIRECTORY_SEASON_LIST } from '../_datas';
+import { useEffectEvent, useLayoutEffect, useState } from 'react';
+import { DIRECTORY_SEASON_LIST, DIRECTORY_SEASON_NAME_MAP, TDirectorySeasonName } from '../_datas';
 import { IDirectoryEventHub } from '../_types';
 import SeasonSwitchToggle from './SeasonSwitchToggle';
 import { TooltipButton } from '@/shared/ui/button';
@@ -13,7 +13,7 @@ function DirectorySeasonFilter({ eventHub, defaultSelectedSeasons = [] }: IProps
   // 선택된 계절 id
   const [selectedSeasons, setSelectedSeasons] = useState<Set<string>>(new Set(defaultSelectedSeasons));
 
-  const clickSeasonFilter = (pressed: boolean) => (id: string) => {
+  const clickSeasonFilter = (pressed: boolean) => (id: keyof typeof DIRECTORY_SEASON_NAME_MAP, name: TDirectorySeasonName) => {
     setSelectedSeasons((prev) => {
       const newSet = new Set(prev);
       if (pressed) {
@@ -23,11 +23,22 @@ function DirectorySeasonFilter({ eventHub, defaultSelectedSeasons = [] }: IProps
       }
       return newSet;
     });
+    eventHub.onClickSeasonFilter?.({ id, name }, pressed);
   };
 
-  useEffect(() => {
-    eventHub.onClickSeasonFilter?.(Array.from(selectedSeasons));
-  }, [eventHub, selectedSeasons]);
+  const handleClickSeasonFilter = useEffectEvent(() => {
+    defaultSelectedSeasons.forEach((id) => {
+      eventHub.onClickSeasonFilter?.({
+        id: id as keyof typeof DIRECTORY_SEASON_NAME_MAP,
+        name: DIRECTORY_SEASON_NAME_MAP[id as keyof typeof DIRECTORY_SEASON_NAME_MAP],
+      },
+      true);
+    });
+  });
+
+  useLayoutEffect(() => {
+    handleClickSeasonFilter();
+  }, []);
 
   return (
     <div className='flex items-center gap-2'>
@@ -37,7 +48,7 @@ function DirectorySeasonFilter({ eventHub, defaultSelectedSeasons = [] }: IProps
           <SeasonSwitchToggle
             key={id} name={name} pressed={selectedSeasons.has(id)}
             onPressedChange={(pressed: boolean) => () => {
-              clickSeasonFilter(pressed)(id);
+              clickSeasonFilter(pressed)(id, name);
             } } />
         ))}
       </span>

@@ -5,6 +5,7 @@ import { IDirectoryEventHub } from './_types';
 import DirectoryFilterToggle from './_ui/DirectoryFilterToggle';
 import DirectoryFilterContainer from './_ui/DirectoryFilterContainer';
 import DirectorySearchInput from './_ui/DirectorySearchInput';
+import DirectoryFilterKeywordContainer from './_ui/DirectoryFilterKeywordContainer';
 
 /**
  * 꽃 사전 리스트 페이지
@@ -15,6 +16,7 @@ const FlowerDirectoryPage = () => {
     onToggleFilterSection: undefined,
     onClickColorFilter: undefined,
     onClickSeasonFilter: undefined,
+    onSearchKeyword: undefined,
   };
   return (
     <div className="px-4">
@@ -24,6 +26,7 @@ const FlowerDirectoryPage = () => {
       </div>
       <DirectoryFilterContainer eventHub={eventHub} />
       <DirectorySearchInput eventHub={eventHub} />
+      <DirectoryFilterKeywordContainer eventHub={eventHub} />
       <DirectoryTopSection />
       Flower Directory Page
     </div>

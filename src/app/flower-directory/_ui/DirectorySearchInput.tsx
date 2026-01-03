@@ -16,8 +16,8 @@ function DirectorySearchInput({ eventHub }: IProps) {
   };
 
   useEffect(() => {
-    console.log(debouncedValue);
-  }, [debouncedValue]);
+    eventHub.onSearchKeyword?.(debouncedValue);
+  }, [debouncedValue, eventHub]);
 
   return (
     <SearchInput placeholder='꽃 이름, 꽃말, 설명 등으로 검색' className='mt-4' value={value} onChange={handleChange}/>
