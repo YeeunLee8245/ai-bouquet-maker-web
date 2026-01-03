@@ -1,6 +1,8 @@
 import React, { useRef } from 'react';
 import { IDirectoryEventHub } from '../_types';
-import { directoryDefaultSortOptions, testDirectoryList } from '../_datas';
+import { directoryDefaultSortOptions, testDirectoryItem } from '../_datas';
+import { FlowerCard } from '@/entities/flower/ui';
+import { Button } from '@/shared/ui/button';
 
 type TProps = {
   eventHub: IDirectoryEventHub;
@@ -36,14 +38,13 @@ function DirectoryListContainer({ eventHub }: TProps) {
           ))}
         </span>
       </div>
-      <div>
-        {testDirectoryList.map(({ id, name, color, season, tags }) => (
-          <div key={id}>
-            <span>{name}</span>
-            <span>{color}</span>
-            <span>{season}</span>
-            <span>{tags.join(', ')}</span>
-          </div>
+      <div className='grid grid-cols-2 gap-x-4 gap-y-8 mt-3'>
+        {Array.from({ length: 10 }).map((_, index) => (
+          <FlowerCard
+            key={index}
+            size='lg'
+            {...testDirectoryItem}
+            actionButton={<Button size='md' onClick={() => {}} className='mt-3'>선택하기</Button>}/>
         ))}
       </div>
     </div>

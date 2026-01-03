@@ -32,7 +32,7 @@
 
 /* UI Typography Styles */
 
-@utility text-ui-log {
+@utility text-ui-tag {
   font-size: var(--font-size-ui-xxsm);
   font-style: normal;
   font-weight: var(--font-weight-medium);

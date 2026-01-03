@@ -42,12 +42,12 @@ export const directoryDefaultSortOptions = [
   },
 ] as const;
 
-export const testDirectoryList = [
+export const testDirectoryItem =
   {
     id: '1',
+    imageUrl: '/temp_tulip.png',
     name: '튤립',
-    color: 'red',
-    season: 'spring',
+    isLiked: false,
+    colors: ['#FF0000', '#FF8E3E', '#FFD700'],
     tags: ['희망', '사랑', '감사'],
-  },
-];
+  };
