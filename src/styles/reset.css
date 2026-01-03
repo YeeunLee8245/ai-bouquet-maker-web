@@ -1,4 +1,30 @@
 @layer base {
+  /* 스크롤바 스타일 */
+  * {
+    /* Firefox */
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 0, 0, 0.3) transparent;
+  }
+
+  /* Webkit 브라우저 (Chrome, Safari, Edge) */
+  *::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: transparent; /* 배경 투명 */
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+  }
+
+  *::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+
   button {
     cursor: pointer;
   }
