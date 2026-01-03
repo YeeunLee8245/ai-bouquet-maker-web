@@ -47,7 +47,7 @@ function DirectoryColorFilter({ eventHub, defaultSelectedColors = [] }: IProps) 
           <ColorSwitchToggle
             key={id}
             pressed={selectedColors.has(id)}
-            onPressedChange={(pressed: boolean) => () => {
+            onPressedChange={(pressed: boolean) => {
               clickColorFilter(pressed)(id, name);
             } }
             colorHex={colorHex}/>

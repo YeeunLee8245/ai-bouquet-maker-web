@@ -47,7 +47,7 @@ function DirectorySeasonFilter({ eventHub, defaultSelectedSeasons = [] }: IProps
         {DIRECTORY_SEASON_LIST.map(({ id, name }) => (
           <SeasonSwitchToggle
             key={id} name={name} pressed={selectedSeasons.has(id)}
-            onPressedChange={(pressed: boolean) => () => {
+            onPressedChange={(pressed: boolean) => {
               clickSeasonFilter(pressed)(id, name);
             } } />
         ))}

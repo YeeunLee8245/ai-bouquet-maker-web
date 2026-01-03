@@ -9,7 +9,7 @@ type TProps = {
 function DirectoryFilterToggle({ eventHub }: TProps) {
   const [pressed, setPressed] = useState(false);
 
-  const onPressedChange = (pressed: boolean) => () => {
+  const onPressedChange = (pressed: boolean) => {
     setPressed(pressed);
     eventHub.onToggleFilterSection?.(pressed);
   };

@@ -1,3 +1,4 @@
+import { cn } from '@/shared/utils/styles';
 import { IToggleButtonProps } from './types';
 
 const buttonPrimary: Record<NonNullable<IToggleButtonProps['size']>, string> = {
@@ -6,18 +7,18 @@ const buttonPrimary: Record<NonNullable<IToggleButtonProps['size']>, string> = {
   lg: 'w-full h-[44px] px-4 inline-flex items-center justify-center rounded-4 bg-primary-400 text-ui-cta-lg text-white hover:bg-primary-600 hover:text-primary-200 [&[data-state="on"]]:bg-primary-600 [&[data-state="on"]]:text-primary-200',
 };
 
-function ToggleButton({ pressed, size = 'lg', variant = 'primary', className, onPressedChange, children, ...props  }: IToggleButtonProps) {
+function ToggleButton({ pressed, size = 'lg', variant = 'primary', className, onPressedChange, children, ...props }: IToggleButtonProps) {
   return (
     <button
       type="button"
       aria-pressed={pressed}
       data-state={pressed ? 'on' : 'off'}
-      onClick={onPressedChange(!pressed)}
-      className={`
-        cursor-pointer
-        ${variant === 'primary' ? buttonPrimary[size] : ''}
-        ${className}
-      `}
+      onClick={() => {onPressedChange(!pressed);}}
+      className={cn(
+        'cursor-pointer',
+        variant === 'primary' ? buttonPrimary[size] : '',
+        className,
+      )}
       {...props}
     >
       {children}
