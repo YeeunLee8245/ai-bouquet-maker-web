@@ -20,7 +20,7 @@ function DirectorySearchInput({ eventHub }: IProps) {
   }, [debouncedValue, eventHub]);
 
   return (
-    <SearchInput placeholder='꽃 이름, 꽃말, 설명 등으로 검색' className='mt-4' value={value} onChange={handleChange}/>
+    <SearchInput placeholder='꽃 이름, 꽃말, 설명 등으로 검색' value={value} onChange={handleChange}/>
   );
 }
 
