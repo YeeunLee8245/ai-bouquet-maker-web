@@ -1,4 +1,8 @@
 .swagger-page {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
   min-height: 100vh;
   background: #f8fafc;
   padding: 24px 0 48px;
