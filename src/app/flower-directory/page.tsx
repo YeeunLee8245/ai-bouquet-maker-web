@@ -30,6 +30,7 @@ const FlowerDirectoryPage = () => {
       <DirectorySearchInput eventHub={eventHub} />
       <DirectoryFilterKeywordContainer eventHub={eventHub} />
       <DirectoryListContainer eventHub={eventHub} />
+
     </div>
   );
 };

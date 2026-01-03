@@ -10,6 +10,10 @@ type TProps = {
   className?: string
   /** 고정 위치 */
   position?: 'bottom-right' | 'bottom-left'
+  /** 스크롤 컨테이너 셀렉터 (기본값: 부모에서 스크롤 가능한 요소 찾기) */
+  scrollContainerSelector?: string;
+  /** 부모 스크롤 컨테이너 자동 감지 사용 여부 (기본값: true) */
+  useParentScroller?: boolean;
 };
 
 function prefersReducedMotion() {
@@ -23,22 +27,63 @@ export function ScrollToTopButton({
   children = null,
   className,
   position = 'bottom-right',
+  scrollContainerSelector,
+  useParentScroller = true,
 }: TProps) {
   const [visible, setVisible] = React.useState(false);
+  const scrollContainerRef = React.useRef<HTMLElement | null>(null);
+  const buttonRef = React.useRef<HTMLButtonElement>(null);
 
   React.useEffect(() => {
+    // 1) 스크롤 컨테이너 찾기
+    let scrollContainer: HTMLElement | null = null;
+
+    if (scrollContainerSelector) {
+      scrollContainer = document.querySelector(
+        scrollContainerSelector,
+      ) as HTMLElement | null;
+    } else if (useParentScroller && buttonRef.current) {
+      let parent = buttonRef.current.parentElement;
+      while (parent) {
+        const overflowY = window.getComputedStyle(parent).overflowY;
+        if (overflowY === 'auto' || overflowY === 'scroll') {
+          scrollContainer = parent;
+          break;
+        }
+        parent = parent.parentElement;
+      }
+    }
+
+    scrollContainerRef.current = scrollContainer;
+
+    const target: HTMLElement | Window =
+      scrollContainer ?? window;
+
     const onScroll = () => {
-      setVisible(window.scrollY >= showAfterPx);
+      const scrollTop =
+        scrollContainer != null
+          ? scrollContainer.scrollTop
+          : window.scrollY;
+
+      setVisible(scrollTop >= showAfterPx);
     };
 
     onScroll();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, [showAfterPx]);
+    target.addEventListener('scroll', onScroll, { passive: true });
+    return () => target.removeEventListener('scroll', onScroll);
+  }, [showAfterPx, scrollContainerSelector, useParentScroller]);
 
   const onClick = () => {
-    const behavior: ScrollBehavior = prefersReducedMotion() ? 'auto' : 'smooth';
-    window.scrollTo({ top: 0, behavior });
+    const behavior: ScrollBehavior = prefersReducedMotion()
+      ? 'auto'
+      : 'smooth';
+    const scrollContainer = scrollContainerRef.current;
+
+    if (scrollContainer) {
+      scrollContainer.scrollTo({ top: 0, behavior });
+    } else {
+      window.scrollTo({ top: 0, behavior });
+    }
   };
 
   const pos =
@@ -46,18 +91,18 @@ export function ScrollToTopButton({
       ? 'right-4 bottom-4'
       : 'left-4 bottom-4';
 
-  if (!visible) {return null;}
-
   return (
     <button
+      ref={buttonRef}
       type="button"
       onClick={onClick}
       aria-label="Scroll to top"
-      // 디자인 확정되면 커스터마이징 필요(props로 variant 받아서 처리)
       className={[
-        'fixed z-50 rounded-full px-4 py-3 shadow',
-        'bg-black/80 text-white hover:bg-black',
+        'fixed z-float p-3 rounded-5',
+        'bg-primary-400 text-white hover:bg-primary-600',
         pos,
+        // 안 보일 때는 숨기기
+        visible ? '' : 'opacity-0 pointer-events-none',
         className ?? '',
       ].join(' ')}
     >
