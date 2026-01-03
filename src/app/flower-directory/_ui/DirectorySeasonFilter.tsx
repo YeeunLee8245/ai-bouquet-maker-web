@@ -1,4 +1,4 @@
-import { useEffectEvent, useLayoutEffect, useState } from 'react';
+import { useState } from 'react';
 import { DIRECTORY_SEASON_LIST, DIRECTORY_SEASON_NAME_MAP, TDirectorySeasonName } from '../_datas';
 import { IDirectoryEventHub } from '../_types';
 import SeasonSwitchToggle from './SeasonSwitchToggle';
@@ -6,12 +6,12 @@ import { TooltipButton } from '@/shared/ui/button';
 
 interface IProps {
   eventHub: IDirectoryEventHub;
-  defaultSelectedSeasons?: string[];
+  defaultSelectedItems?: string[];
 }
 
-function DirectorySeasonFilter({ eventHub, defaultSelectedSeasons = [] }: IProps) {
+function DirectorySeasonFilter({ eventHub, defaultSelectedItems = [] }: IProps) {
   // 선택된 계절 id
-  const [selectedSeasons, setSelectedSeasons] = useState<Set<string>>(new Set(defaultSelectedSeasons));
+  const [selectedSeasons, setSelectedSeasons] = useState<Set<string>>(new Set(defaultSelectedItems));
 
   const clickSeasonFilter = (pressed: boolean) => (id: keyof typeof DIRECTORY_SEASON_NAME_MAP, name: TDirectorySeasonName) => {
     setSelectedSeasons((prev) => {
@@ -25,20 +25,6 @@ function DirectorySeasonFilter({ eventHub, defaultSelectedSeasons = [] }: IProps
     });
     eventHub.onClickSeasonFilter?.({ id, name }, pressed);
   };
-
-  const handleClickSeasonFilter = useEffectEvent(() => {
-    defaultSelectedSeasons.forEach((id) => {
-      eventHub.onClickSeasonFilter?.({
-        id: id as keyof typeof DIRECTORY_SEASON_NAME_MAP,
-        name: DIRECTORY_SEASON_NAME_MAP[id as keyof typeof DIRECTORY_SEASON_NAME_MAP],
-      },
-      true);
-    });
-  });
-
-  useLayoutEffect(() => {
-    handleClickSeasonFilter();
-  }, []);
 
   return (
     <div className='flex items-center gap-2'>

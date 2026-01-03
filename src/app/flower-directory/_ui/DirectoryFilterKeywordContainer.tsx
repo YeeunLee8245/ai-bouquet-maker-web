@@ -3,13 +3,14 @@ import { ActionLabel } from '@/shared/ui/label';
 import React, { useCallback, useEffectEvent, useLayoutEffect, useState } from 'react';
 import XIcon from '@/shared/assets/icons/x.svg';
 import { IDirectoryEventHub, TDirectoryFilterItem } from '../_types';
+import { directoryDefaultSelectedColors, directoryDefaultSelectedSeasons } from '../_datas';
 
 type TProps = {
   eventHub: IDirectoryEventHub;
 };
 
 function DirectoryFilterKeywordContainer({ eventHub }: TProps) {
-  const [keywords, setKeywords] = useState<TDirectoryFilterItem[]>([]);
+  const [keywords, setKeywords] = useState<TDirectoryFilterItem[]>([...directoryDefaultSelectedColors, ...directoryDefaultSelectedSeasons]);
 
   const handleClickRemoveKeyword = useCallback((id: string) => () => {
     setKeywords((prev) => prev.filter((k) => k.id !== id));
