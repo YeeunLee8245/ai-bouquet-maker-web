@@ -7,6 +7,7 @@ import DirectoryFilterContainer from './_ui/DirectoryFilterContainer';
 import DirectorySearchInput from './_ui/DirectorySearchInput';
 import DirectoryFilterKeywordContainer from './_ui/DirectoryFilterKeywordContainer';
 import { useMemo } from 'react';
+import DirectoryListContainer from './_ui/DirectoryListContainer';
 
 /**
  * 꽃 사전 리스트 페이지
@@ -29,6 +30,7 @@ const FlowerDirectoryPage = () => {
       <DirectoryFilterContainer eventHub={eventHub} />
       <DirectorySearchInput eventHub={eventHub} />
       <DirectoryFilterKeywordContainer eventHub={eventHub} />
+      <DirectoryListContainer eventHub={eventHub} />
       <DirectoryTopSection />
       Flower Directory Page
     </div>

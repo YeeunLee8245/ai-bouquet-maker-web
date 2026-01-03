@@ -30,3 +30,24 @@ export const DIRECTORY_SEASON_LIST = Object.keys(DIRECTORY_SEASON_NAME_MAP).map(
 
 export const directoryDefaultSelectedColors = [DIRECTORY_COLOR_LIST[0]];
 export const directoryDefaultSelectedSeasons = [DIRECTORY_SEASON_LIST[0]];
+
+export const directoryDefaultSortOptions = [
+  {
+    id: 'popular',
+    name: '인기순',
+  },
+  {
+    id: 'name',
+    name: '이름순',
+  },
+] as const;
+
+export const testDirectoryList = [
+  {
+    id: '1',
+    name: '튤립',
+    color: 'red',
+    season: 'spring',
+    tags: ['희망', '사랑', '감사'],
+  },
+];
