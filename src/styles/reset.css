@@ -1,0 +1,7 @@
+@layer base {
+  input {
+    &:focus-visible {
+      outline: none;
+    }
+  }
+}

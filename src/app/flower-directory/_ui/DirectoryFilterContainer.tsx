@@ -11,6 +11,7 @@ function DirectoryFilterContainer({ eventHub }: TProps) {
   return (
     <div className='flex flex-col gap-2'>
       <DirectoryColorFilter eventHub={eventHub} defaultSelectedColors={[DIRECTORY_COLOR_LIST[0].id]} />
+      {/* TODO: yeeun 필터 선택 초기값 수정 */}
       <DirectorySeasonFilter eventHub={eventHub} defaultSelectedSeasons={[DIRECTORY_SEASON_LIST[0].id]} />
     </div>
   );
