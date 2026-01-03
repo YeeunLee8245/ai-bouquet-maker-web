@@ -36,7 +36,6 @@ function FlowerCard({ size, imageUrl, name, isLiked, colors, tags, actionButton 
           height={flowerCardImageSizes[size].height}
           className='object-cover'
         />
-        {/* TODO: yeeun 좋아요 버튼 */}
         {isLiked !== undefined && (
           <button className='absolute top-2 right-2 text-black/20 hover:text-primary-400'>
             <OutlineHeartIcon/>

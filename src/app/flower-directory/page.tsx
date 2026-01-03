@@ -1,6 +1,5 @@
 'use client';
 
-import DirectoryTopSection from './_ui/directory-top-section';
 import { IDirectoryEventHub } from './_types';
 import DirectoryFilterToggle from './_ui/DirectoryFilterToggle';
 import DirectoryFilterContainer from './_ui/DirectoryFilterContainer';
@@ -31,8 +30,6 @@ const FlowerDirectoryPage = () => {
       <DirectorySearchInput eventHub={eventHub} />
       <DirectoryFilterKeywordContainer eventHub={eventHub} />
       <DirectoryListContainer eventHub={eventHub} />
-      <DirectoryTopSection />
-      Flower Directory Page
     </div>
   );
 };
