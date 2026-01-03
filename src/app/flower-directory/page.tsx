@@ -16,6 +16,7 @@ const FlowerDirectoryPage = () => {
     onToggleFilterSection: undefined,
     onClickColorFilter: undefined,
     onClickSeasonFilter: undefined,
+    onClickResetFilter: undefined,
     onSearchKeyword: undefined,
   }), []);
 

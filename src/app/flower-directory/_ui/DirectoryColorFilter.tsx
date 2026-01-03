@@ -1,27 +1,16 @@
 import ColorSwitchToggle from '@/shared/ui/button/ColorSwitchToggle';
 import { DIRECTORY_COLOR_LIST, DIRECTORY_COLOR_NAME_MAP, TDirectoryColorName } from '../_datas';
-import { useState } from 'react';
 import { IDirectoryEventHub } from '../_types';
 
 interface IProps {
   eventHub: IDirectoryEventHub;
-  defaultSelectedItems?: string[];
+  selectedItems: Set<string>;
+  onItemChange: (id: string, pressed: boolean) => void;
 }
 
-function DirectoryColorFilter({ eventHub, defaultSelectedItems = [] }: IProps) {
-  // 선택된 색상 id 목록
-  const [selectedColors, setSelectedColors] = useState<Set<string>>(new Set(defaultSelectedItems));
-
+function DirectoryColorFilter({ eventHub, selectedItems, onItemChange }: IProps) {
   const clickColorFilter = (pressed: boolean) => (id: keyof typeof DIRECTORY_COLOR_NAME_MAP, name: TDirectoryColorName) => {
-    setSelectedColors((prev) => {
-      const newSet = new Set(prev);
-      if (pressed) {
-        newSet.add(id);
-      } else {
-        newSet.delete(id);
-      }
-      return newSet;
-    });
+    onItemChange(id, pressed);
     eventHub.onClickColorFilter?.({ id, name }, pressed);
   };
 
@@ -32,7 +21,7 @@ function DirectoryColorFilter({ eventHub, defaultSelectedItems = [] }: IProps) {
         {DIRECTORY_COLOR_LIST.map(({ id, colorHex, name }) => (
           <ColorSwitchToggle
             key={id}
-            pressed={selectedColors.has(id)}
+            pressed={selectedItems.has(id)}
             onPressedChange={(pressed: boolean) => {
               clickColorFilter(pressed)(id, name);
             } }

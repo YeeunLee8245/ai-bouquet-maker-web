@@ -1,4 +1,7 @@
 @layer base {
+  button {
+    cursor: pointer;
+  }
   input {
     &:focus-visible {
       outline: none;

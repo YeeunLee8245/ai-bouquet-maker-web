@@ -9,5 +9,6 @@ export interface IDirectoryEventHub {
   onToggleFilterSection?: (pressed: boolean) => void;
   onClickColorFilter?: (selectedColor: TDirectoryFilterItem, pressed: boolean) => void;
   onClickSeasonFilter?: (selectedSeason: TDirectoryFilterItem, pressed: boolean) => void;
+  onClickResetFilter?: VoidFunction;
   onSearchKeyword?: (keyword: string) => void;
 }

@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { DIRECTORY_SEASON_LIST, DIRECTORY_SEASON_NAME_MAP, TDirectorySeasonName } from '../_datas';
 import { IDirectoryEventHub } from '../_types';
 import SeasonSwitchToggle from './SeasonSwitchToggle';
@@ -6,23 +5,13 @@ import { TooltipButton } from '@/shared/ui/button';
 
 interface IProps {
   eventHub: IDirectoryEventHub;
-  defaultSelectedItems?: string[];
+  selectedItems: Set<string>;
+  onItemChange: (id: string, pressed: boolean) => void;
 }
 
-function DirectorySeasonFilter({ eventHub, defaultSelectedItems = [] }: IProps) {
-  // 선택된 계절 id
-  const [selectedSeasons, setSelectedSeasons] = useState<Set<string>>(new Set(defaultSelectedItems));
-
+function DirectorySeasonFilter({ eventHub, selectedItems, onItemChange }: IProps) {
   const clickSeasonFilter = (pressed: boolean) => (id: keyof typeof DIRECTORY_SEASON_NAME_MAP, name: TDirectorySeasonName) => {
-    setSelectedSeasons((prev) => {
-      const newSet = new Set(prev);
-      if (pressed) {
-        newSet.add(id);
-      } else {
-        newSet.delete(id);
-      }
-      return newSet;
-    });
+    onItemChange(id, pressed);
     eventHub.onClickSeasonFilter?.({ id, name }, pressed);
   };
 
@@ -32,7 +21,7 @@ function DirectorySeasonFilter({ eventHub, defaultSelectedItems = [] }: IProps) 
       <span className='ml-2 flex items-center justify-center gap-2 my-micro'>
         {DIRECTORY_SEASON_LIST.map(({ id, name }) => (
           <SeasonSwitchToggle
-            key={id} name={name} pressed={selectedSeasons.has(id)}
+            key={id} name={name} pressed={selectedItems.has(id)}
             onPressedChange={(pressed: boolean) => {
               clickSeasonFilter(pressed)(id, name);
             } } />
