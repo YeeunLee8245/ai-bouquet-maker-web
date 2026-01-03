@@ -7,7 +7,7 @@
 
 @import "./typography.css";
 @import "./color.css";
-@import "./spacing.css";
+@import "./layout.css";
 
 @theme {
   --font-sans: "Wanted Sans Variable", "Wanted Sans",

@@ -1,12 +1,12 @@
 import { useState, useCallback } from 'react';
 import TooltipIcon from '@/shared/assets/icons/tooltip.svg';
 import { ITooltipButtonProps, TooltipPosition } from './types';
-// TODO: yeeun 스타일 수정 필요
+
 const positionStyles: Record<TooltipPosition, string> = {
-  'top-right': 'bottom-full left-0 mb-[6px]',
-  'top-left': 'bottom-full right-0 mb-[6px]',
-  'bottom-right': 'top-full left-0 mt-[6px]',
-  'bottom-left': 'top-full right-0 mt-[6px]',
+  'top-right': 'left-0 mb-[6px]',
+  'top-left': 'right-0 mb-[6px]',
+  'bottom-right': 'left-0 mt-[6px]',
+  'bottom-left': 'right-0 mt-[6px]',
 };
 
 function TooltipButton({ msg, position = 'bottom-right' }: ITooltipButtonProps) {
@@ -46,25 +46,24 @@ function TooltipButton({ msg, position = 'bottom-right' }: ITooltipButtonProps) 
       onMouseLeave={handleOpenChange(false)}
       onFocus={handleOpenChange(true)}
       onBlur={handleOpenChange(false)}
-      className='relative inline-block'
+      className='relative inline-block cursor-pointer '
     >
       <TooltipIcon />
-      {/* {isOpen && ( */}
-      <div
-        ref={tooltipRefCallback}
-        style={adjustedPosition}
-        // box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.08);
-        className={`
+      {isOpen && (
+        <div
+          ref={tooltipRefCallback}
+          style={adjustedPosition}
+          className={`
             absolute py-1 px-2 rounded-2 bg-gray-100 text-[#2B2D23] text-[12px] leading-4
             max-w-[200px] w-max whitespace-normal wrap-break-word
-            box-shadow-[0_2px_2px_0_rgba(0,0,0,0.08)]
+            shadow-[0_2px_2px_0_rgba(0,0,0,0.08)]
             z-50
             ${positionStyles[position]}
           `}
-      >
-        {msg}
-      </div>
-      {/* )} */}
+        >
+          {msg}
+        </div>
+      )}
     </div>
   );
 }

@@ -23,4 +23,19 @@
   --radius-4: 8px;
   --radius-5: 12px;
   --radius-6: 16px;
+
+  /**
+   * z-index
+   */
+   --z-index-0: 0;
+   --z-index-10: 10;
+   --z-index-20: 20;
+   --z-index-30: 30;
+   --z-index-40: 40;
+   --z-index-50: 50;
+   --z-index-60: 60;
+   --z-index-dropdown: var(--z-index-30);
+   --z-index-modal: var(--z-index-40);
+   --z-index-tooltip: var(--z-index-50);
+   --z-index-toast: var(--z-index-60);
 }
