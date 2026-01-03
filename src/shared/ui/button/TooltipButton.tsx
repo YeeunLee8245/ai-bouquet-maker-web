@@ -1,3 +1,4 @@
+'use client';
 import { useState, useCallback } from 'react';
 import TooltipIcon from '@/shared/assets/icons/tooltip.svg';
 import { ITooltipButtonProps, TooltipPosition } from './types';
