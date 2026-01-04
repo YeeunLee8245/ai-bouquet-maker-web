@@ -160,9 +160,23 @@ export async function GET(request: NextRequest) {
       seasons.map(s => `seasons.cs.{${s}}`).join(',') + ',seasons.cs.{all_year}'
     );
     
-    // 검색어 필터
+    // 검색어 필터 (꽃 이름 + 꽃말 검색)
+    let meaningMatchedIds: number[] = [];
     if (search) {
-      query = query.ilike('name_ko', `%${search}%`);
+      // 1단계: 꽃말에서 검색어 매칭되는 flower_id 조회
+      const { data: meaningMatches } = await supabase
+        .from('flower_meanings')
+        .select('flower_id')
+        .ilike('meaning', `%${search}%`);
+      
+      meaningMatchedIds = meaningMatches?.map(m => m.flower_id) || [];
+      
+      // 2단계: 꽃 이름 OR 꽃말 매칭 ID로 필터
+      if (meaningMatchedIds.length > 0) {
+        query = query.or(`name_ko.ilike.%${search}%,id.in.(${meaningMatchedIds.join(',')})`);
+      } else {
+        query = query.ilike('name_ko', `%${search}%`);
+      }
     }
     
     // 페이지네이션
