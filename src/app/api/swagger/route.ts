@@ -15,6 +15,7 @@ export const GET = async () => {
       ],
       tags: [
         { name: 'Recommend', description: '꽃 추천 API' },
+        { name: 'Flowers', description: '꽃 사전 및 좋아요 API' },
       ],
       components: {
         schemas: {
