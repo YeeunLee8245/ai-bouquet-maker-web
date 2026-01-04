@@ -5,6 +5,9 @@
 /.next/
 /out/
 
+# python
+__pycache__/
+
 # production
 /build
 
@@ -12,4 +15,4 @@
 /node_modules
 
 # environment variables
-/.env*
+.env*
