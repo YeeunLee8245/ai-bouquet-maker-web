@@ -1,9 +1,17 @@
+/* API 문서 페이지일 때 body와 main의 너비 제한 제거 */
+body.swagger-full-width {
+  width: 100% !important;
+  max-width: none !important;
+}
+
+main.swagger-full-width {
+  width: 100% !important;
+  max-width: none !important;
+}
+
 .swagger-page {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 100vw;
-  min-height: 100vh;
+  width: 100%;
+  min-height: 100%;
   background: #f8fafc;
   padding: 24px 0 48px;
 }
