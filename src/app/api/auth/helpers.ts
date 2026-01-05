@@ -41,9 +41,27 @@ export const resolveProvider = (value?: string | null): Provider => {
 };
 
 const getBaseOrigin = (requestUrl: string) => {
+  try {
+    const url = new URL(requestUrl);
+    // 요청 URL이 절대 경로(http/https 포함)인 경우 해당 origin을 우선 사용
+    if (url.origin && url.origin !== 'null') {
+      return url.origin;
+    }
+  } catch (e) {
+    // 상대 경로인 경우 catch로 넘어감
+  }
+
+  // Fallback: 환경변수 사용
   const envBase = process.env.NEXT_PUBLIC_SITE_URL;
-  if (envBase) {return new URL(envBase).origin;}
-  return new URL(requestUrl).origin;
+  if (envBase) {
+    try {
+      return new URL(envBase).origin;
+    } catch {
+      return envBase;
+    }
+  }
+
+  return '';
 };
 
 export const buildCallbackUrl = (requestUrl: string, next?: string | null) => {
