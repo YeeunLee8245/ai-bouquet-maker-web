@@ -2,6 +2,7 @@ import { cn } from '@/shared/utils/styles';
 import Image from 'next/image';
 import React from 'react';
 import OutlineHeartIcon from '@/shared/assets/icons/outline_heart.svg';
+import Link from 'next/link';
 
 type TProps = {
   id: string;
@@ -25,10 +26,13 @@ const flowerCardImageSizes: Record<TProps['size'], { width: number; height: numb
   },
 };
 
-function FlowerCard({ size, imageUrl, name, isLiked, colors, tags, actionButton }: TProps) {
+function FlowerCard({ size, imageUrl, id, name, isLiked, colors, tags, actionButton }: TProps) {
   return (
     <div className='flex flex-col'>
-      <div className={cn('relative overflow-hidden', size === 'md' && 'rounded-4', size === 'lg' && 'rounded-3')}>
+      <Link
+        aria-label={`${name} 상세 페이지 보기`}
+        href={`/flower-directory/${id}`}
+        className={cn('relative overflow-hidden', size === 'md' && 'rounded-4', size === 'lg' && 'rounded-3')}>
         <Image
           src={imageUrl}
           alt={name}
@@ -52,7 +56,7 @@ function FlowerCard({ size, imageUrl, name, isLiked, colors, tags, actionButton 
             ))}
           </div>
         )}
-      </div>
+      </Link>
       <div className='mt-2'>
         <p className='text-body-lg'>{name}</p>
         <div className='flex gap-2 mt-2'>

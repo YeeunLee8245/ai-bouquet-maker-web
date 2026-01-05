@@ -1,15 +1,11 @@
-import { ScrollToTopButton } from '@/shared/ui/scroll-to-top/ScrollToTopButton';
 import BottomActionFooter from '@/widgets/footer/BottomActionFooter';
-import ArrowUpIcon from '@/shared/assets/icons/up_arrow.svg';
 
-export default function FlowerDirectoryLayout({ children }: { children: React.ReactNode }) {
+export default function FlowerDirectoryLayout({ children, modal }: { children: React.ReactNode, modal: React.ReactNode }) {
   return (
     <div className='relative h-full flex flex-col'>
-      <div className='flex-1 overflow-y-auto'>
+      <div className='relative flex flex-1 overflow-y-auto'>
         {children}
-        <ScrollToTopButton className='bottom-[144px]'>
-          <ArrowUpIcon />
-        </ScrollToTopButton>
+        {modal}
       </div>
       <BottomActionFooter />
     </div>
