@@ -23,7 +23,7 @@ const FlowerDirectoryPage = () => {
   }), []);
 
   return (
-    <div className="relative flex-1 px-4 overflow-y-auto">
+    <div className="flex-1 px-4 overflow-y-auto">
       <div className='py-4 flex justify-between items-center'>
         <span className='text-title-lg'>꽃 사전</span>
         <DirectoryFilterToggle eventHub={eventHub} />
@@ -32,8 +32,8 @@ const FlowerDirectoryPage = () => {
       <DirectorySearchInput eventHub={eventHub} />
       <DirectoryFilterKeywordContainer eventHub={eventHub} />
       <DirectoryListContainer eventHub={eventHub} />
-      <ScrollToTopButton className='bottom-[144px]'>
-        <ArrowUpIcon />
+      <ScrollToTopButton className='bottom-[20px]'>
+        <ArrowUpIcon className='w-[14px] h-[15px]'/>
       </ScrollToTopButton>
     </div>
   );
