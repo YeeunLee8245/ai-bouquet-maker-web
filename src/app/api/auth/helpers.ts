@@ -2,7 +2,7 @@ import type { Provider } from '@supabase/supabase-js';
 
 const OAUTH_PROVIDERS = {
   google: { provider: 'google' as Provider, enabled: true },
-  kakao: { provider: 'kakao' as Provider, enabled: false }, // 구현안됨
+  kakao: { provider: 'kakao' as Provider, enabled: true },
 } as const;
 
 type ProviderName = keyof typeof OAUTH_PROVIDERS;
