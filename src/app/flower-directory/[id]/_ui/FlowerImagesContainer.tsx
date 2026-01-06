@@ -7,24 +7,13 @@ import { useRouter } from 'next/navigation';
 import { Carousel, CarouselIndicator } from '@/shared/ui/carousel';
 
 type TProps = {
-  imageUrl: string;
-  name: string;
+  images: {
+    url: string;
+    name: string;
+  }[]
 };
 
-const images = [
-  {
-    id: 1,
-    url: '/temp_tulip.png',
-    name: 'Image 1',
-  },
-  {
-    id: 2,
-    url: '/temp_geobera.png',
-    name: 'Image 2',
-  },
-];
-
-function FlowerImagesContainer({ imageUrl, name }: TProps) {
+function FlowerImagesContainer({ images }: TProps) {
   const router = useRouter();
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -35,8 +24,8 @@ function FlowerImagesContainer({ imageUrl, name }: TProps) {
         length={images.length}
         onIndexChange={setCurrentIndex}
       >
-        {images.map((image) => (
-          <Image key={image.id} src={image.url} alt={image.name} width={360} height={360} className='object-cover aspect-square' />
+        {images.map(({ url, name }, idx) => (
+          <Image key={idx} src={url} alt={name} width={360} height={360} className='object-cover aspect-square' />
         ))}
       </Carousel>
       <CarouselIndicator
