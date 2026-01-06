@@ -4,7 +4,7 @@ import FlowerImagesContainer from './_ui/FlowerImagesContainer';
 /**
  * 꽃 사전 상세 페이지
  */
-const FlowerDetailPage = () => {
+function FlowerDetailPage() {
   return (
     <div className="relative flex-1 overflow-y-auto">
       <FlowerImagesContainer

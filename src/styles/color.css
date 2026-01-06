@@ -15,4 +15,7 @@
 
   /** etc(action) */
   --color-error: #E86652;
+
+  --color-background: var(--color-gray-50);
+  --color-foreground: var(--color-gray-700);
 }

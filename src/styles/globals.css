@@ -27,18 +27,13 @@
   --breakpoint-pc: 1024px;
 }
 
-:root {
-  --background: var(--color-gray-50);
-  --foreground: var(--color-gray-700);
-}
-
 body {
   /**
   TODO: yeeun
   (태리님께 PC, Tablet width 제한 여부 확인 필요)
   */
-  background: var(--background);
-  color: var(--foreground);
+  background: var(--color-background);
+  color: var(--color-foreground);
   /* 모바일 웹브라우저 최적화 (폰트 렌더링 개선, 세로 스크롤만 허용, 바운스 효과 제거)*/
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

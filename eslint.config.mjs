@@ -56,7 +56,7 @@ const eslintConfig = defineConfig([
 
       // 범용적으로 많이 쓰이는 기본 규칙들 (코드 품질 관련)
       'no-console': ['warn', { allow: ['warn', 'error'] }],
-      
+
       // unused-imports 플러그인 규칙
       'no-unused-vars': 'off', // unused-imports/no-unused-vars로 대체
       'unused-imports/no-unused-imports': 'error', // 사용하지 않는 import 자동 삭제
@@ -69,7 +69,8 @@ const eslintConfig = defineConfig([
           argsIgnorePattern: '^_',
         },
       ],
-      
+      'react-hooks/set-state-in-effect': 'off',
+
       'prefer-const': 'error',
       'no-var': 'error',
       'object-shorthand': 'error',
