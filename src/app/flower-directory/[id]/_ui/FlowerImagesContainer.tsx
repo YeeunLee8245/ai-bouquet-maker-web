@@ -40,6 +40,7 @@ function FlowerImagesContainer({ imageUrl, name }: TProps) {
         ))}
       </Carousel>
       <CarouselIndicator
+        className='absolute bottom-[12px] left-[50%] transform -translate-x-1/2'
         count={images.length}
         activeIndex={currentIndex}
       />
