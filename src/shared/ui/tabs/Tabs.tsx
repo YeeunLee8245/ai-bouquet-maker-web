@@ -1,20 +1,18 @@
 'use client';
 
 import * as React from 'react';
-import { TabsContext, useTabsCtx } from './context';
 import type { TTabsProps, TTabsListProps, TTabsTriggerProps, TTabsContentProps } from './types';
+import { useId } from 'react';
+import { TabsContext, useTabsContext } from './hooks/useTabsContext';
 
-function TabsRoot({ value, defaultId: defaultValue, onValueChange, children }: TTabsProps) {
+function TabsRoot({ value, defaultValue, onValueChange, children }: TTabsProps) {
+  const idBase = useId();
+
   const current = defaultValue ?? value;
 
-  const setValue = React.useCallback(
-    (v: string) => {
-      onValueChange?.(v);
-    },
-    [onValueChange],
-  );
-
-  const idBase = React.useId();
+  const setValue = (v: string) => {
+    onValueChange?.(v);
+  };
 
   return (
     <TabsContext.Provider value={{ value: current, setValue, idBase }}>
@@ -36,7 +34,7 @@ TabsList.displayName = 'Tabs.List';
 
 const TabsTrigger = React.forwardRef<HTMLButtonElement, TTabsTriggerProps>(
   ({ value, children, ...props }, ref) => {
-    const { value: active, setValue, idBase } = useTabsCtx();
+    const { value: active, setValue: setValue, idBase } = useTabsContext();
     const selected = active === value;
     const tabId = `${idBase}-tab-${value}`;
     const panelId = `${idBase}-panel-${value}`;
@@ -72,7 +70,7 @@ TabsTrigger.displayName = 'Tabs.Trigger';
 
 const TabsContent = React.forwardRef<HTMLDivElement, TTabsContentProps>(
   ({ value, children, ...props }, ref) => {
-    const { value: active, idBase } = useTabsCtx();
+    const { value: active, idBase } = useTabsContext();
     const selected = active === value;
     const tabId = `${idBase}-tab-${value}`;
     const panelId = `${idBase}-panel-${value}`;

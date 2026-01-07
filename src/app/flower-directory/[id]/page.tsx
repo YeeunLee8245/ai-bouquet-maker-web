@@ -1,6 +1,7 @@
 import { tempFlowerDetailData } from './_datas';
 import FlowerDescContainer from './_ui/FlowerDescContainer';
 import FlowerImagesContainer from './_ui/FlowerImagesContainer';
+import FlowerTabContainer from './_ui/FlowerTabContainer';
 
 /**
  * 꽃 사전 상세 페이지
@@ -15,6 +16,7 @@ function FlowerDetailPage() {
       <FlowerDescContainer
         {...tempFlowerDetailData}
       />
+      <FlowerTabContainer/>
       Flower Detail Page
     </div>
   );
