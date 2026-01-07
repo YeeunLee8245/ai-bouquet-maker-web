@@ -5,7 +5,7 @@ import type { TTabsProps, TTabsListProps, TTabsTriggerProps, TTabsContentProps }
 import { useId } from 'react';
 import { TabsContext, useTabsContext } from './hooks/useTabsContext';
 
-function TabsRoot({ value, defaultValue, onValueChange, children }: TTabsProps) {
+function TabsRoot({ value, defaultValue, onValueChange, children, ...props }: TTabsProps) {
   const idBase = useId();
 
   const current = defaultValue ?? value;
@@ -16,7 +16,7 @@ function TabsRoot({ value, defaultValue, onValueChange, children }: TTabsProps) 
 
   return (
     <TabsContext.Provider value={{ value: current, setValue, idBase }}>
-      <div>{children}</div>
+      <div {...props}>{children}</div>
     </TabsContext.Provider>
   );
 }

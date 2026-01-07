@@ -20,8 +20,7 @@ export type TTabsProps = {
   defaultValue?: string;
   /** 탭 id 값 변경 함수 */
   onValueChange?: (value: string) => void;
-  children: React.ReactNode;
-};
+} & React.HTMLAttributes<HTMLDivElement>;
 
 export type TTabsListProps = React.HTMLAttributes<HTMLDivElement>;
 
