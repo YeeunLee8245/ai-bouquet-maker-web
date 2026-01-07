@@ -6,8 +6,8 @@ type Params = {
   /**
    * 스와이프 거리 px 기준
    */
-  thresholdTouch?: number,
-  thresholdMouse?: number,
+  thresholdTouch?: number;
+  thresholdMouse?: number;
 };
 
 const useSwipeDrag = ({ onPrev, onNext, thresholdTouch = 8, thresholdMouse = 10 }: Params) => {

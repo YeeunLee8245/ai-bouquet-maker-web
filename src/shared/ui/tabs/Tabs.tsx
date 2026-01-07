@@ -4,7 +4,7 @@ import * as React from 'react';
 import { TabsContext, useTabsCtx } from './context';
 import type { TTabsProps, TTabsListProps, TTabsTriggerProps, TTabsContentProps } from './types';
 
-function TabsRoot({ value, defaultValue, onValueChange, children }: TTabsProps) {
+function TabsRoot({ value, defaultId: defaultValue, onValueChange, children }: TTabsProps) {
   const current = defaultValue ?? value;
 
   const setValue = React.useCallback(

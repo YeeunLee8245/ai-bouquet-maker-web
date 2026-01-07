@@ -4,5 +4,5 @@ export interface IInputProps extends React.InputHTMLAttributes<HTMLInputElement>
   leftIcon?: {
     component: React.ReactNode;
     className?: string;
-  }
+  };
 }

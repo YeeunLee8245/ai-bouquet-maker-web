@@ -5,12 +5,12 @@ import * as React from 'react';
 
 type TProps = {
   /** 이 px 이상 스크롤되면 버튼 노출 */
-  showAfterPx?: number
+  showAfterPx?: number;
   /** 버튼 텍스트/아이콘 */
-  children?: React.ReactNode
-  className?: string
+  children?: React.ReactNode;
+  className?: string;
   /** 고정 위치 */
-  position?: 'bottom-right' | 'bottom-left'
+  position?: 'bottom-right' | 'bottom-left';
   /** 스크롤 컨테이너 셀렉터 (기본값: 부모에서 스크롤 가능한 요소 찾기) */
   scrollContainerSelector?: string;
   /** 부모 스크롤 컨테이너 자동 감지 사용 여부 (기본값: true) */

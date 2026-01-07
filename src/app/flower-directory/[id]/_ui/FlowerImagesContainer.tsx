@@ -10,7 +10,7 @@ type TProps = {
   images: {
     url: string;
     name: string;
-  }[]
+  }[];
 };
 
 function FlowerImagesContainer({ images }: TProps) {

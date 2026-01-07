@@ -42,6 +42,10 @@ const eslintConfig = defineConfig([
       'stylistic/arrow-spacing': ['error', { before: true, after: true }],
       'stylistic/comma-dangle': ['error', 'always-multiline'],
       'stylistic/semi': ['error', 'always'],
+      'stylistic/member-delimiter-style': ['error', {
+        multiline: { delimiter: 'semi', requireLast: true },
+        singleline: { delimiter: 'semi', requireLast: false },
+      }],
       'stylistic/comma-spacing': ['error', { before: false, after: true }],
       'stylistic/key-spacing': ['error', { beforeColon: false, afterColon: true }],
       'stylistic/space-before-blocks': ['error', 'always'],

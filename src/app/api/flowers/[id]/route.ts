@@ -67,21 +67,21 @@ import { getUser } from '@/lib/auth';
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     const { id } = await params;
     const flowerId = parseInt(id, 10);
-    
+
     if (isNaN(flowerId)) {
       return NextResponse.json(
         { error: '유효하지 않은 꽃 ID입니다.' },
-        { status: 400 }
+        { status: 400 },
       );
     }
-    
+
     const supabase = await createClient();
-    
+
     // 꽃 상세 정보 조회 (flower_meanings 포함)
     const { data: flower, error } = await supabase
       .from('flowers')
@@ -91,25 +91,25 @@ export async function GET(
       `)
       .eq('id', flowerId)
       .single();
-    
+
     if (error || !flower) {
       return NextResponse.json(
         { error: '꽃을 찾을 수 없습니다.' },
-        { status: 404 }
+        { status: 404 },
       );
     }
-    
+
     // 현재 사용자 확인 (좋아요 여부)
     let isLiked: boolean | undefined = undefined;
     const user = await getUser();
-    
+
     if (user) {
       const { data: publicUser } = await supabase
         .from('users')
         .select('id')
         .eq('auth_id', user.id)
         .single();
-      
+
       if (publicUser) {
         const { data: like } = await supabase
           .from('user_flower_likes')
@@ -117,17 +117,17 @@ export async function GET(
           .eq('user_id', publicUser.id)
           .eq('flower_id', flowerId)
           .single();
-        
+
         isLiked = !!like;
       }
     }
-    
+
     // 유사한 꽃 조회: 감정 태그 매칭 우선, 이후 같은 계절로 채움
     const currentSeasons = flower.seasons || [];
     const emotionTags: string[] = flower.flower_meanings
       ?.flatMap((m: { emotion_tags?: string[] | null }) => m.emotion_tags || []) || [];
     const uniqueEmotionTags = [...new Set(emotionTags)].slice(0, 5);
-    
+
     // 모든 후보 꽃 조회 (같은 계절)
     let candidateQuery = supabase
       .from('flowers')
@@ -139,15 +139,15 @@ export async function GET(
       `)
       .neq('id', flowerId)
       .eq('availability', true);
-    
+
     if (currentSeasons.length > 0) {
       candidateQuery = candidateQuery.or(
-        currentSeasons.map((s: string) => `seasons.cs.{${s}}`).join(',')
+        currentSeasons.map((s: string) => `seasons.cs.{${s}}`).join(','),
       );
     }
-    
+
     const { data: candidateFlowers } = await candidateQuery;
-    
+
     // 감정 태그 매칭 점수 계산 및 정렬
     type CandidateFlower = {
       id: number;
@@ -155,18 +155,18 @@ export async function GET(
       image_url?: string | null;
       flower_meanings?: { meaning: string; is_primary?: boolean; emotion_tags?: string[] | null }[];
     };
-    
+
     const scoredFlowers = (candidateFlowers || []).map((f: CandidateFlower) => {
       const flowerEmotionTags = f.flower_meanings
         ?.flatMap(m => m.emotion_tags || []) || [];
       const matchCount = uniqueEmotionTags.filter(tag => flowerEmotionTags.includes(tag)).length;
       return { ...f, matchScore: matchCount };
     });
-    
+
     // 점수 높은 순 정렬, 상위 4개 선택
     scoredFlowers.sort((a, b) => b.matchScore - a.matchScore);
     const similarFlowers = scoredFlowers.slice(0, 4);
-    
+
     // 응답 데이터 구성
     const meanings = (flower.flower_meanings || []).map((m: {
       id: number;
@@ -183,7 +183,7 @@ export async function GET(
       is_primary: m.is_primary,
       emotion_tags: m.emotion_tags,
     }));
-    
+
     const formattedSimilarFlowers = (similarFlowers || []).map((f: {
       id: number;
       name_ko: string;
@@ -198,7 +198,7 @@ export async function GET(
         .map(m => m.meaning)
         .slice(0, 2),
     }));
-    
+
     return NextResponse.json({
       success: true,
       data: {
@@ -222,7 +222,7 @@ export async function GET(
     console.error('Flower detail error:', error);
     return NextResponse.json(
       { error: '꽃 정보 조회 중 오류가 발생했습니다.' },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
