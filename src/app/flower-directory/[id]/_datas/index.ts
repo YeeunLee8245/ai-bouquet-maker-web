@@ -15,6 +15,23 @@ export const tempFlowerDetailData = {
       name: 'Image 2',
     },
   ],
+  meanings: [
+    {
+      color: '#FF0000',
+      description: '어버이에 대한 사랑과 존경',
+      tags: ['사랑', '감사', '축하'],
+    },
+    {
+      color: '#00FF00',
+      description: '축하와 소중함을 전달하는 꽃',
+      tags: ['사랑', '감사', '축하'],
+    },
+    {
+      color: '#0000FF',
+      description: '신비와 영감을 주는 꽃',
+      tags: ['사랑', '감사', '축하'],
+    },
+  ],
 };
 
 export const flowerTabItems = [

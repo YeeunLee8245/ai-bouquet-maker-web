@@ -8,6 +8,7 @@ import FlowerTabContainer from './_ui/FlowerTabContainer';
  */
 function FlowerDetailPage() {
   const { images } = tempFlowerDetailData;
+
   return (
     <div className="relative flex-1 overflow-y-auto">
       <FlowerImagesContainer
@@ -16,7 +17,9 @@ function FlowerDetailPage() {
       <FlowerDescContainer
         {...tempFlowerDetailData}
       />
-      <FlowerTabContainer/>
+      <FlowerTabContainer {...tempFlowerDetailData}/>
+      <div className='w-full h-micro bg-gray-100' />
+
       Flower Detail Page
     </div>
   );

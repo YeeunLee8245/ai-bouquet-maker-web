@@ -3,8 +3,19 @@
 import { Tabs } from '@/shared/ui/tabs';
 import React, { useState, useLayoutEffect, useRef } from 'react';
 import { flowerTabItems } from '../_datas';
+import FlowerLanguageContents from './FlowerLanguageContents';
+import FlowerFloweringTimeContents from './FlowerFloweringTimeContents';
+import FlowerManagementContents from './FlowerManagementContents';
 
-function FlowerTabContainer() {
+type TProps = {
+  meanings: {
+    color: string;
+    description: string;
+    tags: string[];
+  }[];
+};
+
+function FlowerTabContainer({ meanings }: TProps) {
   const [currentValue, setCurrentValue] = useState<string>(flowerTabItems[0].value);
   const listRef = useRef<HTMLDivElement | null>(null);
   const triggerRefs = useRef<Record<string, HTMLButtonElement | null>>({});
@@ -42,9 +53,11 @@ function FlowerTabContainer() {
             style={{ left: indicatorStyle.left, width: indicatorStyle.width }}
           />
         </Tabs.List>
-        {flowerTabItems.map(({ value, label }) => (
+        {flowerTabItems.map(({ value }) => (
           <Tabs.Content key={value} value={value} className='mt-4'>
-            <p>{label}</p>
+            {value === '1' && <FlowerLanguageContents meanings={meanings} />}
+            {value === '2' && <FlowerFloweringTimeContents />}
+            {value === '3' && <FlowerManagementContents />}
           </Tabs.Content>
         ))}
       </Tabs>
