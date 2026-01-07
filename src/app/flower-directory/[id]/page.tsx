@@ -1,4 +1,5 @@
 import { tempFlowerDetailData } from './_datas';
+import FlowerDescContainer from './_ui/FlowerDescContainer';
 import FlowerImagesContainer from './_ui/FlowerImagesContainer';
 
 /**
@@ -9,7 +10,10 @@ function FlowerDetailPage() {
   return (
     <div className="relative flex-1 overflow-y-auto">
       <FlowerImagesContainer
-        images={images}
+        {...tempFlowerDetailData}
+      />
+      <FlowerDescContainer
+        {...tempFlowerDetailData}
       />
       Flower Detail Page
     </div>

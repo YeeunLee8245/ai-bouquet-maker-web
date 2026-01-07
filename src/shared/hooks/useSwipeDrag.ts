@@ -10,7 +10,7 @@ type Params = {
   thresholdMouse?: number,
 };
 
-const useSwipeDrag = ({ onPrev, onNext, thresholdTouch = 10, thresholdMouse = 10 }: Params) => {
+const useSwipeDrag = ({ onPrev, onNext, thresholdTouch = 8, thresholdMouse = 10 }: Params) => {
   const startX = useRef(0);
   const deltaX = useRef(0);
   const dragging = useRef(false);
