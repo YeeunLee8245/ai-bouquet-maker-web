@@ -13,9 +13,14 @@ type TProps = {
     description: string;
     tags: string[];
   }[];
+  floweringTime: {
+    season: string[];
+    months: string[];
+  };
+  management: string;
 };
 
-function FlowerTabContainer({ meanings }: TProps) {
+function FlowerTabContainer({ meanings, floweringTime, management }: TProps) {
   const [currentValue, setCurrentValue] = useState<string>(flowerTabItems[0].value);
   const listRef = useRef<HTMLDivElement | null>(null);
   const triggerRefs = useRef<Record<string, HTMLButtonElement | null>>({});
@@ -54,10 +59,10 @@ function FlowerTabContainer({ meanings }: TProps) {
           />
         </Tabs.List>
         {flowerTabItems.map(({ value }) => (
-          <Tabs.Content key={value} value={value} className='mt-4'>
+          <Tabs.Content key={value} value={value} className='mt-4 px-micro pb-1'>
             {value === '1' && <FlowerLanguageContents meanings={meanings} />}
-            {value === '2' && <FlowerFloweringTimeContents />}
-            {value === '3' && <FlowerManagementContents />}
+            {value === '2' && <FlowerFloweringTimeContents floweringTime={floweringTime} />}
+            {value === '3' && <FlowerManagementContents management={management} />}
           </Tabs.Content>
         ))}
       </Tabs>
