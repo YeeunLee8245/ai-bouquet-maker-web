@@ -1,6 +1,7 @@
 import { tempFlowerDetailData } from './_datas';
 import FlowerDescContainer from './_ui/FlowerDescContainer';
 import FlowerImagesContainer from './_ui/FlowerImagesContainer';
+import FlowerSimilarContainer from './_ui/FlowerSimilarContainer';
 import FlowerTabContainer from './_ui/FlowerTabContainer';
 
 /**
@@ -19,8 +20,7 @@ function FlowerDetailPage() {
       />
       <FlowerTabContainer {...tempFlowerDetailData}/>
       <div className='w-full h-micro bg-gray-100' />
-
-      Flower Detail Page
+      <FlowerSimilarContainer {...tempFlowerDetailData}/>
     </div>
   );
 };

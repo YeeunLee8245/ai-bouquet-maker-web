@@ -37,6 +37,38 @@ export const tempFlowerDetailData = {
     months: ['3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
   },
   management: '반그늘을 좋아하며, 산성 토양에서 잘 자랍니다.',
+  similarFlowers: [
+    {
+      id: '1',
+      name: '거베라',
+      imageUrl: '/temp_geobera.png',
+      tags: ['사랑', '감사', '축하'],
+    },
+    {
+      id: '2',
+      name: '거베라',
+      imageUrl: '/temp_geobera.png',
+      tags: ['사랑', '감사', '축하'],
+    },
+    {
+      id: '3',
+      name: '거베라',
+      imageUrl: '/temp_geobera.png',
+      tags: ['사랑', '감사', '축하'],
+    },
+    {
+      id: '4',
+      name: '거베라',
+      imageUrl: '/temp_geobera.png',
+      tags: ['사랑', '감사', '축하'],
+    },
+    {
+      id: '5',
+      name: '거베라',
+      imageUrl: '/temp_geobera.png',
+      tags: ['사랑', '감사', '축하'],
+    },
+  ],
 };
 
 export const flowerTabItems = [

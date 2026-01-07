@@ -13,7 +13,7 @@ type TProps = {
   colors?: string[];
   tags: string[];
   actionButton?: React.ReactNode;
-};
+} & React.HTMLAttributes<HTMLDivElement>;
 
 const flowerCardImageSizes: Record<TProps['size'], { width: number; height: number }> = {
   md: {
@@ -26,19 +26,22 @@ const flowerCardImageSizes: Record<TProps['size'], { width: number; height: numb
   },
 };
 
-function FlowerCard({ size, imageUrl, id, name, isLiked, colors, tags, actionButton }: TProps) {
+function FlowerCard({ size, imageUrl, id, name, isLiked, colors, tags, actionButton, className, ...props }: TProps) {
   return (
-    <div className='flex flex-col'>
+    <div className={cn('flex flex-col', className)} {...props}>
       <Link
         aria-label={`${name} 상세 페이지 보기`}
         href={`/flower-directory/${id}`}
-        className={cn('relative overflow-hidden', size === 'md' && 'rounded-4', size === 'lg' && 'rounded-3')}>
+        className={cn('relative')}>
         <Image
           src={imageUrl}
           alt={name}
           width={flowerCardImageSizes[size].width}
           height={flowerCardImageSizes[size].height}
-          className='object-cover'
+          className={cn('object-cover',
+            size === 'md' && 'rounded-4 border-1 border-gray-100',
+            size === 'lg' && 'rounded-3',
+          )}
         />
         {isLiked !== undefined && (
           <button className='absolute top-2 right-2 text-black/20 hover:text-primary-400'>
@@ -46,7 +49,9 @@ function FlowerCard({ size, imageUrl, id, name, isLiked, colors, tags, actionBut
           </button>
         )}
         {colors && (
-          <div className='absolute bottom-0 right-0 p-2 w-full flex justify-end gap-1 backdrop-blur-[1px] bg-gradient-to-b from-[#CECECE]/0 to-black/12'>
+          <div className={cn('absolute bottom-0 right-0 p-2 w-full flex justify-end gap-1 backdrop-blur-[1px] bg-gradient-to-b from-[#CECECE]/0 to-black/12',
+            size === 'md' && 'rounded-4', size === 'lg' && 'rounded-3',
+          )}>
             {colors.map((hexColor, idx) => (
               <span
                 key={hexColor}
@@ -57,9 +62,9 @@ function FlowerCard({ size, imageUrl, id, name, isLiked, colors, tags, actionBut
           </div>
         )}
       </Link>
-      <div className='mt-2'>
-        <p className='text-body-lg'>{name}</p>
-        <div className='flex gap-2 mt-2'>
+      <div className={cn(size === 'md' && 'mt-1', size === 'lg' && 'mt-2')}>
+        <p className={cn('text-body-lg', size === 'md' && 'pt-micro')}>{name}</p>
+        <div className={cn('flex mt-2', size === 'md' && 'gap-1', size === 'lg' && 'gap-2')}>
           {tags.map((tag) => (
             <span key={tag} className='max-w-[140px] overflow-hidden text-ellipsis whitespace-nowrap py-1 px-2 rounded-3 bg-gray-100 text-ui-tag text-gray-400'>{tag}</span>
           ))}
