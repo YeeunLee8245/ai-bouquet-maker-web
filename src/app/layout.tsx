@@ -23,7 +23,7 @@ export default function RootLayout({
     <html lang="en">
       <body className='flex flex-col h-dvh overflow-hidden w-[360px] mx-auto'>
         <Header />
-        <main className='flex-1 overflow-y-auto overscroll-contain'>
+        <main className='max-h-[calc(100%-48px)] h-full overscroll-contain'>
           {children}
         </main>
       </body>

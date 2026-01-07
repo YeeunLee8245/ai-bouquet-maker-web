@@ -1,12 +1,12 @@
 'use client';
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef, useEffect, useEffectEvent } from 'react';
 import { createPortal } from 'react-dom';
 import TooltipIcon from '@/shared/assets/icons/tooltip.svg';
 import { ITooltipButtonProps } from './types';
 
 const MARGIN = 16; // 화면 경계 여백
 
-function TooltipButton({ msg, position = 'bottom-right' }: ITooltipButtonProps) {
+function TooltipButton({ msg, position = 'bottom-right', scrollContainerElement }: ITooltipButtonProps) {
   const [isOpen, setIsOpen] = useState(false);
   const triggerRef = useRef<HTMLDivElement>(null);
 
@@ -79,6 +79,19 @@ function TooltipButton({ msg, position = 'bottom-right' }: ITooltipButtonProps) 
     }
 
   }, [position]);
+
+  const handleScroll = useEffectEvent(() => {
+    setIsOpen(false);
+  });
+
+  useEffect(() => {
+    if (!isOpen) {return;}
+    const scrollContainer = scrollContainerElement ? scrollContainerElement : document.body;
+    scrollContainer?.addEventListener('scroll', handleScroll);
+    return () => {
+      scrollContainer?.removeEventListener('scroll', handleScroll);
+    };
+  }, [isOpen, scrollContainerElement]);
 
   return (
     <>
