@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import '../styles/globals.css';
 import Header from '@/widgets/header/Header';
+import AppProviders from '@/shared/providers/AppProviders';
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -20,13 +21,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className='flex flex-col h-dvh overflow-hidden w-[360px] mx-auto'>
-        <Header />
-        <main className='max-h-[calc(100%-48px)] h-full overscroll-contain'>
-          {children}
-        </main>
-      </body>
-    </html>
+    <AppProviders>
+      <html lang="ko">
+        <body className='flex flex-col h-dvh overflow-hidden w-[360px] mx-auto'>
+          <Header />
+          <main className='max-h-[calc(100%-48px)] h-full overscroll-contain'>
+            {children}
+          </main>
+        </body>
+      </html>
+    </AppProviders>
   );
 }
