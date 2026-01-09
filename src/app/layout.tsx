@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import '../styles/globals.css';
 import Header from '@/widgets/header/Header';
-import AppProviders from '@/shared/providers/AppProviders';
+import AppProviders from '@/shared/providers/app-providers';
 
 export const metadata: Metadata = {
   title: 'Create Next App',
