@@ -1,4 +1,5 @@
 export const tempFlowerDetailData = {
+  id: '1',
   title: {
     ko: '거베라',
     en: 'Gerbera / Gerbera jamesonii',
