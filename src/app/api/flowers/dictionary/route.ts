@@ -23,7 +23,7 @@ function getCurrentSeason(): string {
  *     description: |
  *       필터, 검색, 정렬을 지원하는 꽃 사전 API
  *       
- *       **계절 기본값**: 서버 시간 기준 현재 계절
+ *       **필터 미지정 시**: 모든 계절/색상 꽃 조회
  *     parameters:
  *       - name: seasons
  *         in: query
@@ -107,10 +107,10 @@ export async function GET(request: NextRequest) {
     const page = parseInt(searchParams.get('page') || '1', 10);
     const limit = parseInt(searchParams.get('limit') || '20', 10);
     
-    // 계절 필터 (기본값: 서버 시간 계절)
+    // 계절 필터
     const seasons = seasonsParam 
       ? seasonsParam.split(',').map(s => s.trim()) 
-      : [defaultSeason];
+      : null;
     
     // 색상 필터
     const colors = colorsParam 
@@ -220,10 +220,12 @@ export async function GET(request: NextRequest) {
       query = query.in('id', colorFilteredFlowerIds);
     }
     
-    // 계절 필터 적용 (season이 seasons 배열에 포함되거나, all_year인 경우)
-    query = query.or(
-      seasons.map(s => `seasons.cs.{${s}}`).join(',') + ',seasons.cs.{all_year}'
-    );
+    // 계절 필터 적용 (seasons 파라미터가 있을 때만)
+    if (seasons) {
+      query = query.or(
+        seasons.map(s => `seasons.cs.{${s}}`).join(',') + ',seasons.cs.{all_year}'
+      );
+    }
     
     // 검색어 필터 (꽃 이름 + 꽃말 검색)
     if (search) {
