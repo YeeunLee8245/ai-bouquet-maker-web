@@ -3,6 +3,7 @@ import { createClient } from '@/lib/supabase/server';
 import { getUser } from '@/lib/auth';
 import { analyzeEmotion } from '@services/emotion-analysis';
 import { getRecommendationsFromAnalysis } from '@/lib/recommendation';
+import { spendToken, getUserBalance } from '@/lib/wallet';
 
 /**
  * @swagger
@@ -14,6 +15,7 @@ import { getRecommendationsFromAnalysis } from '@/lib/recommendation';
  *     description: |
  *       사용자의 감정/상황 텍스트를 AI가 분석하여 꽃을 추천합니다.
  *       최대 10개의 추천 결과를 반환하며, 페이징을 지원하지 않습니다.
+ *       **요청 1회당 AI 추천 토큰 1개가 소진됩니다.**
  *
  *       <details>
  *       <summary>📊 점수 계산 방식 (클릭하여 펼치기)</summary>
@@ -87,6 +89,17 @@ import { getRecommendationsFromAnalysis } from '@/lib/recommendation';
  *         description: 잘못된 요청
  *       401:
  *         description: 인증 필요 (로그인 필수)
+ *       403:
+ *         description: 토큰 부족 (AI 추천 토큰 필요)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *             example:
+ *               error: "사용 가능한 토큰 부족"
  *       500:
  *         description: 서버 오류
  */
@@ -126,6 +139,15 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // AI 분석 전 토큰 선검사
+    const balance = await getUserBalance(user.id);
+    if (balance < 1) {
+      return NextResponse.json(
+        { error: '사용 가능한 토큰 부족' },
+        { status: 403 },
+      );
+    }
+
     // AI 분석
     const analysis = await analyzeEmotion(text);
 
@@ -158,6 +180,20 @@ export async function POST(request: NextRequest) {
 
       if (!saveError && newRecommendation) {
         recommendationId = newRecommendation.id;
+
+        if (recommendationId) {
+          try {
+            await spendToken(user.id, recommendationId);
+          } catch (tokenError: any) {
+            // 토큰 부족 시 저장된 추천 데이터 삭제 (선택 사항)
+            await supabase.from('recommendations').delete().eq('id', recommendationId);
+            
+            return NextResponse.json(
+              { error: tokenError.message || '토큰이 부족합니다.' },
+              { status: 403 },
+            );
+          }
+        }
       } else {
         console.error('Failed to save recommendation:', saveError);
       }
