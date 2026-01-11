@@ -72,20 +72,20 @@ import { getCardRecommendations } from '@/lib/card-recommendation';
  *               success: true
  *               recommendation_id: "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
  *               recommendations:
- *                 - flower:
- *                     id: 28
- *                     name_ko: "안스리움"
- *                     image_url: "anthurium.jpg"
+ *                 - flower_id: 28
+ *                   flower_meaning_id: 58
+ *                   flower_name: "안스리움"
+ *                   meaning: "사랑에 번민하는 마음"
+ *                   color: "분홍"
  *                   score: 17
- *                   matchedTags: ["사랑", "행복", "분홍 컬러"]
- *                   inSeason: true
- *                 - flower:
- *                     id: 1
- *                     name_ko: "장미"
- *                     image_url: "rose.jpg"
+ *                   image_url: "anthurium.jpg"
+ *                 - flower_id: 1
+ *                   flower_meaning_id: 2
+ *                   flower_name: "장미"
+ *                   meaning: "불타는 사랑"
+ *                   color: "빨강"
  *                   score: 16
- *                   matchedTags: ["사랑", "상황 추천 꽃"]
- *                   inSeason: true
+ *                   image_url: "rose.jpg"
  *               ranked:
  *                 - flower_id: 28
  *                   flower_meaning_id: 58
@@ -175,16 +175,27 @@ export async function GET(request: NextRequest) {
       console.error('Failed to save preset recommendation:', dbError);
     }
 
+    // 표준화된 응답 형식으로 변환
+    const standardizedRecommendations = recommendations.map(rec => ({
+      flower_id: rec.flower.id,
+      flower_meaning_id: rec.flowerMeaningId || 0,
+      flower_name: rec.flower.name_ko,
+      meaning: rec.flower.flower_meanings?.find(m => m.id === rec.flowerMeaningId)?.meaning || '',
+      color: rec.flower.flower_meanings?.find(m => m.id === rec.flowerMeaningId)?.color || '',
+      score: rec.score,
+      image_url: rec.flower.image_url || null,
+    }));
+
     return NextResponse.json({
       success: true,
       recommendation_id: recommendationId,
-      recommendations,
+      recommendations: standardizedRecommendations,
       ranked,
       metadata: {
         type: 'preset',
         relationship,
         occasion,
-        flower_count: recommendations.length,
+        flower_count: standardizedRecommendations.length,
       },
     });
   } catch (error) {

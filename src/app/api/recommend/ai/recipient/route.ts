@@ -86,18 +86,20 @@ import { getRecommendationsFromAnalysis } from '@/lib/recommendation';
  *                 message: "당신을 생각하면 늘 미소가 지어져요. 사랑해요."
  *                 recipient: "여자친구"
  *               recommendations:
- *                 - flower:
- *                     id: 15
- *                     name_ko: "작약"
- *                     image_url: "peony.jpg"
+ *                 - flower_id: 15
+ *                   flower_meaning_id: 30
+ *                   flower_name: "작약"
+ *                   meaning: "수줍음"
+ *                   color: "분홍"
  *                   score: 35
- *                   matchedTags: ["연인", "우아한", "AI 추천", "분홍 컬러"]
- *                 - flower:
- *                     id: 1
- *                     name_ko: "장미"
- *                     image_url: "rose.jpg"
+ *                   image_url: "peony.jpg"
+ *                 - flower_id: 1
+ *                   flower_meaning_id: 2
+ *                   flower_name: "장미"
+ *                   meaning: "불타는 사랑"
+ *                   color: "빨강"
  *                   score: 28
- *                   matchedTags: ["사랑", "연인", "AI 추천"]
+ *                   image_url: "rose.jpg"
  *               ranked:
  *                 - flower_id: 15
  *                   flower_meaning_id: 30
@@ -189,16 +191,27 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    // 표준화된 응답 형식으로 변환
+    const standardizedRecommendations = recommendations.map(rec => ({
+      flower_id: rec.flower.id,
+      flower_meaning_id: rec.flowerMeaningId || 0,
+      flower_name: rec.flower.name_ko,
+      meaning: rec.flower.flower_meanings?.find(m => m.id === rec.flowerMeaningId)?.meaning || '',
+      color: rec.flower.flower_meanings?.find(m => m.id === rec.flowerMeaningId)?.color || '',
+      score: rec.score,
+      image_url: rec.flower.image_url || null,
+    }));
+
     return NextResponse.json({
       success: true,
       recommendation_id: recommendationId,
       analysis,
-      recommendations,
+      recommendations: standardizedRecommendations,
       ranked,
       metadata: {
         type: 'recipient',
         input_text: text,
-        flower_count: recommendations.length,
+        flower_count: standardizedRecommendations.length,
       },
     });
   } catch (error) {

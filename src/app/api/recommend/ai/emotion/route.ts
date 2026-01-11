@@ -83,18 +83,20 @@ import { getRecommendationsFromAnalysis } from '@/lib/recommendation';
  *                 message: "힘든 날이 지나가고, 당신에게 평화가 찾아오길 바랍니다."
  *                 recipient: ""
  *               recommendations:
- *                 - flower:
- *                     id: 12
- *                     name_ko: "안개꽃"
- *                     image_url: "gypsophila.jpg"
+ *                 - flower_id: 12
+ *                   flower_meaning_id: 24
+ *                   flower_name: "안개꽃"
+ *                   meaning: "맑은 마음"
+ *                   color: "하양"
  *                   score: 26
- *                   matchedTags: ["위로", "AI 추천", "하양 컬러"]
- *                 - flower:
- *                     id: 5
- *                     name_ko: "프리지아"
- *                     image_url: "freesia.jpg"
+ *                   image_url: "gypsophila.jpg"
+ *                 - flower_id: 5
+ *                   flower_meaning_id: 10
+ *                   flower_name: "프리지아"
+ *                   meaning: "당신의 시작을 응원해"
+ *                   color: "노랑"
  *                   score: 18
- *                   matchedTags: ["희망"]
+ *                   image_url: "freesia.jpg"
  *               ranked:
  *                 - flower_id: 12
  *                   flower_meaning_id: 24
@@ -185,16 +187,27 @@ export async function POST(request: NextRequest) {
         console.error('Failed to save recommendation:', saveError);
       }
     }
+    // 표준화된 응답 형식으로 변환
+    const standardizedRecommendations = recommendations.map(rec => ({
+      flower_id: rec.flower.id,
+      flower_meaning_id: rec.flowerMeaningId || 0,
+      flower_name: rec.flower.name_ko,
+      meaning: rec.flower.flower_meanings?.find(m => m.id === rec.flowerMeaningId)?.meaning || '',
+      color: rec.flower.flower_meanings?.find(m => m.id === rec.flowerMeaningId)?.color || '',
+      score: rec.score,
+      image_url: rec.flower.image_url || null,
+    }));
+
     return NextResponse.json({
       success: true,
       recommendation_id: recommendationId,
       analysis,
-      recommendations,
+      recommendations: standardizedRecommendations,
       ranked,
       metadata: {
         type: 'emotion',
         input_text: text,
-        flower_count: recommendations.length,
+        flower_count: standardizedRecommendations.length,
       },
     });
   } catch (error) {
