@@ -13,6 +13,7 @@ import { getRecommendationsFromAnalysis } from '@/lib/recommendation';
  *     summary: AI 대상 맞춤 꽃 추천
  *     description: |
  *       받는 사람에 대한 설명을 AI가 분석하여 맞춤 꽃을 추천합니다.
+ *       최대 10개의 추천 결과를 반환하며, 페이징을 지원하지 않습니다.
  *
  *       <details>
  *       <summary>📊 점수 계산 방식 (클릭하여 펼치기)</summary>
@@ -58,33 +59,15 @@ import { getRecommendationsFromAnalysis } from '@/lib/recommendation';
  *                   type: string
  *                   format: uuid
  *                   nullable: true
- *                 analysis:
- *                   type: object
+ *                 total_count:
+ *                   type: integer
+ *                   description: "검색된 꽃의 총 개수 (최대 10개)"
  *                 recommendations:
  *                   type: array
- *                 ranked:
- *                   type: array
- *                 metadata:
- *                   type: object
  *             example:
  *               success: true
  *               recommendation_id: "a2b3c4d5-e6f7-8901-abcd-ef1234567890"
- *               analysis:
- *                 title: "우아한 여자친구를 위한 꽃"
- *                 tags:
- *                   emotion_tags: ["사랑", "아름다움"]
- *                   situation_tags: []
- *                   relation_tags: ["연인"]
- *                   style_tags: ["우아한", "차분한"]
- *                 recommend_flowers:
- *                   - flower_name: "작약"
- *                     color: "분홍"
- *                     reason: "우아하고 풍성한 느낌을 줍니다."
- *                   - flower_name: "장미"
- *                     color: "연분홍"
- *                     reason: "사랑을 표현하는 대표적인 꽃입니다."
- *                 message: "당신을 생각하면 늘 미소가 지어져요. 사랑해요."
- *                 recipient: "여자친구"
+ *               total_count: 2
  *               recommendations:
  *                 - flower_id: 15
  *                   flower_meaning_id: 30
@@ -100,17 +83,6 @@ import { getRecommendationsFromAnalysis } from '@/lib/recommendation';
  *                   color: "빨강"
  *                   score: 28
  *                   image_url: "rose.jpg"
- *               ranked:
- *                 - flower_id: 15
- *                   flower_meaning_id: 30
- *                   score: 35
- *                 - flower_id: 1
- *                   flower_meaning_id: 2
- *                   score: 28
- *               metadata:
- *                 type: "recipient"
- *                 input_text: "30대 여자친구, 차분하고 우아한 스타일을 좋아해요"
- *                 flower_count: 2
  *       400:
  *         description: 잘못된 요청
  *       401:
@@ -205,14 +177,8 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       recommendation_id: recommendationId,
-      analysis,
+      total_count: standardizedRecommendations.length,
       recommendations: standardizedRecommendations,
-      ranked,
-      metadata: {
-        type: 'recipient',
-        input_text: text,
-        flower_count: standardizedRecommendations.length,
-      },
     });
   } catch (error) {
     console.error('AI Recipient Recommend Error:', error);

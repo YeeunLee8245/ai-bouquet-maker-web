@@ -13,7 +13,7 @@ import { getCardRecommendations } from '@/lib/card-recommendation';
  *     description: |
  *       대상(relationship)과 상황(occasion)을 선택하여 꽃을 추천받습니다.
  *       AI를 사용하지 않고 DB 기반 고정 점수 계산 방식을 사용합니다.
- *       URL 공유가 가능하며, 조회 기록이 DB에 저장됩니다.
+ *       최대 10개의 추천 결과를 반환하며, 페이징을 지원하지 않습니다.
  *
  *       **사용 예시:**
  *       - `GET /api/recommend/preset?relationship=lover&occasion=birthday_anniversary`
@@ -68,9 +68,21 @@ import { getCardRecommendations } from '@/lib/card-recommendation';
  *           application/json:
  *             schema:
  *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 recommendation_id:
+ *                   type: string
+ *                   format: uuid
+ *                 total_count:
+ *                   type: integer
+ *                   description: "검색된 꽃의 총 개수 (최대 10개)"
+ *                 recommendations:
+ *                   type: array
  *             example:
  *               success: true
  *               recommendation_id: "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+ *               total_count: 2
  *               recommendations:
  *                 - flower_id: 28
  *                   flower_meaning_id: 58
@@ -86,15 +98,6 @@ import { getCardRecommendations } from '@/lib/card-recommendation';
  *                   color: "빨강"
  *                   score: 16
  *                   image_url: "rose.jpg"
- *               ranked:
- *                 - flower_id: 28
- *                   flower_meaning_id: 58
- *                   score: 17
- *               metadata:
- *                 type: "preset"
- *                 relationship: "lover"
- *                 occasion: "birthday"
- *                 flower_count: 2
  *       400:
  *         description: 잘못된 요청
  *       404:
@@ -189,14 +192,8 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({
       success: true,
       recommendation_id: recommendationId,
+      total_count: standardizedRecommendations.length,
       recommendations: standardizedRecommendations,
-      ranked,
-      metadata: {
-        type: 'preset',
-        relationship,
-        occasion,
-        flower_count: standardizedRecommendations.length,
-      },
     });
   } catch (error) {
     console.error('Preset Recommend API Error:', error);

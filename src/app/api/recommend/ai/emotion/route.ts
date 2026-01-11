@@ -13,6 +13,7 @@ import { getRecommendationsFromAnalysis } from '@/lib/recommendation';
  *     summary: AI 감정 기반 꽃 추천
  *     description: |
  *       사용자의 감정/상황 텍스트를 AI가 분석하여 꽃을 추천합니다.
+ *       최대 10개의 추천 결과를 반환하며, 페이징을 지원하지 않습니다.
  *
  *       <details>
  *       <summary>📊 점수 계산 방식 (클릭하여 펼치기)</summary>
@@ -58,30 +59,15 @@ import { getRecommendationsFromAnalysis } from '@/lib/recommendation';
  *                   type: string
  *                   format: uuid
  *                   nullable: true
- *                 analysis:
- *                   type: object
+ *                 total_count:
+ *                   type: integer
+ *                   description: "검색된 꽃의 총 개수 (최대 10개)"
  *                 recommendations:
  *                   type: array
- *                 ranked:
- *                   type: array
- *                 metadata:
- *                   type: object
  *             example:
  *               success: true
  *               recommendation_id: "18561ccb-20c4-4bdb-8905-ec2647f471c5"
- *               analysis:
- *                 title: "위로의 꽃"
- *                 tags:
- *                   emotion_tags: ["위로", "희망"]
- *                   situation_tags: []
- *                   relation_tags: []
- *                   style_tags: []
- *                 recommend_flowers:
- *                   - flower_name: "안개꽃"
- *                     color: "하양"
- *                     reason: "순수하고 편안한 느낌을 줍니다."
- *                 message: "힘든 날이 지나가고, 당신에게 평화가 찾아오길 바랍니다."
- *                 recipient: ""
+ *               total_count: 2
  *               recommendations:
  *                 - flower_id: 12
  *                   flower_meaning_id: 24
@@ -97,17 +83,6 @@ import { getRecommendationsFromAnalysis } from '@/lib/recommendation';
  *                   color: "노랑"
  *                   score: 18
  *                   image_url: "freesia.jpg"
- *               ranked:
- *                 - flower_id: 12
- *                   flower_meaning_id: 24
- *                   score: 26
- *                 - flower_id: 5
- *                   flower_meaning_id: 10
- *                   score: 18
- *               metadata:
- *                 type: "emotion"
- *                 input_text: "요즘 많이 지쳐있어서 위로받고 싶어요"
- *                 flower_count: 2
  *       400:
  *         description: 잘못된 요청
  *       401:
@@ -201,14 +176,8 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       recommendation_id: recommendationId,
-      analysis,
+      total_count: standardizedRecommendations.length,
       recommendations: standardizedRecommendations,
-      ranked,
-      metadata: {
-        type: 'emotion',
-        input_text: text,
-        flower_count: standardizedRecommendations.length,
-      },
     });
   } catch (error) {
     console.error('AI Emotion Recommend Error:', error);
