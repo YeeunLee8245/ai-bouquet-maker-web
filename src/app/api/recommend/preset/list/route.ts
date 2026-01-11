@@ -52,7 +52,7 @@ export async function GET(request: NextRequest) {
 
     // relationship 파라미터가 있으면 해당 관계에 맞는 상황만 반환
     if (relationship) {
-      const occasions = getAvailableOccasions(relationship);
+      const occasions = await getAvailableOccasions(relationship);
       return NextResponse.json({
         success: true,
         occasions,
@@ -60,8 +60,8 @@ export async function GET(request: NextRequest) {
     }
 
     // relationship 파라미터가 없으면 전체 관계 + 전체 상황 목록 반환
-    const relationships = getAvailableRelationships();
-    const occasions = getAllOccasions();
+    const relationships = await getAvailableRelationships();
+    const occasions = await getAllOccasions();
 
     return NextResponse.json({
       success: true,
