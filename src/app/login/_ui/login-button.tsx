@@ -16,11 +16,11 @@ export function LoginButton({ provider, className }: TProps) {
       href={link}
       className={
         cn(
-          'relative w-full h-[48px] px-2 border border-gray-100 rounded-4 transition hover:border-primary-400 hover:shadow-sm',
+          'relative w-full h-[48px] px-2 rounded-4 transition',
           className,
         )}>
       {cloneElement(iconComponent, { className: 'absolute top-1/2 -translate-y-1/2' } as React.HTMLAttributes<HTMLElement>)}
-      <p className='pb-micro text-body-md'>{name}</p>
+      <p className='pb-micro text-body-md w-full h-full text-center content-center'>{name} 로그인</p>
     </Link>
   );
 }

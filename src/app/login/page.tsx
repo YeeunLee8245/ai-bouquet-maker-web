@@ -1,5 +1,6 @@
-import GoogleIcon from '@shared/assets/icons/google.svg';
-import KakaoIcon from '@shared/assets/icons/kakao.svg';
+import { LOGIN_PROVIDER_LIST } from './_datas';
+import LoginButton from './_ui/login-button';
+import { cn } from '@/shared/utils/styles';
 
 /**
  * 로그인 페이지
@@ -13,14 +14,21 @@ const LoginPage = () => {
         {'꽃다발 레시피에 로그인하고\n맞춤 추천을 받아 보세요.'}
       </p>
       <div className="mt-10 w-full flex flex-col gap-2">
-        <button className="relative w-full h-[48px] px-2 border border-gray-100 rounded-4 transition hover:border-primary-400 hover:shadow-sm">
-          <GoogleIcon className="absolute left-[11.33px] top-1/2 -translate-y-1/2" />
-          <p className='pb-micro text-body-md'>Google 로그인</p>
-        </button>
-        <button className="relative w-full h-[48px] px-2 bg-[#FFE400] rounded-4 transition hover:brightness-95 hover:shadow-inner">
-          <KakaoIcon className="absolute left-[12.3px] top-1/2 -translate-y-1/2" />
-          <p className='pb-micro text-body-md'>카카오 로그인</p>
-        </button>
+        {LOGIN_PROVIDER_LIST.map((provider) => {
+          const { id } = provider;
+          return (
+            <LoginButton
+              key={id}
+              provider={provider}
+              className={
+                cn(
+                  id === 'google' && 'border border-gray-100 rounded-4 transition hover:border-primary-400 hover:shadow-sm [&>svg]:left-[11.33px]',
+                  id === 'kakao' && 'bg-[#FFE400] rounded-4 transition hover:brightness-95 hover:shadow-inner [&>svg]:left-[12.3px]',
+                )
+              }
+            />
+          );
+        })}
       </div>
     </div>
   );
