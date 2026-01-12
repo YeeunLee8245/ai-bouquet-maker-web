@@ -15,7 +15,21 @@ import { spendToken, getUserBalance } from '@/lib/wallet';
  *     description: |
  *       사용자의 감정/상황 텍스트를 AI가 분석하여 꽃을 추천합니다.
  *       최대 10개의 추천 결과를 반환하며, 페이징을 지원하지 않습니다.
- *       **요청 1회당 AI 추천 토큰 1개가 소진됩니다.**
+ *       **요청 1회당 AI 추천 토큰 1개가 소진됩니다. (성공 시에만)**
+ *
+ *       <details>
+ *       <summary>⚙️ 처리 순서 (클릭하여 펼치기)</summary>
+ *
+ *       ```
+ *       1. 토큰 잔액 확인 (부족 시 403 반환)
+ *       2. 사용자 조회
+ *       3. DB INSERT (status='pending')
+ *       4. AI 분석 수행
+ *       5. 결과 UPDATE
+ *          ├─ 성공: status='success' + 결과 저장 → 토큰 차감
+ *          └─ 실패: status='failed' + error_msg 저장 (토큰 차감 X)
+ *       ```
+ *       </details>
  *
  *       <details>
  *       <summary>📊 점수 계산 방식 (클릭하여 펼치기)</summary>
@@ -148,73 +162,119 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // AI 분석
-    const analysis = await analyzeEmotion(text);
-
-    // 점수 계산 및 꽃 추천
-    const { recommendations, ranked } = await getRecommendationsFromAnalysis(analysis, 'emotion');
-
-    // DB에 저장 (이미 인증된 사용자)
-    let recommendationId: string | null = null;
     const supabase = await createClient();
 
+    // 사용자 조회
     const { data: publicUser, error: userError } = await supabase
       .from('users')
       .select('id')
       .eq('auth_id', user.id)
       .single();
 
-    if (!userError && publicUser) {
-      const { data: newRecommendation, error: saveError } = await supabase
+    if (userError || !publicUser) {
+      return NextResponse.json(
+        { error: '사용자 정보를 찾을 수 없습니다.' },
+        { status: 404 },
+      );
+    }
+
+    // pending 상태로 먼저 저장
+    const { data: pendingRecommendation, error: insertError } = await supabase
+      .from('recommendations')
+      .insert({
+        user_id: publicUser.id,
+        recommendation_type: 'emotion',
+        input_text: text,
+        status: 'pending',
+        created_at: new Date().toISOString(),
+      })
+      .select('id')
+      .single();
+
+    if (insertError || !pendingRecommendation) {
+      console.error('Failed to create pending recommendation:', insertError);
+      return NextResponse.json(
+        { error: '추천 요청 생성에 실패했습니다.' },
+        { status: 500 },
+      );
+    }
+
+    const recommendationId = pendingRecommendation.id;
+
+    try {
+      // AI 분석
+      const analysis = await analyzeEmotion(text);
+
+      // 점수 계산 및 꽃 추천
+      const { recommendations, ranked } = await getRecommendationsFromAnalysis(analysis, 'emotion');
+
+      // 성공: status를 success로 업데이트 + 결과 저장
+      await supabase
         .from('recommendations')
-        .insert({
-          user_id: publicUser.id,
-          recommendation_type: 'emotion',
-          input_text: text,
+        .update({
+          status: 'success',
           analysis_result: analysis,
           recommended_flowers: ranked,
-          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
         })
-        .select('id')
-        .single();
+        .eq('id', recommendationId);
 
-      if (!saveError && newRecommendation) {
-        recommendationId = newRecommendation.id;
+      // 토큰 차감 (성공 시에만)
+      try {
+        await spendToken(user.id, recommendationId);
+      } catch (tokenError: unknown) {
+        const errorMessage = tokenError instanceof Error ? tokenError.message : '토큰 차감 실패';
+        // 토큰 차감 실패 시 status를 failed로 변경
+        await supabase
+          .from('recommendations')
+          .update({
+            status: 'failed',
+            error_msg: errorMessage,
+            updated_at: new Date().toISOString(),
+          })
+          .eq('id', recommendationId);
 
-        if (recommendationId) {
-          try {
-            await spendToken(user.id, recommendationId);
-          } catch (tokenError: any) {
-            // 토큰 부족 시 저장된 추천 데이터 삭제 (선택 사항)
-            await supabase.from('recommendations').delete().eq('id', recommendationId);
-            
-            return NextResponse.json(
-              { error: tokenError.message || '토큰이 부족합니다.' },
-              { status: 403 },
-            );
-          }
-        }
-      } else {
-        console.error('Failed to save recommendation:', saveError);
+        return NextResponse.json(
+          { error: errorMessage },
+          { status: 403 },
+        );
       }
-    }
-    // 표준화된 응답 형식으로 변환
-    const standardizedRecommendations = recommendations.map(rec => ({
-      flower_id: rec.flower.id,
-      flower_meaning_id: rec.flowerMeaningId || 0,
-      flower_name: rec.flower.name_ko,
-      meaning: rec.flower.flower_meanings?.find(m => m.id === rec.flowerMeaningId)?.meaning || '',
-      color: rec.flower.flower_meanings?.find(m => m.id === rec.flowerMeaningId)?.color || '',
-      score: rec.score,
-      image_url: rec.flower.image_url || null,
-    }));
 
-    return NextResponse.json({
-      success: true,
-      recommendation_id: recommendationId,
-      total_count: standardizedRecommendations.length,
-      recommendations: standardizedRecommendations,
-    });
+      // 표준화된 응답 형식으로 변환
+      const standardizedRecommendations = recommendations.map(rec => ({
+        flower_id: rec.flower.id,
+        flower_meaning_id: rec.flowerMeaningId || 0,
+        flower_name: rec.flower.name_ko,
+        meaning: rec.flower.flower_meanings?.find(m => m.id === rec.flowerMeaningId)?.meaning || '',
+        color: rec.flower.flower_meanings?.find(m => m.id === rec.flowerMeaningId)?.color || '',
+        score: rec.score,
+        image_url: rec.flower.image_url || null,
+      }));
+
+      return NextResponse.json({
+        success: true,
+        recommendation_id: recommendationId,
+        total_count: standardizedRecommendations.length,
+        recommendations: standardizedRecommendations,
+      });
+    } catch (aiError: unknown) {
+      // AI 분석 실패: status를 failed로 업데이트 (토큰 차감 안 함)
+      console.error('AI Emotion Analysis Error:', aiError);
+      const errorMessage = aiError instanceof Error ? aiError.message : 'AI 분석 중 오류 발생';
+      await supabase
+        .from('recommendations')
+        .update({
+          status: 'failed',
+          error_msg: errorMessage,
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', recommendationId);
+
+      return NextResponse.json(
+        { error: '추천 중 오류가 발생했습니다.' },
+        { status: 500 },
+      );
+    }
   } catch (error) {
     console.error('AI Emotion Recommend Error:', error);
     return NextResponse.json(
