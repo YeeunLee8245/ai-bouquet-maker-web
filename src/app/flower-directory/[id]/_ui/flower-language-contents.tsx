@@ -1,4 +1,5 @@
 import React from 'react';
+import ColorFlowerIcon from '@/shared/assets/icons/color_flower.svg';
 
 type TProps = {
   meanings: {
@@ -16,7 +17,9 @@ function FlowerLanguageContents({ meanings }: TProps) {
         {meanings.map(({ color, description, tags }) => (
           <div key={color} className='flex flex-col'>
             <div className='flex items-center gap-1'>
-              <span>Icon</span>
+              <span className='pr-[4.8px]'>
+                <ColorFlowerIcon className='w-[14px] h-[14px]' style={{ fill: color }} />
+              </span>
               <span className='text-body-lg'>색상</span>
             </div>
             <p className='mt-1 text-body-md'>{description}</p>

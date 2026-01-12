@@ -34,7 +34,7 @@ export const tempFlowerDetailData = {
     },
   ],
   floweringTime: {
-    season: ['봄', '여름', '가을', '겨울'],
+    season: ['spring', 'summer', 'autumn', 'winter'],
     months: ['3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
   },
   management: '반그늘을 좋아하며, 산성 토양에서 잘 자랍니다.',
