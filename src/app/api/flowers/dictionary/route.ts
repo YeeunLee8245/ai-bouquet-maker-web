@@ -26,8 +26,8 @@ function getCurrentSeason(): string {
  *       **필터 미지정 시**: 모든 계절/색상 꽃 조회
  *
  *       **정렬 기준**:
- *       - `popular`: 인기순 (기본값, 현재는 id순)
- *       - `name`: 이름 가나다순
+ *       - `name`: 이름 가나다순 (기본값)
+ *       - `popular`: 인기순 (좋아요 많은 순)
  *     parameters:
  *       - name: seasons
  *         in: query
@@ -70,7 +70,7 @@ function getCurrentSeason(): string {
  *         schema:
  *           type: string
  *           enum: [popular, name]
- *           default: popular
+ *           default: name
  *       - name: page
  *         in: query
  *         description: 페이지 번호 (1부터 시작)
@@ -220,7 +220,7 @@ export async function GET(request: NextRequest) {
     const seasonsParam = searchParams.get('seasons');
     const colorsParam = searchParams.get('colors');
     const search = searchParams.get('search') || '';
-    const sort = searchParams.get('sort') || 'popular';
+    const sort = searchParams.get('sort') || 'name';
     const page = parseInt(searchParams.get('page') || '1', 10);
     const limit = parseInt(searchParams.get('limit') || '20', 10);
 
