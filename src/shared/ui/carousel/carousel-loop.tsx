@@ -1,5 +1,5 @@
 import useSwipeDrag from '@/shared/hooks/useSwipeDrag';
-import useLoopCarousel from './hooks/useLoopCarousel';
+import useLoopCarousel from './hooks/use-loop-carousel';
 import { CarouselProps } from './types';
 import { cloneElement } from 'react';
 

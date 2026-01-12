@@ -1,4 +1,4 @@
-import { default as Input } from './Input';
-import { default as SearchInput } from './SearchInput';
+import { default as Input } from './input';
+import { default as SearchInput } from './search-input';
 
 export { Input, SearchInput };

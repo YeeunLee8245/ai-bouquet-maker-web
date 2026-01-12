@@ -1,5 +1,5 @@
 import { cn } from '@/shared/utils/styles';
-import ToggleButton from './ToggleButton';
+import ToggleButton from './toggle-button';
 import { IToggleButtonProps } from './types';
 
 interface IProps extends IToggleButtonProps {

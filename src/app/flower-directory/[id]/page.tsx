@@ -1,8 +1,8 @@
 import { tempFlowerDetailData } from './_datas';
-import FlowerDescContainer from './_ui/FlowerDescContainer';
-import FlowerImagesContainer from './_ui/FlowerImagesContainer';
-import FlowerSimilarContainer from './_ui/FlowerSimilarContainer';
-import FlowerTabContainer from './_ui/FlowerTabContainer';
+import FlowerDescContainer from './_ui/flower-desc-container';
+import FlowerImagesContainer from './_ui/flower-images-container';
+import FlowerSimilarContainer from './_ui/flower-similar-container';
+import FlowerTabContainer from './_ui/flower-tab-container';
 
 /**
  * 꽃 사전 상세 페이지

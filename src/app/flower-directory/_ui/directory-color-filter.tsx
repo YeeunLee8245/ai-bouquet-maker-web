@@ -1,4 +1,4 @@
-import ColorSwitchToggle from '@/shared/ui/button/ColorSwitchToggle';
+ import ColorSwitchToggle from '@/shared/ui/button/color-switch-toggle';
 import { DIRECTORY_COLOR_LIST, DIRECTORY_COLOR_NAME_MAP, TDirectoryColorName } from '../_datas';
 import { IDirectoryEventHub } from '../_types';
 

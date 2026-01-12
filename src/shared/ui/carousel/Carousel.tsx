@@ -1,7 +1,7 @@
 import useSwipeDrag from '@/shared/hooks/useSwipeDrag';
 import React, { cloneElement } from 'react';
 import { CarouselProps } from './types';
-import useCarousel from './hooks/useCarousel';
+import useCarousel from './hooks/use-carousel';
 
 function Carousel({ index, length, onIndexChange, children }: CarouselProps) {
   const { items, goPrev, goNext } = useCarousel({ length, index, onIndexChange, children });

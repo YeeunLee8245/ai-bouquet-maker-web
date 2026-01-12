@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect } from 'react';
 import { DIRECTORY_SEASON_LIST, DIRECTORY_SEASON_NAME_MAP, TDirectorySeasonName } from '../_datas';
 import { IDirectoryEventHub } from '../_types';
-import SeasonSwitchToggle from './SeasonSwitchToggle';
+import SeasonSwitchToggle from './season-switch-toggle';
 import { TooltipButton } from '@/shared/ui/button';
 
 interface IProps {

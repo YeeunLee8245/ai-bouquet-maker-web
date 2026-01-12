@@ -1,13 +1,13 @@
 'use client';
 
 import { IDirectoryEventHub } from './_types';
-import DirectoryFilterToggle from './_ui/DirectoryFilterToggle';
-import DirectoryFilterContainer from './_ui/DirectoryFilterContainer';
-import DirectorySearchInput from './_ui/DirectorySearchInput';
-import DirectoryFilterKeywordContainer from './_ui/DirectoryFilterKeywordContainer';
+import DirectoryFilterToggle from './_ui/directory-filter-toggle';
+import DirectoryFilterContainer from './_ui/directory-filter-container';
+import DirectorySearchInput from './_ui/directory-search-input';
+import DirectoryFilterKeywordContainer from './_ui/directory-filter-keyword-container';
 import { useMemo } from 'react';
-import DirectoryListContainer from './_ui/DirectoryListContainer';
-import { ScrollToTopButton } from '@/shared/ui/scroll-to-top/ScrollToTopButton';
+import DirectoryListContainer from './_ui/directory-list-container';
+import { ScrollToTopButton } from '@/shared/ui/scroll-to-top/scroll-to-top-button';
 import ArrowUpIcon from '@/shared/assets/icons/up_arrow.svg';
 
 /**

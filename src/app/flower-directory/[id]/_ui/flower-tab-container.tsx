@@ -3,9 +3,9 @@
 import { Tabs } from '@/shared/ui/tabs';
 import React, { useState, useLayoutEffect, useRef } from 'react';
 import { flowerTabItems } from '../_datas';
-import FlowerLanguageContents from './FlowerLanguageContents';
-import FlowerFloweringTimeContents from './FlowerFloweringTimeContents';
-import FlowerManagementContents from './FlowerManagementContents';
+import FlowerLanguageContents from './flower-language-contents';
+import FlowerFloweringTimeContents from './flower-flowering-time-contents';
+import FlowerManagementContents from './flower-management-contents';
 
 type TProps = {
   meanings: {

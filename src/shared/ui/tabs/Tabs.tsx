@@ -3,7 +3,7 @@
 import * as React from 'react';
 import type { TTabsProps, TTabsListProps, TTabsTriggerProps, TTabsContentProps } from './types';
 import { useId } from 'react';
-import { TabsContext, useTabsContext } from './hooks/useTabsContext';
+import { TabsContext, useTabsContext } from './hooks/use-tabs-context';
 
 function TabsRoot({ value, defaultValue, onValueChange, children, ...props }: TTabsProps) {
   const idBase = useId();

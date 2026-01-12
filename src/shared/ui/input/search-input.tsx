@@ -1,6 +1,6 @@
 import React from 'react';
 import SearchIcon from '@/shared/assets/icons/search.svg';
-import Input from './Input';
+import Input from './input';
 import { IInputProps } from './types';
 
 function SearchInput({ className, ...props }: IInputProps) {

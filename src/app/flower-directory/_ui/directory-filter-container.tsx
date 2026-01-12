@@ -2,8 +2,8 @@
 import { useEffectEvent, useLayoutEffect, useRef, useState } from 'react';
 import { directoryDefaultSelectedColors, directoryDefaultSelectedSeasons } from '../_datas';
 import { IDirectoryEventHub } from '../_types';
-import DirectoryColorFilter from './DirectoryColorFilter';
-import DirectorySeasonFilter from './DirectorySeasonFilter';
+import DirectoryColorFilter from './directory-color-filter';
+import DirectorySeasonFilter from './directory-season-filter';
 
 type TProps = {
   eventHub: IDirectoryEventHub;
