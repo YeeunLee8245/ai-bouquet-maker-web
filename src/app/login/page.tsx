@@ -22,8 +22,8 @@ const LoginPage = () => {
               provider={provider}
               className={
                 cn(
-                  id === 'google' && 'border border-gray-100 rounded-4 transition hover:border-primary-400 hover:shadow-sm [&>svg]:left-[11.33px]',
-                  id === 'kakao' && 'bg-[#FFE400] rounded-4 transition hover:brightness-95 hover:shadow-inner [&>svg]:left-[12.3px]',
+                  id === 'google' && 'border border-gray-100 rounded-4 transition hover:border-primary-400 hover:shadow-sm [&>span]:left-[11.33px]',
+                  id === 'kakao' && 'bg-[#FFE400] rounded-4 transition hover:brightness-95 hover:shadow-inner [&>span]:left-[12.3px]',
                 )
               }
             />
