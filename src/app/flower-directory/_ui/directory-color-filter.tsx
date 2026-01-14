@@ -17,7 +17,7 @@ function DirectoryColorFilter({ eventHub, selectedItems, onItemChange }: IProps)
   return (
     <div className="flex items-center gap-2">
       <span className='px-1 text-ui-label-md whitespace-nowrap'>색상</span>
-      <span className='ml-2 flex items-center justify-center gap-2 my-micro'>
+      <span className='flex items-center justify-center gap-2 my-micro'>
         {DIRECTORY_COLOR_LIST.map(({ id, colorHex, name }) => (
           <ColorSwitchToggle
             key={id}

@@ -53,7 +53,7 @@ function DirectoryFilterContainer({ eventHub }: TProps) {
       if (!filterSection) {return;}
 
       filterSection.style.cssText = pressed ?
-        'overflow: visible;' :
+        'overflow: auto;' :
         'overflow: hidden;';
     };
     eventHub.onClickResetFilter = () => {
