@@ -27,7 +27,7 @@ function DirectorySeasonFilter({ eventHub, selectedItems, onItemChange }: IProps
 
   return (
     <div ref={containerRef} className='flex items-center gap-2'>
-      <span className='px-1 text-ui-label-md'>계절</span>
+      <span className='px-1 text-ui-label-md whitespace-nowrap'>계절</span>
       <span className='ml-2 flex items-center justify-center gap-2 my-micro'>
         {DIRECTORY_SEASON_LIST.map(({ id, name }) => (
           <SeasonSwitchToggle

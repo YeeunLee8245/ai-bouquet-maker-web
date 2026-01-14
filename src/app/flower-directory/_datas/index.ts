@@ -1,7 +1,12 @@
 export const DIRECTORY_COLOR_NAME_MAP = {
-  red: ['빨강', '#FF0000'],
-  orange: ['주황', '#FF8E3E'],
-  yellow: ['노랑', '#FFD700'],
+  red: ['빨강', '#A1262C'],
+  orange: ['주황', '#FF8D3E'],
+  yellow: ['노랑', '#FFE000'],
+  green: ['초록', '#00C240'],
+  blue: ['파랑', '#3359DC'],
+  pink: ['분홍', '#FFB6C1'],
+  purple: ['보라', '#9B59B6'],
+  white: ['흰색', '#FFFFFF'],
 } as const;
 
 export type TDirectoryColorName = (typeof DIRECTORY_COLOR_NAME_MAP)[keyof typeof DIRECTORY_COLOR_NAME_MAP][0];

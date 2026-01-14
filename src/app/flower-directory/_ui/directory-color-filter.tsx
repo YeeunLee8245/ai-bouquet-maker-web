@@ -1,4 +1,4 @@
- import ColorSwitchToggle from '@/shared/ui/button/color-switch-toggle';
+import ColorSwitchToggle from '@/shared/ui/button/color-switch-toggle';
 import { DIRECTORY_COLOR_LIST, DIRECTORY_COLOR_NAME_MAP, TDirectoryColorName } from '../_datas';
 import { IDirectoryEventHub } from '../_types';
 
@@ -16,7 +16,7 @@ function DirectoryColorFilter({ eventHub, selectedItems, onItemChange }: IProps)
 
   return (
     <div className="flex items-center gap-2">
-      <span className='px-1 text-ui-label-md'>색상</span>
+      <span className='px-1 text-ui-label-md whitespace-nowrap'>색상</span>
       <span className='ml-2 flex items-center justify-center gap-2 my-micro'>
         {DIRECTORY_COLOR_LIST.map(({ id, colorHex, name }) => (
           <ColorSwitchToggle

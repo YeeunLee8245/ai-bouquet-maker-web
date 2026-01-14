@@ -45,7 +45,16 @@ function DirectoryFilterContainer({ eventHub }: TProps) {
   const setEventHubFilters = useEffectEvent(() => {
     eventHub.onToggleFilterSection = (pressed: boolean) => {
       if (!containerRef.current) {return;}
-      containerRef.current.style.gridTemplateRows = pressed ? '1fr' : '0fr';
+
+      const container = containerRef.current as HTMLDivElement;
+      container.style.gridTemplateRows = pressed ? '1fr' : '0fr';
+      const filterSection = container.querySelector<HTMLDivElement>('[data-filter-section]');
+      console.log(filterSection);
+      if (!filterSection) {return;}
+
+      filterSection.style.cssText = pressed ?
+        'overflow: visible;' :
+        'overflow: hidden;';
     };
     eventHub.onClickResetFilter = () => {
       setSelectedColors(new Set(directoryDefaultSelectedColors.map(({ id }) => id)));
@@ -63,7 +72,7 @@ function DirectoryFilterContainer({ eventHub }: TProps) {
       className='grid transition-[grid-template-rows] duration-300 ease-in-out'
       style={{ gridTemplateRows: '0fr' }}
     >
-      <div className='min-h-0 overflow-hidden'>
+      <div data-filter-section className='min-h-0 overflow-hidden'>
         <div className='flex flex-col gap-2 pb-4'>
           <DirectoryColorFilter
             eventHub={eventHub}
