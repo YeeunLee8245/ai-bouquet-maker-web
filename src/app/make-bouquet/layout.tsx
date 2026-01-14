@@ -1,13 +1,13 @@
 type TProps = {
   children: React.ReactNode;
-  modal: React.ReactNode;
+  // modal: React.ReactNode;
 };
 
-export default function MakeBouquetLayout({ children, modal }: TProps) {
+export default function MakeBouquetLayout({ children }: TProps) {
   return (
     <div className='relative h-full flex flex-col'>
       {children}
-      {modal}
+      {/* {modal} */}
     </div>
   );
 }
