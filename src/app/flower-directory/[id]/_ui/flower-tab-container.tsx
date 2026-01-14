@@ -6,6 +6,7 @@ import { flowerTabItems } from '../_datas';
 import FlowerLanguageContents from './flower-language-contents';
 import FlowerFloweringTimeContents from './flower-flowering-time-contents';
 import FlowerManagementContents from './flower-management-contents';
+import { DIRECTORY_SEASON_NAME_MAP } from '../../_datas';
 
 type TProps = {
   meanings: {
@@ -14,7 +15,7 @@ type TProps = {
     tags: string[];
   }[];
   floweringTime: {
-    season: string[];
+    season: (keyof typeof DIRECTORY_SEASON_NAME_MAP)[];
     months: string[];
   };
   management: string;

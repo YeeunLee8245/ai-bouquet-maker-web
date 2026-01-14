@@ -1,3 +1,5 @@
+import { DIRECTORY_SEASON_NAME_MAP } from '../../_datas';
+
 export const tempFlowerDetailData = {
   id: '1',
   title: {
@@ -34,7 +36,7 @@ export const tempFlowerDetailData = {
     },
   ],
   floweringTime: {
-    season: ['spring', 'summer', 'autumn', 'winter'],
+    season: ['spring', 'summer', 'autumn', 'winter'] as (keyof typeof DIRECTORY_SEASON_NAME_MAP)[],
     months: ['3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
   },
   management: '반그늘을 좋아하며, 산성 토양에서 잘 자랍니다.',
