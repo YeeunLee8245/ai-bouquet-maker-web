@@ -13,8 +13,8 @@ const MakeBouquetPage = () => {
   return (
     <div>
       <div className='pt-4 pb-2 mx-4 px-1'>
-        <p className="text-title-lg">꽃다발 만들기</p>
-        <p className="mt-1 text-body-md text-gray-400 whitespace-pre-wrap">{'특별한 마음을 담은 꽃다발을 직접\n구성해 보세요.'}</p>
+        <p className='text-title-lg'>꽃다발 만들기</p>
+        <p className='mt-1 text-body-md text-gray-400 whitespace-pre-wrap'>{'특별한 마음을 담은 꽃다발을 직접\n구성해 보세요.'}</p>
       </div>
       <div className='pt-4 pb-8 px-4'>
         <MakeBouquetInfoContainer />

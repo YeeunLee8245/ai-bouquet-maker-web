@@ -35,7 +35,7 @@ function FlowerDescContainer({ id, title, description, isLiked }: TProps) {
     <div className='flex flex-col px-4 py-4'>
       <div className='flex items-center justify-between'>
         <span className='text-title-lg'>{ko}</span>
-        <LikeButton type="flower" id={id} variant="fill" size="lg"
+        <LikeButton type='flower' id={id} variant='fill' size='lg'
           queryKeyToPatch={queryKey}
           patchQueryData={patchQueryData}
           className='p-[2.6px, 2px, 3.4px, 2px]'

@@ -14,8 +14,8 @@ function ColorSwitchToggle({ pressed, onPressedChange, className, colorHex, ...p
   return (
     <ToggleButton
       pressed={pressed}
-      size="sm"
-      variant="custom"
+      size='sm'
+      variant='custom'
       onPressedChange={onPressedChange}
       className={cn('relative w-8 h-8 rounded-full border-2 border-gray-100',
         'hover:border-white hover:after:content-[""] hover:after:absolute hover:after:inset-0 hover:after:bg-black/40 hover:after:rounded-full ',

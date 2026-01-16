@@ -28,6 +28,9 @@ const eslintConfig = defineConfig([
       // Single quote 사용
       'stylistic/quotes': ['error', 'single', { avoidEscape: true }],
 
+      // JSX 속성 값도 single quote 사용
+      'stylistic/jsx-quotes': ['error', 'prefer-single'],
+
       // 빈 공백은 2줄 미만 (최대 1줄)
       'stylistic/no-multiple-empty-lines': ['error', { max: 1, maxEOF: 0, maxBOF: 0 }],
 

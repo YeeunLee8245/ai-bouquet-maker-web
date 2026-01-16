@@ -11,7 +11,7 @@ function FlowerDetailPage() {
   const { images } = tempFlowerDetailData;
 
   return (
-    <div className="relative flex-1 overflow-y-auto">
+    <div className='relative flex-1 overflow-y-auto'>
       <FlowerImagesContainer
         {...tempFlowerDetailData}
       />

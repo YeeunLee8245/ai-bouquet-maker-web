@@ -24,7 +24,7 @@ function LikeButton({type, id, variant, size, className, queryKeyToPatch, patchQ
 
   return (
     <button
-      type="button"
+      type='button'
       onClick={toggle}
       disabled={pending}
       aria-pressed={liked}

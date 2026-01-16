@@ -24,7 +24,7 @@ function TabsRoot({ value, defaultValue, onValueChange, children, ...props }: TT
 const TabsList = React.forwardRef<HTMLDivElement, TTabsListProps>(
   ({ children, ...props }, ref) => {
     return (
-      <div ref={ref} role="tablist" {...props}>
+      <div ref={ref} role='tablist' {...props}>
         {children}
       </div>
     );
@@ -50,8 +50,8 @@ const TabsTrigger = React.forwardRef<HTMLButtonElement, TTabsTriggerProps>(
     return (
       <button
         ref={ref}
-        type="button"
-        role="tab"
+        type='button'
+        role='tab'
         id={tabId}
         aria-selected={selected}
         aria-controls={panelId}
@@ -78,7 +78,7 @@ const TabsContent = React.forwardRef<HTMLDivElement, TTabsContentProps>(
     return (
       <div
         ref={ref}
-        role="tabpanel"
+        role='tabpanel'
         id={panelId}
         aria-labelledby={tabId}
         hidden={!selected}

@@ -10,7 +10,7 @@ const buttonPrimary: Record<NonNullable<IToggleButtonProps['size']>, string> = {
 function ToggleButton({ pressed, size = 'lg', variant = 'primary', className, onPressedChange, children, ...props }: IToggleButtonProps) {
   return (
     <button
-      type="button"
+      type='button'
       aria-pressed={pressed}
       data-state={pressed ? 'on' : 'off'}
       onClick={() => {onPressedChange(!pressed);}}

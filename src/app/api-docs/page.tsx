@@ -38,7 +38,7 @@ export default function ApiDocsPage() {
   }, []);
 
   return (
-    <div className="swagger-page">
+    <div className='swagger-page'>
       <div ref={elRef} />
     </div>
   );

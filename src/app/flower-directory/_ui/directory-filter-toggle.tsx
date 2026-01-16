@@ -15,7 +15,7 @@ function DirectoryFilterToggle({ eventHub }: TProps) {
   };
 
   return (
-    <ToggleButton size="sm" pressed={pressed} onPressedChange={onPressedChange}>
+    <ToggleButton size='sm' pressed={pressed} onPressedChange={onPressedChange}>
       필터
     </ToggleButton>
   );

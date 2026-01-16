@@ -16,8 +16,8 @@ export default async function MainPage() {
     : '로그인 후 맞춤 추천을 받아보세요.';
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-white px-4 py-12">
-      <p className="text-center text-lg font-semibold text-zinc-900">{heroText}</p>
+    <div className='flex min-h-screen items-center justify-center bg-white px-4 py-12'>
+      <p className='text-center text-lg font-semibold text-zinc-900'>{heroText}</p>
     </div>
   );
 }

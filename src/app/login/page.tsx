@@ -8,12 +8,12 @@ import { cn } from '@/shared/utils/styles';
 const LoginPage = () => {
 
   return (
-    <div className="px-4 pt-4 pb-8 flex flex-col items-center">
-      <p className="text-title-lg">로그인</p>
-      <p className="text-body-md text-gray-400 mt-1 whitespace-pre-wrap text-center">
+    <div className='px-4 pt-4 pb-8 flex flex-col items-center'>
+      <p className='text-title-lg'>로그인</p>
+      <p className='text-body-md text-gray-400 mt-1 whitespace-pre-wrap text-center'>
         {'꽃다발 레시피에 로그인하고\n맞춤 추천을 받아 보세요.'}
       </p>
-      <div className="mt-10 w-full flex flex-col gap-2">
+      <div className='mt-10 w-full flex flex-col gap-2'>
         {LOGIN_PROVIDER_LIST.map((provider) => {
           const { id } = provider;
           return (

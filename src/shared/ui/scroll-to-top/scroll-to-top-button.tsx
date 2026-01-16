@@ -95,9 +95,9 @@ export function ScrollToTopButton({
   return (
     <button
       ref={buttonRef}
-      type="button"
+      type='button'
       onClick={onClick}
-      aria-label="Scroll to top"
+      aria-label='Scroll to top'
       className={cn(
         'absolute z-float p-3 rounded-5',
         'bg-primary-400 text-white hover:bg-primary-600',
