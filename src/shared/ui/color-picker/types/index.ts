@@ -1,4 +1,4 @@
-export interface IColorPickerItemProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'onSelect'> {
+export interface IColorPickerProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'onSelect'> {
   /**
    * @description 색상
    */

@@ -1,3 +1,5 @@
+'use client';
+
 import { ColorPicker } from '@/shared/ui/color-picker';
 import React from 'react';
 
@@ -11,7 +13,7 @@ export default function BouquetPackagingSection({ title }: TProps) {
     <div>
       <p className='text-title-lg'>{title}</p>
       <div>
-        <ColorPicker/>
+        <ColorPicker color='#000000' onSelect={() => {}} />
       </div>
     </div>
   );

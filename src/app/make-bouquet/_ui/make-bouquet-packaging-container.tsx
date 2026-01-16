@@ -6,8 +6,8 @@ export default function MakeBouquetPackagingContainer() {
     <div className='mt-4 p-4 border-1 border-gray-100 rounded-5 bg-white'>
       <p className='text-title-md px-micro'>포장 옵션</p>
       <div className='mt-3 px-micro grid grid-cols-1 grid-rows-2 gap-y-4'>
-        <BouquetPackagingSection />
-        <BouquetPackagingSection />
+        <BouquetPackagingSection title='포장지' />
+        <BouquetPackagingSection title='리본' />
       </div>
     </div>
   );
