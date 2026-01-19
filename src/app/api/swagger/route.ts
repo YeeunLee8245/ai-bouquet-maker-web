@@ -14,6 +14,7 @@ export const GET = async () => {
         { url: 'http://localhost:3000', description: 'Local Development' },
       ],
       tags: [
+        { name: 'Auth', description: '인증 API' },
         { name: 'Recommend', description: '꽃 추천 API' },
         { name: 'Flowers', description: '꽃 사전 및 좋아요 API' },
       ],
