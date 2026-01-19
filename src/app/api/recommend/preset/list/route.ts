@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getAvailableRelationships, getAvailableOccasions, getAllOccasions } from '@/lib/card-recommendation';
+import { getAvailableRelationships, getAvailableOccasions, getAllOccasions } from '@/lib/recommend/card-recommendation';
 
 /**
  * @swagger

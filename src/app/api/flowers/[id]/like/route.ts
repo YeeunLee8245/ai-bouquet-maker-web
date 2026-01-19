@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
-import { getPublicUser } from '@/lib/auth';
+import { getPublicUser } from '@/lib/users/auth';
 
 /**
  * @swagger

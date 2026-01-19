@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
-import { getPublicUser } from '@/lib/auth';
+import { getPublicUser } from '@/lib/users/auth';
 import { analyzeEmotion } from '@services/emotion-analysis';
-import { getRecommendationsFromAnalysis } from '@/lib/recommendation';
-import { spendToken, getUserBalance } from '@/lib/wallet';
+import { getRecommendationsFromAnalysis } from '@/lib/recommend/recommendation';
+import { spendToken, getUserBalance } from '@/lib/users/wallet';
 
 /**
  * @swagger
