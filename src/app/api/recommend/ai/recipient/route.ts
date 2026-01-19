@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
+import { createClient } from '@shared/supabase/server';
 import { getPublicUser } from '@/lib/users/auth';
 import { analyzeRecipient } from '@services/recipient-analysis';
 import { getRecommendationsFromAnalysis } from '@/lib/recommend/recommendation';
