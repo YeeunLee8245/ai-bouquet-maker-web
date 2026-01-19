@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
-import { getUser } from '@/lib/auth';
+import { getPublicUser } from '@/lib/auth';
 
 /**
  * @swagger
@@ -41,8 +41,8 @@ import { getUser } from '@/lib/auth';
  */
 export async function POST(request: NextRequest) {
   try {
-    const user = await getUser();
-    if (!user) {
+    const publicUser = await getPublicUser();
+    if (!publicUser) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -82,22 +82,10 @@ export async function POST(request: NextRequest) {
     }
 
     const supabase = await createClient();
-    const { data: publicUser, error: userError } = await supabase
-      .from('users')
-      .select('id')
-      .eq('auth_id', user.id)
-      .single();
 
-    if (userError || !publicUser) {
-      return NextResponse.json(
-        { error: 'User not found in public.users' },
-        { status: 404 },
-      );
-    }
-
-    console.log('uniqueIds', uniqueIds);
-    console.log('recommendation_id', recommendation_id);
-    console.log('publicUser.id', publicUser.id);
+    console.debug('uniqueIds', uniqueIds);
+    console.debug('recommendation_id', recommendation_id);
+    console.debug('publicUser.id', publicUser.id);
 
     const { error } = await supabase
       .from('recommendations')
