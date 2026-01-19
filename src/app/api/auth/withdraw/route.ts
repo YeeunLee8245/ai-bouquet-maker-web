@@ -1,13 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@shared/supabase/server';
-import { createClient as createAdminClient } from '@supabase/supabase-js';
 
 /**
  * @swagger
- * /api/users/withdraw:
+ * /api/auth/withdraw:
  *   post:
  *     tags:
- *       - Users
+ *       - Auth
  *     summary: 회원 탈퇴
  *     description: |
  *       현재 로그인된 사용자의 정보를 익명화하고 계정을 완전히 삭제합니다.
