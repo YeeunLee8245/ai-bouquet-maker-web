@@ -6,3 +6,19 @@ export type TMakeBouquetInfoData = {
    */
   isRequired: boolean;
 };
+
+/**
+ * 꽃 색상과 개수
+ */
+export type TFlowerColorAndQuantity = {
+  color: string;
+  quantity: number;
+};
+
+export type TFlowerCompositionItem = {
+  id: number;
+  name: string;
+  keywords: string[];
+  imageUrl: string;
+  colorAndQuantities: TFlowerColorAndQuantity[];
+};
