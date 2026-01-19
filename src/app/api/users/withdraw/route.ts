@@ -9,14 +9,19 @@ import { createClient as createAdminClient } from '@supabase/supabase-js';
  *     tags:
  *       - Users
  *     summary: 회원 탈퇴
- *     description: 현재 로그인된 사용자의 정보를 익명화하고 계정을 삭제합니다.
+ *     description: |
+ *       현재 로그인된 사용자의 정보를 익명화하고 계정을 완전히 삭제합니다.
+ *       1. public.users 테이블의 개인정보를 익명화 처리합니다. (Soft Delete)
+ *       2. auth.users 테이블에서 사용자를 삭제합니다. (Hard Delete)
  *     responses:
  *       200:
- *         description: 탈퇴 성공
+ *         description: 탈퇴 및 로그아웃 성공
  *       401:
- *         description: 인증되지 않은 사용자
+ *         description: 인증되지 않은 사용자 (세션 없음)
+ *       404:
+ *         description: 사용자 정보를 찾을 수 없음
  *       500:
- *         description: 서버 오류
+ *         description: 서버 처리 중 오류 발생
  */
 export async function POST(request: NextRequest) {
   try {
