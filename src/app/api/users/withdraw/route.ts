@@ -54,9 +54,16 @@ export async function POST(request: NextRequest) {
     }
 
     const internalId = publicUser.id;
+    console.log(`[Withdraw] Starting anonymization for public user: ${internalId}`);
+
+    // 4. auth.users에서 사용자 삭제 준비 (Admin 클라이언트 생성)
+    const { createAdminClient } = await import('@shared/supabase/admin');
+    const supabaseAdmin = createAdminClient();
 
     // 3. public.users 데이터 익명화 (Soft Delete)
-    const { error: updateError } = await supabase
+    // 일반 유저 클라이언트는 RLS 정책에 의해 자신의 정보를 특정 방식으로 수정하지 못할 수 있으므로
+    // 관리자(Admin) 클라이언트를 사용하여 확실하게 처리합니다.
+    const { error: updateError } = await supabaseAdmin
       .from('users')
       .update({
         email: `deleted+${internalId}@example.invalid`,
@@ -66,37 +73,34 @@ export async function POST(request: NextRequest) {
         avatar_url: null,
         is_active: false,
         deleted_at: new Date().toISOString(),
-        auth_id: null, // auth.users에서 삭제될 것이므로 명시적으로 연결 해제
+        deleted_reason: '직접탈퇴',
+        auth_id: null,
       })
-      .eq('id', internalId);
+      .eq('id', internalId); 
 
     if (updateError) {
+      console.error('[Withdraw] Anonymization error:', updateError);
       throw updateError;
     }
+    console.log('[Withdraw] Anonymization successful');
 
-    // 4. auth.users에서 사용자 삭제 (Admin 클라이언트 필요)
-    // 서비스 역할 키(SERVICE_ROLE_KEY)를 사용하여 관리자 클라이언트 생성
-    const supabaseAdmin = createAdminClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!,
-    );
-
+    // 4. auth.users에서 사용자 삭제 (Admin 클라이언트 사용)
     const { error: deleteError } = await supabaseAdmin.auth.admin.deleteUser(userId);
 
     if (deleteError) {
-      console.error('Auth user delete error:', deleteError);
-      // 이미 public.users는 익명화되었으므로, auth 삭제 실패 시 로그만 남기고 진행할 수도 있으나
-      // 여기서는 엄격하게 에러를 던집니다. (단, 이 시점에서 이미 public.users는 업데이트됨)
+      console.error('[Withdraw] Auth user delete error:', deleteError);
       throw deleteError;
     }
+    console.log('[Withdraw] Auth user deleted successfully');
 
     // 5. 현재 세션 로그아웃 처리
     await supabase.auth.signOut();
+    console.log('[Withdraw] Sign out successful');
 
     return NextResponse.json({ message: '탈퇴가 완료되었습니다.' }, { status: 200 });
 
   } catch (error) {
-    console.error('Withdrawal error:', error);
+    console.error('[Withdraw] Global error:', error);
     const message = error instanceof Error ? error.message : '탈퇴 처리 중 오류가 발생했습니다.';
     return NextResponse.json({ error: message }, { status: 500 });
   }
