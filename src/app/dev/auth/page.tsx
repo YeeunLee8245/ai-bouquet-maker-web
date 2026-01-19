@@ -1,4 +1,8 @@
-import { createClient } from '@shared/supabase/server';
+'use client';
+
+import { createClient } from '@shared/supabase/client';
+import { useEffect, useState } from 'react';
+import { User } from '@supabase/supabase-js';
 
 const SignInActions = () => {
   const next = encodeURIComponent('/dev/auth');
@@ -55,13 +59,48 @@ const Greeting = ({ email, name }: { email: string | null; name: string | null }
   </div>
 );
 
-export default async function Home() {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+export default function Home() {
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+  const supabase = createClient();
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      setUser(user);
+      setLoading(false);
+    };
+    fetchUser();
+  }, [supabase]);
+
+  const handleWithdraw = async () => {
+    if (!confirm('정말 탈퇴하시겠습니까? 이 작업은 되돌릴 수 없습니다.')) {
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/auth/withdraw', {
+        method: 'POST',
+      });
+
+      if (response.ok) {
+        alert('탈퇴가 완료되었습니다.');
+        window.location.reload();
+      } else {
+        const data = await response.json();
+        alert(`탈퇴 실패: ${data.error || '알 수 없는 오류'}`);
+      }
+    } catch (error) {
+      console.error('Withdraw request failed', error);
+      alert('요청 중 오류가 발생했습니다.');
+    }
+  };
 
   const isSignedIn = Boolean(user);
+
+  if (loading) {
+    return <div className='flex min-h-screen items-center justify-center bg-zinc-100'>Loading...</div>;
+  }
 
   return (
     <div className='flex min-h-screen items-center justify-center bg-zinc-100 px-4 py-12 font-sans'>
@@ -81,7 +120,15 @@ export default async function Home() {
         {isSignedIn && user ? (
           <>
             <Greeting email={user.email ?? null} name={user.user_metadata.full_name ?? null} />
-            <SignOutActions />
+            <div className='flex flex-col gap-2'>
+              <SignOutActions />
+              <button
+                onClick={handleWithdraw}
+                className='w-full rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-center text-sm font-semibold text-red-700 transition hover:bg-red-100'
+              >
+                회원 탈퇴 (API 테스트)
+              </button>
+            </div>
           </>
         ) : (
           <SignInActions />
@@ -90,3 +137,4 @@ export default async function Home() {
     </div>
   );
 }
+

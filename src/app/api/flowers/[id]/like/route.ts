@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
-import { getUser } from '@/lib/auth';
+import { createClient } from '@shared/supabase/server';
+import { getPublicUser } from '@/lib/users/auth';
 
 /**
  * @swagger
@@ -51,9 +51,9 @@ export async function POST(
       );
     }
 
-    // 인증 확인
-    const user = await getUser();
-    if (!user) {
+    // 인증 및 사용자 정보 확인
+    const publicUser = await getPublicUser();
+    if (!publicUser) {
       return NextResponse.json(
         { error: '로그인이 필요한 서비스입니다.' },
         { status: 401 },
@@ -61,20 +61,6 @@ export async function POST(
     }
 
     const supabase = await createClient();
-
-    // public.users에서 사용자 조회
-    const { data: publicUser, error: userError } = await supabase
-      .from('users')
-      .select('id')
-      .eq('auth_id', user.id)
-      .single();
-
-    if (userError || !publicUser) {
-      return NextResponse.json(
-        { error: '사용자 정보를 찾을 수 없습니다.' },
-        { status: 404 },
-      );
-    }
 
     // 꽃 존재 여부 확인
     const { data: flower, error: flowerError } = await supabase
@@ -168,9 +154,9 @@ export async function DELETE(
       );
     }
 
-    // 인증 확인
-    const user = await getUser();
-    if (!user) {
+    // 인증 및 사용자 정보 확인
+    const publicUser = await getPublicUser();
+    if (!publicUser) {
       return NextResponse.json(
         { error: '로그인이 필요한 서비스입니다.' },
         { status: 401 },
@@ -178,20 +164,6 @@ export async function DELETE(
     }
 
     const supabase = await createClient();
-
-    // public.users에서 사용자 조회
-    const { data: publicUser, error: userError } = await supabase
-      .from('users')
-      .select('id')
-      .eq('auth_id', user.id)
-      .single();
-
-    if (userError || !publicUser) {
-      return NextResponse.json(
-        { error: '사용자 정보를 찾을 수 없습니다.' },
-        { status: 404 },
-      );
-    }
 
     // 좋아요 삭제
     const { error: deleteError } = await supabase

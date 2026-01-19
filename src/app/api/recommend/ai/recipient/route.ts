@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
-import { getUser } from '@/lib/auth';
+import { createClient } from '@shared/supabase/server';
+import { getPublicUser } from '@/lib/users/auth';
 import { analyzeRecipient } from '@services/recipient-analysis';
-import { getRecommendationsFromAnalysis } from '@/lib/recommendation';
-import { spendToken, getUserBalance } from '@/lib/wallet';
+import { getRecommendationsFromAnalysis } from '@/lib/recommend/recommendation';
+import { spendToken, getUserBalance } from '@/lib/users/wallet';
 
 /**
  * @swagger
@@ -119,9 +119,9 @@ import { spendToken, getUserBalance } from '@/lib/wallet';
  */
 export async function POST(request: NextRequest) {
   try {
-    // 인증 확인 (AI 추천은 로그인 필수)
-    const user = await getUser();
-    if (!user) {
+    // 인증 및 사용자 정보 확인
+    const publicUser = await getPublicUser();
+    if (!publicUser) {
       return NextResponse.json(
         { error: '로그인이 필요한 서비스입니다.' },
         { status: 401 },
@@ -154,7 +154,7 @@ export async function POST(request: NextRequest) {
     }
 
     // AI 분석 전 토큰 선검사
-    const balance = await getUserBalance(user.id);
+    const balance = await getUserBalance(publicUser.id);
     if (balance < 1) {
       return NextResponse.json(
         { error: '사용 가능한 토큰 부족' },
@@ -163,20 +163,6 @@ export async function POST(request: NextRequest) {
     }
 
     const supabase = await createClient();
-
-    // 사용자 조회
-    const { data: publicUser, error: userError } = await supabase
-      .from('users')
-      .select('id')
-      .eq('auth_id', user.id)
-      .single();
-
-    if (userError || !publicUser) {
-      return NextResponse.json(
-        { error: '사용자 정보를 찾을 수 없습니다.' },
-        { status: 404 },
-      );
-    }
 
     // pending 상태로 먼저 저장
     const { data: pendingRecommendation, error: insertError } = await supabase
@@ -221,7 +207,7 @@ export async function POST(request: NextRequest) {
 
       // 토큰 차감 (성공 시에만)
       try {
-        await spendToken(user.id, recommendationId);
+        await spendToken(publicUser.id, recommendationId);
       } catch (tokenError: unknown) {
         const errorMessage = tokenError instanceof Error ? tokenError.message : '토큰 차감 실패';
         // 토큰 차감 실패 시 status를 failed로 변경

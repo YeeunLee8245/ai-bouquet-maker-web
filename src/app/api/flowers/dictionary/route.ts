@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
-import { getUser } from '@/lib/auth';
+import { createClient } from '@shared/supabase/server';
+import { getUser } from '@/lib/users/auth';
 
 /**
  * 현재 계절 가져오기 (서버 시간 기준)

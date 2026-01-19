@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
-import { getUser } from '@/lib/auth';
-import { getCardRecommendations } from '@/lib/card-recommendation';
+import { createClient } from '@shared/supabase/server';
+import { getUser } from '@/lib/users/auth';
+import { getCardRecommendations } from '@/lib/recommend/card-recommendation';
 
 /**
  * @swagger
