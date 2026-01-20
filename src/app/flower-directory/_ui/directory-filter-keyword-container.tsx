@@ -53,7 +53,7 @@ function DirectoryFilterKeywordContainer({ eventHub }: TProps) {
             text={name}
             icon={
               <span onClick={handleClickRemoveKeyword(id)} className='cursor-pointer pl-micro pr-[3.2px]'>
-                <XIcon />
+                <XIcon className='w-[11px] h-[11px] fill-gray-200'/>
               </span>
             }
           />

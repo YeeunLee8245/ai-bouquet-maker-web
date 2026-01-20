@@ -5,13 +5,18 @@ import { TFlowerCompositionItem } from '../_types';
 import Image from 'next/image';
 import { ColorPicker } from '@/shared/ui/color-picker';
 import PlusIcon from '@/shared/assets/icons/plus.svg';
+import ColorCompositionItem from './color-composition-item';
 
 type TProps = {
   item: TFlowerCompositionItem;
+  onDeleteColor: (color: string) => void;
+  onPlusColor: (color: string) => void;
+  onMinusColor: (color: string) => void;
+  onDelete: (id: number) => void;
 };
 
-export default function FlowerCompositionItem({ item }: TProps) {
-  const { id, name, keywords, imageUrl } = item;
+export default function FlowerCompositionItem({ item, onDeleteColor, onPlusColor, onMinusColor, onDelete }: TProps) {
+  const { id, name, keywords, imageUrl, colorAndQuantities } = item;
 
   return (
     <div>
@@ -27,9 +32,30 @@ export default function FlowerCompositionItem({ item }: TProps) {
           />
         </ColorPicker>
       </div>
-      <div>
-        <p>{name}</p>
+      <p className='pt-2 text-body-lg'>{name}</p>
+      <div className='pt-2 flex gap-2 flex-wrap'>
+        {keywords.map((keyword) => (
+          <span key={keyword} className='text-ui-tag bg-gray-100 rounded-3 px-2 py-1 text-gray-400'>
+            {keyword}
+          </span>
+        ))}
       </div>
+      <div className='py-4'>
+        {colorAndQuantities.map(({ color, quantity }) => (
+          <ColorCompositionItem
+            key={color}
+            color={color}
+            quantity={quantity}
+            onPlus={onPlusColor}
+            onMinus={onMinusColor}
+            onDelete={onDeleteColor}
+          />
+        ))}
+      </div>
+      <button
+        type='button'
+        onClick={() => onDelete(id)}
+        className='text-ui-textbtn-md text-gray-400'>꽃 삭제</button>
     </div>
   );
 }

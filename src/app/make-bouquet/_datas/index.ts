@@ -31,11 +31,13 @@ export const FLOWER_COMPOSITION_ITEMS: TFlowerCompositionItem[] = [
     imageUrl: '/temp_geobera.png',
     colorAndQuantities: [
       {
-        color: '#FF0000',
+        // 주황
+        color: '#FF8D3E',
         quantity: 1,
       },
       {
-        color: '#00FF00',
+        // 초록
+        color: '#00C240',
         quantity: 1,
       },
     ],
