@@ -11,7 +11,7 @@ type TProps = {
 };
 
 export default function FlowerCompositionItem({ item }: TProps) {
-  const { id, name, keywords, imageUrl, colorAndQuantities } = item;
+  const { id, name, keywords, imageUrl } = item;
 
   return (
     <div>
