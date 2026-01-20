@@ -26,15 +26,30 @@ export async function GET(request: NextRequest) {
     return redirectToLogin(request, providerError);
   }
 
+  let isNewUser = false;
+
   if (code) {
-    const { error } = await supabase.auth.exchangeCodeForSession(code);
+    const { data, error } = await supabase.auth.exchangeCodeForSession(code);
 
     if (error) {
       return redirectToLogin(request, error.message);
     }
+
+    // 신규 유저 여부 확인: 가입 시점과 로그인 시점이 같으면 최초 로그인으로 판단
+    if (data?.user) {
+      const { created_at, last_sign_in_at } = data.user;
+      if (!last_sign_in_at || created_at === last_sign_in_at) {
+        isNewUser = true;
+      }
+    }
   }
 
   const destination = resolveNextDestination(request.url, next, '/');
+  const redirectUrl = new URL(destination);
 
-  return NextResponse.redirect(destination);
+  if (isNewUser) {
+    redirectUrl.searchParams.set('is_new_user', 'true');
+  }
+
+  return NextResponse.redirect(redirectUrl);
 }

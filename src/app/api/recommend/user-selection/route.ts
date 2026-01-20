@@ -83,10 +83,6 @@ export async function POST(request: NextRequest) {
 
     const supabase = await createClient();
 
-    console.debug('uniqueIds', uniqueIds);
-    console.debug('recommendation_id', recommendation_id);
-    console.debug('publicUser.id', publicUser.id);
-
     const { error } = await supabase
       .from('recommendations')
       .update({ selected_flower_meanings_ids: uniqueIds })
