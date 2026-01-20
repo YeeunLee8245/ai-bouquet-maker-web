@@ -42,4 +42,22 @@ export const FLOWER_COMPOSITION_ITEMS: TFlowerCompositionItem[] = [
       },
     ],
   },
+  {
+    id: 2,
+    name: '거베라',
+    keywords: ['행복', '감사', '축하'],
+    imageUrl: '/temp_geobera.png',
+    colorAndQuantities: [
+      {
+        // 주황
+        color: '#FF8D3E',
+        quantity: 1,
+      },
+      {
+        // 초록
+        color: '#00C240',
+        quantity: 1,
+      },
+    ],
+  },
 ];

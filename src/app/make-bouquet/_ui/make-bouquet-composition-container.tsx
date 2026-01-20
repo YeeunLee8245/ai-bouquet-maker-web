@@ -35,15 +35,17 @@ export default function MakeBouquetCompositionContainer() {
         </Button>
       </div>
       <div className='mt-3 flex flex-col'>
-        {FLOWER_COMPOSITION_ITEMS.map((item) => (
-          <FlowerCompositionItem
-            key={item.id}
-            item={item}
-            onDelete={handleDelete}
-            onDeleteColor={handleDeleteColor}
-            onPlusColor={handlePlusColor}
-            onMinusColor={handleMinusColor}
-          />
+        {FLOWER_COMPOSITION_ITEMS.map((item, idx) => (
+          <div key={item.id}>
+            <FlowerCompositionItem
+              item={item}
+              onDelete={handleDelete}
+              onDeleteColor={handleDeleteColor}
+              onPlusColor={handlePlusColor}
+              onMinusColor={handleMinusColor}
+            />
+            {idx !== FLOWER_COMPOSITION_ITEMS.length - 1 && <div className='my-4 w-full h-[1px] bg-gray-100'/>}
+          </div>
         ))}
       </div>
     </div>

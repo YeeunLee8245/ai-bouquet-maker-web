@@ -15,7 +15,8 @@ export default function MakeBouquetInfoContainer() {
             </div>
             {/* TODO: yeeun button form 형식으로 error 처리 및 submit */}
             <Input placeholder={placeholder} className='mt-2 w-full py-2 px-3 rounded-4 border-1 border-gray-100'/>
-            <p className='mx-micro mt-2 text-body-xsm text-[#E86652]'>{'필수 입력 항목이에요.'}</p>
+            {/* TODO: yeeun form 붙이면서 분기 로직 수정 */}
+            {isRequired && <p className='mx-micro mt-2 text-body-xsm text-[#E86652]'>{'필수 입력 항목이에요.'}</p>}
           </div>
         ))}
       </div>
