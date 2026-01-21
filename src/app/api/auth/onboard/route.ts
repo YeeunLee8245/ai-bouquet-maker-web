@@ -3,7 +3,7 @@ import { getPublicUser, setOnboarded } from '@/lib/users/auth';
 
 /**
  * @swagger
- * /api/onboard:
+ * /api/auth/onboard:
  *   post:
  *     tags:
  *       - Auth

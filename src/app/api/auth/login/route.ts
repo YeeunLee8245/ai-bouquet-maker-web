@@ -24,7 +24,7 @@
  *         description: 로그인 완료 후 리다이렉트할 경로
  *     responses:
  *       302:
- *         description: OAuth 제공자로 리다이렉트 (성공 시 callback에서 온보딩 여부에 따라 ?is_new_user=true 파라미터를 포함하여 리다이렉트됨)
+ *         description: OAuth 제공자로 리다이렉트 (성공 시 callback에서 온보딩 여부에 따라 최초 가입 시에만 ?is_new_user=true 파라미터를 포함하여 리다이렉트되며, 기존 유저일 경우 해당 파라미터는 생략됨)
  *       400:
  *         description: 잘못된 요청
  */

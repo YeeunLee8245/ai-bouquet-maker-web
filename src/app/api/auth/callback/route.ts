@@ -1,3 +1,24 @@
+/**
+ * @swagger
+ * /api/auth/callback:
+ *   get:
+ *     tags:
+ *       - Auth
+ *     summary: OAuth 콜백 처리
+ *     description: |
+ *       OAuth 인증 완료 후 호출되는 엔드포인트입니다. 
+ *       사용자 세션을 교환하고, 온보딩 여부를 판단하여 메인 또는 지정된 페이지로 리다이렉트합니다.
+ *       
+ *       **리다이렉트 파라미터:**
+ *       - **최초 가입 시:** `?is_new_user=true` 파라미터가 포함됩니다.
+ *       - **기존 유저일 때:** `is_new_user` 파라미터가 생략됩니다. (`=false`로 표시되지 않음)
+ *     responses:
+ *       302:
+ *         description: 서비스의 목적지 페이지로 리다이렉트
+ *       400:
+ *         description: 인증 실패 또는 잘못된 코드
+ */
+
 import { NextRequest, NextResponse } from 'next/server';
 
 import { createClient } from '@shared/supabase/server';
