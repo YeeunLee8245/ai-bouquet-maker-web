@@ -207,7 +207,13 @@ export async function POST(request: NextRequest) {
 
       // 토큰 차감 (성공 시에만)
       try {
-        await spendToken(publicUser.id, recommendationId);
+        await spendToken(
+          publicUser.id,
+          recommendationId,
+          'recommendation',
+          'uuid',
+          'AI 감정 기반 꽃 추천'
+        );
       } catch (tokenError: unknown) {
         const errorMessage = tokenError instanceof Error ? tokenError.message : '토큰 차감 실패';
         // 토큰 차감 실패 시 status를 failed로 변경

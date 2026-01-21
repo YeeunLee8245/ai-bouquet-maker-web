@@ -17,9 +17,39 @@ export const GET = async () => {
         { name: 'Auth', description: '인증 API' },
         { name: 'Recommend', description: '꽃 추천 API' },
         { name: 'Flowers', description: '꽃 사전 및 좋아요 API' },
+        { name: 'Wallet', description: '지갑 및 토큰 API' },
       ],
       components: {
         schemas: {
+          WalletBalance: {
+            type: 'object',
+            properties: {
+              balance: { type: 'integer', example: 150, description: '현재 보유 토큰 잔액' },
+            },
+          },
+          WalletLedger: {
+            type: 'object',
+            properties: {
+              id: { type: 'integer', example: 1 },
+              source: { 
+                type: 'string', 
+                enum: ['signup', 'daily_login', 'topup', 'admin', 'event'],
+                example: 'daily_login'
+              },
+              type: { 
+                type: 'string', 
+                enum: ['credit', 'debit', 'refund', 'expire'],
+                example: 'credit'
+              },
+              amount: { type: 'integer', example: 10 },
+              balance_after: { type: 'integer', example: 150 },
+              reference_type: { type: 'string', example: 'recommendation' },
+              reference_id: { type: 'string', example: 'uuid-string' },
+              reference_id_type: { type: 'string', enum: ['uuid', 'int', 'composite'], example: 'uuid' },
+              description: { type: 'string', example: '일일 로그인 보너스' },
+              created_at: { type: 'string', format: 'date-time' },
+            },
+          },
           AnalysisTags: {
             type: 'object',
             properties: {
