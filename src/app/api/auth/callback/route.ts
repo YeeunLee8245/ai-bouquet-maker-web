@@ -41,6 +41,17 @@ export async function GET(request: NextRequest) {
       if (!last_sign_in_at || created_at === last_sign_in_at) {
         isNewUser = true;
       }
+
+      // 일일 로그인 보상 지급 (비동기 처리)
+      // getPublicUser() 내부에서 보상 지급 로직(checkAndGrantDailyBonus)이 실행됩니다.
+      (async () => {
+        try {
+          const { getPublicUser } = await import('@/lib/users/auth');
+          await getPublicUser();
+        } catch (err) {
+          console.error('[AuthCallback] Failed to trigger daily bonus via getPublicUser:', err);
+        }
+      })();
     }
   }
 
