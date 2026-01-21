@@ -11,7 +11,8 @@
     "start": "next start",
     "lint": "eslint ./src",
     "lint:debug": "eslint ./src --debug",
-    "lint:fix": "eslint ./src --fix"
+    "lint:fix": "eslint ./src --fix",
+    "update-types": "npx supabase gen types typescript --project-id jzknltafoksihencnztd > src/types/supabase.ts"
   },
   "dependencies": {
     "@supabase/ssr": "^0.8.0",
