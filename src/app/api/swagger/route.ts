@@ -14,13 +14,24 @@ export const GET = async () => {
         { url: 'http://localhost:3000', description: 'Local Development' },
       ],
       tags: [
-        { name: 'Auth', description: '인증 API' },
+        { name: 'Auth', description: '인증 및 사용자 관리 API (Google, Kakao OAuth 지원)' },
         { name: 'Recommend', description: '꽃 추천 API' },
         { name: 'Flowers', description: '꽃 사전 및 좋아요 API' },
         { name: 'Wallet', description: '지갑 및 토큰 API' },
       ],
       components: {
         schemas: {
+          User: {
+            type: 'object',
+            properties: {
+              id: { type: 'string', format: 'uuid', example: 'uuid-string' },
+              email: { type: 'string', example: 'user@example.com' },
+              nickname: { type: 'string', example: '꽃돌이' },
+              avatar_url: { type: 'string', example: 'https://example.com/avatar.png' },
+              is_onboarded: { type: 'boolean', example: false, description: '온보딩 완료 여부' },
+              created_at: { type: 'string', format: 'date-time' },
+            },
+          },
           WalletBalance: {
             type: 'object',
             properties: {
