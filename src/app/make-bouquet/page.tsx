@@ -6,10 +6,15 @@ import MakeBouquetPackagingContainer from './_ui/make-bouquet-packaging-containe
 import MakeBouquetSummaryContainer from './_ui/make-bouquet-summary-containert';
 import MakeBouquetPreviewContainer from './_ui/make-bouquet-preview-container';
 
+type TProps = {
+  packagingColors?: string[];
+  ribbonColors?: string[];
+};
+
 /**
- * 꽃다발 만들기 페이지
+ * 꽃다발 만들기/수정 페이지
  */
-const MakeBouquetPage = () => {
+function MakeBouquetPage({ packagingColors = [], ribbonColors = [] }: TProps) {
   return (
     <div>
       <div className='pt-4 pb-2 mx-4 px-1'>
@@ -19,7 +24,7 @@ const MakeBouquetPage = () => {
       <div className='pt-4 pb-8 px-4'>
         <MakeBouquetInfoContainer />
         <MakeBouquetCompositionContainer />
-        <MakeBouquetPackagingContainer />
+        <MakeBouquetPackagingContainer packagingColors={packagingColors} ribbonColors={ribbonColors} />
         <MakeBouquetSummaryContainer />
         <MakeBouquetPreviewContainer />
         <MakeBouquetButton />
