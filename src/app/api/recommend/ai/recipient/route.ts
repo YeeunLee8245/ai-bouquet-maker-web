@@ -78,6 +78,20 @@ import { spendToken, getUserBalance } from '@/lib/users/wallet';
  *                 total_count:
  *                   type: integer
  *                   description: "검색된 꽃의 총 개수 (최대 10개)"
+ *                 title:
+ *                   type: string
+ *                   description: "추천 제목 (AI 생성 또는 자동 생성)"
+ *                 message:
+ *                   type: string
+ *                   description: "추천 메시지 (AI 생성, Preset은 빈 문자열)"
+ *                 recipient:
+ *                   type: string
+ *                   nullable: true
+ *                   description: "받는 사람 (AI 추출 또는 Label)"
+ *                 occasion:
+ *                   type: string
+ *                   nullable: true
+ *                   description: "상황 (AI 추출 또는 Label)"
  *                 recommendations:
  *                   type: array
  *             example:
@@ -200,6 +214,8 @@ export async function POST(request: NextRequest) {
         .update({
           status: 'success',
           analysis_result: analysis,
+          relationship: analysis.recipient || null, // AI가 추출한 받는사람
+          occasion: analysis.occasion || null,     // AI가 추출한 상황
           recommended_flowers: ranked,
           updated_at: new Date().toISOString(),
         })
@@ -247,6 +263,10 @@ export async function POST(request: NextRequest) {
         success: true,
         recommendation_id: recommendationId,
         total_count: standardizedRecommendations.length,
+        title: analysis.title,
+        message: analysis.message,
+        recipient: analysis.recipient || null,
+        occasion: analysis.occasion || null,
         recommendations: standardizedRecommendations,
       });
     } catch (aiError: unknown) {

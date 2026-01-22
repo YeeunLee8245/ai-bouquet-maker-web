@@ -28,8 +28,10 @@ export interface EmotionAnalysisResponse {
   recommend_flowers: RecommendFlower[];
   message: string;
   recipient?: string;
+  occasion?: string;
 }
 
 export interface RecipientAnalysisResponse extends EmotionAnalysisResponse {
   recipient?: string;
+  occasion?: string;
 }

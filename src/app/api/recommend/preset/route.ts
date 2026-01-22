@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@shared/supabase/server';
 import { getUser } from '@/lib/users/auth';
 import { getCardRecommendations } from '@/lib/recommend/card-recommendation';
+import { getRelationshipLabel, getOccasionLabel } from '@/lib/recommend/relationship-templates';
 
 /**
  * @swagger
@@ -77,12 +78,30 @@ import { getCardRecommendations } from '@/lib/recommend/card-recommendation';
  *                 total_count:
  *                   type: integer
  *                   description: "검색된 꽃의 총 개수 (최대 10개)"
+ *                 title:
+ *                   type: string
+ *                   description: "추천 제목 (자동 생성)"
+ *                 message:
+ *                   type: string
+ *                   description: "추천 메시지 (Preset은 빈 문자열)"
+ *                 recipient:
+ *                   type: string
+ *                   nullable: true
+ *                   description: "받는 사람 (Label)"
+ *                 occasion:
+ *                   type: string
+ *                   nullable: true
+ *                   description: "상황 (Label)"
  *                 recommendations:
  *                   type: array
  *             example:
  *               success: true
  *               recommendation_id: "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
  *               total_count: 2
+ *               title: "연인에게 전하는 생일/기념일 꽃다발"
+ *               message: ""
+ *               recipient: "연인"
+ *               occasion: "생일/기념일"
  *               recommendations:
  *                 - flower_id: 28
  *                   flower_meaning_id: 58
@@ -154,15 +173,18 @@ export async function GET(request: NextRequest) {
 
         userId = publicUser?.id || null;
       }
+      
+      const relationshipLabel = getRelationshipLabel(relationship);
+      const occasionLabel = getOccasionLabel(occasion);
 
       const { data: newRecommendation, error: saveError } = await supabase
         .from('recommendations')
         .insert({
           user_id: userId,
           recommendation_type: 'preset',
-          input_text: `${relationship}:${occasion}`,
-          relationship,
-          occasion,
+          input_text: `${relationshipLabel}:${occasionLabel}`,
+          relationship: relationshipLabel,
+          occasion: occasionLabel,
           recommended_flowers: ranked,
           created_at: new Date().toISOString(),
         })
@@ -189,10 +211,19 @@ export async function GET(request: NextRequest) {
       image_url: rec.flower.image_url || null,
     }));
 
+    // preset 추천의 경우 title, message 등은 별도로 생성하지 않으므로 기본값 또는 label 사용
+    // AI 추천과의 응답 형식 통일을 위해 추가
+    const relationshipLabel = getRelationshipLabel(relationship);
+    const occasionLabel = getOccasionLabel(occasion);
+
     return NextResponse.json({
       success: true,
       recommendation_id: recommendationId,
       total_count: standardizedRecommendations.length,
+      title: `${relationshipLabel}에게 전하는 ${occasionLabel} 꽃다발`, // 간단한 제목 생성
+      message: '', // preset은 메시지 생성 안 함
+      recipient: relationshipLabel,
+      occasion: occasionLabel,
       recommendations: standardizedRecommendations,
     });
   } catch (error) {

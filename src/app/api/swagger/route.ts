@@ -85,6 +85,7 @@ export const GET = async () => {
               tags: { $ref: '#/components/schemas/AnalysisTags' },
               recommend_flowers: { type: 'array', items: { $ref: '#/components/schemas/RecommendFlower' } },
               message: { type: 'string', example: '생일 축하해! 항상 행복하길 바라.' },
+              occasion: { type: 'string', example: '생일 축하' },
             },
           },
           RecipientAnalysisResponse: {
@@ -94,6 +95,7 @@ export const GET = async () => {
                 type: 'object',
                 properties: {
                   recipient: { type: 'string', example: '엄마' },
+                  occasion: { type: 'string', example: '부모님 생신' },
                 },
               },
             ],
