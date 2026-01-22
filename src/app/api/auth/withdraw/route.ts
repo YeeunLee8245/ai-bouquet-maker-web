@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { createClient } from '@shared/supabase/server';
 
 /**
@@ -22,7 +22,7 @@ import { createClient } from '@shared/supabase/server';
  *       500:
  *         description: 서버 처리 중 오류 발생
  */
-export async function POST(request: NextRequest) {
+export async function POST() {
   try {
     const supabase = await createClient();
 
@@ -53,7 +53,6 @@ export async function POST(request: NextRequest) {
     }
 
     const internalId = publicUser.id;
-    console.log(`[Withdraw] Starting anonymization for public user: ${internalId}`);
 
     // 4. auth.users에서 사용자 삭제 준비 (Admin 클라이언트 생성)
     const { createAdminClient } = await import('@shared/supabase/admin');
@@ -75,13 +74,12 @@ export async function POST(request: NextRequest) {
         deleted_reason: '직접탈퇴',
         auth_id: null,
       })
-      .eq('id', internalId); 
+      .eq('id', internalId);
 
     if (updateError) {
       console.error('[Withdraw] Anonymization error:', updateError);
       throw updateError;
     }
-    console.log('[Withdraw] Anonymization successful');
 
     // 4. auth.users에서 사용자 삭제 (Admin 클라이언트 사용)
     const { error: deleteError } = await supabaseAdmin.auth.admin.deleteUser(userId);
@@ -90,11 +88,9 @@ export async function POST(request: NextRequest) {
       console.error('[Withdraw] Auth user delete error:', deleteError);
       throw deleteError;
     }
-    console.log('[Withdraw] Auth user deleted successfully');
 
     // 5. 현재 세션 로그아웃 처리
     await supabase.auth.signOut();
-    console.log('[Withdraw] Sign out successful');
 
     return NextResponse.json({ message: '탈퇴가 완료되었습니다.' }, { status: 200 });
 

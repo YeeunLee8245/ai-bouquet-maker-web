@@ -42,15 +42,15 @@ export const GET = async () => {
             type: 'object',
             properties: {
               id: { type: 'integer', example: 1 },
-              source: { 
-                type: 'string', 
+              source: {
+                type: 'string',
                 enum: ['signup', 'daily_login', 'topup', 'admin', 'event'],
-                example: 'daily_login'
+                example: 'daily_login',
               },
-              type: { 
-                type: 'string', 
+              type: {
+                type: 'string',
                 enum: ['credit', 'debit', 'refund', 'expire'],
-                example: 'credit'
+                example: 'credit',
               },
               amount: { type: 'integer', example: 10 },
               balance_after: { type: 'integer', example: 150 },

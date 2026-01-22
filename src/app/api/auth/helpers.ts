@@ -47,7 +47,7 @@ const getBaseOrigin = (requestUrl: string) => {
     if (url.origin && url.origin !== 'null') {
       return url.origin;
     }
-  } catch (e) {
+  } catch {
     // 상대 경로인 경우 catch로 넘어감
   }
 

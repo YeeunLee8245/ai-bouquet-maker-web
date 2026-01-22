@@ -28,7 +28,7 @@ export async function GET() {
     if (!publicUser) {
       return NextResponse.json(
         { error: '로그인이 필요합니다.' },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -50,7 +50,7 @@ export async function GET() {
     console.error('[Wallet History] GET Error:', error);
     return NextResponse.json(
       { error: '내역 조회 중 오류가 발생했습니다.' },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

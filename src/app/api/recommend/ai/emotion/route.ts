@@ -212,7 +212,7 @@ export async function POST(request: NextRequest) {
           recommendationId,
           'recommendation',
           'uuid',
-          'AI 감정 기반 꽃 추천'
+          'AI 감정 기반 꽃 추천',
         );
       } catch (tokenError: unknown) {
         const errorMessage = tokenError instanceof Error ? tokenError.message : '토큰 차감 실패';

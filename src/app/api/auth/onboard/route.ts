@@ -28,11 +28,11 @@ import { getPublicUser, setOnboarded } from '@/lib/users/auth';
 export async function POST() {
   try {
     const publicUser = await getPublicUser();
-    
+
     if (!publicUser) {
       return NextResponse.json(
         { error: '로그인이 필요합니다.' },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -43,7 +43,7 @@ export async function POST() {
     console.error('[Onboard] POST Error:', error);
     return NextResponse.json(
       { error: '온보딩 상태 업데이트 중 오류가 발생했습니다.' },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
