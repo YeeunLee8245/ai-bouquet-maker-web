@@ -17,8 +17,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
+  modals,
 }: Readonly<{
   children: React.ReactNode;
+  modals: React.ReactNode;
 }>) {
   return (
     <AppProviders>
@@ -28,6 +30,7 @@ export default function RootLayout({
           <main className='max-h-[calc(100%-48px)] h-full overscroll-contain'>
             {children}
           </main>
+          {modals}
         </body>
       </html>
     </AppProviders>
