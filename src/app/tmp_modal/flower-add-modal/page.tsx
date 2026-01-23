@@ -1,6 +1,6 @@
 import React from 'react';
-import FlowerFavoriteListSection from './_ui/flower-favorite-list-section';
 import FlowerSearchSection from './_ui/flower-search-section';
+import FlowerFavoritesSection from './_ui/flower-favorites-section';
 
 function FlowerAddModalPage() {
   return (
@@ -12,9 +12,9 @@ function FlowerAddModalPage() {
         </button>
       </div>
       <div className='pt-4 pb-6'>
-        <FlowerFavoriteListSection />
+        <FlowerSearchSection />
       </div>
-      <FlowerSearchSection />
+      <FlowerFavoritesSection />
     </div>
   );
 }
