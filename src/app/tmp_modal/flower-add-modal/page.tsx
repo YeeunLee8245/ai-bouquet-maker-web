@@ -1,20 +1,24 @@
 import React from 'react';
 import FlowerSearchSection from './_ui/flower-search-section';
 import FlowerFavoritesSection from './_ui/flower-favorites-section';
+import BottomActionFooter from '@/widgets/footer/BottomActionFooter';
 
 function FlowerAddModalPage() {
   return (
-    <div className='w-full h-[624px] px-4 pt-4 pb-8 rounded-t-5'>
-      <div className='flex justify-between px-micro'>
-        <p className='text-title-md'>꽃 추가</p>
-        <button type='button' className='text-ui-textbtn-md text-gray-400 hover:text-gray-500'>
-          닫기
-        </button>
+    <div className='relative flex flex-col h-[624px]'>
+      <div className='w-full flex-1 px-4 pt-4 rounded-t-5'>
+        <div className='flex justify-between px-micro'>
+          <p className='text-title-md'>꽃 추가</p>
+          <button type='button' className='text-ui-textbtn-md text-gray-400 hover:text-gray-500'>
+            닫기
+          </button>
+        </div>
+        <div className='pt-4 pb-6'>
+          <FlowerSearchSection />
+        </div>
+        <FlowerFavoritesSection />
       </div>
-      <div className='pt-4 pb-6'>
-        <FlowerSearchSection />
-      </div>
-      <FlowerFavoritesSection />
+      <BottomActionFooter title='꽃다발 담기' />
     </div>
   );
 }

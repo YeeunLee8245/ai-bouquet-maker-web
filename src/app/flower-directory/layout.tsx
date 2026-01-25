@@ -12,7 +12,7 @@ export default function FlowerDirectoryLayout({ children, modal }: TProps) {
         {children}
         {modal}
       </div>
-      <BottomActionFooter />
+      <BottomActionFooter title='꽃다발 만들기' />
     </div>
   );
 }
