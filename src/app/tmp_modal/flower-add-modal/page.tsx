@@ -5,7 +5,7 @@ import BottomActionFooter from '@/widgets/footer/BottomActionFooter';
 
 function FlowerAddModalPage() {
   return (
-    <div className='relative flex flex-col h-[624px]'>
+    <div className='relative flex flex-col min-h-[624px]'>
       <div className='w-full flex-1 px-4 pt-4 rounded-t-5'>
         <div className='flex justify-between px-micro'>
           <p className='text-title-md'>꽃 추가</p>
