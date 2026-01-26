@@ -16,3 +16,6 @@ __pycache__/
 
 # environment variables
 .env*
+
+# open-next
+.open-next/
