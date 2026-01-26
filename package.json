@@ -13,7 +13,8 @@
     "lint:debug": "eslint ./src --debug",
     "lint:fix": "eslint ./src --fix",
     "update-types": "npx supabase gen types typescript --project-id jzknltafoksihencnztd > src/types/supabase.ts",
-    "db-push": "npx supabase db push"
+    "db-push": "npx supabase db push",
+    "deploy": "opennextjs-cloudflare && wrangler deploy"
   },
   "dependencies": {
     "@supabase/ssr": "^0.8.0",
@@ -36,6 +37,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.39.2",
+    "@opennextjs/cloudflare": "^1.15.1",
     "@stylistic/eslint-plugin": "^5.6.1",
     "@svgr/webpack": "^8.1.0",
     "@tailwindcss/postcss": "^4",
@@ -48,6 +50,7 @@
     "eslint-plugin-unused-imports": "^4.1.4",
     "tailwindcss": "^4.1.17",
     "typescript": "^5",
-    "typescript-eslint": "^8.49.0"
+    "typescript-eslint": "^8.49.0",
+    "wrangler": "^4.60.0"
   }
 }
