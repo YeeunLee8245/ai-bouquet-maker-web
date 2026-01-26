@@ -13,7 +13,8 @@
     "lint:debug": "eslint ./src --debug",
     "lint:fix": "eslint ./src --fix",
     "update-types": "npx supabase gen types typescript --project-id jzknltafoksihencnztd > src/types/supabase.ts",
-    "db-push": "npx supabase db push"
+    "db-push": "npx supabase db push",
+    "cloudflare:build": "exec opennextjs-cloudflare build"
   },
   "dependencies": {
     "@supabase/ssr": "^0.8.0",
