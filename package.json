@@ -14,7 +14,7 @@
     "lint:fix": "eslint ./src --fix",
     "update-types": "npx supabase gen types typescript --project-id jzknltafoksihencnztd > src/types/supabase.ts",
     "db-push": "npx supabase db push",
-    "deploy-preview": "opennextjs-cloudflare && wrangler deploy"
+    "deploy-preview": "opennextjs-cloudflare deploy"
   },
   "dependencies": {
     "@supabase/ssr": "^0.8.0",
