@@ -1,85 +1,83 @@
-// TODO: yeeun jotai로 구현
-// 'use client';
+'use client';
 
-// import { redirect, RedirectType, useRouter } from 'next/navigation';
-// import { getInitModalStoreInfo, useModalInfos, useOnModal } from './modalStore';
-// import { IHiddenModalsPageProps, IModalsPageProps } from './$types';
+import { redirect, RedirectType, useRouter } from 'next/navigation';
+import { initModalStoreInfo, modalInfoAtom, useOnModal } from './modalStore';
+import { IHiddenModalsPageProps, IModalsPageProps } from './$types';
+import { useAtomValue } from 'jotai';
 
-// const initDatas = getInitModalStoreInfo();
+/**
+ * intercepting Modal
+ */
+export const withInterceptingModals =
+  <P extends object>(Component: React.ComponentType<P>, fallbackPath: string) => {
+    const InterceptingModal = (props: P) => {
+      if (Component === undefined) {
+        console.log('redirect', fallbackPath);
+        return redirect(fallbackPath, RedirectType.replace);
+      }
+      return <Component {...props} fallbackPath={fallbackPath} />;
+    };
+    InterceptingModal.displayName = `withInterceptingModals(${Component?.displayName || Component?.name || 'Component'})`;
+    return InterceptingModal;
+  };
 
-// /**
-//  * intercepting Modal
-//  */
-// export const withInterceptingModals =
-//   <P extends object>(Component: React.ComponentType<P>, fallbackPath: string) => {
-//     const InterceptingModal = (props: P) => {
-//       if (Component === undefined) {
-//         console.log('redirect', fallbackPath);
-//         return redirect(fallbackPath, RedirectType.replace);
-//       }
-//       return <Component {...props} fallbackPath={fallbackPath} />;
-//     };
-//     InterceptingModal.displayName = `withInterceptingModals(${Component?.displayName || Component?.name || 'Component'})`;
-//     return InterceptingModal;
-//   };
+/**
+ * 일반적인 Modal
+ */
+export function DefaultModalsPage() {
+  const { component, path } = useAtomValue(modalInfoAtom);
+  const setValues = useOnModal();
 
-// /**
-//  * 일반적인 Modal
-//  */
-// export function DefaultModalsPage() {
-//   const { component, path } = useModalInfos();
-//   const setValues = useOnModal();
+  if (!component || path) {return null;}
 
-//   if (!component || path) {return null;}
+  const handleClose = () => {
+    setValues(initModalStoreInfo);
+  };
 
-//   const handleClose = () => {
-//     setValues(initDatas);
-//   };
+  const handleConfirm = (/* type?: TConfirmType */) => {
+    setValues(initModalStoreInfo);
+  };
 
-//   const handleConfirm = (/* type?: TConfirmType */) => {
-//     setValues(initDatas);
-//   };
+  const Component = component;
+  return (
+    <section id='modal'>
+      <Component onClose={handleClose} onConfirm={handleConfirm} />
+    </section>
+  );
+}
 
-//   const Component = component;
-//   return (
-//     <section id='modal'>
-//       <Component onClose={handleClose} onConfirm={handleConfirm} />
-//     </section>
-//   );
-// }
+/**
+ * route 하는 Modal
+ */
+export default function ModalsPage(props: IModalsPageProps) {
+  const { fallbackPath } = props as unknown as IHiddenModalsPageProps;
+  const router = useRouter();
+  const { component, type, fallback } = useAtomValue(modalInfoAtom);
+  const setValues = useOnModal();
+  const moveFallback = fallback || fallbackPath;
 
-// /**
-//  * route 하는 Modal
-//  */
-// export default function ModalsPage(props: IModalsPageProps) {
-//   const { fallbackPath } = props as unknown as IHiddenModalsPageProps;
-//   const router = useRouter();
-//   const { component, type, fallback } = useModalInfos();
-//   const setValues = useOnModal();
-//   const moveFallback = fallback || fallbackPath;
+  if (!component) {return null;}
 
-//   if (!component) {return null;}
+  const handleClose = () => {
+    setValues(initModalStoreInfo);
+    if (type && type === RedirectType.push) {
+      router.back();
+    } else if (moveFallback) {
+      router.replace(moveFallback);
+    }
+  };
 
-//   const handleClose = () => {
-//     setValues(initDatas);
-//     if (type && type === RedirectType.push) {
-//       router.back();
-//     } else if (moveFallback) {
-//       router.replace(moveFallback);
-//     }
-//   };
+  const handleConfirm = (/* type?: TConfirmType */) => {
+    setValues(initModalStoreInfo);
+  };
 
-//   const handleConfirm = (/* type?: TConfirmType */) => {
-//     setValues(initDatas);
-//   };
-
-//   const Component = component;
-//   return (
-//     <section id='modal'>
-//       <Component onClose={handleClose} onConfirm={handleConfirm} />
-//     </section>
-//   );
-// }
+  const Component = component;
+  return (
+    <section id='modal'>
+      <Component onClose={handleClose} onConfirm={handleConfirm} />
+    </section>
+  );
+}
 
 /**
  * 사용(e.g. /login/[path]/@modals/(.)[path]/page.tsx, default.tsx 파일에서 null 리턴 잊지말기)
