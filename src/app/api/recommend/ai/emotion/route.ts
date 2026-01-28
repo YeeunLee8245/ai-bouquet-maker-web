@@ -226,7 +226,7 @@ export async function POST(request: NextRequest) {
         await spendToken(
           publicUser.id,
           recommendationId,
-          'recommendation',
+          'recommendations',
           'uuid',
           'AI 감정 기반 꽃 추천',
         );
