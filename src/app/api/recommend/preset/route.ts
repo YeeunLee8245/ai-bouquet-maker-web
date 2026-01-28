@@ -173,7 +173,7 @@ export async function GET(request: NextRequest) {
 
         userId = publicUser?.id || null;
       }
-      
+
       const relationshipLabel = getRelationshipLabel(relationship);
       const occasionLabel = getOccasionLabel(occasion);
 

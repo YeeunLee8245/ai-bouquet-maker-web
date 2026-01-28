@@ -80,10 +80,15 @@ export async function GET() {
 
     // 현재 계절 계산
     let currentSeason = '';
-    if (currentMonth >= 3 && currentMonth <= 5) {currentSeason = '봄';}
-    else if (currentMonth >= 6 && currentMonth <= 8) {currentSeason = '여름';}
-    else if (currentMonth >= 9 && currentMonth <= 11) {currentSeason = '가을';}
-    else {currentSeason = '겨울';}
+    if (currentMonth >= 3 && currentMonth <= 5) {
+      currentSeason = '봄';
+    } else if (currentMonth >= 6 && currentMonth <= 8) {
+      currentSeason = '여름';
+    } else if (currentMonth >= 9 && currentMonth <= 11) {
+      currentSeason = '가을';
+    } else {
+      currentSeason = '겨울';
+    }
 
     // 2. 인기 꽃 추천 (최근 1일 좋아요 기반)
     // 조인을 통해 좋아요 수와 꽃 정보를 함께 가져오기 위해 RPC 또는 복합 쿼리 사용 가능하지만,
@@ -100,7 +105,6 @@ export async function GET() {
 
     // 좋아요가 있는 꽃 아이디들
     const popularFlowerIds = Object.keys(counts1d).map(Number);
-    
     const flowerSelect = 'id, name_ko, image_url, meanings_tags, flower_meanings(meaning, is_primary)';
 
     let popularFlowersQuery = supabase
@@ -112,15 +116,28 @@ export async function GET() {
       popularFlowersQuery = popularFlowersQuery.in('id', popularFlowerIds);
     }
 
-    let { data: popularFlowers } = await popularFlowersQuery.limit(50);
+    const { data: popularFlowersData } = await popularFlowersQuery.limit(50);
+    let popularFlowers = popularFlowersData || [];
 
-    // 만약 5개보다 적다면 전체에서 랜덤하게 채움
-    if (!popularFlowers || popularFlowers.length < 5) {
-      const { data: extraFlowers } = await supabase
+    // 만약 5개보다 적다면 부족한 만큼만 전체에서 랜덤하게 채움
+    if (popularFlowers.length < 5) {
+      const needed = 5 - popularFlowers.length;
+      const existingIds = popularFlowers.map((f) => f.id);
+
+      let extraQuery = supabase
         .from('flowers')
-        .select(flowerSelect)
-        .limit(10);
-      popularFlowers = [...(popularFlowers || []), ...(extraFlowers || [])];
+        .select(flowerSelect);
+
+      if (existingIds.length > 0) {
+        extraQuery = extraQuery.not('id', 'in', `(${existingIds.join(',')})`);
+      }
+
+      const { data: extraFlowers } = await extraQuery.limit(needed + 5);
+      const randomExtras = (extraFlowers || [])
+        .sort(() => 0.5 - Math.random())
+        .slice(0, needed);
+
+      popularFlowers = [...popularFlowers, ...randomExtras];
     }
 
     // 랜덤으로 5개 섞기
@@ -157,7 +174,7 @@ export async function GET() {
 
     if (topFlowerId) {
       // 1위 꽃이 계절에 맞는지 확인
-      todaysFlowerCandidate = seasonalFlowers?.find(f => f.id === Number(topFlowerId));
+      todaysFlowerCandidate = seasonalFlowers?.find((f) => f.id === Number(topFlowerId));
     }
 
     // 후보가 없으면 계절 꽃 중 랜덤, 계절 꽃도 없으면 전체 중 랜덤
@@ -179,28 +196,26 @@ export async function GET() {
     }
 
     // 4. 데이터 가공 (대표 의미 추출)
-    const getRepresentativeMeanings = (flower: any) => {
+    const getRepresentativeMeanings = (flower: FlowerWithMeanings) => {
       const f = flower as FlowerWithMeanings;
       const meanings = f.flower_meanings || [];
       const primaryMeanings = meanings
         .filter((m) => m.is_primary)
         .map((m) => m.meaning);
-      
       if (primaryMeanings.length > 0) {
         return primaryMeanings.slice(0, 2);
       }
-      
       return meanings.map((m) => m.meaning).slice(0, 2);
     };
 
-    const processedPopular = shuffledPopular.map(f => ({
+    const processedPopular = shuffledPopular.map((f) => ({
       ...f,
-      representative_meanings: getRepresentativeMeanings(f)
+      representative_meanings: getRepresentativeMeanings(f as unknown as FlowerWithMeanings),
     }));
 
     const processedTodaysFlower = todaysFlowerCandidate ? {
       ...todaysFlowerCandidate,
-      representative_meanings: getRepresentativeMeanings(todaysFlowerCandidate)
+      representative_meanings: getRepresentativeMeanings(todaysFlowerCandidate as unknown as FlowerWithMeanings),
     } : null;
 
     return NextResponse.json({
@@ -215,7 +230,7 @@ export async function GET() {
     console.error('Main API Error:', error);
     return NextResponse.json(
       { success: false, message: '서버 에러가 발생했습니다.' },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
