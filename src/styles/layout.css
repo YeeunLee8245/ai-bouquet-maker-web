@@ -28,12 +28,14 @@
    * z-index
    */
    --z-index-0: 0;
+   --z-index-5: 5;
    --z-index-10: 10;
    --z-index-20: 20;
    --z-index-30: 30;
    --z-index-40: 40;
    --z-index-50: 50;
    --z-index-60: 60;
+   --z-index-header: var(--z-index-5);
    --z-index-float: var(--z-index-10);
    --z-index-dropdown: var(--z-index-30);
    --z-index-modal: var(--z-index-40);

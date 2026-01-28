@@ -31,7 +31,7 @@ function LikeButton({type, id, variant, size, className, queryKeyToPatch, patchQ
       aria-busy={pending}
       aria-label={`${liked ? '좋아요 취소' : '좋아요'}`}
       className={cn(className)}>
-      <Icon className={cn(buttonSize, liked ? 'fill-primary-400' : 'fill-black/20')} />
+      <Icon className={cn(buttonSize, liked ? 'fill-primary-400' : 'fill-black/20', variant === 'outline' && '[&>path]:stroke-gray-100')} />
     </button>
   );
 }

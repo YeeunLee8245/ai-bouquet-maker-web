@@ -1,35 +1,31 @@
 // TODO: yeeun jotai로 구현
-// import { RedirectType, useRouter } from 'next/navigation';
-// import { createSAFStore } from '@/store/utilsStore';
+import { RedirectType, useRouter } from 'next/navigation';
+import { IModalInfos } from './$types';
+import { atom, useSetAtom } from 'jotai';
 
-// export const getInitModalStoreInfo = () => ({
-//   component: undefined,
-//   path: '',
-//   type: undefined,
-//   fallback: undefined,
-// });
+export const initModalStoreInfo: IModalInfos = {
+  component: undefined,
+  path: '',
+  type: undefined,
+  fallback: undefined,
+};
 
-// const useModalInfoStore = createSAFStore<IModelStore>((set) => ({
-//   values: getInitModalStoreInfo(),
-//   setValues: (values: IModelInfos) => set({ values }),
-// }));
+export const modalInfoAtom = atom<IModalInfos>(initModalStoreInfo);
 
-// export const useOnModal = (type: RedirectType = RedirectType.replace) => {
-//   const router = useRouter();
-//   const setValues = useModalInfoStore((state) => state.setValues);
-//   return (infos: IModelInfos) => {
-//     setValues({
-//       ...infos,
-//       type,
-//     });
-//     if (infos.path) {
-//       if (type === RedirectType.push) {
-//         router.push(infos.path);
-//         return;
-//       }
-//       router.replace(infos.path);
-//     }
-//   };
-// };
-
-// export const useModalInfos = () => useModalInfoStore((state) => state.values);
+export const useOnModal = (type: RedirectType = RedirectType.replace) => {
+  const router = useRouter();
+  const setValues = useSetAtom(modalInfoAtom);
+  return (infos: IModalInfos) => {
+    setValues({
+      ...infos,
+      type,
+    });
+    if (infos.path) {
+      if (type === RedirectType.push) {
+        router.push(infos.path);
+        return;
+      }
+      router.replace(infos.path);
+    }
+  };
+};

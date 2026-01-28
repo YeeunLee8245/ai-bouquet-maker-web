@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from 'next/server';
 import { updateSession } from '@/shared/supabase/update-session';
 
-export async function proxy(request: NextRequest) {
+export default async function middleware(request: NextRequest) {
   // 배포 환경(production)에서 특정 경로 접근 제한
   if (process.env.NODE_ENV === 'production') {
     const { pathname } = request.nextUrl;
@@ -24,6 +24,7 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
+  runtime: 'experimental-edge', // Cloudflare Workers (Edge Runtime) 지원
   matcher: [
     /*
      * Match all request paths except for the ones starting with:
