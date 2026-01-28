@@ -119,9 +119,9 @@ export async function GET() {
     const { data: popularFlowersData } = await popularFlowersQuery.limit(50);
     let popularFlowers = popularFlowersData || [];
 
-    // 만약 5개보다 적다면 부족한 만큼만 전체에서 랜덤하게 채움
-    if (popularFlowers.length < 5) {
-      const needed = 5 - popularFlowers.length;
+    // 만약 10개보다 적다면 부족한 만큼만 전체에서 랜덤하게 채움
+    if (popularFlowers.length < 10) {
+      const needed = 10 - popularFlowers.length;
       const existingIds = popularFlowers.map((f) => f.id);
 
       let extraQuery = supabase
@@ -140,10 +140,10 @@ export async function GET() {
       popularFlowers = [...popularFlowers, ...randomExtras];
     }
 
-    // 랜덤으로 5개 섞기
+    // 랜덤으로 10개 섞기
     const shuffledPopular = (popularFlowers || [])
       .sort(() => 0.5 - Math.random())
-      .slice(0, 5);
+      .slice(0, 10);
 
     // 3. 오늘의 꽃 추천 (계절 + 1주일 좋아요 1위 기반)
     // 1주일간 좋아요 집계
