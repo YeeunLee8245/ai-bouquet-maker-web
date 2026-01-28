@@ -46,7 +46,7 @@ function FlowerCard({ size, imageUrl, id, name, isLiked, colors, tags, actionBut
         />
         {isLiked !== undefined && (
           <button className='absolute top-2 right-2 text-black/20 hover:text-primary-400'>
-            <OutlineHeartIcon/>
+            <OutlineHeartIcon className='w-6 h-6 [&>path]:stroke-gray-100'/>
           </button>
         )}
         {colors && (

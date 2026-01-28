@@ -1,6 +1,8 @@
 import { getSupabaseUser } from '@/hooks/get-supabase-user';
 import StarIcon from '@/shared/assets/icons/star.svg';
 import Image from 'next/image';
+import GeneralAIInput from './_ui/general-ai-input';
+import SpecificAIButtons from './_ui/specific-ai-buttons';
 
 // 맞춤 추천 -> 따로 페이지 빼는 것이 아닌 컴포넌트 형태로 중첩해서 띄우기
 /**
@@ -36,6 +38,8 @@ export default async function MainPage() {
             <StarIcon className='w-3 h-3 text-gray-50'/>
             <p className='text-body-xsm text-gray-50'>입력한 내용에 따라 AI가 꽃을 추천해 드려요.</p>
           </span>
+          <GeneralAIInput />
+          <SpecificAIButtons/>
         </div>
 
       </div>
