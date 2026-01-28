@@ -86,12 +86,12 @@ export async function GET() {
         id: publicUser.id,
         nickname: publicUser.nickname,
         email: publicUser.email,
-        bio: (publicUser as any).bio || '',
+        bio: publicUser.bio || '',
         created_at: publicUser.created_at,
         avatar_url: publicUser.avatar_url,
       },
       stats: {
-        favorite_flowers: favoriteFlowers?.map((f: any) => f.flowers?.name_ko).filter(Boolean) || [],
+        favorite_flowers: (favoriteFlowers as unknown as { flowers: { name_ko: string } | null }[] | null)?.map((f) => f.flowers?.name_ko).filter(Boolean) || [],
         recent_bouquet: recentBouquets?.[0] || null,
         recommendation_count: recommendationCount || 0,
       },
@@ -125,7 +125,7 @@ export async function PATCH(request: Request) {
       .from('users')
       .update({
         nickname: nickname !== undefined ? nickname : publicUser.nickname,
-        bio: bio !== undefined ? bio : (publicUser as any).bio,
+        bio: bio !== undefined ? bio : publicUser.bio,
         updated_at: new Date().toISOString(),
       })
       .eq('id', publicUser.id)
