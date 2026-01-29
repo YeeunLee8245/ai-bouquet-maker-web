@@ -32,3 +32,36 @@ export const QUICK_PERSON_TARGET_RECOMMENDATION_LIST = [
     name: '동료',
   },
 ];
+
+export const POPULAR_FLOWER_RECOMMENDATION_LIST = [
+  {
+    id: '1',
+    name: '거베라',
+    imageUrl: '/temp_geobera.png',
+    tags: ['사랑', '감사', '축하'],
+  },
+  {
+    id: '2',
+    name: '거베라',
+    imageUrl: '/temp_geobera.png',
+    tags: ['사랑', '감사', '축하'],
+  },
+  {
+    id: '3',
+    name: '거베라',
+    imageUrl: '/temp_geobera.png',
+    tags: ['사랑', '감사', '축하'],
+  },
+  {
+    id: '4',
+    name: '거베라',
+    imageUrl: '/temp_geobera.png',
+    tags: ['사랑', '감사', '축하'],
+  },
+  {
+    id: '5',
+    name: '거베라',
+    imageUrl: '/temp_geobera.png',
+    tags: ['사랑', '감사', '축하'],
+  },
+];

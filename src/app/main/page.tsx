@@ -4,6 +4,7 @@ import Image from 'next/image';
 import GeneralAIInput from './_ui/general-ai-input';
 import SpecificAIButtons from './_ui/specific-ai-buttons';
 import QuickPersonTargetRecommendation from './_ui/quick-person-target-recommendation';
+import PopularFlowerRecommendation from './_ui/popular-flower-recommendation';
 
 // 맞춤 추천 -> 따로 페이지 빼는 것이 아닌 컴포넌트 형태로 중첩해서 띄우기
 /**
@@ -44,6 +45,8 @@ export default async function MainPage() {
         </div>
         {/* 빠른 대상 추천 */}
         <QuickPersonTargetRecommendation />
+        {/* 인기 꽃 추천 */}
+        <PopularFlowerRecommendation />
 
       </div>
       {/* <p className='text-center text-lg font-semibold text-zinc-900'>{heroText}</p> */}
