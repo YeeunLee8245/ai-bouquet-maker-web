@@ -6,6 +6,7 @@
 @import "tailwindcss";
 
 @import "./reset.css";
+@import "./utilities.css";
 @import "./typography.css";
 @import "./color.css";
 @import "./layout.css";

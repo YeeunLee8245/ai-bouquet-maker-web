@@ -38,7 +38,7 @@ function FlowerImagesContainer({ images }: TProps) {
         aria-label='뒤로가기'
         className='w-[24px] h-[24px] absolute top-[16px] left-[16px] transform rotate-[-90deg] ml-[0.6px] justify-items-center'
       >
-        <UpArrowIcon className='w-[17.5px] h-[18.3px]'/>
+        <UpArrowIcon className='w-[17.5px] h-[18.3px] text-white'/>
       </button>
     </div>
   );

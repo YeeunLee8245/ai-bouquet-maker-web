@@ -33,7 +33,7 @@ const FlowerDirectoryPage = () => {
       <DirectoryFilterKeywordContainer eventHub={eventHub} />
       <DirectoryListContainer eventHub={eventHub} />
       <ScrollToTopButton className='bottom-[20px]'>
-        <ArrowUpIcon className='w-[14px] h-[15px]'/>
+        <ArrowUpIcon className='w-[14px] h-[15px] text-white'/>
       </ScrollToTopButton>
     </div>
   );
