@@ -1,3 +1,7 @@
+/**
+ * onSelect 함수 호출 시 색상 전달
+ * @example onSelect={(color) => { console.log(color); }}
+ */
 export interface IColorPickerProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'onSelect'> {
   /**
    * @description 색상

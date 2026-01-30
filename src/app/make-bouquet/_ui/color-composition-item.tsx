@@ -4,6 +4,9 @@ import React from 'react';
 import PlusIcon from '@/shared/assets/icons/plus.svg';
 import XIcon from '@/shared/assets/icons/x.svg';
 import { ColorSwitchToggle } from '@/shared/ui/button';
+import { openModalAtom } from '@/shared/model/modal';
+import { useSetAtom } from 'jotai';
+import ColorPickModal from './modals/color-pick-modal/color-pick-modal';
 
 type TProps = {
   color: string;
@@ -14,6 +17,15 @@ type TProps = {
 };
 
 export default function ColorCompositionItem({ color, quantity, onPlus, onMinus, onDelete }: TProps) {
+  const openMddal = useSetAtom(openModalAtom);
+
+  const handleOpenColorPickModal = () => {
+    openMddal({
+      id: 'color-pick-modal',
+      component: <ColorPickModal />,
+      position: 'bottom',
+    });
+  };
   return (
     <div className='flex items-center justify-between'>
       <div className='flex gap-2'>
@@ -24,7 +36,10 @@ export default function ColorCompositionItem({ color, quantity, onPlus, onMinus,
           className='m-1'>
           <XIcon className='w-[16px] h-[16px] fill-gray-200'/>
         </button>
-        <ColorSwitchToggle colorHex={color} pressed={false} onPressedChange={() => {}}/>
+        <ColorSwitchToggle
+          colorHex={color}
+          onClick={handleOpenColorPickModal}
+        />
       </div>
       <div className='w-fit flex items-center rounded-3 bg-gray-50'>
         {/* 아이템 개수 감소 버튼 */}

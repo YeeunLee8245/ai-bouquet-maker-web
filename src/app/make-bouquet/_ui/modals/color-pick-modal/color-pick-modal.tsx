@@ -3,20 +3,27 @@
 import React, { useState } from 'react';
 import { Button } from '@/shared/ui/button';
 import { getColorName, hslString } from '@/shared/utils/color';
+import { closeModalAtom, TModalProps } from '@/shared/model/modal';
+import { useSetAtom } from 'jotai';
 
-function ColorPickModal() {
+function ColorPickModal({ modalId }: TModalProps) {
   const [hue, setHue] = useState(0);
   const [saturation, setSaturation] = useState(100);
   const [lightness, setLightness] = useState(50);
+  const closeModal = useSetAtom(closeModalAtom);
 
   const selectedColor = hslString(hue, saturation, lightness);
 
   return (
-    <div className='relative flex flex-col min-h-[584px]'>
+    <div className='relative flex flex-col w-[360px] min-h-[584px] bg-gray-50 rounded-t-5'>
       <div className='w-full flex-1 px-4 pt-4 rounded-t-5'>
         <div className='flex justify-between px-micro'>
           <p className='text-title-md'>색상 선택</p>
-          <button type='button' className='text-ui-textbtn-md text-gray-400 hover:text-gray-500'>
+          <button
+            type='button'
+            className='text-ui-textbtn-md text-gray-400 hover:text-gray-500'
+            onClick={() => closeModal(modalId)}
+          >
             닫기
           </button>
         </div>

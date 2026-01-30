@@ -5,8 +5,12 @@ import React from 'react';
 import PlusIcon from '@/shared/assets/icons/plus.svg';
 import { FLOWER_COMPOSITION_ITEMS } from '../_datas';
 import FlowerCompositionItem from './flower-composition-item';
+import { openModalAtom } from '@/shared/model/modal';
+import { useSetAtom } from 'jotai';
+import FlowerAddModal from './modals/flower-add-modal/flower-add-modal';
 
 export default function MakeBouquetCompositionContainer() {
+  const openModal = useSetAtom(openModalAtom);
 
   const handleDelete = (id: number) => {
     console.log('delete id: ', id);
@@ -25,7 +29,11 @@ export default function MakeBouquetCompositionContainer() {
   };
 
   const handleAddFlower = () => {
-
+    openModal({
+      id: 'flower-add-modal',
+      component: <FlowerAddModal />,
+      position: 'bottom',
+    });
   };
 
   return (

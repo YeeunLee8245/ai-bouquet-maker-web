@@ -3,19 +3,42 @@
 import { useAtomValue } from 'jotai';
 import React from 'react';
 import { modalStackAtom } from './modal.atoms';
+import { TModalProps } from './modal.types';
 
 function ModalHost() {
-  const root = typeof document !== 'undefined' ? document.getElementById('modal-root') : null;
   const stack = useAtomValue(modalStackAtom);
 
-  if (!root || stack.length === 0) {return null;}
+  if (stack.length === 0) {
+    return null;
+  }
 
   return (
-    <div>
-      {stack.map((descriptor) => (
-        <div key={descriptor.id}>{descriptor.component}</div>
-      ))}
-    </div>
+    <>
+      {stack.map((descriptor) => {
+        const { id, component } = descriptor;
+        const position = descriptor.position || 'bottom';
+        const positionClasses = position === 'center'
+          ? 'items-center justify-center'
+          : 'items-end justify-center';
+
+        return (
+          <div
+            key={id}
+            className='fixed inset-0 z-50 flex'
+            style={{ backgroundColor: '#00000033' }}
+          >
+            <div className={`flex w-full ${positionClasses}`}>
+              {
+                React.cloneElement(
+                  component,
+                  { modalId: id } as React.PropsWithChildren<TModalProps>,
+                )
+              }
+            </div>
+          </div>
+        );
+      })}
+    </>
   );
 }
 

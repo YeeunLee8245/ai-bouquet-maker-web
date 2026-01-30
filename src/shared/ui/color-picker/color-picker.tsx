@@ -16,7 +16,16 @@ const variantStyles: Record<NonNullable<IColorPickerProps['variant']>, string> =
   additional: 'hover:after:content-[""] hover:after:absolute hover:after:inset-0 hover:after:bg-black/20 hover:after:rounded-2 data-[state="selected"]:after:content-[""] data-[state="selected"]:after:absolute data-[state="selected"]:after:inset-0 data-[state="selected"]:after:bg-black/20 data-[state="selected"]:after:rounded-2',
 };
 
-function ColorPicker({ className, children, color, variant = 'primary', onSelect, ...props }: IColorPickerProps) {
+function ColorPicker(
+  {
+    className,
+    children,
+    color,
+    variant = 'primary',
+    onSelect,
+    ...props
+  }: IColorPickerProps,
+) {
   const ref = useRef<HTMLButtonElement>(null);
 
   return (
@@ -31,6 +40,7 @@ function ColorPicker({ className, children, color, variant = 'primary', onSelect
         variantStyles[variant],
         className,
       )}
+      {...props}
     >
       {children}
     </button>
