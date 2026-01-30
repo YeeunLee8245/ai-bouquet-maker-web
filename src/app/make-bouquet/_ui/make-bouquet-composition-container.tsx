@@ -7,6 +7,7 @@ import { FLOWER_COMPOSITION_ITEMS } from '../_datas';
 import FlowerCompositionItem from './flower-composition-item';
 
 export default function MakeBouquetCompositionContainer() {
+
   const handleDelete = (id: number) => {
     console.log('delete id: ', id);
   };
@@ -23,11 +24,15 @@ export default function MakeBouquetCompositionContainer() {
     console.log('minus color: ', color);
   };
 
+  const handleAddFlower = () => {
+
+  };
+
   return (
     <div className='relative mt-4 p-4 border-1 border-gray-100 rounded-5 bg-white'>
       <div className='flex justify-between'>
         <p className='text-title-md'>꽃 구성</p>
-        <Button size='sm' className='pl-1'>
+        <Button size='sm' className='pl-1' onClick={handleAddFlower}>
           <span className='mx-[3.5px]'>
             <PlusIcon className='w-[13px] h-[13px]' />
           </span>

@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import '../styles/globals.css';
 import Header from '@/widgets/header/Header';
 import AppProviders from '@/shared/providers/app-providers';
+import ModalHost from '@/shared/model/modal/modal-host';
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -17,10 +18,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-  modals,
 }: Readonly<{
   children: React.ReactNode;
-  modals: React.ReactNode;
 }>) {
   return (
     <AppProviders>
@@ -30,7 +29,7 @@ export default function RootLayout({
           <main className='max-h-[calc(100%-48px)] h-full overscroll-contain'>
             {children}
           </main>
-          {modals}
+          <ModalHost />
         </body>
       </html>
     </AppProviders>
