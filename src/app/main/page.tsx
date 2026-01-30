@@ -5,6 +5,7 @@ import GeneralAIInput from './_ui/general-ai-input';
 import SpecificAIButtons from './_ui/specific-ai-buttons';
 import QuickPersonTargetRecommendation from './_ui/quick-person-target-recommendation';
 import PopularFlowerRecommendation from './_ui/popular-flower-recommendation';
+import TodayFlowerContainer from './_ui/today-flower-container';
 
 // 맞춤 추천 -> 따로 페이지 빼는 것이 아닌 컴포넌트 형태로 중첩해서 띄우기
 /**
@@ -25,12 +26,21 @@ export default async function MainPage() {
     <div className='flex min-h-screen items-center justify-center relative'>
       {/* 상단 배경 이미지 */}
       <Image
-        src='/images/bg_home_top.png'
+        src='/images/bg_main_top.webp'
         alt='main'
         width={360}
         height={380}
         className='absolute top-[-48px] left-0 w-full h-[380px] object-cover'
       />
+      {/* 하단 배경 이미지 */}
+      <Image
+        src='/images/bg_main_bottom.webp'
+        alt='main'
+        width={360}
+        height={324}
+        className='absolute bottom-0 left-0 w-full h-[324px] object-cover'
+      />
+
       <div className='absolute inset-0'>
         <div className='px-4 py-5'>
           <p className='px-1 text-title-lg text-white whitespace-pre-wrap'>
@@ -47,9 +57,10 @@ export default async function MainPage() {
         <QuickPersonTargetRecommendation />
         {/* 인기 꽃 추천 */}
         <PopularFlowerRecommendation />
-
+        {/* 오늘의 추천 꽃 */}
+        <TodayFlowerContainer />
       </div>
-      {/* <p className='text-center text-lg font-semibold text-zinc-900'>{heroText}</p> */}
+
     </div>
   );
 }
