@@ -3,7 +3,7 @@ import Image from 'next/image';
 import React from 'react';
 import OutlineHeartIcon from '@/shared/assets/icons/outline_heart.svg';
 import Link from 'next/link';
-import { ColorChips } from '@/shared/ui/chip';
+import { ColorChipGroup } from '@/shared/ui/chip';
 
 type TProps = {
   id: string;
@@ -59,7 +59,7 @@ function FlowerCard({ size, imageUrl, id, name, isLiked, colors, tags, actionBut
           <div className={cn('absolute bottom-0 right-0 p-2 w-full backdrop-blur-[1px] bg-gradient-to-b from-[#CECECE]/0 to-black/12',
             size === 'md' && 'rounded-4', size === 'lg' && 'rounded-3',
           )}>
-            <ColorChips colors={colors} className='justify-end' />
+            <ColorChipGroup colors={colors} className='justify-end' />
           </div>
         )}
       </Link>

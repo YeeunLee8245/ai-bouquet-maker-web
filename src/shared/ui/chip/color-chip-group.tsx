@@ -9,7 +9,7 @@ type TProps = {
  * 꽃의 색상을 작은 칩 형태로 표시하는 컴포넌트
  * 첫 번째 색상이 가장 크고, 이후 색상들은 점점 작아집니다.
  */
-function ColorChips({ colors, className }: TProps) {
+function ColorChipGroup({ colors, className }: TProps) {
   return (
     <div className={cn('flex gap-1 items-center', className)}>
       {colors.map((hexColor, idx) => (
@@ -29,4 +29,4 @@ function ColorChips({ colors, className }: TProps) {
   );
 }
 
-export default ColorChips;
+export default ColorChipGroup;

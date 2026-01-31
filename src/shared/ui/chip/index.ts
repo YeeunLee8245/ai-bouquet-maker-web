@@ -1,4 +1,4 @@
-import { default as ColorChips } from './color-chips';
+import { default as ColorChipGroup } from './color-chip-group';
 import { default as KeywordChip } from './keyword-chip';
 
-export { ColorChips, KeywordChip };
+export { ColorChipGroup, KeywordChip };

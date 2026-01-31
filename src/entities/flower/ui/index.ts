@@ -1,3 +1,3 @@
-import FlowerCard from './FlowerCard';
+import FlowerCard from './flower-card';
 
 export { FlowerCard };

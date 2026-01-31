@@ -1,7 +1,7 @@
 import { SearchInput } from '@/shared/ui/input';
 import React from 'react';
 import { TEMP_FLOWER_SEARCH_RESULT } from '../_datas';
-import { ColorChips } from '@/shared/ui/chip';
+import { ColorChipGroup } from '@/shared/ui/chip';
 
 function FlowerSearchSection() {
   return (
@@ -15,7 +15,7 @@ function FlowerSearchSection() {
                 <span className='text-body-lg'>{name.ko}</span>
                 <span className='ml-2 text-body-md text-gray-400'>{name.en}</span>
               </div>
-              <ColorChips colors={colors} />
+              <ColorChipGroup colors={colors} />
             </div>
           ))}
         </div>
