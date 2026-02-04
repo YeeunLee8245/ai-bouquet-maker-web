@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import LogoIcon from '@/shared/assets/icons/logo.svg';
 import TitleIcon from '@/shared/assets/icons/title.svg';
 import { cn } from '@/shared/utils/styles';
+import Image from 'next/image';
 interface IProps {
   variant?: 'primary' | 'default';
 }
@@ -29,6 +30,14 @@ function Header({ variant: variantProp }: IProps) {
 
   return (
     <header className='relative h-[48px] w-full px-4 py-3 flex justify-between items-center z-header'>
+      {/* 배경 이미지 */}
+      <Image
+        src='/images/bg_main_top.webp'
+        alt='header-background'
+        width={360}
+        height={48}
+        className='absolute z-[-1] left-0 top-0 w-full h-[48px] object-cover object-top'
+      />
       <span className={
         cn(
           'flex items-center',

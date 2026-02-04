@@ -23,22 +23,14 @@ export default async function MainPage() {
     : '로그인 후 맞춤 추천을 받아보세요.';
 
   return (
-    <div className='flex min-h-screen items-center justify-center relative'>
+    <div className='flex min-h-screen items-center justify-center relative overflow-y-auto'>
       {/* 상단 배경 이미지 */}
       <Image
         src='/images/bg_main_top.webp'
         alt='main'
         width={360}
         height={380}
-        className='absolute top-[-48px] left-0 w-full h-[380px] object-cover'
-      />
-      {/* 하단 배경 이미지 */}
-      <Image
-        src='/images/bg_main_bottom.webp'
-        alt='main'
-        width={360}
-        height={324}
-        className='absolute bottom-0 left-0 w-full h-[324px] object-cover'
+        className='absolute top-[-48px] left-0 w-full h-[380px] object-cover object-top'
       />
 
       <div className='absolute inset-0'>
