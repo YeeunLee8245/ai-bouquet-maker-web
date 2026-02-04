@@ -110,7 +110,32 @@ export const GET = async () => {
               flower_name: { type: 'string', example: '장미', description: '꽃 이름 (한글)' },
               quantity: { type: 'integer', example: 3, description: '수량' },
               color: { type: 'string', nullable: true, example: '빨강', description: '꽃 색상' },
+              image_url: { type: 'string', nullable: true, example: 'https://example.com/flower.png', description: '꽃 이미지 URL' },
+              flower_meaning_id: { type: 'integer', nullable: true, example: 1, description: '꽃말 ID' },
             },
+          },
+          BouquetRecipeDetail: {
+            allOf: [
+              { $ref: '#/components/schemas/BouquetRecipeListItem' },
+              {
+                type: 'object',
+                properties: {
+                  wrapping: {
+                    type: 'object',
+                    properties: {
+                      ribbonColor: { type: 'string', nullable: true, example: '#FF0000', description: '리본 색상' },
+                      wrappingColor: { type: 'string', nullable: true, example: '#FFFFFF', description: '포장지 색상' },
+                    },
+                  },
+                  layout: {
+                    type: 'object',
+                    nullable: true,
+                    description: '꽃다발 미리보기 레이아웃 정보 (좌표 등)',
+                    additionalProperties: true,
+                  },
+                },
+              },
+            ],
           },
           BouquetRecipeListItem: {
             type: 'object',
