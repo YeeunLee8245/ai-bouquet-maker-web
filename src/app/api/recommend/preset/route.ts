@@ -42,9 +42,7 @@ import { getRelationshipLabel, getOccasionLabel } from '@/lib/recommend/relation
  *       2. **정렬**: 합산 점수가 높은 순서대로 1차 정렬합니다.
  *       3. **랜덤성**: 점수가 동일할 경우 내부적으로 무작위 섞기를 수행하여 매번 조금씩 다른 결과를 제공합니다.
  *       4. **최종 선정**: 상위 9~10개의 꽃을 최종 추천 목록으로 반환합니다.
- *
- *       **요약하자면**:
- *       과거의 단순 이름 검색(`getFlowersByKeywords`) 방식에서 벗어나, 해당 꽃이 특정 '대상'과 '상황'에 적합한지 **DB 태그(`relation_tags`, `situation_tags`)를 0순위로 체크**하는 데이터 기반 정밀 추천 알고리즘입니다.
+ *       해당 꽃이 특정 '대상'과 '상황'에 적합한지 **DB 태그(`relation_tags`, `situation_tags`)를 0순위로 체크**하는 데이터 기반 정밀 추천 알고리즘입니다.
  *       </details>
  *
  *       **Slug 예시**:
