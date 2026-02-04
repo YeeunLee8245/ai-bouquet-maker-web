@@ -21,52 +21,46 @@ function getCurrentSeason(): string {
  *       - Flowers
  *     summary: 꽃 사전 목록 조회
  *     description: |
- *       필터, 검색, 정렬을 지원하는 꽃 사전 API
+ *       필터, 검색, 정렬을 지원하는 꽃 사전 API입니다.
+ *       사용자가 꽃을 검색하거나 계절별, 색상별로 탐색할 때 사용합니다.
  *
- *       **필터 미지정 시**: 모든 계절/색상 꽃 조회
+ *       ### 🎨 프론트엔드 개발 가이드
+ *       - **`default_season`**: 현재 서버 시간 기준 추천 계절입니다. 초기 진입 시 이 값을 기반으로 필터를 설정할 수 있습니다.
+ *       - **`isLiked` 활성화**: 사용자가 로그인 상태일 때만 `true`/`false`가 제공됩니다. 비로그인 시 `undefined`이므로 하트 아이콘을 비활성 상태로 그려주세요.
+ *       - **이미지 최적화**: `imageUrl`이 없는 경우 프론트엔드 기본 이미지를 사용하도록 구현하는 것이 좋습니다.
  *
  *       **정렬 기준**:
- *       - `name`: 이름 가나다순 (기본값)
- *       - `popular`: 인기순 (좋아요 많은 순)
+ *       - `name`: 가나다순 (기본값)
+ *       - `popular`: 좋아요가 많은 인기순
  *     parameters:
  *       - name: seasons
  *         in: query
  *         description: |
- *           계절 필터 (comma-separated)
- *
- *           미지정 시 전체 계절 조회
+ *           계절 필터 (콤마로 구분된 여러 개 가능)
+ *           - 지원 값: `spring`, `summer`, `autumn`, `winter`, `all_year`
+ *           - 미지정 시 전체 계절 조회
  *         schema:
  *           type: string
  *           example: spring,summer
- *         examples:
- *           single:
- *             summary: 단일 계절
- *             value: spring
- *           multiple:
- *             summary: 복수 계절
- *             value: spring,summer
  *       - name: colors
  *         in: query
  *         description: |
- *           색상 필터 (comma-separated)
- *
- *           현재 지원 색상: 노랑, 보라, 분홍, 빨강, 주황, 파랑, 흰색
- *           (새로운 색상은 DB에 추가될 수 있음)
+ *           색상 이름 필터 (콤마로 구분된 여러 개 가능)
+ *           - 현재 지원 색상: 노랑, 보라, 분홍, 빨강, 주황, 파랑, 흰색
+ *           - 잘못된 색상 입력 시 `400 Bad Request`와 함께 유효한 색상 목록을 반환합니다.
  *         schema:
  *           type: string
  *           example: 빨강,분홍
  *       - name: search
  *         in: query
  *         description: |
- *           꽃 이름 또는 꽃말로 검색
- *
- *           부분 일치 검색 지원 (예: "사랑" → "사랑", "첫사랑" 등 포함)
+ *           꽃 이름 또는 꽃말로 검색 (부분 일치)
  *         schema:
  *           type: string
  *           example: 사랑
  *       - name: sort
  *         in: query
- *         description: 정렬 기준
+ *         description: 정렬 옵션
  *         schema:
  *           type: string
  *           enum: [popular, name]
@@ -80,7 +74,7 @@ function getCurrentSeason(): string {
  *           default: 1
  *       - name: limit
  *         in: query
- *         description: 페이지당 개수
+ *         description: 한 페이지에 표시할 아이템 수
  *         schema:
  *           type: integer
  *           minimum: 1
@@ -93,122 +87,82 @@ function getCurrentSeason(): string {
  *           application/json:
  *             schema:
  *               type: object
- *               required:
- *                 - success
- *                 - data
+ *               required: [success, data]
  *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
+ *                 success: { type: boolean, example: true }
  *                 data:
  *                   type: object
- *                   required:
- *                     - default_season
- *                     - flowers
- *                     - total
- *                     - page
- *                     - limit
- *                     - has_next_page
+ *                   required: [default_season, flowers, total, page, limit, has_next_page]
  *                   properties:
  *                     default_season:
  *                       type: string
  *                       enum: [spring, summer, autumn, winter]
- *                       description: 서버 시간 기준 현재 계절
- *                       example: winter
+ *                       description: "현재 서버 시간 기준 계절 (추천용)"
+ *                       example: spring
  *                     flowers:
  *                       type: array
- *                       description: FlowerCard 목록
+ *                       description: "꽃 정보 목록 (간략 정보)"
  *                       items:
  *                         type: object
- *                         required:
- *                           - id
- *                           - imageUrl
- *                           - name
- *                           - colors
- *                           - tags
+ *                         required: [id, imageUrl, name, colors, tags]
  *                         properties:
- *                           id:
- *                             type: string
- *                             description: 꽃 ID
- *                             example: "1"
- *                           imageUrl:
- *                             type: string
- *                             description: 꽃 이미지 URL
- *                             example: /images/flowers/rose.png
- *                           name:
- *                             type: string
- *                             description: 꽃 이름 (한글)
- *                             example: 장미
- *                           isLiked:
- *                             type: boolean
- *                             nullable: true
- *                             description: |
- *                               로그인 사용자의 좋아요 여부
- *
- *                               - `true`: 좋아요 누름
- *                               - `false`: 좋아요 안 누름
- *                               - `undefined`: 비로그인 사용자
- *                           colors:
- *                             type: array
- *                             description: 꽃 색상 목록
- *                             items:
- *                               type: string
- *                             example: ["빨강", "분홍"]
- *                           tags:
- *                             type: array
- *                             description: 꽃말 태그 (최대 3개)
- *                             items:
- *                               type: string
- *                             example: ["사랑", "열정", "아름다움"]
- *                     total:
- *                       type: integer
- *                       description: 전체 결과 개수
- *                       example: 45
- *                     page:
- *                       type: integer
- *                       description: 현재 페이지 번호
- *                       example: 1
- *                     limit:
- *                       type: integer
- *                       description: 페이지당 개수
- *                       example: 20
- *                     has_next_page:
- *                       type: boolean
- *                       description: 다음 페이지 존재 여부
- *                       example: true
+ *                           id: { type: string, description: "꽃 ID (상세 조회용)", example: "1" }
+ *                           imageUrl: { type: string, description: "대표 이미지 URL", example: "/images/flowers/rose.png" }
+ *                           name: { type: string, description: "한글 이름", example: "장미" }
+ *                           isLiked: { type: boolean, nullable: true, description: "로그인 유저의 좋아요 여부 (비로그인 시 null/undefined)", example: true }
+ *                           colors: { type: array, items: { type: string }, description: "대표 색상 목록", example: ["빨강"] }
+ *                           tags: { type: array, items: { type: string }, description: "상징 꽃말 (최대 3개)", example: ["열정적 사랑", "순결"] }
+ *                     total: { type: integer, description: "전체 결과 수", example: 120 }
+ *                     page: { type: integer, example: 1 }
+ *                     limit: { type: integer, example: 20 }
+ *                     has_next_page: { type: boolean, example: true }
+ *             examples:
+ *               flower_list_success:
+ *                 summary: "꽃 목록 조회 성공 (봄/분홍 필터)"
+ *                 value:
+ *                   success: true
+ *                   data:
+ *                     default_season: "spring"
+ *                     flowers:
+ *                       - id: "1"
+ *                         imageUrl: "/images/flowers/tulip.png"
+ *                         name: "튤립"
+ *                         isLiked: true
+ *                         colors: ["분홍", "빨강"]
+ *                         tags: ["사랑의 고백", "영원한 애정"]
+ *                       - id: "5"
+ *                         imageUrl: "/images/flowers/cherry_blossom.png"
+ *                         name: "벚꽃"
+ *                         isLiked: false
+ *                         colors: ["분홍", "연분홍"]
+ *                         tags: ["순결", "절세미인"]
+ *                     total: 45
+ *                     page: 1
+ *                     limit: 20
+ *                     has_next_page: true
  *       400:
- *         description: 잘못된 요청 (존재하지 않는 색상)
+ *         description: 잘못된 필터값 (색상명 오류 등)
  *         content:
  *           application/json:
  *             schema:
  *               type: object
- *               required:
- *                 - error
- *                 - validColors
  *               properties:
- *                 error:
- *                   type: string
- *                   description: 에러 메시지
- *                   example: "존재하지 않는 색상입니다: 초록"
- *                 validColors:
- *                   type: array
- *                   description: 유효한 색상 목록
- *                   items:
- *                     type: string
- *                   example: ["노랑", "보라", "분홍", "빨강", "주황", "파랑", "흰색"]
+ *                 error: { type: string, example: "존재하지 않는 색상입니다: 초록" }
+ *                 validColors: { type: array, items: { type: string }, example: ["빨강", "분홍", "노랑"] }
+ *             examples:
+ *               invalid_color_filter:
+ *                 summary: "잘못된 색상 필터"
+ *                 value:
+ *                   error: "존재하지 않는 색상입니다: 초록"
+ *                   validColors: ["빨강", "분홍", "노랑", "주황", "노랑", "파랑", "흰색", "보라"]
  *       500:
- *         description: 서버 오류
+ *         description: 서버 내부 오류 (DB 조회 실패 등)
  *         content:
  *           application/json:
  *             schema:
  *               type: object
- *               required:
- *                 - error
  *               properties:
- *                 error:
- *                   type: string
- *                   description: 에러 메시지
- *                   example: "꽃 목록 조회 중 오류가 발생했습니다."
+ *                 error: { type: string, example: "꽃 목록 조회 중 오류가 발생했습니다." }
  */
 export async function GET(request: NextRequest) {
   try {

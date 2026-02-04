@@ -39,8 +39,36 @@ import { getPublicUser } from '@/lib/users/auth';
  *                 success: { type: boolean, example: true }
  *                 data:
  *                   $ref: '#/components/schemas/BouquetRecipeDetail'
+ *             examples:
+ *               success_detail:
+ *                 summary: "꽃다발 상세 정보 조회 성공"
+ *                 value:
+ *                   success: true
+ *                   data:
+ *                     id: "550e8400-e29b-41d4-a716-446655440000"
+ *                     name: "어머니 생신 축하 꽃다발"
+ *                     occasion: "생일"
+ *                     recipient: "어머니"
+ *                     message: "항상 건강하세요!"
+ *                     flowers:
+ *                       - flower_id: 1
+ *                         flower_name: "장미"
+ *                         quantity: 5
+ *                         color: "#FF0000"
+ *                         meaning: "불타는 사랑"
+ *                         icon_color: "#FF0000"
+ *                         image_url: "https://example.com/rose.png"
+ *                     wrapping: { wrappingColor: "#FFFFFF", ribbonColor: "#FF0000" }
+ *                     layout: { items: [] }
+ *                     created_at: "2024-02-04T12:00:00Z"
  *       404:
  *         description: 레시피를 찾을 수 없음
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error: { type: string, example: "해당 꽃다발 레시피를 찾을 수 없습니다." }
  *       500:
  *         description: 서버 내부 오류
  *   put:
@@ -99,37 +127,64 @@ import { getPublicUser } from '@/lib/users/auth';
  *                         y: { type: number, example: 0.7 }
  *                         rotation: { type: number, example: 0 }
  *                         z_index: { type: integer, example: 1 }
- *           example:
- *             name: "수정된 결혼 기념일 꽃다발"
- *             occasion: "결혼 기념일"
- *             recipient: "아내"
- *             message: "세상에서 제일 사랑해"
- *             recipe:
- *               flowers:
- *                 - flower_id: 1
- *                   flower_meaning_id: 101
- *                   quantity: 12
- *                   color: "#FFC0CB"
- *               wrapping:
- *                 wrappingColor: "#F0F8FF"
- *                 ribbonColor: "#FF69B4"
- *             layout:
- *               items:
- *                 - flower_id: 1
- *                   flower_meaning_id: 101
- *                   x: 0.5
- *                   y: 0.7
- *                   rotation: 0
- *                   z_index: 1
+ *           examples:
+ *             full_update:
+ *               summary: "전체 정보 수정 예시"
+ *               value:
+ *                 name: "수정된 결혼 기념일 꽃다발"
+ *                 occasion: "결혼 기념일"
+ *                 recipient: "아내"
+ *                 message: "세상에서 제일 사랑해"
+ *                 recipe:
+ *                   flowers:
+ *                     - flower_id: 1
+ *                       flower_meaning_id: 101
+ *                       quantity: 12
+ *                       color: "#FFC0CB"
+ *                   wrapping:
+ *                     wrappingColor: "#F0F8FF"
+ *                     ribbonColor: "#FF69B4"
+ *                 layout:
+ *                   items:
+ *                     - flower_id: 1
+ *                       flower_meaning_id: 101
+ *                       x: 0.5
+ *                       y: 0.7
+ *                       rotation: 0
+ *                       z_index: 1
  *     responses:
  *       200:
  *         description: 수정 성공
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success: { type: boolean, example: true }
  *       401:
  *         description: 인증 실패
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error: { type: string, example: "로그인이 필요한 서비스입니다." }
  *       403:
  *         description: 권한 없음 (타인의 레시피 수정 시도)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error: { type: string, example: "수정 권한이 없습니다." }
  *       404:
  *         description: 레시피를 찾을 수 없음
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error: { type: string, example: "레시피를 찾을 수 없습니다." }
  *   delete:
  *     tags:
  *       - Recipe
@@ -138,12 +193,36 @@ import { getPublicUser } from '@/lib/users/auth';
  *     responses:
  *       200:
  *         description: 삭제 성공
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success: { type: boolean, example: true }
  *       401:
  *         description: 인증 실패
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error: { type: string, example: "로그인이 필요한 서비스입니다." }
  *       403:
  *         description: 권한 없음
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error: { type: string, example: "삭제 권한이 없습니다." }
  *       404:
  *         description: 레시피를 찾을 수 없음
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error: { type: string, example: "레시피를 찾을 수 없습니다." }
  */
 export async function GET(
   request: NextRequest,

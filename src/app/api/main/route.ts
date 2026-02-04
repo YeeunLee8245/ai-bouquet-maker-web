@@ -18,49 +18,76 @@ import { FlowerWithMeanings } from '@/types/flower';
  *           application/json:
  *             schema:
  *               type: object
+ *               required: [success, data]
  *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
+ *                 success: { type: boolean, example: true }
  *                 data:
  *                   type: object
+ *                   required: [recipients, popularFlowers, todaysFlower]
  *                   properties:
  *                     recipients:
  *                       type: array
- *                       description: 빠른 대상 추천 리스트
+ *                       description: "빠른 대상 추천 리스트 (프론트엔드 홈 화면 상단 노출용)"
  *                       items:
  *                         type: object
  *                         properties:
- *                           id: { type: string, example: "lover" }
- *                           label: { type: string, example: "연인" }
- *                           description: { type: string, example: "고백, 기념일, 평범한 날의 선물" }
+ *                           id: { type: string, description: "관계 슬러그 (추천 API 파라미터로 사용)", example: "lover" }
+ *                           label: { type: string, description: "표시 이름", example: "연인" }
+ *                           description: { type: string, description: "보조 설명", example: "고백, 기념일, 평범한 날의 선물" }
  *                     popularFlowers:
  *                       type: array
- *                       description: 인기 꽃 리스트 (최근 1일 좋아요 기반 랜덤 5개)
+ *                       description: "인기 꽃 리스트 (최근 24시간 내 좋아요 및 활동 기반 랜덤 10개)"
  *                       items:
  *                         type: object
  *                         properties:
  *                           id: { type: integer, example: 1 }
  *                           name_ko: { type: string, example: "장미" }
- *                           image_url: { type: string, example: "https://..." }
- *                           meanings_tags: { type: array, items: { type: string }, example: ["사랑", "열정"] }
+ *                           image_url: { type: string, example: "https://.../rose.png" }
  *                           representative_meanings: { type: array, items: { type: string }, example: ["진심 어린 사랑", "행복한 사랑"] }
  *                     todaysFlower:
  *                       type: object
- *                       description: 오늘의 꽃 (계절 + 최근 1주일 좋아요 1위 기반)
+ *                       description: "오늘의 꽃 (현재 계절 + 주간 인기 꽃 조합)"
  *                       nullable: true
  *                       properties:
- *                         id: { type: integer, example: 1 }
- *                         name_ko: { type: string, example: "장미" }
- *                         image_url: { type: string, example: "https://..." }
- *                         description: { type: string, example: "장미는 사랑의 상징입니다." }
- *                         meanings_tags: { type: array, items: { type: string }, example: ["사랑", "열정"] }
- *                         representative_meanings: { type: array, items: { type: string }, example: ["진심 어린 사랑", "행복한 사랑"] }
- *                         seasons: { type: array, items: { type: string }, example: ["봄", "여름"] }
- *                         blooming_start_month: { type: integer, example: 5 }
- *                         blooming_end_month: { type: integer, example: 7 }
+ *                         id: { type: integer, example: 12 }
+ *                         name_ko: { type: string, example: "프리지아" }
+ *                         image_url: { type: string, example: "https://.../freesia.png" }
+ *                         description: { type: string, example: "봄의 전령사라고 불리는 프리지아는..." }
+ *                         representative_meanings: { type: array, items: { type: string }, example: ["응원", "새로운 시작"] }
+ *                         seasons: { type: array, items: { type: string }, example: ["봄"] }
+ *             examples:
+ *               main_data_success:
+ *                 summary: "홈 데이터 조회 성공 예시"
+ *                 value:
+ *                   success: true
+ *                   data:
+ *                     recipients:
+ *                       - id: "lover"
+ *                         label: "연인"
+ *                         description: "고백, 기념일용"
+ *                       - id: "parents"
+ *                         label: "부모님"
+ *                         description: "감사와 존경"
+ *                     popularFlowers:
+ *                       - id: 1
+ *                         name_ko: "장미"
+ *                         image_url: "https://example.com/flowers/rose.png"
+ *                         representative_meanings: ["사랑"]
+ *                     todaysFlower:
+ *                       id: 12
+ *                       name_ko: "프리지아"
+ *                       image_url: "https://example.com/flowers/freesia.png"
+ *                       representative_meanings: ["응원"]
+ *                       seasons: ["봄"]
  *       500:
  *         description: 서버 오류
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success: { type: boolean, example: false }
+ *                 message: { type: string, example: "서버 에러가 발생했습니다." }
  */
 export async function GET() {
   try {

@@ -15,12 +15,36 @@ import { createClient } from '@shared/supabase/server';
  *     responses:
  *       200:
  *         description: 탈퇴 및 로그아웃 성공
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message: { type: string, example: "탈퇴가 완료되었습니다." }
  *       401:
  *         description: 인증되지 않은 사용자 (세션 없음)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error: { type: string, example: "인증되지 않은 사용자입니다." }
  *       404:
  *         description: 사용자 정보를 찾을 수 없음
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error: { type: string, example: "사용자 정보를 찾을 수 없습니다." }
  *       500:
  *         description: 서버 처리 중 오류 발생
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error: { type: string, example: "탈퇴 처리 중 오류가 발생했습니다." }
  */
 export async function POST() {
   try {

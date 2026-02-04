@@ -13,9 +13,12 @@ import { spendToken, getUserBalance } from '@/lib/users/wallet';
  *       - Recommend
  *     summary: AI 대상 맞춤 꽃 추천
  *     description: |
- *       받는 사람에 대한 설명을 AI가 분석하여 맞춤 꽃을 추천합니다.
- *       최대 10개의 추천 결과를 반환하며, 페이징을 지원하지 않습니다.
- *       **요청 1회당 AI 추천 토큰 1개가 소진됩니다. (성공 시에만)**
+ *       꽃을 선물받을 대상에 대한 설명을 AI가 분석하여 그들의 취향이나 관계에 가장 어울리는 꽃을 추천합니다.
+ *
+ *       ### 🎨 프론트엔드 개발 가이드
+ *       - **분석 범위**: 단순한 '친구', '엄마'라는 단어뿐만 아니라 '평소 차분한 스타일을 좋아하는 30대 여성'과 같은 상세 묘사를 분석합니다.
+ *       - **비용**: 요청 성공 시 **토큰 1개**가 소진됩니다.
+ *       - **추출 정보**: AI가 입력값에서 `recipient`(대상)와 `occasion`(상황)을 스스로 추출하여 반환합니다. 이 정보는 이후 꽃다발 이름 생성 등에 활용됩니다.
  *
  *       <details>
  *       <summary>⚙️ 처리 순서 (클릭하여 펼치기)</summary>
@@ -44,7 +47,7 @@ import { spendToken, getUserBalance } from '@/lib/users/wallet';
  *       | 추천 색상 매칭 | **+6점** | AI 추천 색상과 일치 |
  *       | 대표 꽃말 보너스 | **+2점** | is_primary가 true인 꽃말 |
  *
- *       **계절 필터링**: 현재 계절에 맞는 꽃만 추천
+ *       **계절 필터링**: 현재 계절에 맞는 꽃만 추천 리스트에 포함됩니다.
  *       </details>
  *     requestBody:
  *       required: true
@@ -52,84 +55,88 @@ import { spendToken, getUserBalance } from '@/lib/users/wallet';
  *         application/json:
  *           schema:
  *             type: object
- *             required:
- *               - text
+ *             required: [text]
  *             properties:
  *               text:
  *                 type: string
  *                 minLength: 10
  *                 maxLength: 1000
- *                 description: 받는 사람에 대한 설명
- *                 example: "30대 여자친구, 차분하고 우아한 스타일을 좋아해요"
+ *                 description: "선물받을 사람에 대한 설명 (성격, 취향, 나이대, 스타일 등)"
+ *                 example: "30대 여자친구인데 평소에 향기에 예민하고 우아한 보라색 스타일을 아주 좋아합니다."
  *     responses:
  *       200:
- *         description: 추천 성공
+ *         description: AI 추천 성공
  *         content:
  *           application/json:
  *             schema:
  *               type: object
+ *               required: [success, recommendation_id, recommendations]
  *               properties:
- *                 success:
- *                   type: boolean
- *                 recommendation_id:
- *                   type: string
- *                   format: uuid
- *                   nullable: true
- *                 total_count:
- *                   type: integer
- *                   description: "검색된 꽃의 총 개수 (최대 10개)"
- *                 title:
- *                   type: string
- *                   description: "추천 제목 (AI 생성 또는 자동 생성)"
- *                 message:
- *                   type: string
- *                   description: "추천 메시지 (AI 생성, Preset은 빈 문자열)"
- *                 recipient:
- *                   type: string
- *                   nullable: true
- *                   description: "받는 사람 (AI 추출 또는 Label)"
- *                 occasion:
- *                   type: string
- *                   nullable: true
- *                   description: "상황 (AI 추출 또는 Label)"
+ *                 success: { type: boolean, example: true }
+ *                 recommendation_id: { type: string, format: uuid, description: "생성된 추천 기록 고유 ID" }
+ *                 total_count: { type: integer, description: "필터링 후 반환된 꽃의 개수" }
+ *                 title: { type: string, description: "AI가 생성한 추천 제목", example: "그녀의 우아함을 닮은 보랏빛 선물" }
+ *                 message: { type: string, description: "취향 분석 기반 추천 이유", example: "보라색을 좋아하시는 여자친구분을 위해 고귀함과 신비로움을 상징하는..." }
+ *                 recipient: { type: string, nullable: true, description: "AI가 분석한 대상 명칭", example: "30대 여자친구" }
+ *                 occasion: { type: string, nullable: true, description: "AI가 분석한 선물 상황", example: "일상의 깜짝 선물" }
  *                 recommendations:
  *                   type: array
- *             example:
- *               success: true
- *               recommendation_id: "a2b3c4d5-e6f7-8901-abcd-ef1234567890"
- *               total_count: 2
- *               recommendations:
- *                 - flower_id: 15
- *                   flower_meaning_id: 30
- *                   flower_name: "작약"
- *                   meaning: "수줍음"
- *                   color: "분홍"
- *                   score: 35
- *                   image_url: "peony.jpg"
- *                 - flower_id: 1
- *                   flower_meaning_id: 2
- *                   flower_name: "장미"
- *                   meaning: "불타는 사랑"
- *                   color: "빨강"
- *                   score: 28
- *                   image_url: "rose.jpg"
+ *                   description: "추천된 꽃 목록"
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       flower_id: { type: integer, example: 15 }
+ *                       flower_meaning_id: { type: integer, example: 30 }
+ *                       flower_name: { type: string, example: "작약" }
+ *                       meaning: { type: string, example: "수줍음" }
+ *                       color: { type: string, example: "분홍" }
+ *                       score: { type: integer, example: 52 }
+ *                       image_url: { type: string, nullable: true, example: "https://.../peony.png" }
+ *             examples:
+ *               ai_recipient_success:
+ *                 summary: "AI 대상 맞춤 분석 성공"
+ *                 value:
+ *                   success: true
+ *                   recommendation_id: "a2b3c4d5-e6f7-8901-abcd-ef1234567890"
+ *                   total_count: 3
+ *                   title: "그녀의 우아함을 닮은 보랏빛 선물"
+ *                   message: "보라색을 좋아하시는 여자친구분을 위해 고귀함과 신비로움을 상징하는 꽃들을 준비했습니다."
+ *                   recipient: "30대 여자친구"
+ *                   occasion: "일상의 깜짝 선물"
+ *                   recommendations:
+ *                     - flower_id: 15
+ *                       flower_meaning_id: 30
+ *                       flower_name: "작약"
+ *                       meaning: "수줍음"
+ *                       color: "분홍"
+ *                       score: 52
+ *                       image_url: "https://example.com/flowers/peony.png"
  *       400:
- *         description: 잘못된 요청
- *       401:
- *         description: 인증 필요 (로그인 필수)
- *       403:
- *         description: 토큰 부족 (AI 추천 토큰 필요)
+ *         description: 입력값 부족
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
- *                 error:
- *                   type: string
- *             example:
- *               error: "사용 가능한 토큰 부족"
+ *                 error: { type: string, example: "선물받을 사람에 대한 설명을 입력해주세요." }
+ *       401:
+ *         description: 로그인 필요
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error: { type: string, example: "로그인이 필요한 서비스입니다." }
+ *       403:
+ *         description: 토큰 부족
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error: { type: string, example: "사용 가능한 토큰 부족" }
  *       500:
- *         description: 서버 오류
+ *         description: AI 분석 실패 또는 서버 오류
  */
 export async function POST(request: NextRequest) {
   try {

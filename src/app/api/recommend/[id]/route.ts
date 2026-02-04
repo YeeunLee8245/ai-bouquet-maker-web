@@ -9,7 +9,7 @@ import { getPublicUser } from '@/lib/users/auth';
  *     - name: id
  *       in: path
  *       required: true
- *       description: 추천 ID (UUID)
+ *       description: 추천 기록 UUID
  *       schema:
  *         type: string
  *         format: uuid
@@ -19,11 +19,12 @@ import { getPublicUser } from '@/lib/users/auth';
  *     summary: 추천 상세 조회
  *     description: |
  *       특정 추천 기록의 상세 정보를 조회합니다.
- *       특히 사용자가 선택한 꽃(selected_flower_meanings_ids) 정보를 기반으로, 꽃다발 에디터에서 바로 사용할 수 있도록 **꽃의 한글 이름, 이미지 URL, 색상 정보 등을 JOIN하여 함께 반환**합니다. (selected_flowers 필드)
+ *       단순 DB 기록뿐만 아니라, 사용자가 선택한 꽃 정보를 실제 꽃 데이터와 JOIN하여 상세하게 반환합니다.
  *
  *       ### 🎨 프론트엔드 개발 가이드
- *       - **`selected_flowers` 활용**: 이 리스트를 에디터의 초기 꽃 구성 상태로 바인딩하면 됩니다.
- *       - **색상 아이콘**: 리스트 구성 시 `icon_color`를 사용하여 각 꽃말의 상징색을 표시하세요.
+ *       - **`selected_flowers`**: 유저가 추천 결과에서 선택(체크)한 꽃들의 상세 정보입니다. 꽃다발 에디터 진입 시 이 데이터를 초기 꽃바구니 상태로 사용하세요.
+ *       - **`analysis_result`**: AI 추천 결과의 원본 데이터(JSON)입니다. 제목, 메시지 외에도 AI가 분석한 원본 태그 정보 등이 포함될 수 있습니다.
+ *       - **`status`**: `success` 상태인 기록만 정상적으로 조회하는 것이 권장됩니다.
  *     responses:
  *       200:
  *         description: 조회 성공
@@ -31,56 +32,89 @@ import { getPublicUser } from '@/lib/users/auth';
  *           application/json:
  *             schema:
  *               type: object
+ *               required: [success, data]
  *               properties:
- *                 success:
- *                   type: boolean
+ *                 success: { type: boolean, example: true }
  *                 data:
  *                   type: object
+ *                   required: [id, recommendation_type, status]
  *                   properties:
  *                     id: { type: string, format: uuid }
- *                     input_text: { type: string, description: "사용자 입력 텍스트" }
- *                     recommendation_type: { type: string, enum: ["general", "emotion", "recipient", "preset"] }
+ *                     recommendation_type: { type: string, enum: ["emotion", "recipient", "preset"], example: "emotion" }
+ *                     status: { type: string, enum: ["pending", "success", "failed"], example: "success" }
+ *                     input_text: { type: string, description: "사용자 입력 원문", example: "친구 생일 선물" }
+ *                     relationship: { type: string, nullable: true, example: "친구" }
+ *                     occasion: { type: string, nullable: true, example: "생일" }
  *                     analysis_result:
  *                       type: object
+ *                       nullable: true
  *                       properties:
- *                         bouquet_name: { type: string, example: "희망의 노란 꽃다발" }
- *                         delivery_message: { type: string, example: "당신의 새로운 시작을 응원해요!" }
- *                     selected_flower_meanings_ids: { type: array, items: { type: integer } }
+ *                         title: { type: string, example: "우정을 위한 노란 꽃다발" }
+ *                         message: { type: string, example: "항상 곁에 있어준 친구에게 고마움을 전하세요." }
+ *                     selected_flower_meanings_ids:
+ *                       type: array
+ *                       items: { type: integer }
+ *                       example: [10, 45]
  *                     selected_flowers:
  *                       type: array
- *                       description: "추천 정보와 JOIN된 꽃 상세 정보 목록"
+ *                       description: "추천 정보와 JOIN된 꽃 상세 정보 목록 (에디터 바로 사용 가능)"
  *                       items:
  *                         type: object
  *                         properties:
- *                           flower_meaning_id: { type: integer }
- *                           meaning: { type: string, example: "희망" }
- *                           color: { type: string, example: "yellow" }
- *                           flower_id: { type: integer }
- *                           name: { type: string, example: "거베라" }
- *                           image_url: { type: string, example: "https://.../gerbera.png" }
+ *                           flower_meaning_id: { type: integer, example: 10 }
+ *                           meaning: { type: string, example: "변치 않는 우정" }
+ *                           color: { type: string, example: "#FFFF00" }
+ *                           icon_color: { type: string, example: "#FFD700" }
+ *                           flower_id: { type: integer, example: 5 }
+ *                           name: { type: string, example: "프리지아" }
+ *                           image_url: { type: string, nullable: true, example: "https://.../freesia.png" }
  *             examples:
- *               full_data:
- *                 summary: 전체 데이터 응답 예시
+ *               success_response:
+ *                 summary: "추천 상세 조회 성공 (꽃 데이터 포함)"
  *                 value:
  *                   success: true
  *                   data:
  *                     id: "18561ccb-20c4-4bdb-8905-ec2647f471c5"
- *                     input_text: "친구 개업 선물로 줄 밝은 느낌의 꽃"
- *                     recommendation_type: "general"
+ *                     recommendation_type: "emotion"
+ *                     status: "success"
+ *                     input_text: "친구가 우울해해서 위로해주고 싶어요"
+ *                     relationship: "친구"
+ *                     occasion: "위로"
  *                     analysis_result:
- *                       bouquet_name: "빛나는 시작 꽃다발"
- *                       delivery_message: "사업 번창하시길 기원합니다!"
+ *                       title: "따뜻한 위로의 노란 꽃다발"
+ *                       message: "친구분의 마음이 빨리 회복되길 바라는 마음을 담았습니다."
+ *                     selected_flower_meanings_ids: [10, 45]
  *                     selected_flowers:
  *                       - flower_meaning_id: 10
- *                         meaning: "변치 않는 사랑"
- *                         color: "pink"
+ *                         meaning: "변치 않는 우정"
+ *                         color: "#FFFF00"
+ *                         icon_color: "#FFD700"
  *                         flower_id: 5
+ *                         name: "프리지아"
+ *                         image_url: "https://example.com/flowers/freesia.png"
+ *                       - flower_meaning_id: 45
+ *                         meaning: "영원한 사랑"
+ *                         color: "#FFC0CB"
+ *                         icon_color: "#FF69B4"
+ *                         flower_id: 22
  *                         name: "리시안셔스"
- *                         image_url: "https://example.com/lisianthus.png"
+ *                         image_url: "https://example.com/flowers/lisianthus.png"
  *       401:
- *         description: 인증 실패
+ *         description: 로그인 필요 (본인 기록만 조회 가능)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error: { type: string, example: "로그인이 필요한 서비스입니다." }
  *       404:
- *         description: 추천 기록을 찾을 수 없습니다.
+ *         description: 추천 기록을 찾을 수 없음
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error: { type: string, example: "해당 추천 기록을 찾을 수 없습니다." }
  *       500:
  *         description: 서버 오류
  */

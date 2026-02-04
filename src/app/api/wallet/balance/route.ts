@@ -17,8 +17,18 @@ import { getUserBalance } from '@/lib/users/wallet';
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/WalletBalance'
+ *             examples:
+ *               balance_success:
+ *                 summary: "잔액 조회 성공"
+ *                 value: { balance: 150 }
  *       401:
  *         description: 인증 필요
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error: { type: string, example: "로그인이 필요합니다." }
  */
 export async function GET() {
   try {

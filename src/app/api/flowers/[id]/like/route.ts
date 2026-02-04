@@ -9,14 +9,17 @@ import { getPublicUser } from '@/lib/users/auth';
  *     tags:
  *       - Flowers
  *     summary: 꽃 좋아요 추가
- *     description: 로그인한 사용자가 특정 꽃에 좋아요를 추가합니다.
+ *     description: |
+ *       로그인한 사용자가 특정 꽃에 좋아요를 추가합니다.
+ *       이미 좋아요가 되어 있는 경우에도 성공(`200`)을 반환합니다.
  *     parameters:
  *       - name: id
  *         in: path
  *         required: true
- *         description: 꽃 ID
+ *         description: 꽃의 고유 ID
  *         schema:
  *           type: integer
+ *         example: 1
  *     responses:
  *       200:
  *         description: 좋아요 추가 성공
@@ -25,16 +28,14 @@ import { getPublicUser } from '@/lib/users/auth';
  *             schema:
  *               type: object
  *               properties:
- *                 success:
- *                   type: boolean
- *                 isLiked:
- *                   type: boolean
+ *                 success: { type: boolean, example: true }
+ *                 isLiked: { type: boolean, example: true, description: "변경 후 좋아요 상태" }
  *       401:
- *         description: 인증 필요
+ *         description: 인증 실패 (로그인 필요)
  *       404:
- *         description: 꽃을 찾을 수 없음
+ *         description: 해당 꽃을 찾을 수 없음
  *       500:
- *         description: 서버 오류
+ *         description: 서버 내부 오류
  */
 export async function POST(
   request: NextRequest,
@@ -114,14 +115,15 @@ export async function POST(
  *     tags:
  *       - Flowers
  *     summary: 꽃 좋아요 삭제
- *     description: 로그인한 사용자가 특정 꽃의 좋아요를 삭제합니다.
+ *     description: 로그인한 사용자가 특정 꽃의 좋아요를 취소합니다.
  *     parameters:
  *       - name: id
  *         in: path
  *         required: true
- *         description: 꽃 ID
+ *         description: 꽃의 고유 ID
  *         schema:
  *           type: integer
+ *         example: 1
  *     responses:
  *       200:
  *         description: 좋아요 삭제 성공
@@ -130,14 +132,18 @@ export async function POST(
  *             schema:
  *               type: object
  *               properties:
- *                 success:
- *                   type: boolean
- *                 isLiked:
- *                   type: boolean
+ *                 success: { type: boolean, example: true }
+ *                 isLiked: { type: boolean, example: false, description: "변경 후 좋아요 상태" }
  *       401:
- *         description: 인증 필요
+ *         description: 인증 실패
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error: { type: string, example: "로그인이 필요한 서비스입니다." }
  *       500:
- *         description: 서버 오류
+ *         description: 서버 내부 오류
  */
 export async function DELETE(
   request: NextRequest,

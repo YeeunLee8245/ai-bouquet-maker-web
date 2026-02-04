@@ -22,8 +22,20 @@ import { getPublicUser, setOnboarded } from '@/lib/users/auth';
  *                   example: true
  *       401:
  *         description: 인증 필요
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error: { type: string, example: "로그인이 필요합니다." }
  *       500:
  *         description: 서버 오류
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error: { type: string, example: "온보딩 상태 업데이트 중 오류가 발생했습니다." }
  */
 export async function POST() {
   try {

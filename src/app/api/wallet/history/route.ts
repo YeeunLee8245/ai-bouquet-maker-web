@@ -19,8 +19,34 @@ import { getPublicUser } from '@/lib/users/auth';
  *               type: array
  *               items:
  *                 $ref: '#/components/schemas/WalletLedger'
+ *             examples:
+ *               history_success:
+ *                 summary: "거래 내역 조회 성공"
+ *                 value:
+ *                   - id: 101
+ *                     source: "daily_login"
+ *                     type: "credit"
+ *                     amount: 10
+ *                     balance_after: 150
+ *                     description: "일일 로그인 보너스"
+ *                     created_at: "2024-02-04T00:00:00Z"
+ *                   - id: 98
+ *                     source: "admin"
+ *                     type: "debit"
+ *                     amount: 1
+ *                     balance_after: 140
+ *                     reference_type: "recommendation"
+ *                     reference_id: "uuid-string"
+ *                     description: "AI 대상 맞춤 추천 사용"
+ *                     created_at: "2024-02-03T15:30:00Z"
  *       401:
  *         description: 인증 필요
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error: { type: string, example: "로그인이 필요합니다." }
  */
 export async function GET() {
   try {

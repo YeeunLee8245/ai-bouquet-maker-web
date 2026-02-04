@@ -9,19 +9,65 @@ import { getPublicUser } from '@/lib/users/auth';
  *     tags:
  *       - My
  *     summary: 내 프로필 조회
- *     description: 현재 로그인한 사용자의 프로필 정보 및 활동 통계를 조회합니다.
+ *     description: |
+ *       현재 로그인한 사용자의 프로필 정보와 활동 통계(좋아요 한 꽃, 최근 꽃다발 등)를 조회합니다.
  *     responses:
  *       200:
  *         description: 조회 성공
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 profile:
+ *                   $ref: '#/components/schemas/User'
+ *                 stats:
+ *                   type: object
+ *                   properties:
+ *                     favorite_flowers:
+ *                       type: array
+ *                       items: { type: string }
+ *                       description: "최근 좋아요를 누른 꽃 이름 목록 (최대 5개)"
+ *                       example: ["장미", "튤립"]
+ *                     recent_bouquet:
+ *                       type: object
+ *                       nullable: true
+ *                       description: "가장 최근에 생성한 꽃다발 요약"
+ *                     recommendation_count:
+ *                       type: integer
+ *                       description: "지금까지 받은 총 추천 횟수"
+ *                       example: 12
+ *             examples:
+ *               profile_success:
+ *                 summary: "프로필 및 통계 조회 성공"
+ *                 value:
+ *                   profile:
+ *                     id: "user-uuid"
+ *                     email: "user@example.com"
+ *                     nickname: "꽃돌이"
+ *                     bio: "꽃을 사랑하는 사람입니다."
+ *                     avatar_url: "https://.../avatar.png"
+ *                     is_onboarded: true
+ *                   stats:
+ *                     favorite_flowers: ["장미", "카네이션"]
+ *                     recent_bouquet: { name: "어버이날 꽃다발" }
+ *                     recommendation_count: 5
  *       401:
- *         description: 인증 필요
+ *         description: 인증 필요 (로그인 상태 아님)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error: { type: string, example: "로그인이 필요합니다." }
  *       500:
  *         description: 서버 오류
  *   patch:
  *     tags:
  *       - My
  *     summary: 내 프로필 수정
- *     description: 닉네임, 소개 등의 프로필 정보를 수정합니다.
+ *     description: |
+ *       사용자의 닉네임과 자기소개(bio)를 수정합니다.
  *     requestBody:
  *       required: true
  *       content:
@@ -31,11 +77,26 @@ import { getPublicUser } from '@/lib/users/auth';
  *             properties:
  *               nickname:
  *                 type: string
+ *                 description: 새로운 닉네임
+ *                 example: "수정된닉네임"
+ *                 minLength: 2
+ *                 maxLength: 20
  *               bio:
  *                 type: string
+ *                 description: 새로운 자기소개
+ *                 example: "안녕하세요, 반가워요!"
+ *                 maxLength: 100
  *     responses:
  *       200:
  *         description: 수정 성공
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success: { type: boolean, example: true }
+ *                 profile:
+ *                   $ref: '#/components/schemas/User'
  *       401:
  *         description: 인증 필요
  *       500:

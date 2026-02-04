@@ -170,8 +170,29 @@ import { getPublicUser } from '@/lib/users/auth';
  *                       format: uuid
  *                       description: 생성된 레시피의 UUID
  *                       example: "550e8400-e29b-41d4-a716-446655440000"
+ *       400:
+ *         description: 필수 필드 누락
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error: { type: string }
+ *             examples:
+ *               missing_name:
+ *                 summary: "이름 누락"
+ *                 value: { error: "꽃다발 이름을 입력해주세요." }
+ *               missing_recipe:
+ *                 summary: "레시피 정보 누락"
+ *                 value: { error: "꽃 구성 정보(recipe)가 필요합니다." }
  *       401:
  *         description: 인증 실패 (로그인 필요)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error: { type: string, example: "로그인이 필요한 서비스입니다." }
  *       500:
  *         description: 서버 내부 오류 (DB 저장 실패 등)
  */

@@ -8,7 +8,41 @@ export const GET = async () => {
       info: {
         title: 'AI Bouquet Maker API',
         version: '1.0.0',
-        description: '꽃말 기반 AI 꽃 추천 서비스 API',
+        description: `
+꽃말 기반 AI 꽃 추천 서비스 **AI Bouquet Maker**의 API 문서입니다.
+
+### 서비스 핵심 워크플로우 (Service Flows)
+<details>
+<summary><b>1. AI 기반 맞춤 추천 및 제작 플로우 (Main Flow)</b></summary>
+
+1.  **- 1. 분석 요청**: 사용자가 감정이나 대상을 묘사한 텍스트를 전송합니다. (\`POST /api/recommend/ai/...\`)
+    - *내부 로직*: 토큰 잔액 확인 → AI 분석 시작 → 추천 순위 산정(태그+AI가점+계절필터) → **토큰 1개 차감**.
+2.  **- 2. 꽃 선택**: 추천된 꽃 목록 중 사용자가 꽃다발에 담을 꽃을 선택합니다. (\`POST /api/recommend/user-selection\`)
+3.  **- 3. 상세 편집**: 선택된 꽃들을 기반으로 캔버스 에디터에서 배치(좌표), 수량, 커스텀 색상을 설정합니다.
+4.  **- 4. 레시피 저장**: 최종 완성된 꽃다발 형태를 저장합니다. (\`POST /api/recipe/bouquet\`)
+    - *활용*: 저장된 레시피 ID를 통해 언제든 미리보기 이미지 생성 및 수정이 가능합니다.
+</details>
+
+<br />
+<details>
+<summary><b>2. 토큰 획득 및 사용 경제 플로우 (Economy Flow)</b></summary>
+
+-   **- 1. 적립**: 사용자가 로그인 시 \`daily_login\` 기록을 통해 자동 토큰이 충전됩니다. (\`GET /api/main\` 호출 시 내부 처리)
+-   **- 2. 소모**: 오직 **AI 분석 기능** 사용 시에만 토큰이 소모됩니다. (일반 프리셋 추천은 무료)
+-   **- 3. 추적**: 모든 지갑 활동은 실시간 히스토리로 기록되어 사용자가 직접 확인할 수 있습니다. (\`GET /api/wallet/history\`)
+</details>
+
+<br />
+<details>
+<summary><b>3. 꽃 사전 탐색 및 관심 등록 플로우 (Discovery Flow)</b></summary>
+
+-   **- 1. 검색**: 이름, 색상, 계절별 필터를 통해 꽃 정보를 탐색합니다. (\`GET /api/flowers/dictionary\`)
+-   **- 2. 관심 등록**: 마음에 드는 꽃에 '좋아요'를 표시합니다. (\`POST /api/flowers/{id}/like\`)
+-   **- 3. 개인화**: 좋아요 데이터는 마이페이지 통계 및 홈 화면 추천 데이터로 활용됩니다.
+</details>
+
+---
+        `,
       },
       servers: [
         { url: 'http://localhost:3000', description: 'Local Development' },
@@ -28,6 +62,7 @@ export const GET = async () => {
               id: { type: 'string', format: 'uuid', example: 'uuid-string' },
               email: { type: 'string', example: 'user@example.com' },
               nickname: { type: 'string', example: '꽃돌이' },
+              bio: { type: 'string', nullable: true, example: '꽃을 사랑하는 사람입니다.', description: '자기소개' },
               avatar_url: { type: 'string', example: 'https://example.com/avatar.png' },
               is_onboarded: { type: 'boolean', example: false, description: '온보딩 완료 여부' },
               created_at: { type: 'string', format: 'date-time' },

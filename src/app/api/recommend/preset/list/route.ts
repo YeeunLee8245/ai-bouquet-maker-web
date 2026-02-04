@@ -28,22 +28,35 @@ import { getAvailableRelationships, getAvailableOccasions, getAllOccasions } fro
  *           application/json:
  *             schema:
  *               type: object
- *             example:
- *               success: true
- *               relationships:
- *                 - value: "parents"
- *                   label: "부모님"
- *                   description: "감사와 존경의 마음을 전하는 꽃"
- *                 - value: "lover"
- *                   label: "연인"
- *                   description: "사랑과 로맨스를 전하는 꽃"
- *               occasions:
- *                 - value: "birthday"
- *                   label: "생일"
- *                   description: "새로운 한 해의 시작을 축하하는 꽃"
- *                 - value: "anniversary"
- *                   label: "기념일"
- *                   description: "특별한 날을 기억하는 꽃"
+ *             examples:
+ *               all_options:
+ *                 summary: "전체 선택지 목록 (초기 진입 시)"
+ *                 value:
+ *                   success: true
+ *                   relationships:
+ *                     - value: "lover"
+ *                       label: "연인"
+ *                       description: "사랑과 로맨스를 전하는 꽃"
+ *                   occasions:
+ *                     - value: "birthday_anniversary"
+ *                       label: "생일/기념일"
+ *                       description: "특별한 날을 축하하는 꽃"
+ *               filtered_occasions:
+ *                 summary: "특정 관계에 필터링된 상황 목록"
+ *                 value:
+ *                   success: true
+ *                   occasions:
+ *                     - value: "parents_day"
+ *                       label: "어버이날"
+ *                       description: "부모님께 감사를 전하는 날"
+ *       500:
+ *         description: 서버 오류
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error: { type: string, example: "옵션 조회 중 오류가 발생했습니다." }
  */
 export async function GET(request: NextRequest) {
   try {
