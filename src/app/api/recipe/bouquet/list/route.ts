@@ -12,135 +12,103 @@ import { BouquetRecipeContent } from '@/types/recommendation';
  *     summary: 꽃다발 레시피 목록 조회
  *     description: |
  *       저장된 꽃다발 레시피 목록을 조회합니다.
+ *       현재는 본인이 생성한 레시피만 조회 가능합니다 (`my_only=true`).
  *
- *       **필터 옵션**:
- *       - `my_only=true`: 로그인한 사용자의 꽃다발만 조회 (로그인 필수)
- *       - `my_only=false` 또는 미지정: 빈 배열 반환 (공개 꽃다발 기능 추후 구현 예정)
+ *       ### 🎨 프론트엔드 개발 가이드
+ *       - **목록 표시 정보**: 각 레시피의 기본 정보(이름, 날짜)와 함께 포함된 꽃들의 요약 정보(`flowers` 배열)를 제공합니다.
+ *       - **상세 이동**: 목록 아이템의 `id`를 사용하여 상세 조회 API(`/api/recipe/bouquet/{id}`)를 호출하세요.
  *
- *       **정렬**: 최신순 (created_at DESC)
+ *       **필터 및 페이징**:
+ *       - `my_only`: 항상 `true`여야 현재 데이터를 반환합니다.
+ *       - `page`, `limit`: 표준적인 Offset 기반 페이지네이션을 사용합니다.
+ *       - `total`: 전체 항목 수를 반환하므로 페이지 UI 구성에 활용하세요.
  *     parameters:
  *       - name: my_only
  *         in: query
  *         description: |
- *           내 꽃다발만 필터링 여부
- *           - `true`: 로그인한 사용자의 꽃다발만 조회 (로그인 필수)
- *           - `false` 또는 미지정: 빈 배열 반환 (공개 꽃다발 기능 추후 구현)
+ *           내 꽃다발만 조회할지 여부
+ *           - **`true` (필수)**: 로그인한 사용자의 꽃다발 목록을 반환합니다.
+ *           - `false` 또는 미지정: 현재는 빈 목록(`[]`)이 반환됩니다 (전체 공개용 목록은 추후 지원 예정).
  *         schema:
  *           type: boolean
  *           default: false
  *         example: true
  *       - name: page
  *         in: query
- *         description: 페이지 번호 (1부터 시작)
+ *         description: 조회할 페이지 번호 (1부터 시작)
  *         schema:
  *           type: integer
  *           minimum: 1
  *           default: 1
+ *         example: 1
  *       - name: limit
  *         in: query
- *         description: 페이지당 개수
+ *         description: 한 페이지에 표시할 아이템 수 (최대 50)
  *         schema:
  *           type: integer
  *           minimum: 1
  *           maximum: 50
  *           default: 10
+ *         example: 10
  *     responses:
  *       200:
- *         description: 조회 성공
+ *         description: 목록 조회 성공
  *         content:
  *           application/json:
  *             schema:
  *               type: object
- *               required:
- *                 - success
- *                 - data
+ *               required: [success, data]
  *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
+ *                 success: { type: boolean, example: true }
  *                 data:
  *                   type: object
- *                   required:
- *                     - bouquets
- *                     - total
- *                     - page
- *                     - limit
- *                     - has_next_page
+ *                   required: [bouquets, total, page, limit, has_next_page]
  *                   properties:
  *                     bouquets:
  *                       type: array
- *                       description: 꽃다발 레시피 목록
+ *                       description: "검색 조건에 맞는 꽃다발 레시피들"
  *                       items:
  *                         $ref: '#/components/schemas/BouquetRecipeListItem'
- *                     total:
- *                       type: integer
- *                       description: 전체 결과 개수
- *                     page:
- *                       type: integer
- *                       description: 현재 페이지 번호
- *                     limit:
- *                       type: integer
- *                       description: 페이지당 개수
- *                     has_next_page:
- *                       type: boolean
- *                       description: 다음 페이지 존재 여부
+ *                     total: { type: integer, description: "전체 아이템 수", example: 12 }
+ *                     page: { type: integer, description: "현재 페이지", example: 1 }
+ *                     limit: { type: integer, description: "페이지당 개수", example: 10 }
+ *                     has_next_page: { type: boolean, description: "다음 페이지 존재 여부", example: true }
  *             examples:
  *               my_only_true:
- *                 summary: my_only=true (내 꽃다발 조회)
+ *                 summary: 나의 꽃다발 목록 조회 (성공)
  *                 value:
  *                   success: true
  *                   data:
  *                     bouquets:
  *                       - id: "550e8400-e29b-41d4-a716-446655440000"
- *                         name: "생일 축하 꽃다발"
+ *                         name: "어머니 생신 축하 꽃다발"
  *                         occasion: "생일"
  *                         recipient: "어머니"
- *                         message: "항상 건강하세요!"
  *                         flowers:
  *                           - flower_id: 1
  *                             flower_name: "장미"
+ *                             quantity: 5
+ *                             color: "#FF0000"
+ *                           - flower_id: 5
+ *                             flower_name: "안개꽃"
  *                             quantity: 3
- *                             color: "빨강"
- *                           - flower_id: 2
- *                             flower_name: "튤립"
- *                             quantity: 2
- *                             color: null
- *                         created_at: "2025-12-06T00:00:00Z"
- *                         updated_at: "2025-12-06T00:00:00Z"
- *                     total: 2
- *                     page: 1
- *                     limit: 10
- *                     has_next_page: false
- *               my_only_false:
- *                 summary: my_only=false 또는 미지정 (빈 배열 반환)
- *                 value:
- *                   success: true
- *                   data:
- *                     bouquets: []
- *                     total: 0
+ *                             color: "#FFFFFF"
+ *                         created_at: "2025-12-06T12:00:00Z"
+ *                         updated_at: "2025-12-06T15:30:00Z"
+ *                     total: 1
  *                     page: 1
  *                     limit: 10
  *                     has_next_page: false
  *       401:
- *         description: 인증 필요 (my_only=true인 경우)
+ *         description: 인증 실패 (my_only=true이고 로그아웃 상태인 경우)
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
- *                 error:
- *                   type: string
- *                   example: "내 꽃다발 조회는 로그인이 필요합니다."
+ *                 error: { type: string, example: "내 꽃다발 조회는 로그인이 필요합니다." }
  *       500:
  *         description: 서버 오류
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
- *                   example: "꽃다발 목록 조회 중 오류가 발생했습니다."
  */
 export async function GET(request: NextRequest) {
   try {

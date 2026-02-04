@@ -1,10 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@shared/supabase/server';
 import { BouquetRecipeContent, BouquetLayout } from '@/types/recommendation';
+import { getPublicUser } from '@/lib/users/auth';
 
 /**
  * @swagger
  * /api/recipe/bouquet/{id}:
+ *   parameters:
+ *     - name: id
+ *       in: path
+ *       required: true
+ *       description: 꽃다발 레시피 ID (UUID)
+ *       schema:
+ *         type: string
+ *         format: uuid
+ *       example: "550e8400-e29b-41d4-a716-446655440000"
  *   get:
  *     tags:
  *       - Recipe
@@ -12,15 +22,11 @@ import { BouquetRecipeContent, BouquetLayout } from '@/types/recommendation';
  *     description: |
  *       특정 꽃다발 레시피의 상세 정보를 조회합니다.
  *       꽃다발의 구성(꽃종류, 수량, 색상), 포장 옵션, 그리고 미리보기를 위한 레이아웃 좌표 정보를 포함합니다.
- *     parameters:
- *       - name: id
- *         in: path
- *         required: true
- *         description: 꽃다발 레시피 ID (UUID)
- *         schema:
- *           type: string
- *           format: uuid
- *         example: "550e8400-e29b-41d4-a716-446655440000"
+ *
+ *       ### 🎨 프론트엔드 개발 가이드
+ *       - **`color` (Hex)**: 꽃다발 렌더링용 실제 색상.
+ *       - **`icon_color` (Hex)**: 목록 아이콘용 상징 색상.
+ *       - **`meaning` (Text)**: API에서 JOIN하여 반환하는 꽃말 텍스트입니다. 화면에 즉시 렌더링 가능합니다.
  *     responses:
  *       200:
  *         description: 조회 성공
@@ -28,84 +34,120 @@ import { BouquetRecipeContent, BouquetLayout } from '@/types/recommendation';
  *           application/json:
  *             schema:
  *               type: object
- *               required:
- *                 - success
- *                 - data
+ *               required: [success, data]
  *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
+ *                 success: { type: boolean, example: true }
  *                 data:
  *                   $ref: '#/components/schemas/BouquetRecipeDetail'
- *             examples:
- *               standard:
- *                 summary: 일반적인 꽃다발
- *                 value:
- *                   success: true
- *                   data:
- *                     id: "550e8400-e29b-41d4-a716-446655440000"
- *                     name: "생일 축하 꽃다발"
- *                     occasion: "생일"
- *                     recipient: "어머니"
- *                     message: "항상 건강하세요!"
- *                     flowers:
- *                       - flower_id: 1
- *                         flower_name: "장미"
- *                         image_url: "https://example.com/rose.png"
- *                         quantity: 3
- *                         color: "빨강"
- *                         flower_meaning_id: 10
- *                     wrapping:
- *                       ribbonColor: "#FF0000"
- *                       wrappingColor: "#FFFFFF"
- *                     layout:
- *                       items:
- *                         - flower_id: 1
- *                           x: 100
- *                           y: 150
- *                     created_at: "2025-12-06T09:24:00Z"
- *                     updated_at: "2025-12-06T09:24:00Z"
- *               no_flowers:
- *                 summary: 꽃 구성이 없는 경우 (초기 상태 등)
- *                 value:
- *                   success: true
- *                   data:
- *                     id: "550e8400-e29b-41d4-a716-446655440001"
- *                     name: "빈 꽃다발"
- *                     occasion: null
- *                     recipient: null
- *                     message: null
- *                     flowers: []
- *                     wrapping:
- *                       ribbonColor: null
- *                       wrappingColor: null
- *                     layout: null
- *                     created_at: "2025-12-06T10:00:00Z"
- *                     updated_at: "2025-12-06T10:00:00Z"
  *       404:
  *         description: 레시피를 찾을 수 없음
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
- *                   example: "해당 꽃다발 레시피를 찾을 수 없습니다."
  *       500:
- *         description: 서버 오류
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
- *                   example: "꽃다발 상세 조회 중 오류가 발생했습니다."
+ *         description: 서버 내부 오류
+ *   put:
+ *     tags:
+ *       - Recipe
+ *     summary: 꽃다발 레시피 수정
+ *     description: |
+ *       사용자가 만든 기존 꽃다발 레시피의 정보를 업데이트합니다.
+ *       본인이 작성한 레시피만 수정 가능합니다.
+ *
+ *       ### 🎨 프론트엔드 개발 가이드
+ *       - **필드 선택적 수정**: 수정하려는 필드만 보내는 것이 아니라, **전체 객체 구조**를 맞춰서 보내는 것을 권장합니다 (특히 `recipe`, `layout`).
+ *       - **`color` vs `icon_color`**: 생성(POST) API 가이드와 동일합니다. 커스텀 색상 저장 시 `color`에는 Hex를, `flower_meaning_id`에는 가급적 Primary ID를 사용해 주세요.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name: { type: string, description: "꽃다발 이름", example: "수정된 결혼 기념일 꽃다발" }
+ *               occasion: { type: string, description: "상황", example: "결혼 기념일" }
+ *               recipient: { type: string, description: "받는 사람", example: "아내" }
+ *               message: { type: string, description: "카드 메시지", example: "세상에서 제일 사랑해" }
+ *               recipe:
+ *                 type: object
+ *                 description: 꽃다발 구성 (꽃, 포장)
+ *                 properties:
+ *                   flowers:
+ *                     type: array
+ *                     items:
+ *                       type: object
+ *                       required: [flower_id, flower_meaning_id, quantity, color]
+ *                       properties:
+ *                         flower_id: { type: integer, example: 1 }
+ *                         flower_meaning_id: { type: integer, example: 101 }
+ *                         quantity: { type: integer, example: 12 }
+ *                         color: { type: string, example: "#FFC0CB" }
+ *                   wrapping:
+ *                     type: object
+ *                     properties:
+ *                       wrappingColor: { type: string, example: "#F0F8FF" }
+ *                       ribbonColor: { type: string, example: "#FF69B4" }
+ *               layout:
+ *                 type: object
+ *                 description: 캔버스 배치 정보
+ *                 properties:
+ *                   items:
+ *                     type: array
+ *                     items:
+ *                       type: object
+ *                       properties:
+ *                         flower_id: { type: integer }
+ *                         flower_meaning_id: { type: integer }
+ *                         x: { type: number, example: 0.5 }
+ *                         y: { type: number, example: 0.7 }
+ *                         rotation: { type: number, example: 0 }
+ *                         z_index: { type: integer, example: 1 }
+ *           example:
+ *             name: "수정된 결혼 기념일 꽃다발"
+ *             occasion: "결혼 기념일"
+ *             recipient: "아내"
+ *             message: "세상에서 제일 사랑해"
+ *             recipe:
+ *               flowers:
+ *                 - flower_id: 1
+ *                   flower_meaning_id: 101
+ *                   quantity: 12
+ *                   color: "#FFC0CB"
+ *               wrapping:
+ *                 wrappingColor: "#F0F8FF"
+ *                 ribbonColor: "#FF69B4"
+ *             layout:
+ *               items:
+ *                 - flower_id: 1
+ *                   flower_meaning_id: 101
+ *                   x: 0.5
+ *                   y: 0.7
+ *                   rotation: 0
+ *                   z_index: 1
+ *     responses:
+ *       200:
+ *         description: 수정 성공
+ *       401:
+ *         description: 인증 실패
+ *       403:
+ *         description: 권한 없음 (타인의 레시피 수정 시도)
+ *       404:
+ *         description: 레시피를 찾을 수 없음
+ *   delete:
+ *     tags:
+ *       - Recipe
+ *     summary: 꽃다발 레시피 삭제
+ *     description: 저장된 꽃다발 레시피를 삭제합니다. 본인 것만 삭제 가능합니다.
+ *     responses:
+ *       200:
+ *         description: 삭제 성공
+ *       401:
+ *         description: 인증 실패
+ *       403:
+ *         description: 권한 없음
+ *       404:
+ *         description: 레시피를 찾을 수 없음
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     const { id } = await params;
@@ -122,20 +164,23 @@ export async function GET(
       if (error?.code === 'PGRST116') { // Not found
         return NextResponse.json(
           { error: '해당 꽃다발 레시피를 찾을 수 없습니다.' },
-          { status: 404 }
+          { status: 404 },
         );
       }
       console.error('Bouquet detail query error:', error);
       return NextResponse.json(
         { error: '꽃다발 상세 조회 중 오류가 발생했습니다.' },
-        { status: 500 }
+        { status: 500 },
       );
     }
 
-    // 2. 꽃 정보 추출 및 조회
+    // 2. 꽃 및 꽃말 정보 추출 및 조회
     const recipe = bouquet.recipe as BouquetRecipeContent | null;
-    const flowerIds = Array.from(new Set((recipe?.flowers || []).map(f => f.flower_id)));
+    const flowersInRecipe = recipe?.flowers || [];
+    const flowerIds = Array.from(new Set(flowersInRecipe.map(f => f.flower_id)));
+    const meaningIds = Array.from(new Set(flowersInRecipe.map(f => f.flower_meaning_id)));
 
+    // 꽃 이름 및 이미지 맵
     let flowerMap: Record<number, { name_ko: string; image_url: string | null }> = {};
     if (flowerIds.length > 0) {
       const { data: flowers } = await supabase
@@ -145,19 +190,36 @@ export async function GET(
 
       if (flowers) {
         flowerMap = Object.fromEntries(
-          flowers.map(f => [f.id, { name_ko: f.name_ko, image_url: f.image_url }])
+          flowers.map(f => [f.id, { name_ko: f.name_ko, image_url: f.image_url }]),
+        );
+      }
+    }
+
+    // 꽃말 텍스트 및 아이콘 컬러 맵
+    let meaningMap: Record<number, { meaning: string; icon_color: string | null }> = {};
+    if (meaningIds.length > 0) {
+      const { data: meanings } = await supabase
+        .from('flower_meanings')
+        .select('id, meaning, icon_color')
+        .in('id', meaningIds);
+
+      if (meanings) {
+        meaningMap = Object.fromEntries(
+          meanings.map(m => [m.id, { meaning: m.meaning, icon_color: m.icon_color }]),
         );
       }
     }
 
     // 3. 데이터 포맷팅
-    const flowers = (recipe?.flowers || []).map(f => ({
+    const flowers = flowersInRecipe.map(f => ({
       flower_id: f.flower_id,
       flower_name: flowerMap[f.flower_id]?.name_ko || '알 수 없음',
       image_url: flowerMap[f.flower_id]?.image_url || null,
       quantity: f.quantity,
-      color: f.color || null,
-      flower_meaning_id: f.flower_meaning_id || null,
+      color: f.color,
+      flower_meaning_id: f.flower_meaning_id,
+      meaning: meaningMap[f.flower_meaning_id]?.meaning || '알 수 없음',
+      icon_color: meaningMap[f.flower_meaning_id]?.icon_color || null,
     }));
 
     const responseData = {
@@ -181,7 +243,108 @@ export async function GET(
     console.error('Bouquet detail error:', error);
     return NextResponse.json(
       { error: '꽃다발 상세 조회 중 오류가 발생했습니다.' },
-      { status: 500 }
+      { status: 500 },
+    );
+  }
+}
+
+export async function PUT(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> },
+) {
+  try {
+    const { id } = await params;
+    const publicUser = await getPublicUser();
+    if (!publicUser) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const body = await request.json();
+    const {
+      name,
+      occasion,
+      recipient,
+      message,
+      recipe,
+      layout,
+    } = body;
+
+    const supabase = await createClient();
+
+    // 본인 확인 및 업데이트
+    const { data, error } = await supabase
+      .from('bouquet_recipes')
+      .update({
+        name,
+        occasion,
+        recipient,
+        message,
+        recipe,
+        layout,
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', id)
+      .eq('user_id', publicUser.id)
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Failed to update bouquet recipe:', error);
+      if (error.code === 'PGRST116') {
+        return NextResponse.json(
+          { error: '레시피를 찾을 수 없거나 수정 권한이 없습니다.' },
+          { status: 404 },
+        );
+      }
+      return NextResponse.json(
+        { error: '레시피 수정에 실패했습니다.' },
+        { status: 500 },
+      );
+    }
+
+    return NextResponse.json({ success: true, data });
+  } catch (error) {
+    console.error('Error updating bouquet recipe:', error);
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 },
+    );
+  }
+}
+
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> },
+) {
+  try {
+    const { id } = await params;
+    const publicUser = await getPublicUser();
+    if (!publicUser) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const supabase = await createClient();
+
+    const { error } = await supabase
+      .from('bouquet_recipes')
+      .delete()
+      .eq('id', id)
+      .eq('user_id', publicUser.id);
+
+    if (error) {
+      console.error('Failed to delete bouquet recipe:', error);
+      return NextResponse.json(
+        { error: '레시피 삭제에 실패했습니다.' },
+        { status: 500 },
+      );
+    }
+
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error('Error deleting bouquet recipe:', error);
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 },
     );
   }
 }
