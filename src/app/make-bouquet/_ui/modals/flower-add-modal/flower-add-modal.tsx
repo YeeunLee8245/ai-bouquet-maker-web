@@ -1,7 +1,7 @@
 import React from 'react';
 import FlowerSearchSection from './_ui/flower-search-section';
 import FlowerFavoritesSection from './_ui/flower-favorites-section';
-import BottomActionFooter from '@/widgets/footer/BottomActionFooter';
+import BottomActionFooter from '@/widgets/footer/bottom-action-footer';
 import { closeModalAtom, TModalProps } from '@/shared/model/modal';
 import { useSetAtom } from 'jotai';
 

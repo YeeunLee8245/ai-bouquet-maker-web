@@ -11,9 +11,9 @@ export default function TodayFlowerContainer() {
         alt='main'
         width={360}
         height={324}
-        className='absolute bottom-0 left-0 w-full h-[324px] object-cover'
+        className='absolute z-[-1] bottom-0 left-0 w-full h-[324px] object-cover object-bottom'
       />
-      <div className='flex flex-col gap-3 items-center border-t-2 border-gray-100 pt-5 pb-9'>
+      <div className='relative flex flex-col gap-3 items-center border-t-2 border-gray-100 pt-5 pb-9'>
         <p className='text-title-md text-gray-700'>오늘의 추천 꽃</p>
 
         {/* cover 이미지 + 하단 그라데이션 오버레이 + 텍스트 */}

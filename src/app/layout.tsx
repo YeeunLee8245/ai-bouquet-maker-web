@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import '../styles/globals.css';
-import Header from '@/widgets/header/Header';
+import Header from '@/widgets/header/header';
 import AppProviders from '@/shared/providers/app-providers';
 import ModalHost from '@/shared/model/modal/modal-host';
 
