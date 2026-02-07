@@ -1,6 +1,6 @@
 export type TModalId = string;
 
-export type TModalPosition = 'bottom' | 'center';
+export type TModalPosition = 'bottom' | 'center' | 'right';
 
 export type TModalDescriptor = {
   id: TModalId;
