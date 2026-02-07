@@ -22,3 +22,7 @@ export interface AIPromptPageParams {
   type: AIPromptType;
   [key: string]: string | string[] | undefined;
 }
+
+export interface AIPromptEventHub {
+  onClickGuideItem?: (item: string) => void;
+}

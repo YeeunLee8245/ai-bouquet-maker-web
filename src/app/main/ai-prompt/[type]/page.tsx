@@ -3,7 +3,7 @@
 import { useParams } from 'next/navigation';
 import { notFound } from 'next/navigation';
 import { AI_PROMPT_DATA_MAP, AI_PROMPT_DATAS } from './_datas';
-import { AIPromptType, AIPromptPageParams } from './_types';
+import { AIPromptType, AIPromptPageParams, AIPromptEventHub } from './_types';
 import OutlineHeartIcon from '@/shared/assets/icons/outline_heart.svg';
 import PersonIcon from '@/shared/assets/icons/person.svg';
 import { cloneElement } from 'react';
@@ -37,6 +37,10 @@ function AIPromptPage() {
       break;
   }
 
+  const eventHub: AIPromptEventHub = {
+    onClickGuideItem: undefined,
+  };
+
   const { title, description, placeholder, guide } = AI_PROMPT_DATA_MAP[type];
 
   return (
@@ -51,10 +55,10 @@ function AIPromptPage() {
         </div>
       </div>
       <div className='pt-4 px-4 pb-8 flex flex-col gap-4'>
-        <AIPromptInput placeholder={placeholder} />
+        <AIPromptInput eventHub={eventHub} placeholder={placeholder} />
         <Button size='lg'>꽃 추천 받기</Button>
       </div>
-      <AIPromptGuideContainer guide={guide} />
+      <AIPromptGuideContainer eventHub={eventHub} guide={guide} />
     </div>
   );
 }
