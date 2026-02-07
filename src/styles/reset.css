@@ -33,4 +33,12 @@
       outline: none;
     }
   }
+
+  textarea {
+    border: none;
+    resize: none;
+    &:focus-visible {
+      outline: none;
+    }
+  }
 }
