@@ -3,26 +3,13 @@
 import DrawerIcon from '@/shared/assets/icons/drawer.svg';
 import { usePathname } from 'next/navigation';
 import LogoIcon from '@/shared/assets/icons/logo.svg';
-import TitleIcon from '@/shared/assets/icons/title.svg';
+import WhiteTitleIcon from '@/shared/assets/icons/white_title.svg';
+import PrimaryTitleIcon from '@/shared/assets/icons/primary_title.svg';
 import { cn } from '@/shared/utils/styles';
 import Image from 'next/image';
 interface IProps {
   variant?: 'primary' | 'default';
 }
-
-const containerStyles = (variant: NonNullable<IProps['variant']>) => {
-  return {
-    primary: 'text-[17px] leading-[20px] font-medium tracking-[-0.34px]',
-    default: 'text-[17px] leading-[20px] font-medium tracking-[-0.34px]',
-  }[variant];
-};
-
-const logoWrapperStyles = (variant: NonNullable<IProps['variant']>) => {
-  return {
-    primary: '[&>svg:first-child]:fill-white [&>svg:last-child]:fill-white [&>svg:last-child]:stroke-[0.2]',
-    default: '[&>svg:first-child]:fill-primary-600 [&>svg:last-child]:fill-primary-600 [&>svg:last-child]:stroke-[0.32]',
-  }[variant];
-};
 
 function Header({ variant: variantProp }: IProps) {
   const pathname = usePathname();
@@ -31,20 +18,18 @@ function Header({ variant: variantProp }: IProps) {
   return (
     <header className='relative h-[48px] w-full px-4 py-3 flex justify-between items-center z-header'>
       {/* 배경 이미지 */}
-      <Image
-        src='/images/bg_main_top.webp'
-        alt='header-background'
-        width={360}
-        height={48}
-        className='absolute z-[-1] left-0 top-0 w-full h-[48px] object-cover object-top'
-      />
-      <span className={
-        cn(
-          'flex items-center',
-          logoWrapperStyles(variant),
-        )}>
-        <LogoIcon className='ml-[5px] mr-[7.8px] w-[21px] h-[21.8px]' />
-        <TitleIcon />
+      {variant === 'primary' && (
+        <Image
+          src='/images/bg_main_top.webp'
+          alt='header-background'
+          width={360}
+          height={48}
+          className='absolute z-[-1] left-0 top-0 w-full h-[48px] object-cover object-top'
+        />
+      )}
+      <span className='flex items-center'>
+        <LogoIcon className={cn('ml-[5px] mr-[7.8px] w-[21px] h-[21.8px]', variant === 'primary' ? 'fill-white' : 'fill-primary-600')} />
+        {variant === 'primary' ? <WhiteTitleIcon /> : <PrimaryTitleIcon />}
       </span>
       <div className='cursor-pointer'>
         <DrawerIcon className={cn('w-[18px] h-[16px] mx-[3px]', variant === 'primary' ? 'fill-white stroke-white' : 'fill-primary-600 stroke-primary-600')}/>
