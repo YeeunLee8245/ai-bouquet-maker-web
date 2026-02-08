@@ -20,7 +20,7 @@ export default function AIPromptGuideContainer({ eventHub, guide }: IProps) {
         {items.map((item, index) => (
           <button
             key={index}
-            className='py-2 px-3 rounded-4 bg-white text-body-md border border-gray-100 transition-all hover:border-primary-300 hover:bg-primary-50 active:border-primary-400 active:bg-primary-100'
+            className='py-2 px-3 rounded-4 bg-white text-body-md border border-gray-100 text-start transition-all hover:border-primary-300 hover:bg-primary-50 active:border-primary-400 active:bg-primary-100'
             onClick={handleClickGuideItem(item)}
           >
             {item}
