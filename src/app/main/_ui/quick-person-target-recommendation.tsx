@@ -3,6 +3,7 @@
 import React, { useRef } from 'react';
 import { QUICK_PERSON_TARGET_RECOMMENDATION_LIST } from '../_datas';
 import UpArrowIcon from '@/shared/assets/icons/up_arrow.svg';
+import Link from 'next/link';
 
 const MOVE_DIRECTION = {
   LEFT: 0,
@@ -32,10 +33,10 @@ export default function QuickPersonTargetRecommendation() {
       <p className='text-title-md'>빠른 대상 추천</p>
       <span ref={buttonWrapperRef} className='flex gap-2 overflow-y-auto hide-scrollbar'>
         {QUICK_PERSON_TARGET_RECOMMENDATION_LIST.map((item) => (
-          <button
-            key={item.id}
+          <Link href={`/main/quick-recommendation/${item.id}`} key={item.id}
             className='whitespace-nowrap inline-flex items-center justify-center h-[44px] px-4 text-ui-cta-lg text-gray-600 rounded-4 border border-gray-100'
-          >{item.name}</button>
+          >
+            {item.name}</Link>
         ))}
       </span>
       <div className='flex items-center justify-between'>
