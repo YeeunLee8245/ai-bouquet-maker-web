@@ -4,6 +4,7 @@ export type AIPromptType = (typeof AI_PROMPT_DATAS)[number];
 
 export interface AIPromptGuide {
   title: string;
+  description?: string;
   items: string[];
 }
 
