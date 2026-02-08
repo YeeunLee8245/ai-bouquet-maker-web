@@ -126,7 +126,9 @@ import { getPublicUser } from '@/lib/users/auth';
  *                         x: { type: number, example: 0.5 }
  *                         y: { type: number, example: 0.7 }
  *                         rotation: { type: number, example: 0 }
+ *                         scale: { type: number, example: 1.0 }
  *                         z_index: { type: integer, example: 1 }
+ *                         type: { type: string, description: "등록된 아이콘 키 (예: rose, marigold, tulip 등)", example: "rose" }
  *           examples:
  *             full_update:
  *               summary: "전체 정보 수정 예시"
@@ -299,6 +301,7 @@ export async function GET(
       flower_meaning_id: f.flower_meaning_id,
       meaning: meaningMap[f.flower_meaning_id]?.meaning || '알 수 없음',
       icon_color: meaningMap[f.flower_meaning_id]?.icon_color || null,
+      type: f.type,
     }));
 
     const responseData = {
