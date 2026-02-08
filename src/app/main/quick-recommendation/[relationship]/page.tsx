@@ -3,9 +3,8 @@
 import React from 'react';
 import { QUICK_PERSON_TARGET_RECOMMENDATION_LIST } from '../../_datas';
 import { notFound, useParams } from 'next/navigation';
-import { OCCASION_OBJECT, QUICK_RECOMMENDATION_DATA_MAP } from './_datas';
-import OccasionItem from './_ui/occasion-item';
-import { TOccasion } from './types';
+import { QUICK_RECOMMENDATION_DATA_MAP } from './_datas';
+import { OccasionItem, OCCASION_OBJECT, TOccasion } from '@/entities/occasion';
 
 type TRelationship = (typeof QUICK_PERSON_TARGET_RECOMMENDATION_LIST)[number]['id'];
 

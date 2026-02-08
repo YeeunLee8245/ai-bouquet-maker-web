@@ -41,4 +41,9 @@
       outline: none;
     }
   }
+
+/* next/image는 예외 처리 */
+  /* img[data-nimg] {
+    max-width: auto;
+  } */
 }
