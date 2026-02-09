@@ -77,7 +77,7 @@ function Sidebar({ modalId }: TModalProps) {
           서비스 소개
         </button>
         <div className='text-white text-body-lg mt-1'>문의</div>
-        <div className='text-primary-100 text-body-sm'>contact@todaysflower.com</div>
+        <div className='text-primary-100 text-body-sm'>ai.bouquet.maker@gmail.com</div>
       </div>
     </div>
   );

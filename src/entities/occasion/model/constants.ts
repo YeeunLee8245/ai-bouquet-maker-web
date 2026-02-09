@@ -14,7 +14,7 @@ export const OCCASION_OBJECT = {
   },
   celebration_support: {
     label: '응원',
-    description: '졸업/승진 등 성취를 축하하거나 도전을 응원하며 기쁨을 함께하는 꽃',
+    description: '졸업/승진 등 성취를 축하하거나\n도전을 응원하며 기쁨을 함께하는 꽃',
   },
   comfort_recovery: {
     label: '위로',
