@@ -24,6 +24,7 @@ function Header({ variant: variantProp }: IProps) {
     openModal({
       id: 'sidebar',
       component: <Sidebar />,
+      canCloseOnBackgroundClick: true,
       position: 'right',
     });
   };

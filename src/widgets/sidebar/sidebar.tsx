@@ -49,7 +49,7 @@ function Sidebar({ modalId }: TModalProps) {
       <button
         type='button'
         onClick={() => closeModal(modalId)}
-        className='text-white'
+        className='w-fit text-white'
       >
         <UpArrowIcon className='w-[18px] m-[3px] fill-white transform rotate-[-90deg]'/>
       </button>
