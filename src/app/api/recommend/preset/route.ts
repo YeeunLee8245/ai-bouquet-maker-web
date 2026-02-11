@@ -76,9 +76,15 @@ import { getRelationshipLabel, getOccasionLabel } from '@/lib/recommend/relation
  *               properties:
  *                 success: { type: boolean, example: true }
  *                 recommendation_id: { type: string, format: uuid, description: "생성된 추천 기록 ID" }
- *                 title: { type: string, example: "연인에게 전하는 생일/기념일 꽃다발" }
- *                 recipient: { type: string, example: "연인" }
- *                 occasion: { type: string, example: "생일/기념일" }
+ *                 title: { type: string, example: "연인에게 전하는 생일·기념일 꽃다발" }
+ *                 recipient:
+ *                   type: string
+ *                   enum: ['부모님', '연인', '친구', '직장동료', '선생님', '어르신', '자녀·아이']
+ *                   example: "연인"
+ *                 occasion:
+ *                   type: string
+ *                   enum: ['생일·기념일', '프로포즈', '새로운 시작', '어버이날', '스승의날', '응원', '위로', '사과']
+ *                   example: "생일·기념일"
  *                 recommendations:
  *                   type: array
  *                   items:
@@ -97,9 +103,9 @@ import { getRelationshipLabel, getOccasionLabel } from '@/lib/recommend/relation
  *                 value:
  *                   success: true
  *                   recommendation_id: "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
- *                   title: "연인에게 전하는 생일/기념일 꽃다발"
+ *                   title: "연인에게 전하는 생일·기념일 꽃다발"
  *                   recipient: "연인"
- *                   occasion: "생일/기념일"
+ *                   occasion: "생일·기념일"
  *                   recommendations:
  *                     - flower_id: 11
  *                       flower_meaning_id: 22

@@ -39,7 +39,7 @@ import { getAvailableRelationships, getAvailableOccasions, getAllOccasions } fro
  *                       description: "사랑과 로맨스를 전하는 꽃"
  *                   occasions:
  *                     - value: "birthday_anniversary"
- *                       label: "생일/기념일"
+ *                       label: "생일·기념일"
  *                       description: "특별한 날을 축하하는 꽃"
  *               filtered_occasions:
  *                 summary: "특정 관계에 필터링된 상황 목록"
