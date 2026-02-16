@@ -3,6 +3,7 @@ import '../styles/globals.css';
 import Header from '@/widgets/header/header';
 import AppProviders from '@/shared/providers/app-providers';
 import ModalHost from '@/shared/model/modal/modal-host';
+import ToastHost from '@/shared/model/toast/toast-host';
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -31,6 +32,7 @@ export default function RootLayout({
             {children}
           </main>
           <ModalHost />
+          <ToastHost />
         </body>
       </html>
     </AppProviders>
