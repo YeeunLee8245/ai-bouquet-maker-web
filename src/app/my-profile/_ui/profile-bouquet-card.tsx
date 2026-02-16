@@ -1,0 +1,21 @@
+import DownArrowIcon from '@/shared/assets/icons/group.svg';
+
+interface ProfileBouquetCardProps {
+  label?: string;
+  content?: string;
+  canClick?: boolean;
+}
+
+function ProfileBouquetCard({ label = '', content = '', canClick = false }: ProfileBouquetCardProps) {
+  return (
+    <>
+      <div className='flex justify-between mx-micro items-center'>
+        <div className='text-title-md'>{label}</div>
+        {canClick && <DownArrowIcon className='w-[12px] h-[12px] stroke-gray-200 rotate-[-90deg] mr-[7px]' />}
+      </div>
+      <div className='mx-micro text-body-md mt-micro text-gray-400'>{content}</div>
+    </>
+  );
+}
+
+export default ProfileBouquetCard;
