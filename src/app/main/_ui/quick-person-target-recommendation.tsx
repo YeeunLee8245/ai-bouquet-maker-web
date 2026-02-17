@@ -2,6 +2,7 @@
 
 import React, { useRef } from 'react';
 import { QUICK_PERSON_TARGET_RECOMMENDATION_LIST } from '../_datas';
+import { TRecipient } from '../_types';
 import UpArrowIcon from '@/shared/assets/icons/up_arrow.svg';
 import Link from 'next/link';
 
@@ -17,8 +18,16 @@ const MOVE_DIRECTION_ICON_ROTATE_CLASS: Record<MoveDirection, string> = {
   [MOVE_DIRECTION.RIGHT]: 'rotate-[90deg]',
 } as const;
 
-export default function QuickPersonTargetRecommendation() {
+type TProps = {
+  recipients?: TRecipient[];
+};
+
+export default function QuickPersonTargetRecommendation({ recipients }: TProps) {
   const buttonWrapperRef = useRef<HTMLSpanElement>(null);
+
+  const items = recipients
+    ? recipients.map((r) => ({ id: r.id, name: r.label }))
+    : [...QUICK_PERSON_TARGET_RECOMMENDATION_LIST];
 
   const handleClickMove = (direction: MoveDirection) => () => {
     if (!buttonWrapperRef.current) {return;}
@@ -32,7 +41,7 @@ export default function QuickPersonTargetRecommendation() {
     <div className='flex flex-col gap-3 px-4 pt-1 pb-4'>
       <p className='text-title-md'>빠른 대상 추천</p>
       <span ref={buttonWrapperRef} className='flex gap-2 overflow-y-auto hide-scrollbar'>
-        {QUICK_PERSON_TARGET_RECOMMENDATION_LIST.map((item) => (
+        {items.map((item) => (
           <Link href={`/main/quick-recommendation/${item.id}`} key={item.id}
             className='whitespace-nowrap inline-flex items-center justify-center h-[44px] px-4 text-ui-cta-lg text-gray-600 rounded-4 border border-gray-100'
           >
