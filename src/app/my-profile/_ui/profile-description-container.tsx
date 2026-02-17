@@ -27,6 +27,9 @@ function ProfileDescriptionContainer() {
           ),
         )}
       </div>
+      <button className='text-ui-textbtn-lg text-gray-400 mt-4'>
+        로그아웃
+      </button>
     </div>
   );
 };
