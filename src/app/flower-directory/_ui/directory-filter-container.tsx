@@ -49,7 +49,6 @@ function DirectoryFilterContainer({ eventHub }: TProps) {
       const container = containerRef.current as HTMLDivElement;
       container.style.gridTemplateRows = pressed ? '1fr' : '0fr';
       const filterSection = container.querySelector<HTMLDivElement>('[data-filter-section]');
-      console.log(filterSection);
       if (!filterSection) {return;}
 
       filterSection.style.cssText = pressed ?

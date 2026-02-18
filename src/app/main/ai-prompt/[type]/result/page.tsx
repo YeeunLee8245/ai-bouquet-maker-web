@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-import GroupIcon from '@/shared/assets/icons/group.svg';
+import ChevronDownIcon from '@/shared/assets/icons/chevron_down.svg';
 import { FlowerCard } from '@/entities/flower/ui';
 import { testDirectoryItem } from '@/app/flower-directory/_datas';
 import { Button } from '@/shared/ui/button';
@@ -29,7 +29,7 @@ const AiPromptResultPage = () => {
           <span className='text-body-md text-gray-400'>여동생에게 전하는 꽃다발</span>
           <button ref={buttonRef} type='button' data-is-expanded='true' onClick={handleToggle}
             className='transition-transform duration-300 data-[is-expanded=true]:rotate-180'>
-            <GroupIcon className='w-[12px] h-[12px] stroke-[#CCC] m-1' />
+            <ChevronDownIcon className='w-[12px] h-[12px] stroke-[#CCC] m-1' />
           </button>
         </div>
         <div ref={detailRef} data-is-expanded='true'

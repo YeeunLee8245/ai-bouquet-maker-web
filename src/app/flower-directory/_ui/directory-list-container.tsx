@@ -1,8 +1,10 @@
 import React, { useRef } from 'react';
+import { useSetAtom } from 'jotai';
 import { IDirectoryEventHub } from '../_types';
 import { directoryDefaultSortOptions, testDirectoryItem } from '../_datas';
 import { FlowerCard } from '@/entities/flower/ui';
 import { Button } from '@/shared/ui/button';
+import { toggleFlowerAtom } from '@/shared/model/selected-flowers';
 
 type TProps = {
   eventHub: IDirectoryEventHub;
@@ -10,6 +12,7 @@ type TProps = {
 
 function DirectoryListContainer({ eventHub }: TProps) {
   const sortBtnRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const toggleFlower = useSetAtom(toggleFlowerAtom);
 
   const handleClickSort = (idx: number) => () => {
     sortBtnRefs.current.forEach((ref, index) => {
@@ -43,8 +46,8 @@ function DirectoryListContainer({ eventHub }: TProps) {
           <FlowerCard
             key={index}
             size='lg'
-            {...testDirectoryItem}
-            actionButton={<Button size='md' onClick={() => {}} className='mt-3'>선택하기</Button>}/>
+            {...{...testDirectoryItem, id: `${index}`, name: `${testDirectoryItem.name} ${index}`}}
+            actionButton={<Button size='md' onClick={() => toggleFlower({ id: `${index}`, name: `${testDirectoryItem.name} ${index}` })} className='mt-3'>선택하기</Button>}/>
         ))}
       </div>
     </div>

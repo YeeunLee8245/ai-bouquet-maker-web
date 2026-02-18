@@ -1,4 +1,4 @@
-import DownArrowIcon from '@/shared/assets/icons/group.svg';
+import ChevronDownIcon from '@/shared/assets/icons/chevron_down.svg';
 
 interface ProfileBouquetCardProps {
   label?: string;
@@ -11,7 +11,7 @@ function ProfileBouquetCard({ label = '', content = '', canClick = false }: Prof
     <>
       <div className='flex justify-between mx-micro items-center'>
         <div className='text-title-md'>{label}</div>
-        {canClick && <DownArrowIcon className='w-[12px] h-[12px] stroke-gray-200 rotate-[-90deg] mr-[7px]' />}
+        {canClick && <ChevronDownIcon className='w-[12px] h-[12px] stroke-gray-200 rotate-[-90deg] mr-[7px]' />}
       </div>
       <div className='mx-micro text-body-md mt-micro text-gray-400'>{content}</div>
     </>
