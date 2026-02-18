@@ -5,18 +5,13 @@ import SpecificAIButtons from './_ui/specific-ai-buttons';
 import QuickPersonTargetRecommendation from './_ui/quick-person-target-recommendation';
 import PopularFlowerRecommendation from './_ui/popular-flower-recommendation';
 import TodayFlowerContainer from './_ui/today-flower-container';
-import { getMainData } from './_lib/getMainData';
-
-// 1시간 단위로 데이터 갱신
-export const MAIN_DATA_REVALIDATE_TIME = 60 * 60;
-
+import { getMainData } from '../api/main/getMainData';
 // 맞춤 추천 -> 따로 페이지 빼는 것이 아닌 컴포넌트 형태로 중첩해서 띄우기
 /**
  * 메인 페이지
  */
 export default async function MainPage() {
   const data = await getMainData();
-
   return (
     <div className='flex w-full h-full min-h-0 flex-col'>
       <div className='relative w-full flex-1 min-h-0 overflow-y-auto'>
