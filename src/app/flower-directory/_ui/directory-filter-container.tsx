@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/immutability */
-import { useEffectEvent, useLayoutEffect, useRef, useState } from 'react';
-import { directoryDefaultSelectedColors, directoryDefaultSelectedSeasons } from '../_datas';
+import { useEffectEvent, useLayoutEffect, useRef } from 'react';
+import { useAtom, useSetAtom } from 'jotai';
+import { directoryColorsAtom, directorySeasonsAtom, resetDirectoryFiltersAtom } from '../_model/atoms';
 import { IDirectoryEventHub } from '../_types';
 import DirectoryColorFilter from './directory-color-filter';
 import DirectorySeasonFilter from './directory-season-filter';
@@ -11,12 +12,9 @@ type TProps = {
 
 function DirectoryFilterContainer({ eventHub }: TProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [selectedColors, setSelectedColors] = useState<Set<string>>(
-    new Set(directoryDefaultSelectedColors.map(({ id }) => id)),
-  );
-  const [selectedSeasons, setSelectedSeasons] = useState<Set<string>>(
-    new Set(directoryDefaultSelectedSeasons.map(({ id }) => id)),
-  );
+  const [selectedColors, setSelectedColors] = useAtom(directoryColorsAtom);
+  const [selectedSeasons, setSelectedSeasons] = useAtom(directorySeasonsAtom);
+  const resetFilters = useSetAtom(resetDirectoryFiltersAtom);
 
   const handleColorChange = (id: string, pressed: boolean) => {
     setSelectedColors(prev => {
@@ -56,8 +54,7 @@ function DirectoryFilterContainer({ eventHub }: TProps) {
         'overflow: hidden;';
     };
     eventHub.onClickResetFilter = () => {
-      setSelectedColors(new Set(directoryDefaultSelectedColors.map(({ id }) => id)));
-      setSelectedSeasons(new Set(directoryDefaultSelectedSeasons.map(({ id }) => id)));
+      resetFilters();
     };
   });
 

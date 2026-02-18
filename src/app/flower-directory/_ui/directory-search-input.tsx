@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import { useSetAtom } from 'jotai';
 import { IDirectoryEventHub } from '../_types';
 import { SearchInput } from '@/shared/ui/input';
 import { useDebounceValue } from '@/shared/hooks/useDebounceValue';
+import { directorySearchAtom } from '../_model/atoms';
 
 interface IProps {
   eventHub: IDirectoryEventHub;
@@ -10,14 +12,16 @@ interface IProps {
 function DirectorySearchInput({ eventHub }: IProps) {
   const [value, setValue] = useState<string>('');
   const debouncedValue = useDebounceValue(value, 500);
+  const setSearch = useSetAtom(directorySearchAtom);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);
   };
 
   useEffect(() => {
+    setSearch(debouncedValue);
     eventHub.onSearchKeyword?.(debouncedValue);
-  }, [debouncedValue, eventHub]);
+  }, [debouncedValue, eventHub, setSearch]);
 
   return (
     <SearchInput placeholder='꽃 이름, 꽃말, 설명 등으로 검색' value={value} onChange={handleChange}/>

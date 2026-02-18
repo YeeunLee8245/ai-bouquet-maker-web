@@ -24,7 +24,7 @@ function SelectedFlowerChips() {
   const checkOverflow = useCallback(() => {
     const el = listRef.current;
     if (!el) {return;}
-    setIsOverflowing(el.scrollHeight > el.clientHeight + 2);
+    setIsOverflowing(el.scrollHeight > el.clientHeight + 1);
   }, []);
 
   useEffect(() => {
@@ -34,12 +34,11 @@ function SelectedFlowerChips() {
   return (
     <div className='flex flex-col'>
       <div className='flex justify-between'>
-        <span className='text-ui-label-sm text-gray-400 shrink-0 leading-[28px]'>선택한 꽃</span>
+        <span className='text-ui-label-sm text-gray-400 shrink-0'>선택한 꽃</span>
         {isOverflowing && (
           <button
             type='button'
             onClick={() => setExpanded((prev) => !prev)}
-            className='w-5 h-5 shrink-0 flex items-center justify-center text-gray-400 mt-[4px]'
           >
             <ChevronDownIcon
               className={cn(
@@ -56,6 +55,7 @@ function SelectedFlowerChips() {
         className={cn(
           'flex flex-wrap gap-1 overflow-hidden transition-all duration-200 ease-in-out min-w-0',
           expanded ? 'max-h-[200px] mt-3' : 'max-h-[28px] mt-1',
+          flowers.length === 0 && 'mt-0',
         )}
       >
         {flowers.map(({id, name}) => (

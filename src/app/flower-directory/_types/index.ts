@@ -12,3 +12,24 @@ export interface IDirectoryEventHub {
   onClickResetFilter?: VoidFunction;
   onSearchKeyword?: (keyword: string) => void;
 }
+
+export type TDirectoryFlower = {
+  id: string;
+  imageUrl: string;
+  name: string;
+  isLiked?: boolean;
+  colors: string[];
+  tags: string[];
+};
+
+export type TDirectoryResponse = {
+  success: boolean;
+  data: {
+    default_season: string;
+    flowers: TDirectoryFlower[];
+    total: number;
+    page: number;
+    limit: number;
+    has_next_page: boolean;
+  };
+};

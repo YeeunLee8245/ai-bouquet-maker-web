@@ -1,7 +1,14 @@
-import type { AxiosError } from 'axios';
+import type { ApiError } from './types';
 
-export function isUnauthorizedError(error: unknown) {
-  const e = error as (AxiosError | undefined);
+export function isApiError(error: unknown): error is ApiError {
+  return (
+    typeof error === 'object' &&
+    error !== null &&
+    'message' in error &&
+    typeof (error as ApiError).message === 'string'
+  );
+}
 
-  return e?.response?.status === 401;
+export function isUnauthorizedError(error: unknown): boolean {
+  return isApiError(error) && error.status === 401;
 }

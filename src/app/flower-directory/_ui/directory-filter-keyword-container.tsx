@@ -2,24 +2,49 @@
 import { ActionLabel } from '@/shared/ui/label';
 import React, { useCallback, useEffectEvent, useLayoutEffect, useState } from 'react';
 import XIcon from '@/shared/assets/icons/x.svg';
+import { useSetAtom } from 'jotai';
 import { IDirectoryEventHub, TDirectoryFilterItem } from '../_types';
-import { directoryDefaultSelectedColors, directoryDefaultSelectedSeasons } from '../_datas';
+import { directoryDefaultSelectedColors, directoryDefaultSelectedSeasons, DIRECTORY_SEASON_LIST } from '../_datas';
+import { directoryColorsAtom, directorySeasonsAtom, resetDirectoryFiltersAtom } from '../_model/atoms';
 
 type TProps = {
   eventHub: IDirectoryEventHub;
 };
 
+const seasonIds = new Set(DIRECTORY_SEASON_LIST.map(s => s.id as string));
+
 function DirectoryFilterKeywordContainer({ eventHub }: TProps) {
   const [keywords, setKeywords] = useState<TDirectoryFilterItem[]>([...directoryDefaultSelectedColors, ...directoryDefaultSelectedSeasons]);
+  const setColors = useSetAtom(directoryColorsAtom);
+  const setSeasons = useSetAtom(directorySeasonsAtom);
+  const resetFilters = useSetAtom(resetDirectoryFiltersAtom);
+
+  const removeFromAtom = useCallback((id: string) => {
+    if (seasonIds.has(id)) {
+      setSeasons(prev => {
+        const next = new Set(prev);
+        next.delete(id);
+        return next;
+      });
+    } else {
+      setColors(prev => {
+        const next = new Set(prev);
+        next.delete(id);
+        return next;
+      });
+    }
+  }, [setColors, setSeasons]);
 
   const handleClickRemoveKeyword = useCallback((id: string) => () => {
     setKeywords((prev) => prev.filter((k) => k.id !== id));
-  }, []);
+    removeFromAtom(id);
+  }, [removeFromAtom]);
 
-  const handleClickResetFilter = useCallback(() => {
+  const handleResetFilter = useCallback(() => {
     setKeywords([...directoryDefaultSelectedColors, ...directoryDefaultSelectedSeasons]);
+    resetFilters();
     eventHub.onClickResetFilter?.();
-  }, [eventHub]);
+  }, [eventHub, resetFilters]);
 
   const setEventHubFilters = useEffectEvent(() => {
     eventHub.onClickColorFilter = (selectedColor: TDirectoryFilterItem, pressed: boolean) => {
@@ -59,7 +84,7 @@ function DirectoryFilterKeywordContainer({ eventHub }: TProps) {
           />
         ))}
       </span>
-      <button onClick={handleClickResetFilter} className='text-ui-textbtn-md text-gray-400 ml-2 mr-micro whitespace-nowrap'>초기화</button>
+      <button onClick={handleResetFilter} className='text-ui-textbtn-md text-gray-400 ml-2 mr-micro whitespace-nowrap'>초기화</button>
     </div>
   );
 }

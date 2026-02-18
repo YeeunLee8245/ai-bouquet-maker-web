@@ -1,7 +1,9 @@
-import React, { useRef } from 'react';
-import { useSetAtom } from 'jotai';
+import { useRef, useEffect } from 'react';
+import { useSetAtom, useAtom } from 'jotai';
 import { IDirectoryEventHub } from '../_types';
-import { directoryDefaultSortOptions, testDirectoryItem } from '../_datas';
+import { directoryDefaultSortOptions } from '../_datas';
+import { directorySortAtom } from '../_model/atoms';
+import { useDirectoryQuery } from '../_model/use-directory-query';
 import { FlowerCard } from '@/entities/flower/ui';
 import { Button } from '@/shared/ui/button';
 import { toggleFlowerAtom } from '@/shared/model/selected-flowers';
@@ -11,29 +13,48 @@ type TProps = {
 };
 
 function DirectoryListContainer({ eventHub }: TProps) {
-  const sortBtnRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const sentinelRef = useRef<HTMLDivElement>(null);
   const toggleFlower = useSetAtom(toggleFlowerAtom);
+  const [sort, setSort] = useAtom(directorySortAtom);
 
-  const handleClickSort = (idx: number) => () => {
-    sortBtnRefs.current.forEach((ref, index) => {
-      if (!ref) {return;}
-      ref.setAttribute('aria-current', index === idx ? 'true' : 'false');
-    });
-  };
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isLoading,
+  } = useDirectoryQuery();
+
+  useEffect(() => {
+    const sentinel = sentinelRef.current;
+    if (!sentinel) {return;}
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
+          fetchNextPage();
+        }
+      },
+      { threshold: 0 },
+    );
+
+    observer.observe(sentinel);
+    return () => observer.disconnect();
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
+
+  const flowers = data?.pages.flatMap(page => page.flowers) ?? [];
+  const total = data?.pages[0]?.total ?? 0;
 
   return (
     <div className='flex flex-col border-t-2 border-gray-100 mt-4'>
       <div className='flex items-center justify-between pt-4'>
-        <span className='text-ui-label-sm text-gray-400 pl-micro'>{'n'}개의 꽃</span>
+        <span className='text-ui-label-sm text-gray-400 pl-micro'>{total}개의 꽃</span>
         <span className='pr-micro flex items-center gap-1'>
-          {directoryDefaultSortOptions.map(({ id, name }, index) => (
+          {directoryDefaultSortOptions.map(({ id, name }) => (
             <button
-              ref={ref => {
-                sortBtnRefs.current[index] = ref;
-              }}
-              onClick={handleClickSort(index)}
+              onClick={() => setSort(id)}
               key={id}
-              aria-current={index === 0 ? 'true' : 'false'}
+              aria-current={id === sort ? 'true' : 'false'}
               className='text-ui-textbtn-sm text-gray-400 aria-current:text-gray-700'
             >
               {name}
@@ -42,14 +63,34 @@ function DirectoryListContainer({ eventHub }: TProps) {
         </span>
       </div>
       <div className='grid grid-cols-2 gap-x-4 gap-y-8 mt-3'>
-        {Array.from({ length: 10 }).map((_, index) => (
+        {isLoading && (
+          <span className='col-span-2 text-center py-8 text-ui-label-sm text-gray-400'>
+            불러오는 중...
+          </span>
+        )}
+        {flowers.map((flower) => (
           <FlowerCard
-            key={index}
+            key={flower.id}
             size='lg'
-            {...{...testDirectoryItem, id: `${index}`, name: `${testDirectoryItem.name} ${index}`}}
-            actionButton={<Button size='md' onClick={() => toggleFlower({ id: `${index}`, name: `${testDirectoryItem.name} ${index}` })} className='mt-3'>선택하기</Button>}/>
+            {...flower}
+            actionButton={
+              <Button
+                size='md'
+                onClick={() => toggleFlower({ id: flower.id, name: flower.name })}
+                className='mt-3'
+              >
+                선택하기
+              </Button>
+            }
+          />
         ))}
       </div>
+      <div ref={sentinelRef} className='h-1' />
+      {isFetchingNextPage && (
+        <div className='flex justify-center py-4'>
+          <span className='text-ui-label-sm text-gray-400'>불러오는 중...</span>
+        </div>
+      )}
     </div>
   );
 }
