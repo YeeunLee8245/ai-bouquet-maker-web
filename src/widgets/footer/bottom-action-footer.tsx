@@ -41,14 +41,12 @@ function SelectedFlowerChips() {
             onClick={() => setExpanded((prev) => !prev)}
             className='w-5 h-5 shrink-0 flex items-center justify-center text-gray-400 mt-[4px]'
           >
-            <span
+            <ChevronDownIcon
               className={cn(
-                'w-3 h-3 transition-transform duration-200',
-                expanded ? 'rotate-0' : 'rotate-180',
+                'w-3 h-3 stroke-[#CCC] transition-transform duration-200 ease-in-out',
+                expanded && 'rotate-180',
               )}
-            >
-              <ChevronDownIcon className='w-[12px] h-[12px] stroke-[#CCC] m-1' />
-            </span>
+            />
           </button>
         )}
       </div>
@@ -56,8 +54,8 @@ function SelectedFlowerChips() {
       <div
         ref={listRef}
         className={cn(
-          'flex flex-wrap gap-1 overflow-hidden transition-[max-height] duration-300 ease-in-out min-w-0',
-          expanded ? 'max-h-[200px] mt-3' : 'max-h-[28px] mt-1 ',
+          'flex flex-wrap gap-1 overflow-hidden transition-all duration-200 ease-in-out min-w-0',
+          expanded ? 'max-h-[200px] mt-3' : 'max-h-[28px] mt-1',
         )}
       >
         {flowers.map(({id, name}) => (
