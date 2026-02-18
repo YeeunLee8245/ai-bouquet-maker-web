@@ -12,12 +12,23 @@ import { useSetAtom } from 'jotai';
 import Sidebar from '../sidebar/sidebar';
 import Link from 'next/link';
 interface IProps {
-  variant?: 'primary' | 'default';
+  variant?: 'primary' | 'default' | 'white';
 }
 
-function Header({ variant: variantProp }: IProps) {
+const PRIMARY_PATHS = ['/main'];
+
+const WHITE_PATHS = ['/my-profile'];
+
+function Header({ variant: variantProp = 'default' }: IProps) {
   const pathname = usePathname();
-  const variant = variantProp ?? (pathname === '/main' ? 'primary' : 'default');
+
+  let variant = variantProp;
+  if (WHITE_PATHS.includes(pathname)) {
+    variant = 'white';
+  } else if (PRIMARY_PATHS.includes(pathname)) {
+    variant = 'primary';
+  }
+
   const openModal = useSetAtom(openModalAtom);
 
   const handleOpenSidebar = () => {
@@ -37,7 +48,13 @@ function Header({ variant: variantProp }: IProps) {
   };
 
   return (
-    <header className='relative h-[48px] w-full px-4 py-3 flex justify-between items-center z-header'>
+    <header
+      className={
+        cn(
+          'relative h-[48px] w-full px-4 py-3 flex justify-between items-center z-header',
+          variant === 'white' ? 'bg-white' : '',
+        )}
+    >
       {/* 배경 이미지 */}
       {variant === 'primary' && (
         <Image
@@ -49,7 +66,12 @@ function Header({ variant: variantProp }: IProps) {
         />
       )}
       <Link href='/main' onClick={handleClickLogo} className='flex items-center'>
-        <LogoIcon className={cn('ml-[5px] mr-[7.8px] w-[21px] h-[21.8px]', variant === 'primary' ? 'fill-white' : 'fill-primary-600')} />
+        <LogoIcon
+          className={cn(
+            'ml-[5px] mr-[7.8px] w-[21px] h-[21.8px]',
+            variant === 'primary' ? 'fill-white' : 'fill-primary-600',
+          )}
+        />
         {variant === 'primary' ? <WhiteTitleIcon /> : <PrimaryTitleIcon />}
       </Link>
       <button type='button' onClick={handleOpenSidebar}>

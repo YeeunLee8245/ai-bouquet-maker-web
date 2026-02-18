@@ -10,6 +10,7 @@ import BouquetIcon from '@/shared/assets/icons/bouquet.svg';
 import Link from 'next/link';
 import { cn } from '@/shared/utils/styles';
 import { usePathname } from 'next/navigation';
+import { useSupabaseUser } from '@/hooks/use-supabase-user';
 
 const SIDEBAR_ITEMS = [
   {
@@ -22,16 +23,30 @@ const SIDEBAR_ITEMS = [
     icon: <BouquetIcon />,
     label: '내 꽃다발',
   },
+];
+
+const AUTHENTICATED_ITEMS = [
   {
     path: '/my-profile',
     icon: <PersonIcon />,
-    label: '내 프로필 ',
+    label: '내 프로필',
+  },
+];
+
+const UNAUTHENTICATED_ITEMS = [
+  {
+    path: '/login',
+    icon: <PersonIcon />,
+    label: '로그인',
   },
 ];
 
 function Sidebar({ modalId }: TModalProps) {
   const closeModal = useSetAtom(closeModalAtom);
   const pathname = usePathname();
+  const { isLogin, isLoading } = useSupabaseUser();
+
+  const menuItems = isLogin ? [...SIDEBAR_ITEMS, ...AUTHENTICATED_ITEMS] : [...SIDEBAR_ITEMS, ...UNAUTHENTICATED_ITEMS];
 
   const handleClickMenuItem = (path: string) => (e: React.MouseEvent<HTMLAnchorElement>) => {
     if (pathname === path) {
@@ -55,7 +70,7 @@ function Sidebar({ modalId }: TModalProps) {
       </button>
       {/* 상단 메뉴 */}
       <div className='mt-10 flex flex-col justify-start gap-4'>
-        {SIDEBAR_ITEMS.map((item) => (
+        {!isLoading && menuItems.map((item) => (
           <Link
             key={item.path}
             href={item.path}
