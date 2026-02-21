@@ -4,7 +4,7 @@ import { createClient } from '@/shared/supabase/server';
 type MainFlowerRow = {
   id: number;
   name_ko: string;
-  image_url: string | null;
+  images: string[] | null;
   representative_meanings_tags: string[] | null;
 };
 
@@ -46,7 +46,7 @@ export async function getMainData() {
   });
 
   const popularFlowerIds = Object.keys(counts1d).map(Number);
-  const flowerSelect = 'id, name_ko, image_url, representative_meanings_tags';
+  const flowerSelect = 'id, name_ko, images, representative_meanings_tags';
 
   let popularFlowersQuery = supabase.from('flowers').select(flowerSelect);
 
@@ -122,11 +122,15 @@ export async function getMainData() {
     }
   }
 
-  // 4. 데이터 가공 (대표 의미 직접 추출)
+  // 4. 데이터 가공 (대표 이미지 및 의미 추출)
+  const getRepresentativeImage = (f: MainFlowerRow) => {
+    return f.images?.[0] || '/temp_geobera.png';
+  };
+
   const processedPopular = shuffledPopular.map((f) => ({
     id: f.id,
     name_ko: f.name_ko,
-    image_url: f.image_url ?? '/temp_geobera.png',
+    image_url: getRepresentativeImage(f),
     representative_meanings: f.representative_meanings_tags?.slice(0, 3) ?? [],
   }));
 
@@ -134,7 +138,7 @@ export async function getMainData() {
     ? {
       id: todaysFlowerCandidate.id,
       name_ko: todaysFlowerCandidate.name_ko,
-      image_url: todaysFlowerCandidate.image_url ?? '/temp_geobera.png',
+      image_url: getRepresentativeImage(todaysFlowerCandidate),
       representative_meanings: todaysFlowerCandidate.representative_meanings_tags?.slice(0, 3) ?? [],
     }
     : null;
@@ -145,4 +149,3 @@ export async function getMainData() {
     todaysFlower: processedTodaysFlower,
   };
 }
-
