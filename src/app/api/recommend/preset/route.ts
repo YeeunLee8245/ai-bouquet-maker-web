@@ -224,7 +224,7 @@ export async function GET(request: NextRequest) {
       meaning: rec.flower.flower_meanings?.find(m => m.id === rec.flowerMeaningId)?.meaning || '',
       color: rec.flower.flower_meanings?.find(m => m.id === rec.flowerMeaningId)?.color || '',
       score: rec.score,
-      image_url: rec.flower.image_url || null,
+      image_url: rec.flower.images?.[0] || null,
     }));
 
     // preset 추천의 경우 title, message 등은 별도로 생성하지 않으므로 기본값 또는 label 사용

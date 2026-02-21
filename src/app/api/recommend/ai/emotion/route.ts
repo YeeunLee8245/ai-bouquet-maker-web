@@ -264,7 +264,7 @@ export async function POST(request: NextRequest) {
         meaning: rec.flower.flower_meanings?.find(m => m.id === rec.flowerMeaningId)?.meaning || '',
         color: rec.flower.flower_meanings?.find(m => m.id === rec.flowerMeaningId)?.color || '',
         score: rec.score,
-        image_url: rec.flower.image_url || null,
+        image_url: rec.flower.images?.[0] || null,
       }));
 
       return NextResponse.json({

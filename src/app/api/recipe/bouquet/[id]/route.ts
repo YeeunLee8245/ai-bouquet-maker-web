@@ -266,12 +266,12 @@ export async function GET(
     if (flowerIds.length > 0) {
       const { data: flowers } = await supabase
         .from('flowers')
-        .select('id, name_ko, image_url')
+        .select('id, name_ko, images')
         .in('id', flowerIds);
 
       if (flowers) {
         flowerMap = Object.fromEntries(
-          flowers.map(f => [f.id, { name_ko: f.name_ko, image_url: f.image_url }]),
+          flowers.map(f => [f.id, { name_ko: f.name_ko, image_url: f.images?.[0] || null }]),
         );
       }
     }
