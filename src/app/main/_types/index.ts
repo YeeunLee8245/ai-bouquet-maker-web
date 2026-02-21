@@ -1,7 +1,6 @@
 export type TRecipient = {
   id: string;
   label: string;
-  description: string;
 };
 
 export type TPopularFlower = {
@@ -15,9 +14,7 @@ export type TTodaysFlower = {
   id: number;
   name_ko: string;
   image_url: string;
-  description: string;
   representative_meanings: string[];
-  seasons: string[];
 } | null;
 
 export type TMainResponse = {

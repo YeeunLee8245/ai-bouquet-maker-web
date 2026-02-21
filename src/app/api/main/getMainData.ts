@@ -1,6 +1,17 @@
 import { relationshipTemplates } from '@/lib/recommend/relationship-templates';
 import { createClient } from '@/shared/supabase/server';
-import { FlowerWithMeanings } from '@/types';
+
+type FlowerMeaningRow = {
+  meaning: string | null;
+  is_primary: boolean | null;
+};
+
+type MainFlowerRow = {
+  id: number;
+  name_ko: string;
+  image_url: string | null;
+  flower_meanings: FlowerMeaningRow[] | null;
+};
 
 export async function getMainData() {
   const supabase = await createClient();
@@ -9,7 +20,6 @@ export async function getMainData() {
   const recipients = relationshipTemplates.map((template) => ({
     id: template.relationship,
     label: template.label,
-    description: template.description,
   }));
 
   const now = new Date();
@@ -44,11 +54,9 @@ export async function getMainData() {
 
   // 좋아요가 있는 꽃 아이디들
   const popularFlowerIds = Object.keys(counts1d).map(Number);
-  const flowerSelect = 'id, name_ko, image_url, meanings_tags, flower_meanings(meaning, is_primary)';
+  const flowerSelect = 'id, name_ko, image_url, flower_meanings(meaning, is_primary)';
 
-  let popularFlowersQuery = supabase
-    .from('flowers')
-    .select(flowerSelect);
+  let popularFlowersQuery = supabase.from('flowers').select(flowerSelect);
 
   if (popularFlowerIds.length > 0) {
     // 좋아요가 있는 꽃들을 우선 조회
@@ -56,23 +64,21 @@ export async function getMainData() {
   }
 
   const { data: popularFlowersData } = await popularFlowersQuery.limit(50);
-  let popularFlowers = popularFlowersData || [];
+  let popularFlowers = ((popularFlowersData ?? []) as MainFlowerRow[]);
 
   // 만약 10개보다 적다면 부족한 만큼만 전체에서 랜덤하게 채움
   if (popularFlowers.length < 10) {
     const needed = 10 - popularFlowers.length;
     const existingIds = popularFlowers.map((f) => f.id);
 
-    let extraQuery = supabase
-      .from('flowers')
-      .select(flowerSelect);
+    let extraQuery = supabase.from('flowers').select(flowerSelect);
 
     if (existingIds.length > 0) {
       extraQuery = extraQuery.not('id', 'in', `(${existingIds.join(',')})`);
     }
 
     const { data: extraFlowers } = await extraQuery.limit(needed + 5);
-    const randomExtras = (extraFlowers || [])
+    const randomExtras = ((extraFlowers ?? []) as MainFlowerRow[])
       .sort(() => 0.5 - Math.random())
       .slice(0, needed);
 
@@ -80,7 +86,7 @@ export async function getMainData() {
   }
 
   // 랜덤으로 10개 섞기
-  const shuffledPopular = (popularFlowers || [])
+  const shuffledPopular = popularFlowers
     .sort(() => 0.5 - Math.random())
     .slice(0, 10);
 
@@ -96,66 +102,79 @@ export async function getMainData() {
     counts1w[like.flower_id] = (counts1w[like.flower_id] || 0) + 1;
   });
 
-  const topFlowerId = Object.entries(counts1w)
-    .sort(([, a], [, b]) => b - a)[0]?.[0];
+  const topFlowerId = Number(
+    Object.entries(counts1w)
+      .sort(([, a], [, b]) => b - a)[0]?.[0],
+  );
 
   // 계절에 맞는 꽃들 조회
   const { data: seasonalFlowers } = await supabase
     .from('flowers')
     .select(`
-        id, name_ko, image_url, description, meanings_tags, seasons, 
-        blooming_start_month, blooming_end_month, 
-        flower_meanings(meaning, is_primary)
-      `)
+      id, name_ko, image_url,
+      flower_meanings(meaning, is_primary)
+    `)
     .or(`seasons.cs.{${currentSeason}}, and(blooming_start_month.lte.${currentMonth}, blooming_end_month.gte.${currentMonth})`);
 
-  let todaysFlowerCandidate = null;
+  const seasonalFlowerRows = (seasonalFlowers ?? []) as MainFlowerRow[];
 
-  if (topFlowerId) {
-    // 1위 꽃이 계절에 맞는지 확인
-    todaysFlowerCandidate = seasonalFlowers?.find((f) => f.id === Number(topFlowerId));
+  let todaysFlowerCandidate: MainFlowerRow | null = null;
+
+  // 1위 꽃이 계절에 맞는지 확인
+  if (Number.isFinite(topFlowerId)) {
+    todaysFlowerCandidate = seasonalFlowerRows.find((f) => f.id === topFlowerId) ?? null;
   }
 
   // 후보가 없으면 계절 꽃 중 랜덤, 계절 꽃도 없으면 전체 중 랜덤
   if (!todaysFlowerCandidate) {
-    if (seasonalFlowers && seasonalFlowers.length > 0) {
-      todaysFlowerCandidate = seasonalFlowers[Math.floor(Math.random() * seasonalFlowers.length)];
+    if (seasonalFlowerRows.length > 0) {
+      todaysFlowerCandidate = seasonalFlowerRows[Math.floor(Math.random() * seasonalFlowerRows.length)];
     } else {
       const { data: anyFlower } = await supabase
         .from('flowers')
         .select(`
-            id, name_ko, image_url, description, meanings_tags, seasons, 
-            blooming_start_month, blooming_end_month, 
-            flower_meanings(meaning, is_primary)
-          `)
+          id, name_ko, image_url,
+          flower_meanings(meaning, is_primary)
+        `)
         .limit(1)
         .single();
-      todaysFlowerCandidate = anyFlower;
+
+      todaysFlowerCandidate = (anyFlower as MainFlowerRow | null) ?? null;
     }
   }
 
   // 4. 데이터 가공 (대표 의미 추출)
-  const getRepresentativeMeanings = (flower: FlowerWithMeanings) => {
-    const f = flower as FlowerWithMeanings;
-    const meanings = f.flower_meanings || [];
+  const getRepresentativeMeanings = (flower: MainFlowerRow) => {
+    const meanings = flower.flower_meanings ?? [];
     const primaryMeanings = meanings
-      .filter((m) => m.is_primary)
-      .map((m) => m.meaning);
+      .filter((m) => m.is_primary && m.meaning)
+      .map((m) => m.meaning as string);
+
     if (primaryMeanings.length > 0) {
       return primaryMeanings.slice(0, 2);
     }
-    return meanings.map((m) => m.meaning).slice(0, 2);
+
+    return meanings
+      .filter((m) => !!m.meaning)
+      .map((m) => m.meaning as string)
+      .slice(0, 2);
   };
 
   const processedPopular = shuffledPopular.map((f) => ({
-    ...f,
-    representative_meanings: getRepresentativeMeanings(f as unknown as FlowerWithMeanings),
+    id: f.id,
+    name_ko: f.name_ko,
+    image_url: f.image_url ?? '/temp_geobera.png',
+    representative_meanings: getRepresentativeMeanings(f),
   }));
 
-  const processedTodaysFlower = todaysFlowerCandidate ? {
-    ...todaysFlowerCandidate,
-    representative_meanings: getRepresentativeMeanings(todaysFlowerCandidate as unknown as FlowerWithMeanings),
-  } : null;
+  const processedTodaysFlower = todaysFlowerCandidate
+    ? {
+      id: todaysFlowerCandidate.id,
+      name_ko: todaysFlowerCandidate.name_ko,
+      image_url: todaysFlowerCandidate.image_url ?? '/temp_geobera.png',
+      representative_meanings: getRepresentativeMeanings(todaysFlowerCandidate),
+    }
+    : null;
 
   return {
     recipients,
