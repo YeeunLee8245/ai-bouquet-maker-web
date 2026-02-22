@@ -210,9 +210,9 @@ export async function GET(
       flower_meanings?: { meaning: string; is_primary?: boolean; emotion_tags?: string[] | null }[];
     };
 
-    const scoredFlowers = (candidateFlowers || []).map((f: any) => {
-      const flowerEmotionTags = f.flower_meanings
-        ?.flatMap((m: any) => m.emotion_tags || []) || [];
+    const scoredFlowers = ((candidateFlowers || []) as CandidateFlower[]).map((f) => {
+      const flowerEmotionTags = (f.flower_meanings || [])
+        .flatMap(m => m.emotion_tags || []);
       const matchCount = uniqueEmotionTags.filter(tag => flowerEmotionTags.includes(tag)).length;
       return { ...f, matchScore: matchCount };
     });

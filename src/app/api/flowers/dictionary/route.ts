@@ -344,13 +344,17 @@ export async function GET(request: NextRequest) {
 
     // FlowerCard에 맞는 형태로 변환
     const formattedFlowers = filteredFlowers.map(flower => {
-      const meanings = flower.flower_meanings || [];
+      const meanings = (flower.flower_meanings || []) as Array<{
+        icon_color?: string | null;
+        is_primary?: boolean | null;
+        meaning?: string | null;
+      }>;
 
       // 색상 추출 (icon_color)
       const flowerColors = [...new Set(
         meanings
-          .map((m: any) => m.icon_color)
-          .filter(Boolean),
+          .map(m => m.icon_color)
+          .filter((color): color is string => Boolean(color)),
       )];
 
       // 태그 추출 (신규 컬럼 우선, 없으면 조인 데이터에서 추출)
@@ -358,8 +362,8 @@ export async function GET(request: NextRequest) {
 
       if (tags.length === 0) {
         tags = meanings
-          .filter((m: any) => m.is_primary)
-          .map((m: any) => m.meaning)
+          .filter((m): m is { is_primary: boolean; meaning: string } => Boolean(m.is_primary) && typeof m.meaning === 'string')
+          .map(m => m.meaning)
           .slice(0, 3);
       }
 
