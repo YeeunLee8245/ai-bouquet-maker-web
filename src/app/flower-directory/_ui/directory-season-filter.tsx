@@ -1,18 +1,19 @@
 import { useRef, useState, useEffect } from 'react';
+import { useAtom } from 'jotai';
 import { DIRECTORY_SEASON_LIST, DIRECTORY_SEASON_NAME_MAP, TDirectorySeasonName } from '../_datas';
+import { directorySeasonsAtom } from '../_model/atoms';
 import { IDirectoryEventHub } from '../_types';
 import SeasonSwitchToggle from './season-switch-toggle';
 import { TooltipButton } from '@/shared/ui/button';
 
 interface IProps {
   eventHub: IDirectoryEventHub;
-  selectedItems: Set<string>;
-  onItemChange: (id: string, pressed: boolean) => void;
 }
 
-function DirectorySeasonFilter({ eventHub, selectedItems, onItemChange }: IProps) {
+function DirectorySeasonFilter({ eventHub }: IProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [scrollContainerElement, setScrollContainerElement] = useState<HTMLElement | null>(null);
+  const [selectedItems, setSelectedItems] = useAtom(directorySeasonsAtom);
 
   useEffect(() => {
     if (containerRef.current) {
@@ -20,8 +21,20 @@ function DirectorySeasonFilter({ eventHub, selectedItems, onItemChange }: IProps
     }
   }, []);
 
+  const handleItemChange = (id: string, pressed: boolean) => {
+    setSelectedItems(prev => {
+      const newSet = new Set(prev);
+      if (pressed) {
+        newSet.add(id);
+      } else {
+        newSet.delete(id);
+      }
+      return newSet;
+    });
+  };
+
   const clickSeasonFilter = (pressed: boolean) => (id: keyof typeof DIRECTORY_SEASON_NAME_MAP, name: TDirectorySeasonName) => {
-    onItemChange(id, pressed);
+    handleItemChange(id, pressed);
     eventHub.onClickSeasonFilter?.({ id, name }, pressed);
   };
 
