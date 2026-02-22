@@ -91,7 +91,8 @@ import { spendToken, getUserBalance } from '@/lib/users/wallet';
  *                       meaning: { type: string, example: "수줍음" }
  *                       color: { type: string, example: "분홍" }
  *                       score: { type: integer, example: 52 }
- *                       image_url: { type: string, nullable: true, example: "https://.../peony.png" }
+ *                       icon_color: { type: string, nullable: true, example: "#FFB3C7", description: "UI 而щ윭移?HEX" }
+ *                       image_url: { type: string, nullable: true, example: "https://.../peony.png", description: "flowers.images[0]" }
  *             examples:
  *               ai_recipient_success:
  *                 summary: "AI 대상 맞춤 분석 성공"
@@ -109,6 +110,7 @@ import { spendToken, getUserBalance } from '@/lib/users/wallet';
  *                       flower_name: "작약"
  *                       meaning: "수줍음"
  *                       color: "분홍"
+ *                       icon_color: "#FFB3C7"
  *                       score: 52
  *                       image_url: "https://example.com/flowers/peony.png"
  *               ai_recipient_success_without_target_or_occasion:
@@ -280,6 +282,7 @@ export async function POST(request: NextRequest) {
         flower_name: rec.flower.name_ko,
         meaning: rec.flower.flower_meanings?.find(m => m.id === rec.flowerMeaningId)?.meaning || '',
         color: rec.flower.flower_meanings?.find(m => m.id === rec.flowerMeaningId)?.color || '',
+        icon_color: rec.flower.flower_meanings?.find(m => m.id === rec.flowerMeaningId)?.icon_color || null,
         score: rec.score,
         image_url: rec.flower.images?.[0] || null,
       }));

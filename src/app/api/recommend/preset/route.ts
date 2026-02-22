@@ -42,9 +42,7 @@ import { getRelationshipLabel, getOccasionLabel } from '@/lib/recommend/relation
  *       2. **정렬**: 합산 점수가 높은 순서대로 1차 정렬합니다.
  *       3. **랜덤성**: 점수가 동일할 경우 내부적으로 무작위 섞기를 수행하여 매번 조금씩 다른 결과를 제공합니다.
  *       4. **최종 선정**: 상위 9~10개의 꽃을 최종 추천 목록으로 반환합니다.
- *
- *       **요약하자면**:
- *       과거의 단순 이름 검색(`getFlowersByKeywords`) 방식에서 벗어나, 해당 꽃이 특정 '대상'과 '상황'에 적합한지 **DB 태그(`relation_tags`, `situation_tags`)를 0순위로 체크**하는 데이터 기반 정밀 추천 알고리즘입니다.
+ *       해당 꽃이 특정 '대상'과 '상황'에 적합한지 **DB 태그(`relation_tags`, `situation_tags`)를 0순위로 체크**하는 데이터 기반 정밀 추천 알고리즘입니다.
  *       </details>
  *
  *       **Slug 예시**:
@@ -99,8 +97,9 @@ import { getRelationshipLabel, getOccasionLabel } from '@/lib/recommend/relation
  *                       flower_name: { type: string, example: "장미" }
  *                       meaning: { type: string, example: "불타는 사랑" }
  *                       color: { type: string, example: "빨강" }
+ *                       icon_color: { type: string, nullable: true, example: "#FF4D6D", description: "UI 컬러칩 HEX" }
  *                       score: { type: integer, example: 42 }
- *                       image_url: { type: string, nullable: true, example: "/images/rose.jpg" }
+ *                       image_url: { type: string, nullable: true, example: "/images/rose.jpg", description: "flowers.images[0]" }
  *             examples:
  *               preset_success:
  *                 summary: "카드 선택 기반 추천 성공"
@@ -116,6 +115,7 @@ import { getRelationshipLabel, getOccasionLabel } from '@/lib/recommend/relation
  *                       flower_name: "거베라"
  *                       meaning: "신비, 수수께끼"
  *                       color: "주황"
+ *                       icon_color: "#FF8A3D"
  *                       score: 38
  *                       image_url: "https://.../gerbera.png"
  *       400:
@@ -227,6 +227,7 @@ export async function GET(request: NextRequest) {
       flower_name: rec.flower.name_ko,
       meaning: rec.flower.flower_meanings?.find(m => m.id === rec.flowerMeaningId)?.meaning || '',
       color: rec.flower.flower_meanings?.find(m => m.id === rec.flowerMeaningId)?.color || '',
+      icon_color: rec.flower.flower_meanings?.find(m => m.id === rec.flowerMeaningId)?.icon_color || null,
       score: rec.score,
       image_url: rec.flower.images?.[0] || null,
     }));
