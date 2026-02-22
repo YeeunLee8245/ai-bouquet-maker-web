@@ -92,7 +92,8 @@ import { spendToken, getUserBalance } from '@/lib/users/wallet';
  *                       meaning: { type: string, example: "맑은 마음" }
  *                       color: { type: string, example: "하양" }
  *                       score: { type: integer, description: "매칭 점수", example: 45 }
- *                       image_url: { type: string, nullable: true, example: "https://.../flower.png" }
+ *                       icon_color: { type: string, nullable: true, example: "#F4F4F4", description: "UI 而щ윭移?HEX" }
+ *                       image_url: { type: string, nullable: true, example: "https://.../flower.png", description: "flowers.images[0]" }
  *             examples:
  *               ai_recommendation_success:
  *                 summary: "AI 감정 분석 추천 성공"
@@ -110,6 +111,7 @@ import { spendToken, getUserBalance } from '@/lib/users/wallet';
  *                       flower_name: "안개꽃"
  *                       meaning: "맑은 마음"
  *                       color: "하양"
+ *                       icon_color: "#F4F4F4"
  *                       score: 45
  *                       image_url: "https://example.com/flowers/gypsophila.png"
  *               ai_recommendation_success_without_target_or_occasion:
@@ -281,6 +283,7 @@ export async function POST(request: NextRequest) {
         flower_name: rec.flower.name_ko,
         meaning: rec.flower.flower_meanings?.find(m => m.id === rec.flowerMeaningId)?.meaning || '',
         color: rec.flower.flower_meanings?.find(m => m.id === rec.flowerMeaningId)?.color || '',
+        icon_color: rec.flower.flower_meanings?.find(m => m.id === rec.flowerMeaningId)?.icon_color || null,
         score: rec.score,
         image_url: rec.flower.images?.[0] || null,
       }));

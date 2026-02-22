@@ -97,8 +97,9 @@ import { getRelationshipLabel, getOccasionLabel } from '@/lib/recommend/relation
  *                       flower_name: { type: string, example: "장미" }
  *                       meaning: { type: string, example: "불타는 사랑" }
  *                       color: { type: string, example: "빨강" }
+ *                       icon_color: { type: string, nullable: true, example: "#FF4D6D", description: "UI 컬러칩 HEX" }
  *                       score: { type: integer, example: 42 }
- *                       image_url: { type: string, nullable: true, example: "/images/rose.jpg" }
+ *                       image_url: { type: string, nullable: true, example: "/images/rose.jpg", description: "flowers.images[0]" }
  *             examples:
  *               preset_success:
  *                 summary: "카드 선택 기반 추천 성공"
@@ -114,6 +115,7 @@ import { getRelationshipLabel, getOccasionLabel } from '@/lib/recommend/relation
  *                       flower_name: "거베라"
  *                       meaning: "신비, 수수께끼"
  *                       color: "주황"
+ *                       icon_color: "#FF8A3D"
  *                       score: 38
  *                       image_url: "https://.../gerbera.png"
  *       400:
@@ -225,6 +227,7 @@ export async function GET(request: NextRequest) {
       flower_name: rec.flower.name_ko,
       meaning: rec.flower.flower_meanings?.find(m => m.id === rec.flowerMeaningId)?.meaning || '',
       color: rec.flower.flower_meanings?.find(m => m.id === rec.flowerMeaningId)?.color || '',
+      icon_color: rec.flower.flower_meanings?.find(m => m.id === rec.flowerMeaningId)?.icon_color || null,
       score: rec.score,
       image_url: rec.flower.images?.[0] || null,
     }));
