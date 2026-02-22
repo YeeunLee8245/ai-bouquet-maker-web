@@ -112,6 +112,24 @@ import { spendToken, getUserBalance } from '@/lib/users/wallet';
  *                       color: "하양"
  *                       score: 45
  *                       image_url: "https://example.com/flowers/gypsophila.png"
+ *               ai_recommendation_success_without_target_or_occasion:
+ *                 summary: "대상/상황 미추출 시 null 반환 예시"
+ *                 value:
+ *                   success: true
+ *                   recommendation_id: "3b7fe1a8-1d50-4c2e-927c-4dc82f4f1a11"
+ *                   total_count: 2
+ *                   title: "오늘 하루를 위한 작은 위로"
+ *                   message: "대상이나 특정 상황이 없어도 감정 중심으로 어울리는 꽃을 추천해드려요."
+ *                   recipient: null
+ *                   occasion: null
+ *                   recommendations:
+ *                     - flower_id: 8
+ *                       flower_meaning_id: 19
+ *                       flower_name: "리시안셔스"
+ *                       meaning: "변치 않는 사랑"
+ *                       color: "화이트"
+ *                       score: 39
+ *                       image_url: "https://example.com/flowers/lisianthus.png"
  *       400:
  *         description: 입력값 오류 (너무 짧거나 긴 텍스트)
  *         content:
@@ -264,7 +282,7 @@ export async function POST(request: NextRequest) {
         meaning: rec.flower.flower_meanings?.find(m => m.id === rec.flowerMeaningId)?.meaning || '',
         color: rec.flower.flower_meanings?.find(m => m.id === rec.flowerMeaningId)?.color || '',
         score: rec.score,
-        image_url: rec.flower.image_url || null,
+        image_url: rec.flower.images?.[0] || null,
       }));
 
       return NextResponse.json({

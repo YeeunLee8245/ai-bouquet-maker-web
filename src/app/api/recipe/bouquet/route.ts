@@ -75,6 +75,10 @@ import { getPublicUser } from '@/lib/users/auth';
  *                           type: string
  *                           description: 선택한 실제 렌더링 색상 (Hex Code)
  *                           example: "#FF8D3E"
+ *                         type:
+ *                           type: string
+ *                           description: "등록된 아이콘 키 (rose, marigold, tulip, peony 등)"
+ *                           example: "rose"
  *                   wrapping:
  *                     type: object
  *                     description: 포장지 및 리본 구성 (선택 사항)
@@ -102,7 +106,9 @@ import { getPublicUser } from '@/lib/users/auth';
  *                         x: { type: number, description: "X 좌표 (px 또는 비율)", example: 150.5 }
  *                         y: { type: number, description: "Y 좌표 (px 또는 비율)", example: 200.0 }
  *                         rotation: { type: number, description: "회전 각도 (degree)", example: 45 }
+ *                         scale: { type: number, description: "크기 배율", example: 1.2 }
  *                         z_index: { type: integer, description: "레이어 순서", example: 1 }
+ *                         type: { type: string, description: "아이콘 종류 (예: rose, marigold 등)", example: "rose" }
  *           examples:
  *             general:
  *               summary: 직접 커스텀하여 만들기

@@ -186,7 +186,8 @@ export async function GET(
       .select(`
         id,
         name_ko,
-        image_url,
+        images,
+        representative_meanings_tags,
         flower_meanings (meaning, is_primary, emotion_tags)
       `)
       .neq('id', flowerId)
@@ -204,13 +205,14 @@ export async function GET(
     type CandidateFlower = {
       id: number;
       name_ko: string;
-      image_url?: string | null;
+      images?: string[] | null;
+      representative_meanings_tags?: string[] | null;
       flower_meanings?: { meaning: string; is_primary?: boolean; emotion_tags?: string[] | null }[];
     };
 
-    const scoredFlowers = (candidateFlowers || []).map((f: CandidateFlower) => {
+    const scoredFlowers = (candidateFlowers || []).map((f: any) => {
       const flowerEmotionTags = f.flower_meanings
-        ?.flatMap(m => m.emotion_tags || []) || [];
+        ?.flatMap((m: any) => m.emotion_tags || []) || [];
       const matchCount = uniqueEmotionTags.filter(tag => flowerEmotionTags.includes(tag)).length;
       return { ...f, matchScore: matchCount };
     });
@@ -236,20 +238,25 @@ export async function GET(
       emotion_tags: m.emotion_tags,
     }));
 
-    const formattedSimilarFlowers = (similarFlowers || []).map((f: {
-      id: number;
-      name_ko: string;
-      image_url?: string | null;
-      flower_meanings?: { meaning: string; is_primary?: boolean }[];
-    }) => ({
-      id: String(f.id),
-      name: f.name_ko,
-      imageUrl: f.image_url || '/temp_tulip.png',
-      tags: (f.flower_meanings || [])
-        .filter(m => m.is_primary)
-        .map(m => m.meaning)
-        .slice(0, 2),
-    }));
+    const formattedSimilarFlowers = (similarFlowers || []).map((f: CandidateFlower) => {
+      const imageUrl = f.images?.[0] || '/temp_tulip.png';
+
+      // 태그 추출 (신규 컬럼 우선)
+      let tags = f.representative_meanings_tags?.slice(0, 2) || [];
+      if (tags.length === 0) {
+        tags = (f.flower_meanings || [])
+          .filter(m => m.is_primary)
+          .map(m => m.meaning)
+          .slice(0, 2);
+      }
+
+      return {
+        id: String(f.id),
+        name: f.name_ko,
+        imageUrl,
+        tags,
+      };
+    });
 
     return NextResponse.json({
       success: true,
@@ -261,7 +268,7 @@ export async function GET(
         description: flower.description,
         care_tips: flower.care_tips,
         plus_info: flower.plus_info,
-        images: flower.images || [flower.image_url].filter(Boolean),
+        images: flower.images || [],
         blooming_start_month: flower.blooming_start_month,
         blooming_end_month: flower.blooming_end_month,
         seasons: flower.seasons,

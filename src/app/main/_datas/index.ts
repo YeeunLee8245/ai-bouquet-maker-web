@@ -1,37 +1,33 @@
 export const QUICK_PERSON_TARGET_RECOMMENDATION_LIST = [
   {
-    id: 1,
-    name: '친구',
-  },
-  {
-    id: 2,
-    name: '가족',
-  },
-  {
-    id: 3,
-    name: '연인',
-  },
-  {
-    id: 4,
-    name: '직장동료',
-  },
-  {
-    id: 5,
+    id: 'parents',
     name: '부모님',
   },
   {
-    id: 6,
-    name: '자녀',
+    id: 'lover',
+    name: '연인',
   },
   {
-    id: 7,
-    name: '배우자',
+    id: 'friend',
+    name: '친구',
   },
   {
-    id: 8,
-    name: '동료',
+    id: 'colleague',
+    name: '직장동료',
   },
-];
+  {
+    id: 'teacher',
+    name: '선생님',
+  },
+  {
+    id: 'elder',
+    name: '어르신',
+  },
+  {
+    id: 'child',
+    name: '자녀·아이',
+  },
+] as const;
 
 export const POPULAR_FLOWER_RECOMMENDATION_LIST = [
   {

@@ -1,8 +1,9 @@
 import type { Metadata, Viewport } from 'next';
 import '../styles/globals.css';
-import Header from '@/widgets/header/Header';
+import Header from '@/widgets/header/header';
 import AppProviders from '@/shared/providers/app-providers';
 import ModalHost from '@/shared/model/modal/modal-host';
+import ToastHost from '@/shared/model/toast/toast-host';
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -27,10 +28,11 @@ export default function RootLayout({
       <html lang='ko'>
         <body className='flex flex-col h-dvh overflow-hidden w-[360px] mx-auto'>
           <Header />
-          <main className='max-h-[calc(100%-48px)] h-full overscroll-contain'>
+          <main className='max-h-[calc(100%-48px)] h-full overscroll-contain overflow-y-auto scrollbar-hide'>
             {children}
           </main>
           <ModalHost />
+          <ToastHost />
         </body>
       </html>
     </AppProviders>

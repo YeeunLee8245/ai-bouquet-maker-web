@@ -74,21 +74,21 @@
   line-height: var(--font-spacing-sm); /* 142.857% */
 }
 
-@utility text-ui-textbox-lg {
+@utility text-ui-textbtn-lg {
   font-size: var(--font-size-ui-md);
   font-style: normal;
   font-weight: var(--font-weight-medium);
   line-height: var(--font-spacing-md); /* 150% */
 }
 
-@utility text-ui-textbox-md {
+@utility text-ui-textbtn-md {
   font-size: var(--font-size-ui-sm);
   font-style: normal;
   font-weight: var(--font-weight-medium);
   line-height: var(--font-spacing-sm); /* 142.857% */
 }
 
-@utility text-ui-textbox-sm {
+@utility text-ui-textbtn-sm {
   font-size: var(--font-size-ui-xsm);
   font-style: normal;
   font-weight: var(--font-weight-regular);

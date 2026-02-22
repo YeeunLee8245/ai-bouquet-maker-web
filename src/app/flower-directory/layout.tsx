@@ -1,4 +1,4 @@
-import BottomActionFooter from '@/widgets/footer/BottomActionFooter';
+import BottomActionFooter from '@/widgets/footer/bottom-action-footer';
 
 type TProps = {
   children: React.ReactNode;

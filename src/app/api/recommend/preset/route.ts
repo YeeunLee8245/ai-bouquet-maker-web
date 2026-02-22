@@ -54,6 +54,7 @@ import { getRelationshipLabel, getOccasionLabel } from '@/lib/recommend/relation
  *         required: true
  *         schema:
  *           type: string
+ *           enum: [parents, lover, friend, colleague, teacher, elder, child]
  *         description: "대상 관계 고유 Slug (예: lover)"
  *         example: "lover"
  *       - in: query
@@ -61,6 +62,7 @@ import { getRelationshipLabel, getOccasionLabel } from '@/lib/recommend/relation
  *         required: true
  *         schema:
  *           type: string
+ *           enum: [birthday_anniversary, proposal, new_beginning, parents_day, teachers_day, celebration_support, comfort_recovery, apology]
  *         description: "상황 고유 Slug (예: birthday_anniversary)"
  *         example: "birthday_anniversary"
  *     responses:
@@ -74,9 +76,17 @@ import { getRelationshipLabel, getOccasionLabel } from '@/lib/recommend/relation
  *               properties:
  *                 success: { type: boolean, example: true }
  *                 recommendation_id: { type: string, format: uuid, description: "생성된 추천 기록 ID" }
- *                 title: { type: string, example: "연인에게 전하는 생일/기념일 꽃다발" }
- *                 recipient: { type: string, example: "연인" }
- *                 occasion: { type: string, example: "생일/기념일" }
+ *                 title: { type: string, example: "연인에게 전하는 생일·기념일 꽃다발" }
+ *                 recipient:
+ *                   type: string
+ *                   enum: ['부모님', '연인', '친구', '직장동료', '선생님', '어르신', '자녀·아이']
+ *                   description: "relationship value에 대응되는 표시 라벨 "
+ *                   example: "연인"
+ *                 occasion:
+ *                   type: string
+ *                   enum: ['생일·기념일', '프로포즈', '새로운 시작', '어버이날', '스승의날', '빛나는 성과', '위로', '사과']
+ *                   description: "occasion value에 대응되는 표시 라벨 (응원 x 빛나는 성과 o)"
+ *                   example: "생일·기념일"
  *                 recommendations:
  *                   type: array
  *                   items:
@@ -95,9 +105,9 @@ import { getRelationshipLabel, getOccasionLabel } from '@/lib/recommend/relation
  *                 value:
  *                   success: true
  *                   recommendation_id: "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
- *                   title: "연인에게 전하는 생일/기념일 꽃다발"
+ *                   title: "연인에게 전하는 생일·기념일 꽃다발"
  *                   recipient: "연인"
- *                   occasion: "생일/기념일"
+ *                   occasion: "생일·기념일"
  *                   recommendations:
  *                     - flower_id: 11
  *                       flower_meaning_id: 22
@@ -216,7 +226,7 @@ export async function GET(request: NextRequest) {
       meaning: rec.flower.flower_meanings?.find(m => m.id === rec.flowerMeaningId)?.meaning || '',
       color: rec.flower.flower_meanings?.find(m => m.id === rec.flowerMeaningId)?.color || '',
       score: rec.score,
-      image_url: rec.flower.image_url || null,
+      image_url: rec.flower.images?.[0] || null,
     }));
 
     // preset 추천의 경우 title, message 등은 별도로 생성하지 않으므로 기본값 또는 label 사용

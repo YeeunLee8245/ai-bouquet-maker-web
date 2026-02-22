@@ -277,13 +277,12 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    // 꽃 데이터 조회 (flower_meanings join)
-    // 인기순 정렬을 위해 flowers_with_counts 뷰를 사용
+    // 꽃 데이터 조회 (최적화된 컬럼 선택)
     let query = supabase
       .from('flowers_with_counts_view')
       .select(`
-        *,
-        flower_meanings (*)
+        id, name_ko, images, representative_meanings_tags, availability,
+        flower_meanings (icon_color, is_primary, meaning)
       `, { count: 'exact' })
       .eq('availability', true);
 
@@ -350,24 +349,25 @@ export async function GET(request: NextRequest) {
       // 색상 추출 (icon_color)
       const flowerColors = [...new Set(
         meanings
-          .map((m: { icon_color?: string | null }) => m.icon_color)
+          .map((m: any) => m.icon_color)
           .filter(Boolean),
       )];
 
-      // 태그 추출 (꽃말)
-      const tags = meanings
-        .filter((m: { is_primary?: boolean }) => m.is_primary)
-        .map((m: { meaning: string }) => m.meaning)
-        .slice(0, 3);
+      // 태그 추출 (신규 컬럼 우선, 없으면 조인 데이터에서 추출)
+      let tags = flower.representative_meanings_tags?.slice(0, 3) || [];
 
-      // 태그가 없으면 일반 꽃말에서 추출
       if (tags.length === 0) {
-        tags.push(...meanings.map((m: { meaning: string }) => m.meaning).slice(0, 3));
+        tags = meanings
+          .filter((m: any) => m.is_primary)
+          .map((m: any) => m.meaning)
+          .slice(0, 3);
       }
+
+      const imageUrl = (flower.images as string[])?.[0] || '/temp_tulip.png';
 
       return {
         id: String(flower.id),
-        imageUrl: flower.image_url || '/temp_tulip.png',
+        imageUrl,
         name: flower.name_ko,
         isLiked: user ? userLikes.has(flower.id) : undefined,
         colors: flowerColors,

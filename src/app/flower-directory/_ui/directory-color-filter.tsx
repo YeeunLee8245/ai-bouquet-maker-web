@@ -1,16 +1,30 @@
+import { useAtom } from 'jotai';
 import ColorSwitchToggle from '@/shared/ui/button/color-switch-toggle';
 import { DIRECTORY_COLOR_LIST, DIRECTORY_COLOR_NAME_MAP, TDirectoryColorName } from '../_datas';
+import { directoryColorsAtom } from '../_model/atoms';
 import { IDirectoryEventHub } from '../_types';
 
 interface IProps {
   eventHub: IDirectoryEventHub;
-  selectedItems: Set<string>;
-  onItemChange: (id: string, pressed: boolean) => void;
 }
 
-function DirectoryColorFilter({ eventHub, selectedItems, onItemChange }: IProps) {
+function DirectoryColorFilter({ eventHub }: IProps) {
+  const [selectedItems, setSelectedItems] = useAtom(directoryColorsAtom);
+
+  const handleItemChange = (id: string, pressed: boolean) => {
+    setSelectedItems(prev => {
+      const newSet = new Set(prev);
+      if (pressed) {
+        newSet.add(id);
+      } else {
+        newSet.delete(id);
+      }
+      return newSet;
+    });
+  };
+
   const clickColorFilter = (pressed: boolean) => (id: keyof typeof DIRECTORY_COLOR_NAME_MAP, name: TDirectoryColorName) => {
-    onItemChange(id, pressed);
+    handleItemChange(id, pressed);
     eventHub.onClickColorFilter?.({ id, name }, pressed);
   };
 

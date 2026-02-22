@@ -177,7 +177,7 @@ export async function GET(
           flowers (
             id,
             name_ko,
-            image_url
+            images
           )
         `)
         .in('id', selectedIds);
@@ -191,7 +191,7 @@ export async function GET(
           color: string | null;
           icon_color: string | null;
           flower_id: number;
-          flowers: { name_ko: string; image_url: string | null } | { name_ko: string; image_url: string | null }[] | null;
+          flowers: { name_ko: string; images: string[] | null } | { name_ko: string; images: string[] | null }[] | null;
         }[]).map((m) => {
           const flower = Array.isArray(m.flowers) ? m.flowers[0] : m.flowers;
           return {
@@ -201,7 +201,7 @@ export async function GET(
             icon_color: m.icon_color,
             flower_id: m.flower_id,
             name: flower?.name_ko || '알 수 없음',
-            image_url: flower?.image_url || null,
+            image_url: flower?.images?.[0] || null,
           };
         });
       }
