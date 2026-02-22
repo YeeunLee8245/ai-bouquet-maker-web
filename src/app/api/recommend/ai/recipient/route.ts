@@ -111,6 +111,24 @@ import { spendToken, getUserBalance } from '@/lib/users/wallet';
  *                       color: "분홍"
  *                       score: 52
  *                       image_url: "https://example.com/flowers/peony.png"
+ *               ai_recipient_success_without_target_or_occasion:
+ *                 summary: "대상/상황 미추출 시 null 반환 예시"
+ *                 value:
+ *                   success: true
+ *                   recommendation_id: "4e1a1f3d-8608-4658-a2b3-d95b143cff55"
+ *                   total_count: 2
+ *                   title: "취향을 담은 편안한 꽃 선물"
+ *                   message: "명확한 대상이나 상황이 없어도 입력된 취향 정보를 중심으로 추천해드려요."
+ *                   recipient: null
+ *                   occasion: null
+ *                   recommendations:
+ *                     - flower_id: 11
+ *                       flower_meaning_id: 21
+ *                       flower_name: "거베라"
+ *                       meaning: "희망"
+ *                       color: "오렌지"
+ *                       score: 41
+ *                       image_url: "https://example.com/flowers/gerbera.png"
  *       400:
  *         description: 입력값 부족
  *         content:
