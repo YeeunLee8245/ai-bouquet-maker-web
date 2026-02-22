@@ -72,11 +72,13 @@ import { getRelationshipLabel, getOccasionLabel } from '@/lib/recommend/relation
  *           application/json:
  *             schema:
  *               type: object
- *               required: [success, recommendation_id, recommendations]
+ *               required: [success, recommendation_id, total_count, recommendations]
  *               properties:
  *                 success: { type: boolean, example: true }
  *                 recommendation_id: { type: string, format: uuid, description: "생성된 추천 기록 ID" }
+ *                 total_count: { type: integer, description: "추천된 꽃의 개수" }
  *                 title: { type: string, example: "연인에게 전하는 생일·기념일 꽃다발" }
+ *                 message: { type: string, description: "preset은 항상 빈 문자열 반환", example: "" }
  *                 recipient:
  *                   type: string
  *                   enum: ['부모님', '연인', '친구', '직장동료', '선생님', '어르신', '자녀·아이']
@@ -95,9 +97,9 @@ import { getRelationshipLabel, getOccasionLabel } from '@/lib/recommend/relation
  *                       flower_id: { type: integer, example: 1 }
  *                       flower_meaning_id: { type: integer, example: 2 }
  *                       flower_name: { type: string, example: "장미" }
- *                       meaning: { type: string, example: "불타는 사랑" }
- *                       color: { type: string, example: "빨강" }
- *                       icon_color: { type: string, nullable: true, example: "#FF4D6D", description: "UI 컬러칩 HEX" }
+ *                       meaning: { type: string, description: "매칭된 꽃말", example: "열정적인 사랑" }
+ *                       tags: { type: array, items: { type: string }, example: ['매칭 꽃말', '대표1', '대표2'], description: '매칭된 꽃말 우선 + 대표 꽃말 (최대 3개)' }
+ *                       colors: { type: array, items: { type: string }, description: "꽃 색상 코드(HEX) 목록", example: ["#FF4D6D"] }
  *                       score: { type: integer, example: 42 }
  *                       image_url: { type: string, nullable: true, example: "/images/rose.jpg", description: "flowers.images[0]" }
  *             examples:
@@ -106,16 +108,18 @@ import { getRelationshipLabel, getOccasionLabel } from '@/lib/recommend/relation
  *                 value:
  *                   success: true
  *                   recommendation_id: "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+ *                   total_count: 3
  *                   title: "연인에게 전하는 생일·기념일 꽃다발"
+ *                   message: ""
  *                   recipient: "연인"
  *                   occasion: "생일·기념일"
  *                   recommendations:
  *                     - flower_id: 11
  *                       flower_meaning_id: 22
  *                       flower_name: "거베라"
- *                       meaning: "신비, 수수께끼"
- *                       color: "주황"
- *                       icon_color: "#FF8A3D"
+ *                       meaning: "행복"
+ *                       tags: ['행복', '희망', '사랑']
+ *                       colors: ["#FF6B6B", "#FFD93D"]
  *                       score: 38
  *                       image_url: "https://.../gerbera.png"
  *       400:
@@ -221,16 +225,28 @@ export async function GET(request: NextRequest) {
     }
 
     // 표준화된 응답 형식으로 변환
-    const standardizedRecommendations = recommendations.map(rec => ({
-      flower_id: rec.flower.id,
-      flower_meaning_id: rec.flowerMeaningId || 0,
-      flower_name: rec.flower.name_ko,
-      meaning: rec.flower.flower_meanings?.find(m => m.id === rec.flowerMeaningId)?.meaning || '',
-      color: rec.flower.flower_meanings?.find(m => m.id === rec.flowerMeaningId)?.color || '',
-      icon_color: rec.flower.flower_meanings?.find(m => m.id === rec.flowerMeaningId)?.icon_color || null,
-      score: rec.score,
-      image_url: rec.flower.images?.[0] || null,
-    }));
+    const standardizedRecommendations = recommendations.map(rec => {
+      const matchedMeaning = rec.flower.flower_meanings?.find(m => m.id === rec.flowerMeaningId)?.meaning || '';
+      const representativeTags = Array.isArray(rec.flower.representative_meanings_tags)
+        ? rec.flower.representative_meanings_tags
+        : [];
+      const tags = [...new Set([matchedMeaning, ...representativeTags].filter(Boolean))].slice(0, 3);
+
+      return {
+        flower_id: rec.flower.id,
+        flower_meaning_id: rec.flowerMeaningId || 0,
+        flower_name: rec.flower.name_ko,
+        meaning: matchedMeaning,
+        tags,
+        colors: rec.flower.colors || [...new Set(
+          (rec.flower.flower_meanings || [])
+            .map(m => m.icon_color)
+            .filter((color): color is string => Boolean(color)),
+        )],
+        score: rec.score,
+        image_url: rec.flower.images?.[0] || null,
+      };
+    });
 
     // preset 추천의 경우 title, message 등은 별도로 생성하지 않으므로 기본값 또는 label 사용
     // AI 추천과의 응답 형식 통일을 위해 추가

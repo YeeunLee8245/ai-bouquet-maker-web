@@ -88,10 +88,10 @@ import { spendToken, getUserBalance } from '@/lib/users/wallet';
  *                       flower_id: { type: integer, example: 15 }
  *                       flower_meaning_id: { type: integer, example: 30 }
  *                       flower_name: { type: string, example: "작약" }
- *                       meaning: { type: string, example: "수줍음" }
- *                       color: { type: string, example: "분홍" }
+ *                       meaning: { type: string, description: "매칭된 꽃말", example: "고귀함" }
+ *                       tags: { type: array, items: { type: string }, example: ['매칭 꽃말', '대표1', '대표2'], description: '매칭된 꽃말 우선 + 대표 꽃말 (최대 3개)' }
+ *                       colors: { type: array, items: { type: string }, description: "꽃 색상 코드(HEX) 목록", example: ["#D4A0C0", "#FFAEC9"] }
  *                       score: { type: integer, example: 52 }
- *                       icon_color: { type: string, nullable: true, example: "#FFB3C7", description: "UI 而щ윭移?HEX" }
  *                       image_url: { type: string, nullable: true, example: "https://.../peony.png", description: "flowers.images[0]" }
  *             examples:
  *               ai_recipient_success:
@@ -108,9 +108,9 @@ import { spendToken, getUserBalance } from '@/lib/users/wallet';
  *                     - flower_id: 15
  *                       flower_meaning_id: 30
  *                       flower_name: "작약"
- *                       meaning: "수줍음"
- *                       color: "분홍"
- *                       icon_color: "#FFB3C7"
+ *                       meaning: "고귀함"
+ *                       tags: ['고귀함', '우아함', '연애']
+ *                       colors: ["#D4A0C0", "#FFAEC9"]
  *                       score: 52
  *                       image_url: "https://example.com/flowers/peony.png"
  *               ai_recipient_success_without_target_or_occasion:
@@ -128,7 +128,8 @@ import { spendToken, getUserBalance } from '@/lib/users/wallet';
  *                       flower_meaning_id: 21
  *                       flower_name: "거베라"
  *                       meaning: "희망"
- *                       color: "오렌지"
+ *                       tags: ['희망', '행복', '순수']
+ *                       colors: ["#FF6B6B", "#FFD93D"]
  *                       score: 41
  *                       image_url: "https://example.com/flowers/gerbera.png"
  *       400:
@@ -276,16 +277,28 @@ export async function POST(request: NextRequest) {
       }
 
       // 표준화된 응답 형식으로 변환
-      const standardizedRecommendations = recommendations.map(rec => ({
-        flower_id: rec.flower.id,
-        flower_meaning_id: rec.flowerMeaningId || 0,
-        flower_name: rec.flower.name_ko,
-        meaning: rec.flower.flower_meanings?.find(m => m.id === rec.flowerMeaningId)?.meaning || '',
-        color: rec.flower.flower_meanings?.find(m => m.id === rec.flowerMeaningId)?.color || '',
-        icon_color: rec.flower.flower_meanings?.find(m => m.id === rec.flowerMeaningId)?.icon_color || null,
-        score: rec.score,
-        image_url: rec.flower.images?.[0] || null,
-      }));
+      const standardizedRecommendations = recommendations.map(rec => {
+        const matchedMeaning = rec.flower.flower_meanings?.find(m => m.id === rec.flowerMeaningId)?.meaning || '';
+        const representativeTags = Array.isArray(rec.flower.representative_meanings_tags)
+          ? rec.flower.representative_meanings_tags
+          : [];
+        const tags = [...new Set([matchedMeaning, ...representativeTags].filter(Boolean))].slice(0, 3);
+
+        return {
+          flower_id: rec.flower.id,
+          flower_meaning_id: rec.flowerMeaningId || 0,
+          flower_name: rec.flower.name_ko,
+          meaning: matchedMeaning,
+          tags,
+          colors: rec.flower.colors || [...new Set(
+            (rec.flower.flower_meanings || [])
+              .map(m => m.icon_color)
+              .filter((color): color is string => Boolean(color)),
+          )],
+          score: rec.score,
+          image_url: rec.flower.images?.[0] || null,
+        };
+      });
 
       return NextResponse.json({
         success: true,

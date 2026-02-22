@@ -89,10 +89,10 @@ import { spendToken, getUserBalance } from '@/lib/users/wallet';
  *                       flower_id: { type: integer, example: 12 }
  *                       flower_meaning_id: { type: integer, example: 24 }
  *                       flower_name: { type: string, example: "안개꽃" }
- *                       meaning: { type: string, example: "맑은 마음" }
- *                       color: { type: string, example: "하양" }
+ *                       meaning: { type: string, description: "매칭된 꽃말", example: "순수한 마음" }
+ *                       tags: { type: array, items: { type: string }, example: ['매칭 꽃말', '대표1', '대표2'], description: '매칭된 꽃말 우선 + 대표 꽃말 (최대 3개)' }
+ *                       colors: { type: array, items: { type: string }, description: "꽃 색상 코드(HEX) 목록", example: ["#FFFFFF", "#FFB6C1"] }
  *                       score: { type: integer, description: "매칭 점수", example: 45 }
- *                       icon_color: { type: string, nullable: true, example: "#F4F4F4", description: "UI 而щ윭移?HEX" }
  *                       image_url: { type: string, nullable: true, example: "https://.../flower.png", description: "flowers.images[0]" }
  *             examples:
  *               ai_recommendation_success:
@@ -109,9 +109,9 @@ import { spendToken, getUserBalance } from '@/lib/users/wallet';
  *                     - flower_id: 12
  *                       flower_meaning_id: 24
  *                       flower_name: "안개꽃"
- *                       meaning: "맑은 마음"
- *                       color: "하양"
- *                       icon_color: "#F4F4F4"
+ *                       meaning: "순수한 마음"
+ *                       tags: ['순수한 마음', '우정', '감사']
+ *                       colors: ["#FFFFFF", "#FFB6C1"]
  *                       score: 45
  *                       image_url: "https://example.com/flowers/gypsophila.png"
  *               ai_recommendation_success_without_target_or_occasion:
@@ -128,8 +128,9 @@ import { spendToken, getUserBalance } from '@/lib/users/wallet';
  *                     - flower_id: 8
  *                       flower_meaning_id: 19
  *                       flower_name: "리시안셔스"
- *                       meaning: "변치 않는 사랑"
- *                       color: "화이트"
+ *                       meaning: "변하지 않는 사랑"
+ *                       tags: ['변하지 않는 사랑', '우아함', '희망']
+ *                       colors: ["#9B59B6", "#F5CBA7"]
  *                       score: 39
  *                       image_url: "https://example.com/flowers/lisianthus.png"
  *       400:
@@ -277,16 +278,28 @@ export async function POST(request: NextRequest) {
       }
 
       // 표준화된 응답 형식으로 변환
-      const standardizedRecommendations = recommendations.map(rec => ({
-        flower_id: rec.flower.id,
-        flower_meaning_id: rec.flowerMeaningId || 0,
-        flower_name: rec.flower.name_ko,
-        meaning: rec.flower.flower_meanings?.find(m => m.id === rec.flowerMeaningId)?.meaning || '',
-        color: rec.flower.flower_meanings?.find(m => m.id === rec.flowerMeaningId)?.color || '',
-        icon_color: rec.flower.flower_meanings?.find(m => m.id === rec.flowerMeaningId)?.icon_color || null,
-        score: rec.score,
-        image_url: rec.flower.images?.[0] || null,
-      }));
+      const standardizedRecommendations = recommendations.map(rec => {
+        const matchedMeaning = rec.flower.flower_meanings?.find(m => m.id === rec.flowerMeaningId)?.meaning || '';
+        const representativeTags = Array.isArray(rec.flower.representative_meanings_tags)
+          ? rec.flower.representative_meanings_tags
+          : [];
+        const tags = [...new Set([matchedMeaning, ...representativeTags].filter(Boolean))].slice(0, 3);
+
+        return {
+          flower_id: rec.flower.id,
+          flower_meaning_id: rec.flowerMeaningId || 0,
+          flower_name: rec.flower.name_ko,
+          meaning: matchedMeaning,
+          tags,
+          colors: rec.flower.colors || [...new Set(
+            (rec.flower.flower_meanings || [])
+              .map(m => m.icon_color)
+              .filter((color): color is string => Boolean(color)),
+          )],
+          score: rec.score,
+          image_url: rec.flower.images?.[0] || null,
+        };
+      });
 
       return NextResponse.json({
         success: true,

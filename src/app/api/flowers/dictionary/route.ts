@@ -26,7 +26,7 @@ function getCurrentSeason(): string {
  *
  *       ### 🎨 프론트엔드 개발 가이드
  *       - **`default_season`**: 현재 서버 시간 기준 추천 계절입니다. 초기 진입 시 이 값을 기반으로 필터를 설정할 수 있습니다.
- *       - **`isLiked` 활성화**: 사용자가 로그인 상태일 때만 `true`/`false`가 제공됩니다. 비로그인 시 `undefined`이므로 하트 아이콘을 비활성 상태로 그려주세요.
+ *       - **`isLiked` 활성화**: 사용자가 로그인 상태일 때만 `true`/`false`가 제공됩니다. 비로그인 시 `isLiked` 키 자체가 응답에 없으므로(`undefined`) 하트 아이콘을 비활성 상태로 그려주세요.
  *       - **이미지 최적화**: `imageUrl`이 없는 경우 프론트엔드 기본 이미지를 사용하도록 구현하는 것이 좋습니다.
  *
  *       **정렬 기준**:
@@ -109,8 +109,8 @@ function getCurrentSeason(): string {
  *                           id: { type: string, description: "꽃 ID (상세 조회용)", example: "1" }
  *                           imageUrl: { type: string, description: "대표 이미지 URL", example: "/images/flowers/rose.png" }
  *                           name: { type: string, description: "한글 이름", example: "장미" }
- *                           isLiked: { type: boolean, nullable: true, description: "로그인 유저의 좋아요 여부 (비로그인 시 null/undefined)", example: true }
- *                           colors: { type: array, items: { type: string }, description: "대표 색상 목록", example: ["빨강"] }
+ *                           isLiked: { type: boolean, nullable: true, description: "로그인 유저의 좋아요 여부. 비로그인 시 키 자체가 없음(undefined)", example: true }
+ *                           colors: { type: array, items: { type: string }, description: "대표 색상 코드(HEX) 목록", example: ["#FF4D6D"] }
  *                           tags: { type: array, items: { type: string }, description: "상징 꽃말 (최대 3개)", example: ["열정적 사랑", "순결"] }
  *                     total: { type: integer, description: "전체 결과 수", example: 120 }
  *                     page: { type: integer, example: 1 }
@@ -118,7 +118,7 @@ function getCurrentSeason(): string {
  *                     has_next_page: { type: boolean, example: true }
  *             examples:
  *               flower_list_success:
- *                 summary: "꽃 목록 조회 성공 (봄/분홍 필터)"
+ *                 summary: "꽃 목록 조회 성공 (로그인 상태, 봄/분홍 필터)"
  *                 value:
  *                   success: true
  *                   data:
@@ -128,15 +128,31 @@ function getCurrentSeason(): string {
  *                         imageUrl: "/images/flowers/tulip.png"
  *                         name: "튤립"
  *                         isLiked: true
- *                         colors: ["분홍", "빨강"]
+ *                         colors: ["#F8BBD0", "#FF4D6D"]
  *                         tags: ["사랑의 고백", "영원한 애정"]
  *                       - id: "5"
  *                         imageUrl: "/images/flowers/cherry_blossom.png"
  *                         name: "벚꽃"
  *                         isLiked: false
- *                         colors: ["분홍", "연분홍"]
+ *                         colors: ["#F8BBD0", "#E91E63"]
  *                         tags: ["순결", "절세미인"]
  *                     total: 45
+ *                     page: 1
+ *                     limit: 20
+ *                     has_next_page: true
+ *               flower_list_no_login:
+ *                 summary: "비로그인 조회 (isLiked 키 없음)"
+ *                 value:
+ *                   success: true
+ *                   data:
+ *                     default_season: "spring"
+ *                     flowers:
+ *                       - id: "1"
+ *                         imageUrl: "/images/flowers/tulip.png"
+ *                         name: "튤립"
+ *                         colors: ["#F8BBD0", "#FF4D6D"]
+ *                         tags: ["사랑의 고백", "영원한 애정"]
+ *                     total: 120
  *                     page: 1
  *                     limit: 20
  *                     has_next_page: true
