@@ -38,24 +38,20 @@ import { getAvailableRelationships, getAvailableOccasions, getAllOccasions } fro
  *                   type: array
  *                   items:
  *                     type: object
- *                     required: [value, description]
+ *                     required: [value]
  *                     properties:
  *                       value:
  *                         type: string
  *                         enum: [parents, lover, friend, colleague, teacher, elder, child]
- *                       description:
- *                         type: string
  *                 occasions:
  *                   type: array
  *                   items:
  *                     type: object
- *                     required: [value, description]
+ *                     required: [value]
  *                     properties:
  *                       value:
  *                         type: string
  *                         enum: [birthday_anniversary, proposal, new_beginning, parents_day, teachers_day, celebration_support, comfort_recovery, apology]
- *                       description:
- *                         type: string
  *             examples:
  *               all_options:
  *                 summary: 전체 선택지 목록 (초기 진입)
@@ -63,17 +59,14 @@ import { getAvailableRelationships, getAvailableOccasions, getAllOccasions } fro
  *                   success: true
  *                   relationships:
  *                     - value: "lover"
- *                       description: "사랑과 로맨스를 전하는 꽃"
  *                   occasions:
  *                     - value: "birthday_anniversary"
- *                       description: "특별한 날을 기념하고 축하하는 꽃"
  *               filtered_occasions:
  *                 summary: 특정 관계에 필터링된 상황 목록
  *                 value:
  *                   success: true
  *                   occasions:
  *                     - value: "parents_day"
- *                       description: "부모님께 감사와 사랑을 전하는 꽃"
  *       500:
  *         description: 서버 오류
  *         content:
