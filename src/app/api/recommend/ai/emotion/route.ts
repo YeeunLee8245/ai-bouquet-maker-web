@@ -71,11 +71,11 @@ import { spendToken, getUserBalance } from '@/lib/users/wallet';
  *           application/json:
  *             schema:
  *               type: object
- *               required: [success, recommendation_id, recommendations]
+ *               required: [success, recommendationId, recommendations]
  *               properties:
  *                 success: { type: boolean, example: true }
- *                 recommendation_id: { type: string, format: uuid, description: "생성된 추천 기록 고유 ID" }
- *                 total_count: { type: integer, description: "필터링 후 반환된 꽃의 개수" }
+ *                 recommendationId: { type: string, format: uuid, description: "생성된 추천 기록 고유 ID" }
+ *                 totalCount: { type: integer, description: "필터링 후 반환된 꽃의 개수" }
  *                 title: { type: string, description: "AI가 생성한 추천 꽃다발 제목", example: "진심을 전하는 수수한 축하 꽃다발" }
  *                 message: { type: string, description: "AI가 작성한 추천 이유와 위로의 메시지", example: "친구분의 결혼을 진심으로 축하드려요. 화려함보다는 변치 않는 우정을 상징하는..." }
  *                 recipient: { type: string, nullable: true, description: "분석된 선물 대상", example: "오랜 친구" }
@@ -86,53 +86,53 @@ import { spendToken, getUserBalance } from '@/lib/users/wallet';
  *                   items:
  *                     type: object
  *                     properties:
- *                       flower_id: { type: integer, example: 12 }
- *                       flower_meaning_id: { type: integer, example: 24 }
- *                       flower_name: { type: string, example: "안개꽃" }
+ *                       id: { type: integer, example: 12 }
+ *                       flowerMeaningId: { type: integer, example: 24 }
+ *                       name: { type: string, example: "안개꽃" }
  *                       meaning: { type: string, description: "매칭된 꽃말", example: "순수한 마음" }
  *                       tags: { type: array, items: { type: string }, example: ['매칭 꽃말', '대표1', '대표2'], description: '매칭된 꽃말 우선 + 대표 꽃말 (최대 3개)' }
  *                       colors: { type: array, items: { type: string }, description: "꽃 색상 코드(HEX) 목록", example: ["#FFFFFF", "#FFB6C1"] }
  *                       score: { type: integer, description: "매칭 점수", example: 45 }
- *                       image_url: { type: string, nullable: true, example: "https://.../flower.png", description: "flowers.images[0]" }
+ *                       imageUrl: { type: string, nullable: true, example: "https://.../flower.png", description: "flowers.images[0]" }
  *             examples:
  *               ai_recommendation_success:
  *                 summary: "AI 감정 분석 추천 성공"
  *                 value:
  *                   success: true
- *                   recommendation_id: "18561ccb-20c4-4bdb-8905-ec2647f471c5"
- *                   total_count: 5
+ *                   recommendationId: "18561ccb-20c4-4bdb-8905-ec2647f471c5"
+ *                   totalCount: 5
  *                   title: "지친 당신을 위한 위로의 꽃다발"
  *                   message: "오늘 하루 정말 고생 많으셨어요. 당신의 지친 마음을 달래줄 수 있는..."
  *                   recipient: "나 자신"
  *                   occasion: "위로와 응원"
  *                   recommendations:
- *                     - flower_id: 12
- *                       flower_meaning_id: 24
- *                       flower_name: "안개꽃"
+ *                     - id: 12
+ *                       flowerMeaningId: 24
+ *                       name: "안개꽃"
  *                       meaning: "순수한 마음"
  *                       tags: ['순수한 마음', '우정', '감사']
  *                       colors: ["#FFFFFF", "#FFB6C1"]
  *                       score: 45
- *                       image_url: "https://example.com/flowers/gypsophila.png"
+ *                       imageUrl: "https://example.com/flowers/gypsophila.png"
  *               ai_recommendation_success_without_target_or_occasion:
  *                 summary: "대상/상황 미추출 시 null 반환 예시"
  *                 value:
  *                   success: true
- *                   recommendation_id: "3b7fe1a8-1d50-4c2e-927c-4dc82f4f1a11"
- *                   total_count: 2
+ *                   recommendationId: "3b7fe1a8-1d50-4c2e-927c-4dc82f4f1a11"
+ *                   totalCount: 2
  *                   title: "오늘 하루를 위한 작은 위로"
  *                   message: "대상이나 특정 상황이 없어도 감정 중심으로 어울리는 꽃을 추천해드려요."
  *                   recipient: null
  *                   occasion: null
  *                   recommendations:
- *                     - flower_id: 8
- *                       flower_meaning_id: 19
- *                       flower_name: "리시안셔스"
+ *                     - id: 8
+ *                       flowerMeaningId: 19
+ *                       name: "리시안셔스"
  *                       meaning: "변하지 않는 사랑"
  *                       tags: ['변하지 않는 사랑', '우아함', '희망']
  *                       colors: ["#9B59B6", "#F5CBA7"]
  *                       score: 39
- *                       image_url: "https://example.com/flowers/lisianthus.png"
+ *                       imageUrl: "https://example.com/flowers/lisianthus.png"
  *       400:
  *         description: 입력값 오류 (너무 짧거나 긴 텍스트)
  *         content:
@@ -286,9 +286,9 @@ export async function POST(request: NextRequest) {
         const tags = [...new Set([matchedMeaning, ...representativeTags].filter(Boolean))].slice(0, 3);
 
         return {
-          flower_id: rec.flower.id,
-          flower_meaning_id: rec.flowerMeaningId || 0,
-          flower_name: rec.flower.name_ko,
+          id: rec.flower.id,
+          flowerMeaningId: rec.flowerMeaningId || 0,
+          name: rec.flower.name_ko,
           meaning: matchedMeaning,
           tags,
           colors: rec.flower.colors || [...new Set(
@@ -297,14 +297,14 @@ export async function POST(request: NextRequest) {
               .filter((color): color is string => Boolean(color)),
           )],
           score: rec.score,
-          image_url: rec.flower.images?.[0] || null,
+          imageUrl: rec.flower.images?.[0] || null,
         };
       });
 
       return NextResponse.json({
         success: true,
-        recommendation_id: recommendationId,
-        total_count: standardizedRecommendations.length,
+        recommendationId,
+        totalCount: standardizedRecommendations.length,
         title: analysis.title,
         message: analysis.message,
         recipient: analysis.recipient || null,

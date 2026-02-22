@@ -72,17 +72,17 @@ import { getRelationshipLabel, getOccasionLabel } from '@/lib/recommend/relation
  *           application/json:
  *             schema:
  *               type: object
- *               required: [success, recommendation_id, total_count, recommendations]
+ *               required: [success, recommendationId, totalCount, recommendations]
  *               properties:
  *                 success: { type: boolean, example: true }
- *                 recommendation_id: { type: string, format: uuid, description: "생성된 추천 기록 ID" }
- *                 total_count: { type: integer, description: "추천된 꽃의 개수" }
+ *                 recommendationId: { type: string, format: uuid, nullable: true, description: "생성된 추천 기록 ID (DB 저장 실패 시 null)" }
+ *                 totalCount: { type: integer, description: "추천된 꽃의 개수" }
  *                 title: { type: string, example: "연인에게 전하는 생일·기념일 꽃다발" }
  *                 message: { type: string, description: "preset은 항상 빈 문자열 반환", example: "" }
  *                 recipient:
  *                   type: string
  *                   enum: ['부모님', '연인', '친구', '직장동료', '선생님', '어르신', '자녀·아이']
- *                   description: "relationship value에 대응되는 표시 라벨 "
+ *                   description: "relationship value에 대응되는 표시 라벨"
  *                   example: "연인"
  *                 occasion:
  *                   type: string
@@ -94,34 +94,34 @@ import { getRelationshipLabel, getOccasionLabel } from '@/lib/recommend/relation
  *                   items:
  *                     type: object
  *                     properties:
- *                       flower_id: { type: integer, example: 1 }
- *                       flower_meaning_id: { type: integer, example: 2 }
- *                       flower_name: { type: string, example: "장미" }
+ *                       id: { type: integer, example: 1 }
+ *                       flowerMeaningId: { type: integer, example: 2 }
+ *                       name: { type: string, example: "장미" }
  *                       meaning: { type: string, description: "매칭된 꽃말", example: "열정적인 사랑" }
  *                       tags: { type: array, items: { type: string }, example: ['매칭 꽃말', '대표1', '대표2'], description: '매칭된 꽃말 우선 + 대표 꽃말 (최대 3개)' }
  *                       colors: { type: array, items: { type: string }, description: "꽃 색상 코드(HEX) 목록", example: ["#FF4D6D"] }
  *                       score: { type: integer, example: 42 }
- *                       image_url: { type: string, nullable: true, example: "/images/rose.jpg", description: "flowers.images[0]" }
+ *                       imageUrl: { type: string, nullable: true, example: "/images/rose.jpg", description: "flowers.images[0]" }
  *             examples:
  *               preset_success:
  *                 summary: "카드 선택 기반 추천 성공"
  *                 value:
  *                   success: true
- *                   recommendation_id: "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
- *                   total_count: 3
+ *                   recommendationId: "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+ *                   totalCount: 3
  *                   title: "연인에게 전하는 생일·기념일 꽃다발"
  *                   message: ""
  *                   recipient: "연인"
  *                   occasion: "생일·기념일"
  *                   recommendations:
- *                     - flower_id: 11
- *                       flower_meaning_id: 22
- *                       flower_name: "거베라"
+ *                     - id: 11
+ *                       flowerMeaningId: 22
+ *                       name: "거베라"
  *                       meaning: "행복"
  *                       tags: ['행복', '희망', '사랑']
  *                       colors: ["#FF6B6B", "#FFD93D"]
  *                       score: 38
- *                       image_url: "https://.../gerbera.png"
+ *                       imageUrl: "https://.../gerbera.png"
  *       400:
  *         description: 필수 파라미터 누락
  *         content:
@@ -233,9 +233,9 @@ export async function GET(request: NextRequest) {
       const tags = [...new Set([matchedMeaning, ...representativeTags].filter(Boolean))].slice(0, 3);
 
       return {
-        flower_id: rec.flower.id,
-        flower_meaning_id: rec.flowerMeaningId || 0,
-        flower_name: rec.flower.name_ko,
+        id: rec.flower.id,
+        flowerMeaningId: rec.flowerMeaningId || 0,
+        name: rec.flower.name_ko,
         meaning: matchedMeaning,
         tags,
         colors: rec.flower.colors || [...new Set(
@@ -244,7 +244,7 @@ export async function GET(request: NextRequest) {
             .filter((color): color is string => Boolean(color)),
         )],
         score: rec.score,
-        image_url: rec.flower.images?.[0] || null,
+        imageUrl: rec.flower.images?.[0] || null,
       };
     });
 
@@ -255,10 +255,10 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      recommendation_id: recommendationId,
-      total_count: standardizedRecommendations.length,
-      title: `${relationshipLabel}에게 전하는 ${occasionLabel} 꽃다발`, // 간단한 제목 생성
-      message: '', // preset은 메시지 생성 안 함
+      recommendationId,
+      totalCount: standardizedRecommendations.length,
+      title: `${relationshipLabel}에게 전하는 ${occasionLabel} 꽃다발`,
+      message: '',
       recipient: relationshipLabel,
       occasion: occasionLabel,
       recommendations: standardizedRecommendations,
