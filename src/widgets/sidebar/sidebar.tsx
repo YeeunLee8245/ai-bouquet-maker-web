@@ -10,7 +10,7 @@ import BouquetIcon from '@/shared/assets/icons/bouquet.svg';
 import Link from 'next/link';
 import { cn } from '@/shared/utils/styles';
 import { usePathname } from 'next/navigation';
-import { useSupabaseUser } from '@/hooks/use-supabase-user';
+import { useUserAuth } from '@/hooks/use-supabase-user';
 
 const SIDEBAR_ITEMS = [
   {
@@ -44,7 +44,7 @@ const UNAUTHENTICATED_ITEMS = [
 function Sidebar({ modalId }: TModalProps) {
   const closeModal = useSetAtom(closeModalAtom);
   const pathname = usePathname();
-  const { isLogin, isLoading } = useSupabaseUser();
+  const { isLogin, isLoading } = useUserAuth();
 
   const menuItems = isLogin ? [...SIDEBAR_ITEMS, ...AUTHENTICATED_ITEMS] : [...SIDEBAR_ITEMS, ...UNAUTHENTICATED_ITEMS];
 
