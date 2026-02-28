@@ -1,14 +1,15 @@
 import { useRef, useEffect, useMemo } from 'react';
-import { useSetAtom, useAtom, useStore } from 'jotai';
+import { useSetAtom, useAtom, useAtomValue, useStore } from 'jotai';
 import { IDirectoryEventHub } from '../_types';
 import { directoryDefaultSortOptions } from '../_datas';
 import { directorySortAtom } from '../_model/atoms';
 import { useDirectoryQuery } from '../_model/use-directory-query';
 import { FlowerCard } from '@/entities/flower/ui';
 import { Button } from '@/shared/ui/button';
-import { toggleFlowerAtom } from '@/shared/model/selected-flowers';
+import { toggleFlowerAtom, selectedFlowersAtom } from '@/shared/model/selected-flowers';
 import LikeButton from '@/features/like/ui/like-button';
 import { initLikeFromServer } from '@/features/like/model/atoms';
+import { cn } from '@/shared/utils/styles';
 
 type TProps = {
   eventHub: IDirectoryEventHub;
@@ -18,6 +19,7 @@ function DirectoryListContainer({ eventHub }: TProps) {
   const sentinelRef = useRef<HTMLDivElement>(null);
   const store = useStore();
   const toggleFlower = useSetAtom(toggleFlowerAtom);
+  const selectedFlowers = useAtomValue(selectedFlowersAtom);
   const [sort, setSort] = useAtom(directorySortAtom);
 
   const {
@@ -94,13 +96,21 @@ function DirectoryListContainer({ eventHub }: TProps) {
               : undefined
             }
             actionButton={
-              <Button
-                size='md'
-                onClick={() => toggleFlower({ id: flower.id, name: flower.name })}
-                className='mt-3'
-              >
-                선택하기
-              </Button>
+              (() => {
+                const isSelected = selectedFlowers.some(f => f.id === flower.id);
+                return (
+                  <Button
+                    size='md'
+                    onClick={(e) => {
+                      e.preventDefault();
+                      toggleFlower({ id: flower.id, name: flower.name });
+                    }}
+                    className={cn('mt-3', isSelected && 'bg-primary-600 text-primary-200')}
+                  >
+                    {isSelected ? '선택 취소' : '선택하기'}
+                  </Button>
+                );
+              })()
             }
           />
         ))}

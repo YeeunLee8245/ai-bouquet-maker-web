@@ -39,5 +39,9 @@ export function useDirectoryQuery() {
     initialPageParam: 1,
     getNextPageParam: (lastPage) =>
       lastPage.has_next_page ? lastPage.page + 1 : undefined,
+    /**
+     * 캐시 유지 시간을 무한으로 설정하여 페이지 이동 시, 데이터가 변경되지 않도록 함
+     */
+    staleTime: Infinity,
   });
 }
