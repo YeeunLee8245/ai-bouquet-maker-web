@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useImperativeHandle, useState } from 'react'; // forwardRef 삭제
+import { useEffect, useImperativeHandle, useMemo, useState } from 'react'; // forwardRef 삭제
 import { useProfileQuery } from '../_model/use-profile-query';
 import { useUpdateProfileMutation } from '../_model/use-profile-mutation';
 
@@ -42,10 +42,24 @@ function ProfileEditForm({
     setForm((prev) => ({ ...prev, [id]: value }));
   };
 
+  const isDirty = useMemo(() => {
+    return (form.nickname !== (data?.profile?.nickname ?? '') ||
+    form.bio !== (data?.profile?.bio ?? ''));
+  }, [form, data?.profile]);
+
   const handleSubmit = () => {
+    if (!isDirty) {
+      onSaveSuccess?.();
+      return;
+    }
     mutation.mutate(
       { nickname: form.nickname, bio: form.bio },
-      { onSuccess: () => onSaveSuccess?.() },
+      { onSuccess: () => onSaveSuccess?.(),
+        /*
+         * TODO: yeeun Toast 에러 처리
+         * onError: () => showToast({ message: '에러가 발생했어요.', type: 'error' })
+         */
+      },
     );
   };
 
