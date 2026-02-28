@@ -1,7 +1,6 @@
 import { cn } from '@/shared/utils/styles';
 import Image from 'next/image';
 import React from 'react';
-import OutlineHeartIcon from '@/shared/assets/icons/outline_heart.svg';
 import Link from 'next/link';
 import { ColorChipGroup } from '@/shared/ui/chip';
 
@@ -10,10 +9,10 @@ type TProps = {
   size: 'md' | 'lg';
   imageUrl: string;
   name: string;
-  isLiked?: boolean; // 좋아요 여부 (undefined: 미지원, true: 좋아요, false: 좋아요 취소)
   colors?: string[];
   tags: string[];
   actionButton?: React.ReactNode;
+  likeButton?: React.ReactNode;
 } & React.HTMLAttributes<HTMLDivElement>;
 
 const flowerCardImageSizes: Record<TProps['size'], { width: number; height: number }> = {
@@ -27,7 +26,7 @@ const flowerCardImageSizes: Record<TProps['size'], { width: number; height: numb
   },
 };
 
-function FlowerCard({ size, imageUrl, id, name, isLiked, colors, tags, actionButton, className, ...props }: TProps) {
+function FlowerCard({ size, imageUrl, id, name, colors, tags, actionButton, likeButton, className, ...props }: TProps) {
   const [imageWidth, imageHeight] = [flowerCardImageSizes[size].width, flowerCardImageSizes[size].height];
   return (
     <div className={cn('flex flex-col', `min-w-[${imageWidth}px]`, className)} {...props}>
@@ -49,10 +48,10 @@ function FlowerCard({ size, imageUrl, id, name, isLiked, colors, tags, actionBut
             height: imageHeight,
           }}
         />
-        {isLiked !== undefined && (
-          <button className='absolute top-2 right-2 text-black/20 hover:text-primary-400'>
-            <OutlineHeartIcon className='w-6 h-6 [&>path]:stroke-gray-100'/>
-          </button>
+        {likeButton && (
+          <div className='absolute top-2 right-2' onClick={(e) => e.preventDefault()}>
+            {likeButton}
+          </div>
         )}
         {colors && (
           <div className={cn('absolute bottom-0 right-0 p-2 w-full backdrop-blur-[1px] bg-gradient-to-b from-[#CECECE]/0 to-black/12',

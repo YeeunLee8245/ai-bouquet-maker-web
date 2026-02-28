@@ -1,5 +1,5 @@
 import { useRef, useEffect } from 'react';
-import { useSetAtom, useAtom } from 'jotai';
+import { useSetAtom, useAtom, useStore } from 'jotai';
 import { IDirectoryEventHub } from '../_types';
 import { directoryDefaultSortOptions } from '../_datas';
 import { directorySortAtom } from '../_model/atoms';
@@ -7,6 +7,8 @@ import { useDirectoryQuery } from '../_model/use-directory-query';
 import { FlowerCard } from '@/entities/flower/ui';
 import { Button } from '@/shared/ui/button';
 import { toggleFlowerAtom } from '@/shared/model/selected-flowers';
+import LikeButton from '@/features/like/ui/like-button';
+import { initLikeFromServer } from '@/features/like/model/atoms';
 
 type TProps = {
   eventHub: IDirectoryEventHub;
@@ -14,6 +16,7 @@ type TProps = {
 
 function DirectoryListContainer({ eventHub }: TProps) {
   const sentinelRef = useRef<HTMLDivElement>(null);
+  const store = useStore();
   const toggleFlower = useSetAtom(toggleFlowerAtom);
   const [sort, setSort] = useAtom(directorySortAtom);
 
@@ -45,6 +48,14 @@ function DirectoryListContainer({ eventHub }: TProps) {
   const flowers = data?.pages.flatMap(page => page.flowers) ?? [];
   const total = data?.pages[0]?.total ?? 0;
 
+  useEffect(() => {
+    flowers.forEach((flower) => {
+      if (flower.isLiked !== undefined) {
+        initLikeFromServer({ store, liked: flower.isLiked, id: flower.id, type: 'flower' });
+      }
+    });
+  }, [flowers, store]);
+
   return (
     <div className='flex flex-col border-t-2 border-gray-100 mt-4'>
       <div className='flex items-center justify-between pt-4'>
@@ -72,7 +83,15 @@ function DirectoryListContainer({ eventHub }: TProps) {
           <FlowerCard
             key={flower.id}
             size='lg'
-            {...flower}
+            id={flower.id}
+            imageUrl={flower.imageUrl}
+            name={flower.name}
+            colors={flower.colors}
+            tags={flower.tags}
+            likeButton={flower.isLiked !== undefined
+              ? <LikeButton type='flower' id={flower.id} variant='outline' size='lg' />
+              : undefined
+            }
             actionButton={
               <Button
                 size='md'

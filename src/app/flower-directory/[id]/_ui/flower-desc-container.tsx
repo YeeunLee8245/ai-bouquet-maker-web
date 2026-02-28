@@ -1,7 +1,7 @@
 'use client';
 
 import { initLikeFromServer } from '@/features/like/model/atoms';
-import LikeButton from '@/features/like/ui/LikeButton';
+import LikeButton from '@/features/like/ui/like-button';
 import { useStore } from 'jotai';
 import React, { useEffect } from 'react';
 
