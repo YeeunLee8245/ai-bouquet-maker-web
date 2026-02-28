@@ -40,6 +40,7 @@ function FlowerCard({ size, imageUrl, id, name, colors, tags, actionButton, like
           width={imageWidth}
           height={imageHeight}
           className={cn('object-cover',
+            'max-w-none',
             size === 'md' && 'rounded-4 border-1 border-gray-100',
             size === 'lg' && 'rounded-3',
           )}
