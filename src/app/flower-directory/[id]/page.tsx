@@ -23,7 +23,7 @@ function FlowerDetailPage() {
   }
 
   return (
-    <div className='relative flex-1 overflow-y-auto'>
+    <div className='relative flex-1 overflow-y-auto hide-scrollbar'>
       <FlowerImagesContainer images={data.images} />
       <FlowerDescContainer
         id={data.id}
