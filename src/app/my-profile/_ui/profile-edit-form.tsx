@@ -1,31 +1,69 @@
 'use client';
 
-import { useState } from 'react';
-import { profileDescriptionData } from '../_datas';
+import { useEffect, useImperativeHandle, useState } from 'react'; // forwardRef 삭제
+import { useProfileQuery } from '../_model/use-profile-query';
+import { useUpdateProfileMutation } from '../_model/use-profile-mutation';
 
-const editableFields = profileDescriptionData.filter(({ id }) =>
-  ['nickname', 'email', 'bio'].includes(id),
-);
+export type TProfileEditFormRef = {
+  submit: () => void;
+};
 
-function ProfileEditForm() {
-  const [form, setForm] = useState(() =>
-    Object.fromEntries(editableFields.map(({ id, value }) => [id, value])),
-  );
+const EDITABLE_FIELDS = [
+  { id: 'nickname', label: '닉네임' },
+  { id: 'bio', label: '소개' },
+] as const;
+
+// forwardRef 대신 일반 함수형 컴포넌트처럼 작성 (ref를 props로 직접 받음)
+function ProfileEditForm({
+  onSaveSuccess,
+  ref,
+}: {
+  onSaveSuccess?: () => void;
+  ref?: React.Ref<TProfileEditFormRef>;
+}) {
+  const { data } = useProfileQuery();
+  const mutation = useUpdateProfileMutation();
+
+  const [form, setForm] = useState<Record<string, string>>({
+    nickname: '',
+    bio: '',
+  });
+
+  useEffect(() => {
+    if (data?.profile) {
+      setForm({
+        nickname: data.profile.nickname ?? '',
+        bio: data.profile.bio ?? '',
+      });
+    }
+  }, [data?.profile]);
 
   const handleChange = (id: string, value: string) => {
     setForm((prev) => ({ ...prev, [id]: value }));
   };
 
+  const handleSubmit = () => {
+    mutation.mutate(
+      { nickname: form.nickname, bio: form.bio },
+      { onSuccess: () => onSaveSuccess?.() },
+    );
+  };
+
+  // 여전히 외부 명령을 위해 useImperativeHandle은 필요합니다.
+  useImperativeHandle(ref, () => ({
+    submit: handleSubmit,
+  }));
+
   return (
     <div className='flex flex-col py-4 gap-4'>
-      {editableFields.map(({ id, label }) => (
+      {EDITABLE_FIELDS.map(({ id, label }) => (
         <div key={id} className='flex flex-col gap-1 px-micro'>
           <label className='text-ui-label-sm text-gray-400'>{label}</label>
           <input
             type='text'
             value={form[id]}
             onChange={(e) => handleChange(id, e.target.value)}
-            placeholder='플레이스 홀더'
+            placeholder={label}
             className='w-full h-[42px] px-3 py-2 border border-gray-200 rounded-4 text-body-md text-gray-900 placeholder:text-gray-300 outline-none focus:border-primary-400'
           />
         </div>
@@ -35,6 +73,6 @@ function ProfileEditForm() {
       </button>
     </div>
   );
-}
+};
 
 export default ProfileEditForm;
