@@ -36,7 +36,15 @@ function DirectoryListContainer({ eventHub }: TProps) {
 
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
+        /**
+         * 무한 스크롤 처리
+         * isIntersecting: 센티넬이 뷰포트 안에 들어오는지 여부
+         * hasNextPage: 다음 페이지가 있는지 여부
+         * isFetchingNextPage: 다음 페이지를 불러오는지 여부
+         *
+         * 뷰포트와 요소가 교차하고 다음 페이지가 있으며 다음 페이지를 불러오지 않는 경우: 다음 페이지를 불러옴
+         */
+        if (entries[entries.length - 1]?.isIntersecting && hasNextPage && !isFetchingNextPage) {
           fetchNextPage();
         }
       },
@@ -115,6 +123,7 @@ function DirectoryListContainer({ eventHub }: TProps) {
           />
         ))}
       </div>
+      {/* 무한스크롤 트리거(센티넬) */}
       <div ref={sentinelRef} className='h-1' />
       {isFetchingNextPage && (
         <div className='flex justify-center py-4'>
