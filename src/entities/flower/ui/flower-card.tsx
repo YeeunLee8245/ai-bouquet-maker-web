@@ -30,12 +30,11 @@ const flowerCardImageSizes: Record<TProps['size'], { width: number; height: numb
 function FlowerCard({ size, imageUrl, id, name, isLiked, colors, tags, actionButton, className, ...props }: TProps) {
   const [imageWidth, imageHeight] = [flowerCardImageSizes[size].width, flowerCardImageSizes[size].height];
   return (
-    <div className={cn('flex flex-col', size === 'md' && `min-w-[${imageWidth}px]`, size === 'lg' && `min-w-[${imageWidth}px]`, className)} {...props}>
+    <div className={cn('flex flex-col', `min-w-[${imageWidth}px]`, className)} {...props}>
       <Link
         aria-label={`${name} 상세 페이지 보기`}
         href={`/flower-directory/${id}`}
         className={cn('relative')}>
-        {/* TODO: yeeun 이미지 너비 높이 고정 */}
         <Image
           src={imageUrl}
           alt={name}
