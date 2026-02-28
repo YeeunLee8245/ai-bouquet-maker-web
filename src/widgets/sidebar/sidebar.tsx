@@ -70,7 +70,7 @@ function Sidebar({ modalId }: TModalProps) {
       </button>
       {/* 상단 메뉴 */}
       <div className='mt-10 flex flex-col justify-start gap-4'>
-        {!isLoading && menuItems.map((item) => (
+        { menuItems.map((item) => (
           <Link
             key={item.path}
             href={item.path}

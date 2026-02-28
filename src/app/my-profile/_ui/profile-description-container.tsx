@@ -2,8 +2,11 @@ import React from 'react';
 import Link from 'next/link';
 import { profileBouquetData, profileDescriptionData } from '../_datas';
 import ProfileBouquetCard from './profile-bouquet-card';
+import { useUserAction } from '@/hooks/use-user-action';
 
 function ProfileDescriptionContainer() {
+  const { signOut } = useUserAction();
+
   return (
     <div className='flex flex-col py-4'>
       <div className='flex flex-col gap-4 px-micro'>
@@ -27,7 +30,7 @@ function ProfileDescriptionContainer() {
           ),
         )}
       </div>
-      <button className='text-ui-textbtn-lg text-gray-400 mt-4'>
+      <button onClick={signOut} className='text-ui-textbtn-lg text-gray-400 mt-4'>
         로그아웃
       </button>
     </div>
