@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useMemo } from 'react';
 import { useSetAtom, useAtom, useStore } from 'jotai';
 import { IDirectoryEventHub } from '../_types';
 import { directoryDefaultSortOptions } from '../_datas';
@@ -45,8 +45,9 @@ function DirectoryListContainer({ eventHub }: TProps) {
     return () => observer.disconnect();
   }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
-  const flowers = data?.pages.flatMap(page => page.flowers) ?? [];
-  const total = data?.pages[0]?.total ?? 0;
+  const [flowers, total] = useMemo(() => {
+    return [data?.pages.flatMap(page => page.flowers) ?? [], data?.pages[0]?.total ?? 0];
+  }, [data]);
 
   useEffect(() => {
     flowers.forEach((flower) => {
