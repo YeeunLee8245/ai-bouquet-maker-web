@@ -4,30 +4,27 @@ import SummerIcon from '@/shared/assets/icons/summer.svg';
 import AutumnIcon from '@/shared/assets/icons/fall.svg';
 import WinterIcon from '@/shared/assets/icons/winter.svg';
 import { DIRECTORY_SEASON_NAME_MAP } from '../../_datas';
+import { TFlowerFloweringTime } from '../_types';
 
 type TProps = {
-  floweringTime: {
-    season: (keyof typeof DIRECTORY_SEASON_NAME_MAP)[];
-    months: string[];
-  };
+  floweringTimes: TFlowerFloweringTime[];
 };
 
-function FlowerFloweringTimeContents({ floweringTime }: TProps) {
-  const { season, months } = floweringTime;
+function FlowerFloweringTimeContents({ floweringTimes }: TProps) {
   return (
     <div className='flex flex-col gap-3'>
       <p className='text-title-md'>개화 시기</p>
-      {season.map((id) => {
-        const name = DIRECTORY_SEASON_NAME_MAP[id];
+      {floweringTimes.map(({ season, months }) => {
+        const name = DIRECTORY_SEASON_NAME_MAP[season];
         return (
-          <div key={id}>
+          <div key={season}>
             <div className='flex items-center gap-2flex-wrap'>
               <span className='flex items-center gap-1 flex-wrap'>
                 <span className='pr-[5.27px]'>
-                  { id === 'spring' && <SpringIcon />}
-                  { id === 'summer' && <SummerIcon />}
-                  { id === 'autumn' && <AutumnIcon />}
-                  { id === 'winter' && <WinterIcon />}
+                  { season === 'spring' && <SpringIcon />}
+                  { season === 'summer' && <SummerIcon />}
+                  { season === 'autumn' && <AutumnIcon />}
+                  { season === 'winter' && <WinterIcon />}
                 </span>
                 <span className='text-body-lg'>{name}</span>
               </span>

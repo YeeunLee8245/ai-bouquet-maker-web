@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { Button } from '@/shared/ui/button';
-import { getColorName, hslString } from '@/shared/utils/color';
+import { getColorNameFromHsl, hslString } from '@/shared/utils/color';
 import { closeModalAtom, TModalProps } from '@/shared/model/modal';
 import { useSetAtom } from 'jotai';
 
@@ -35,7 +35,7 @@ function ColorPickModal({ modalId }: TModalProps) {
             style={{ backgroundColor: selectedColor }}
           />
           <p className='pt-2 text-center text-body-xsm text-gray-400'>
-            {getColorName(hue, saturation, lightness)}
+            {getColorNameFromHsl(hue, saturation, lightness)}
           </p>
         </div>
 

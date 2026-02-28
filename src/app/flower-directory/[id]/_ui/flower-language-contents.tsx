@@ -1,5 +1,6 @@
 import React from 'react';
 import ColorFlowerIcon from '@/shared/assets/icons/color_flower.svg';
+import { getColorNameFromHex } from '@/shared/utils/color';
 
 type TProps = {
   meanings: {
@@ -10,6 +11,7 @@ type TProps = {
 };
 
 function FlowerLanguageContents({ meanings }: TProps) {
+
   return (
     <div>
       <p className='text-title-md'>꽃말과 의미</p>
@@ -20,7 +22,8 @@ function FlowerLanguageContents({ meanings }: TProps) {
               <span className='pr-[4.8px]'>
                 <ColorFlowerIcon className='w-[14px] h-[14px]' style={{ fill: color }} />
               </span>
-              <span className='text-body-lg'>색상</span>
+              {/* TODO: yeeun 색상 이름 매칭 QA 테스트 주목 필요 */}
+              <span className='text-body-lg'>{getColorNameFromHex(color)}</span>
             </div>
             <p className='mt-1 text-body-md'>{description}</p>
             <div className='flex items-center gap-1 text-body-sm text-gray-400'>

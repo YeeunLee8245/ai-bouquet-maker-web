@@ -6,22 +6,15 @@ import { flowerTabItems } from '../_datas';
 import FlowerLanguageContents from './flower-language-contents';
 import FlowerFloweringTimeContents from './flower-flowering-time-contents';
 import FlowerManagementContents from './flower-management-contents';
-import { DIRECTORY_SEASON_NAME_MAP } from '../../_datas';
+import { TFlowerFloweringTime, TFlowerMeaning } from '../_types';
 
 type TProps = {
-  meanings: {
-    color: string;
-    description: string;
-    tags: string[];
-  }[];
-  floweringTime: {
-    season: (keyof typeof DIRECTORY_SEASON_NAME_MAP)[];
-    months: string[];
-  };
+  meanings: TFlowerMeaning[];
+  floweringTimes: TFlowerFloweringTime[];
   management: string;
 };
 
-function FlowerTabContainer({ meanings, floweringTime, management }: TProps) {
+function FlowerTabContainer({ meanings, floweringTimes, management }: TProps) {
   const [currentValue, setCurrentValue] = useState<string>(flowerTabItems[0].value);
   const listRef = useRef<HTMLDivElement | null>(null);
   const triggerRefs = useRef<Record<string, HTMLButtonElement | null>>({});
@@ -62,7 +55,7 @@ function FlowerTabContainer({ meanings, floweringTime, management }: TProps) {
         {flowerTabItems.map(({ value }) => (
           <Tabs.Content key={value} value={value} className='mt-4 px-micro pb-1'>
             {value === '1' && <FlowerLanguageContents meanings={meanings} />}
-            {value === '2' && <FlowerFloweringTimeContents floweringTime={floweringTime} />}
+            {value === '2' && <FlowerFloweringTimeContents floweringTimes={floweringTimes} />}
             {value === '3' && <FlowerManagementContents management={management} />}
           </Tabs.Content>
         ))}
