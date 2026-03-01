@@ -35,6 +35,7 @@ function SelectedFlowerChips() {
     <div className='flex flex-col'>
       <div className='flex justify-between'>
         <span className='text-ui-label-sm text-gray-400 shrink-0'>선택한 꽃</span>
+        {/* TODO: yeeun 접었을 때 2번째 줄 텍스트 살짝 보이는 문제 수정 */}
         {isOverflowing && (
           <button
             type='button'

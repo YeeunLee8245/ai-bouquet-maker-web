@@ -13,6 +13,7 @@ type TProps = {
   tags: string[];
   actionButton?: React.ReactNode;
   likeButton?: React.ReactNode;
+  searchParams?: Record<string, string>;
 } & React.HTMLAttributes<HTMLDivElement>;
 
 const flowerCardImageSizes: Record<TProps['size'], { width: number; height: number }> = {
@@ -26,13 +27,14 @@ const flowerCardImageSizes: Record<TProps['size'], { width: number; height: numb
   },
 };
 
-function FlowerCard({ size, imageUrl, id, name, colors, tags, actionButton, likeButton, className, ...props }: TProps) {
+function FlowerCard({ size, imageUrl, id, name, colors, tags, actionButton, likeButton, searchParams, className, ...props }: TProps) {
   const [imageWidth, imageHeight] = [flowerCardImageSizes[size].width, flowerCardImageSizes[size].height];
+  const query = searchParams ? `?${new URLSearchParams(searchParams).toString()}` : '';
   return (
     <div className={cn('flex flex-col', `min-w-[${imageWidth}px]`, className)} {...props}>
       <Link
         aria-label={`${name} 상세 페이지 보기`}
-        href={`/flower-directory/${id}`}
+        href={`/flower-directory/${id}${query}`}
         className={cn('relative')}>
         <Image
           src={imageUrl}
