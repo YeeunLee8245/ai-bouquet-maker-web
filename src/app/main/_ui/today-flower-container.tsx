@@ -2,6 +2,7 @@ import { KeywordChip } from '@/shared/ui/chip';
 import Image from 'next/image';
 import React from 'react';
 import { TTodaysFlower } from '../_types';
+import Link from 'next/link';
 
 type TProps = {
   flower?: TTodaysFlower;
@@ -26,7 +27,7 @@ export default function TodayFlowerContainer({ flower }: TProps) {
         <p className='text-title-md text-gray-700'>오늘의 추천 꽃</p>
 
         {/* cover 이미지 + 하단 그라데이션 오버레이 + 텍스트 */}
-        <button className='relative w-[140px] h-[196px]'>
+        <Link href={`/flower-directory/${flower?.id}`} aria-label={`${name} 상세 페이지 보기`} className='relative w-[140px] h-[196px]'>
           <div className='absolute inset-0 rounded-[24px] overflow-hidden shadow-[0_6px_20px_rgba(0,0,0,0.12)]'>
             <Image
               src={imageUrl}
@@ -43,7 +44,7 @@ export default function TodayFlowerContainer({ flower }: TProps) {
           <p className='absolute left-0 right-0 bottom-4 text-center text-[18px] font-semibold leading-[24px] tracking-[-0.072px] text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.25)]'>
             {name}
           </p>
-        </button>
+        </Link>
 
         <span className='mt-3 flex gap-1 items-center'>
           {meanings.map((tag) => (
