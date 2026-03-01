@@ -101,7 +101,7 @@ function DirectoryListContainer({ eventHub }: TProps) {
             tags={flower.tags}
             searchParams={{ 'can-create-bouquet': 'true' }}
             likeButton={flower.isLiked !== undefined
-              ? <LikeButton type='flower' id={flower.id} variant='outline' size='lg' />
+              ? <LikeButton type='flower' id={flower.id} initialLiked={flower.isLiked} variant='outline' size='lg' />
               : undefined
             }
             actionButton={

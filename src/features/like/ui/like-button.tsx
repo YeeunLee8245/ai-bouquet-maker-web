@@ -10,7 +10,6 @@ type TProps = TUseLikeParams & {
   className?: string;
 };
 
-// TODO: yeeun 버튼 사이즈 스타일 추가
 const buttonSizes: Record<TProps['size'], string> = {
   md: 'w-[18px] h-[18px]',
   lg: 'w-[20px] h-[20px]',

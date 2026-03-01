@@ -8,24 +8,25 @@ import { isUnauthorizedError } from '@/shared/api/error';
 export type TUseLikeParams = {
   type: LikeType;
   id: string;
+  initialLiked?: boolean;
   queryKeyToPatch?: readonly unknown[];
   patchQueryData?: (prev: unknown, liked: boolean) => unknown;
 };
 
-export function useLike({type, id, queryKeyToPatch, patchQueryData}: TUseLikeParams) {
+export function useLike({type, id, initialLiked, queryKeyToPatch, patchQueryData}: TUseLikeParams) {
   const store = useStore();
   const queryClient = useQueryClient();
 
   const key = makeLikeKey(type, id);
-  const atom = getLikeAtom(key);
+  const atom = getLikeAtom(key, initialLiked);
   const state = useAtomValue(atom);
 
   const mutation = useMutation({
-    mutationFn: async () => {
-      if (state.liked) {
-        return deleteLike(id);
+    mutationFn: async (newLiked: boolean) => {
+      if (newLiked) {
+        return postLike(id);
       }
-      return postLike(id);
+      return deleteLike(id);
     },
     // 뮤테이션 시작 직전에 상태 업데이트
     onMutate: (newLiked: boolean) => {

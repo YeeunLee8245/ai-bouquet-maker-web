@@ -14,12 +14,12 @@ export function makeLikeKey(type: LikeType, id: string): LikeKey {
   return `${type}:${id}`;
 }
 
-export function getLikeAtom(key: LikeKey) {
+export function getLikeAtom(key: LikeKey, initialLiked?: boolean) {
   const found = cache.get(key);
   if (found) {return found;}
 
   const created = atom<LikeState>({
-    liked: false,
+    liked: initialLiked ?? false,
     pending: false,
   });
   cache.set(key, created);
