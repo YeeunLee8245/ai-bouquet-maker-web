@@ -8,9 +8,10 @@ type TProps = {
     imageUrl: string;
     tags: string[];
   }[];
+  searchParams?: Record<string, string>;
 };
 
-function FlowerSimilarContainer({ similarFlowers }: TProps) {
+function FlowerSimilarContainer({ similarFlowers, searchParams }: TProps) {
   return (
     <div className='w-full pt-4 pb-5'>
       <p className='text-title-md px-4'>유사한 꽃</p>
@@ -20,6 +21,7 @@ function FlowerSimilarContainer({ similarFlowers }: TProps) {
             key={flower.id}
             size='md'
             {...flower}
+            searchParams={searchParams}
             className='first:ml-4 last:mr-4'
           />
         ))}

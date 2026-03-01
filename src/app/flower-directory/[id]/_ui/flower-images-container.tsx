@@ -11,9 +11,10 @@ type TProps = {
     url: string;
     name: string;
   }[];
+  prevPath?: string;
 };
 
-function FlowerImagesContainer({ images }: TProps) {
+function FlowerImagesContainer({ images, prevPath }: TProps) {
   const router = useRouter();
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -34,7 +35,7 @@ function FlowerImagesContainer({ images }: TProps) {
         activeIndex={currentIndex}
       />
       <button
-        onClick={() => router.back()}
+        onClick={() => prevPath ? router.push(prevPath) : router.back()}
         aria-label='뒤로가기'
         className='w-[24px] h-[24px] absolute top-[16px] left-[16px] transform rotate-[-90deg] ml-[0.6px] justify-items-center'
       >
