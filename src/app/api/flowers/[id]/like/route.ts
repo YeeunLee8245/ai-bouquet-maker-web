@@ -28,7 +28,6 @@ import { getPublicUser } from '@/lib/users/auth';
  *             schema:
  *               type: object
  *               properties:
- *                 success: { type: boolean, example: true }
  *                 isLiked: { type: boolean, example: true, description: "변경 후 좋아요 상태" }
  *       401:
  *         description: 인증 실패 (로그인 필요)
@@ -80,12 +79,15 @@ export async function POST(
     // 좋아요 추가 (upsert로 중복 방지)
     const { error: likeError } = await supabase
       .from('user_flower_likes')
-      .upsert({
-        user_id: publicUser.id,
-        flower_id: flowerId,
-      }, {
-        onConflict: 'user_id,flower_id',
-      });
+      .upsert(
+        {
+          user_id: publicUser.id,
+          flower_id: flowerId,
+        },
+        {
+          onConflict: 'user_id,flower_id',
+        },
+      );
 
     if (likeError) {
       console.error('Like insert error:', likeError);
@@ -96,7 +98,6 @@ export async function POST(
     }
 
     return NextResponse.json({
-      success: true,
       isLiked: true,
     });
   } catch (error) {
@@ -114,7 +115,7 @@ export async function POST(
  *   delete:
  *     tags:
  *       - Flowers
- *     summary: 꽃 좋아요 삭제
+ *     summary: 꽃 좋아요 해제
  *     description: 로그인한 사용자가 특정 꽃의 좋아요를 취소합니다.
  *     parameters:
  *       - name: id
@@ -126,13 +127,12 @@ export async function POST(
  *         example: 1
  *     responses:
  *       200:
- *         description: 좋아요 삭제 성공
+ *         description: 좋아요 해제 성공
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
- *                 success: { type: boolean, example: true }
  *                 isLiked: { type: boolean, example: false, description: "변경 후 좋아요 상태" }
  *       401:
  *         description: 인증 실패
@@ -171,7 +171,7 @@ export async function DELETE(
 
     const supabase = await createClient();
 
-    // 좋아요 삭제
+    // 좋아요 해제
     const { error: deleteError } = await supabase
       .from('user_flower_likes')
       .delete()
@@ -181,19 +181,18 @@ export async function DELETE(
     if (deleteError) {
       console.error('Like delete error:', deleteError);
       return NextResponse.json(
-        { error: '좋아요 삭제 중 오류가 발생했습니다.' },
+        { error: '좋아요 해제 중 오류가 발생했습니다.' },
         { status: 500 },
       );
     }
 
     return NextResponse.json({
-      success: true,
       isLiked: false,
     });
   } catch (error) {
     console.error('Unlike API error:', error);
     return NextResponse.json(
-      { error: '좋아요 삭제 중 오류가 발생했습니다.' },
+      { error: '좋아요 해제 중 오류가 발생했습니다.' },
       { status: 500 },
     );
   }
