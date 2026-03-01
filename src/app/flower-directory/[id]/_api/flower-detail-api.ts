@@ -51,7 +51,8 @@ export async function fetchFlowerDetail(id: string): Promise<TFlowerDetail> {
       name: flower.name_ko,
     })),
     meanings: flower.meanings.map((m) => ({
-      color: m.icon_color ?? '#000000',
+      colorName: m.color ?? '전체',
+      color: m.icon_color ?? '',
       description: m.meaning,
       tags: m.emotion_tags ?? [],
     })),

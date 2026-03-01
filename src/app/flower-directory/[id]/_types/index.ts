@@ -38,6 +38,7 @@ export type TFlowerImage = {
 };
 
 export type TFlowerMeaning = {
+  colorName: string;
   color: string;
   description: string;
   tags: string[];
