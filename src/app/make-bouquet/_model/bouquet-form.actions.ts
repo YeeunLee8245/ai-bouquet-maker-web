@@ -11,15 +11,46 @@ import { TBouquetFlowerItem } from '../_types';
 
 /**
  * 선택한 꽃을 꽃다발 폼에 추가(초기 상태 세팅)
+ * - 먼저 selectedFlowersAtom으로 즉시 초기화(id, name)
+ * - 이후 /api/recipe/bouquet/selected API 호출하여 꽃 상세 정보(name_ko)로 업데이트
  */
-export const initBouquetFlowersAtom = atom(null, (get, set) => {
+export const initBouquetFlowersAtom = atom(null, async (get, set) => {
   const selected = get(selectedFlowersAtom);
+
+  // 즉시 초기화 (API 응답 전까지 기본 데이터 표시)
   const bouquetFlowers: TBouquetFlowerItem[] = selected.map((f) => ({
     flowerId: f.id,
     name: f.name,
     colorAndQuantities: [],
   }));
   set(bouquetFlowersAtom, bouquetFlowers);
+
+  // API 호출하여 꽃 상세 정보로 업데이트
+  if (selected.length === 0) {return;}
+
+  try {
+    const ids = selected.map((f) => Number(f.id));
+    const res = await fetch('/api/recipe/bouquet/selected', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(ids),
+    });
+
+    if (!res.ok) {return;}
+
+    const data: { id: string; name_ko: string }[] = await res.json();
+    if (!Array.isArray(data)) {return;}
+
+    // API 응답 기준으로 name 업데이트
+    const detailMap = new Map(data.map((d) => [d.id, d.name_ko]));
+    const updated = bouquetFlowers.map((f) => ({
+      ...f,
+      name: detailMap.get(f.flowerId) ?? f.name,
+    }));
+    set(bouquetFlowersAtom, updated);
+  } catch {
+    // API 실패 시 기존 초기화 데이터 유지
+  }
 });
 
 /**

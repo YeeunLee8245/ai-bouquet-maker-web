@@ -10,15 +10,25 @@ import { useAtomValue, useSetAtom } from 'jotai';
 import { selectedFlowersAtom, removeFlowerAtom } from '@/shared/model/selected-flowers';
 import { ActionLabel } from '@/shared/ui/label';
 
+type TFlowerChip = {
+  id: string;
+  name: string;
+};
+
+type TSelectedFlowerChipsProps = {
+  flowers: TFlowerChip[];
+  onRemove: (id: string) => void;
+};
+
 type TProps = {
   title?: string;
   className?: string;
   children?: React.ReactNode;
+  flowers?: TFlowerChip[];
+  onRemoveFlower?: (id: string) => void;
 };
 
-function SelectedFlowerChips() {
-  const flowers = useAtomValue(selectedFlowersAtom);
-  const removeFlower = useSetAtom(removeFlowerAtom);
+function SelectedFlowerChips({ flowers, onRemove }: TSelectedFlowerChipsProps) {
   const [expanded, setExpanded] = useState(false);
   const [isOverflowing, setIsOverflowing] = useState(false);
   const listRef = useRef<HTMLDivElement>(null);
@@ -67,7 +77,7 @@ function SelectedFlowerChips() {
             key={id}
             text={name}
             icon={
-              <span onClick={() => removeFlower(id)} className='cursor-pointer pl-micro pr-[3.2px]'>
+              <span onClick={() => onRemove(id)} className='cursor-pointer pl-micro pr-[3.2px]'>
                 <XIcon className='w-[11px] h-[11px] fill-gray-200'/>
               </span>
             }
@@ -79,13 +89,25 @@ function SelectedFlowerChips() {
   );
 }
 
-function BottomActionFooter({ title, children }: TProps) {
+/**
+ * SelectedFlowerChips의 기본 데이터 소스(selectedFlowersAtom)를 사용하는 래퍼
+ */
+function DefaultSelectedFlowerChips() {
+  const flowers = useAtomValue(selectedFlowersAtom);
+  const removeFlower = useSetAtom(removeFlowerAtom);
+  return <SelectedFlowerChips flowers={flowers} onRemove={removeFlower} />;
+}
+
+function BottomActionFooter({ title, children, flowers, onRemoveFlower }: TProps) {
   return (
     <footer
       className='py-3 px-4 pb-8 w-full flex flex-col gap-3 border-t border-gray-100 bg-white'
       style={{ paddingBottom: 'max(2rem, env(safe-area-inset-bottom))' }}
     >
-      <SelectedFlowerChips />
+      {flowers && onRemoveFlower
+        ? <SelectedFlowerChips flowers={flowers} onRemove={onRemoveFlower} />
+        : <DefaultSelectedFlowerChips />
+      }
       {title && <Button size='lg' asChild>
         <Link href='/make-bouquet'>{title}</Link>
       </Button>}
