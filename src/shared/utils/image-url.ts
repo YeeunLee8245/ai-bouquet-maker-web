@@ -3,8 +3,8 @@ const SUPABASE_RENDER_PUBLIC_PATH = '/storage/v1/render/image/public/';
 
 export function toSupabaseResizedImageUrl(
   imageUrl: string | null | undefined,
-  width: number = 124,
-  height: number = 124,
+  width: number = 1024,
+  height: number = 1024,
 ): string | null {
   if (!imageUrl) {
     return null;
