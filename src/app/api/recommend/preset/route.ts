@@ -3,6 +3,7 @@ import { createClient } from '@shared/supabase/server';
 import { getUser } from '@/lib/users/auth';
 import { getCardRecommendations } from '@/lib/recommend/card-recommendation';
 import { getRelationshipLabel, getOccasionLabel } from '@/lib/recommend/relationship-templates';
+import { toSupabaseResizedImageUrl } from '@shared/utils/image-url';
 
 /**
  * @swagger
@@ -244,7 +245,7 @@ export async function GET(request: NextRequest) {
             .filter((color): color is string => Boolean(color)),
         )],
         score: rec.score,
-        imageUrl: rec.flower.images?.[0] || null,
+        imageUrl: toSupabaseResizedImageUrl(rec.flower.images?.[0]),
       };
     });
 

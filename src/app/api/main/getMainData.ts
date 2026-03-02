@@ -1,5 +1,6 @@
 import { relationshipTemplates } from '@/lib/recommend/relationship-templates';
 import { createClient } from '@/shared/supabase/server';
+import { toSupabaseResizedImageUrl } from '@shared/utils/image-url';
 
 type MainFlowerRow = {
   id: number;
@@ -124,7 +125,7 @@ export async function getMainData() {
 
   // 4. 데이터 가공 (대표 이미지 및 의미 추출)
   const getRepresentativeImage = (f: MainFlowerRow) => {
-    return f.images?.[0] || '/temp_geobera.png';
+    return toSupabaseResizedImageUrl(f.images?.[0]) || '/temp_geobera.png';
   };
 
   const processedPopular = shuffledPopular.map((f) => ({
