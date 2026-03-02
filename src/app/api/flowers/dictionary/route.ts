@@ -110,6 +110,7 @@ function getCurrentSeason(): string {
  *                           id: { type: string, description: "꽃 ID (상세 조회용)", example: "1" }
  *                           imageUrl: { type: string, description: "대표 이미지 URL", example: "/images/flowers/rose.png" }
  *                           name: { type: string, description: "한글 이름", example: "장미" }
+ *                           defaultMeaningId: { type: string, description: "기본 꽃말 ID (is_primary:true 우선, 없으면 첫 번째)", example: "101" }
  *                           isLiked: { type: boolean, nullable: true, description: "로그인 유저의 좋아요 여부. 비로그인 시 키 자체가 없음(undefined)", example: true }
  *                           colors: { type: array, items: { type: string }, description: "대표 색상 코드(HEX) 목록", example: ["#FF4D6D"] }
  *                           tags: { type: array, items: { type: string }, description: "상징 꽃말 (최대 3개)", example: ["열정적 사랑", "순결"] }
@@ -128,12 +129,14 @@ function getCurrentSeason(): string {
  *                       - id: "1"
  *                         imageUrl: "/images/flowers/tulip.png"
  *                         name: "튤립"
+ *                         defaultMeaningId: "101"
  *                         isLiked: true
  *                         colors: ["#F8BBD0", "#FF4D6D"]
  *                         tags: ["사랑의 고백", "영원한 애정"]
  *                       - id: "5"
  *                         imageUrl: "/images/flowers/cherry_blossom.png"
  *                         name: "벚꽃"
+ *                         defaultMeaningId: "205"
  *                         isLiked: false
  *                         colors: ["#F8BBD0", "#E91E63"]
  *                         tags: ["순결", "절세미인"]
@@ -151,6 +154,7 @@ function getCurrentSeason(): string {
  *                       - id: "1"
  *                         imageUrl: "/images/flowers/tulip.png"
  *                         name: "튤립"
+ *                         defaultMeaningId: "101"
  *                         colors: ["#F8BBD0", "#FF4D6D"]
  *                         tags: ["사랑의 고백", "영원한 애정"]
  *                     total: 120
@@ -335,10 +339,19 @@ export async function GET(request: NextRequest) {
     // FlowerCard에 맞는 형태로 변환
     const formattedFlowers = filteredFlowers.map(flower => {
       const meanings = (flower.flower_meanings || []) as Array<{
+        id?: number | null;
         icon_color?: string | null;
         is_primary?: boolean | null;
         meaning?: string | null;
       }>;
+
+      // 기본 꽃말 ID: is_primary: true 우선, 없으면 첫 번째
+      const primaryMeaning = meanings.find(m => m.is_primary);
+      const defaultMeaningId = primaryMeaning?.id != null
+        ? String(primaryMeaning.id)
+        : meanings[0]?.id != null
+          ? String(meanings[0].id)
+          : null;
 
       // 색상 추출 (icon_color)
       const flowerColors = [...new Set(
@@ -363,6 +376,7 @@ export async function GET(request: NextRequest) {
         id: String(flower.id),
         imageUrl,
         name: flower.name_ko,
+        defaultMeaningId,
         isLiked: user ? userLikes.has(flower.id) : undefined,
         colors: flowerColors,
         tags,

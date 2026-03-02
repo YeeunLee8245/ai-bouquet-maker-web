@@ -172,7 +172,7 @@ export async function GET(request: NextRequest) {
     }
 
     // 꽃 정보 가져오기 (recipe에서 flower_id 추출)
-    const allFlowerIds = new Set<number>();
+    const allFlowerIds = new Set<string>();
     (bouquets || []).forEach(bouquet => {
       const recipe = bouquet.recipe as BouquetRecipeContent | null;
       if (recipe?.flowers) {
@@ -181,7 +181,7 @@ export async function GET(request: NextRequest) {
     });
 
     // 꽃 이름 조회
-    let flowerMap: Record<number, string> = {};
+    let flowerMap: Record<string, string> = {};
     if (allFlowerIds.size > 0) {
       const { data: flowers } = await supabase
         .from('flowers')
@@ -190,7 +190,7 @@ export async function GET(request: NextRequest) {
 
       if (flowers) {
         flowerMap = Object.fromEntries(
-          flowers.map(f => [f.id, f.name_ko]),
+          flowers.map(f => [String(f.id), f.name_ko]),
         );
       }
     }

@@ -227,7 +227,7 @@ export async function GET(request: NextRequest) {
 
     // 표준화된 응답 형식으로 변환
     const standardizedRecommendations = recommendations.map(rec => {
-      const matchedMeaning = rec.flower.flower_meanings?.find(m => m.id === rec.flowerMeaningId)?.meaning || '';
+      const matchedMeaning = rec.flower.flower_meanings?.find(m => String(m.id) === String(rec.flowerMeaningId))?.meaning || '';
       const representativeTags = Array.isArray(rec.flower.representative_meanings_tags)
         ? rec.flower.representative_meanings_tags
         : [];

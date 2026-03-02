@@ -54,6 +54,10 @@ import { toSupabaseResizedImageUrl } from '@shared/utils/image-url';
  *                     type: string
  *                     description: 꽃 한글명
  *                     example: "튤립"
+ *                   defaultMeaningId:
+ *                     type: string
+ *                     description: 기본 꽃말 ID (is_primary:true 우선, 없으면 첫 번째)
+ *                     example: "101"
  *                   tags:
  *                     type: array
  *                     description: 대표 꽃말 태그
@@ -77,11 +81,13 @@ import { toSupabaseResizedImageUrl } from '@shared/utils/image-url';
  *                 value:
  *                   - id: "12"
  *                     name_ko: "튤립"
+ *                     defaultMeaningId: "101"
  *                     tags: ["사랑", "응원"]
  *                     imageUrl: "/images/flowers/tulip.png"
  *                     colors: ["#F8BBD0", "#FF4D6D"]
  *                   - id: "5"
  *                     name_ko: "장미"
+ *                     defaultMeaningId: "205"
  *                     tags: ["열정", "감사"]
  *                     imageUrl: "/images/flowers/rose.png"
  *                     colors: ["#E31C25", "#FF8A80"]
@@ -159,8 +165,18 @@ export async function POST(request: NextRequest) {
 
     const responseItems = (flowers || [])
       .map(flower => {
+        const meanings = flower.flower_meanings || [];
+        
+        // 기본 꽃말 ID: is_primary: true 우선, 없으면 첫 번째
+        const primaryMeaning = meanings.find(m => m.is_primary);
+        const defaultMeaningId = primaryMeaning?.id != null
+          ? String(primaryMeaning.id)
+          : meanings[0]?.id != null
+            ? String(meanings[0].id)
+            : null;
+
         const colors = Array.from(new Set(
-          (flower.flower_meanings || [])
+          meanings
             .map(meaning => meaning.icon_color)
             .filter((color): color is string => typeof color === 'string' && color.length > 0 && color !== '#9E9E9E'),
         ));
@@ -168,6 +184,7 @@ export async function POST(request: NextRequest) {
         return {
           id: String(flower.id),
           name_ko: flower.name_ko,
+          defaultMeaningId,
           imageUrl: toSupabaseResizedImageUrl((flower.images as string[] | null)?.[0]),
           tags: flower.representative_meanings_tags || [],
           colors,

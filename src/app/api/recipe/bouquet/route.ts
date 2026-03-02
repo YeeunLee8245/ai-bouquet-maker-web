@@ -108,6 +108,7 @@ import { getPublicUser } from '@/lib/users/auth';
  *                         rotation: { type: number, description: "회전 각도 (degree)", example: 45 }
  *                         scale: { type: number, description: "크기 배율", example: 1.2 }
  *                         z_index: { type: integer, description: "레이어 순서", example: 1 }
+ *                         color: { type: string, description: "렌더링 색상 (Hex Code)", example: "#FFD700" }
  *                         type: { type: string, description: "아이콘 종류 (예: rose, marigold 등)", example: "rose" }
  *           examples:
  *             general:
@@ -135,12 +136,14 @@ import { getPublicUser } from '@/lib/users/auth';
  *                       y: 200
  *                       rotation: 0
  *                       z_index: 2
+ *                       color: "#FFD700"
  *                     - flower_id: 112
  *                       flower_meaning_id: 301
  *                       x: 180
  *                       y: 220
  *                       rotation: 15
  *                       z_index: 1
+ *                       color: "#FFD700"
  *             from_recommendation:
  *               summary: AI 추천 결과 바로 저장
  *               description: AI가 추천해준 조합을 그대로 또는 약간 수정하여 저장하는 상황

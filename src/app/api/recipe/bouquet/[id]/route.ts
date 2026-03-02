@@ -263,7 +263,7 @@ export async function GET(
     const meaningIds = Array.from(new Set(flowersInRecipe.map(f => f.flower_meaning_id)));
 
     // 꽃 이름 및 이미지 맵
-    let flowerMap: Record<number, { name_ko: string; image_url: string | null }> = {};
+    let flowerMap: Record<string, { name_ko: string; image_url: string | null }> = {};
     if (flowerIds.length > 0) {
       const { data: flowers } = await supabase
         .from('flowers')
@@ -272,13 +272,13 @@ export async function GET(
 
       if (flowers) {
         flowerMap = Object.fromEntries(
-          flowers.map(f => [f.id, { name_ko: f.name_ko, image_url: toSupabaseResizedImageUrl(f.images?.[0]) }]),
+          flowers.map(f => [String(f.id), { name_ko: f.name_ko, image_url: toSupabaseResizedImageUrl(f.images?.[0]) }]),
         );
       }
     }
 
     // 꽃말 텍스트 및 아이콘 컬러 맵
-    let meaningMap: Record<number, { meaning: string; icon_color: string | null }> = {};
+    let meaningMap: Record<string, { meaning: string; icon_color: string | null }> = {};
     if (meaningIds.length > 0) {
       const { data: meanings } = await supabase
         .from('flower_meanings')
@@ -287,7 +287,7 @@ export async function GET(
 
       if (meanings) {
         meaningMap = Object.fromEntries(
-          meanings.map(m => [m.id, { meaning: m.meaning, icon_color: m.icon_color }]),
+          meanings.map(m => [String(m.id), { meaning: m.meaning, icon_color: m.icon_color }]),
         );
       }
     }
