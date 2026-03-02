@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@shared/supabase/server';
 import { getUser } from '@/lib/users/auth';
+import { toSupabaseResizedImageUrl } from '@shared/utils/image-url';
 
 /**
  * @swagger
@@ -239,7 +240,7 @@ export async function GET(
     }));
 
     const formattedSimilarFlowers = (similarFlowers || []).map((f: CandidateFlower) => {
-      const imageUrl = f.images?.[0] || '/temp_tulip.png';
+      const imageUrl = toSupabaseResizedImageUrl(f.images?.[0]) || '/temp_tulip.png';
 
       // 태그 추출 (신규 컬럼 우선)
       let tags = f.representative_meanings_tags?.slice(0, 2) || [];

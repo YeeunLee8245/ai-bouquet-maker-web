@@ -4,6 +4,7 @@ import { getPublicUser } from '@/lib/users/auth';
 import { analyzeEmotion } from '@services/emotion-analysis';
 import { getRecommendationsFromAnalysis } from '@/lib/recommend/recommendation';
 import { spendToken, getUserBalance } from '@/lib/users/wallet';
+import { toSupabaseResizedImageUrl } from '@shared/utils/image-url';
 
 /**
  * @swagger
@@ -297,7 +298,7 @@ export async function POST(request: NextRequest) {
               .filter((color): color is string => Boolean(color)),
           )],
           score: rec.score,
-          imageUrl: rec.flower.images?.[0] || null,
+          imageUrl: toSupabaseResizedImageUrl(rec.flower.images?.[0]),
         };
       });
 

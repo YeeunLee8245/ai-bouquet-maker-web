@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@shared/supabase/server';
+import { toSupabaseResizedImageUrl } from '@shared/utils/image-url';
 
 /**
  * @swagger
@@ -167,7 +168,7 @@ export async function POST(request: NextRequest) {
         return {
           id: String(flower.id),
           name_ko: flower.name_ko,
-          imageUrl: (flower.images as string[] | null)?.[0] || null,
+          imageUrl: toSupabaseResizedImageUrl((flower.images as string[] | null)?.[0]),
           tags: flower.representative_meanings_tags || [],
           colors,
         };

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@shared/supabase/server';
 import { BouquetRecipeContent, BouquetLayout } from '@/types/recommendation';
 import { getPublicUser } from '@/lib/users/auth';
+import { toSupabaseResizedImageUrl } from '@shared/utils/image-url';
 
 /**
  * @swagger
@@ -271,7 +272,7 @@ export async function GET(
 
       if (flowers) {
         flowerMap = Object.fromEntries(
-          flowers.map(f => [f.id, { name_ko: f.name_ko, image_url: f.images?.[0] || null }]),
+          flowers.map(f => [f.id, { name_ko: f.name_ko, image_url: toSupabaseResizedImageUrl(f.images?.[0]) }]),
         );
       }
     }

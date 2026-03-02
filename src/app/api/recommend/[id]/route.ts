@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@shared/supabase/server';
 import { getPublicUser } from '@/lib/users/auth';
+import { toSupabaseResizedImageUrl } from '@shared/utils/image-url';
 
 /**
  * @swagger
@@ -201,7 +202,7 @@ export async function GET(
             icon_color: m.icon_color,
             flower_id: m.flower_id,
             name: flower?.name_ko || '알 수 없음',
-            image_url: flower?.images?.[0] || null,
+            image_url: toSupabaseResizedImageUrl(flower?.images?.[0]),
           };
         });
       }

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@shared/supabase/server';
 import { getUser } from '@/lib/users/auth';
+import { toSupabaseResizedImageUrl } from '@shared/utils/image-url';
 
 /**
  * 현재 계절 가져오기 (서버 시간 기준)
@@ -383,7 +384,7 @@ export async function GET(request: NextRequest) {
           .slice(0, 3);
       }
 
-      const imageUrl = (flower.images as string[])?.[0] || '/temp_tulip.png';
+      const imageUrl = toSupabaseResizedImageUrl((flower.images as string[])?.[0]) || '/temp_tulip.png';
 
       return {
         id: String(flower.id),
