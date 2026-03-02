@@ -48,7 +48,7 @@ function getCurrentSeason(): string {
  *         description: |
  *           색상 이름 필터 (콤마로 구분된 여러 개 가능)
  *           - 현재 지원 색상: 노랑, 보라, 분홍, 빨강, 주황, 파랑, 흰색
- *           - 잘못된 색상 입력 시 `400 Bad Request`와 함께 유효한 색상 목록을 반환합니다.
+ *           - 존재하지 않는 색상 입력 시 빈 결과 반환
  *         schema:
  *           type: string
  *           example: 빨강,분홍
@@ -157,21 +157,6 @@ function getCurrentSeason(): string {
  *                     page: 1
  *                     limit: 20
  *                     has_next_page: true
- *       400:
- *         description: 잘못된 필터값 (색상명 오류 등)
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 error: { type: string, example: "존재하지 않는 색상입니다: 초록" }
- *                 validColors: { type: array, items: { type: string }, example: ["빨강", "분홍", "노랑"] }
- *             examples:
- *               invalid_color_filter:
- *                 summary: "잘못된 색상 필터"
- *                 value:
- *                   error: "존재하지 않는 색상입니다: 초록"
- *                   validColors: ["빨강", "분홍", "노랑", "주황", "노랑", "파랑", "흰색", "보라"]
  *       500:
  *         description: 서버 내부 오류 (DB 조회 실패 등)
  *         content:
@@ -228,41 +213,10 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    // 색상 필터가 있는 경우 뷰를 사용하여 유효성 검사 및 flower_id 조회
+    // 색상 필터가 있는 경우 flower_id 조회 (존재하지 않는 색상은 결과 0건으로 처리)
     let colorFilteredFlowerIds: number[] | null = null;
 
     if (colors.length > 0) {
-      // 1단계: DB에 존재하는 색상 목록 조회
-      const { data: validColorsData, error: validColorsError } = await supabase
-        .from('flowers_with_meanings_view')
-        .select('color')
-        .not('color', 'is', null);
-
-      if (validColorsError) {
-        console.error('Valid colors query error:', validColorsError);
-        return NextResponse.json(
-          { error: '색상 목록 조회 중 오류가 발생했습니다.' },
-          { status: 500 },
-        );
-      }
-
-      // 유효한 색상 목록 (중복 제거)
-      const validColors = [...new Set(validColorsData?.map(d => d.color) || [])];
-
-      // 입력된 색상 중 유효하지 않은 색상 확인
-      const invalidColors = colors.filter(c => !validColors.includes(c));
-
-      if (invalidColors.length > 0) {
-        return NextResponse.json(
-          {
-            error: `존재하지 않는 색상입니다: ${invalidColors.join(', ')}`,
-            validColors,
-          },
-          { status: 400 },
-        );
-      }
-
-      // 2단계: 유효한 색상으로 flower_id 조회
       const { data: colorMatches, error: colorError } = await supabase
         .from('flowers_with_meanings_view')
         .select('flower_id')
@@ -279,7 +233,7 @@ export async function GET(request: NextRequest) {
       // 중복 제거된 flower_id 목록
       colorFilteredFlowerIds = [...new Set(colorMatches?.map(m => m.flower_id) || [])];
 
-      // 색상 필터에 매칭되는 꽃이 없으면 빈 결과 반환
+      // 매칭되는 꽃이 없으면 빈 결과 반환
       if (colorFilteredFlowerIds.length === 0) {
         return NextResponse.json({
           success: true,
@@ -289,6 +243,7 @@ export async function GET(request: NextRequest) {
             total: 0,
             page,
             limit,
+            has_next_page: false,
           },
         });
       }
@@ -315,22 +270,40 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // 검색어 필터 (꽃 이름 + 꽃말 검색)
+    // 검색어 필터 (search_text 컬럼으로 단일 쿼리 - 이름 + 꽃말 통합)
     if (search) {
-      // 1단계: 꽃말에서 검색어 매칭되는 flower_id 조회
-      const { data: meaningMatches } = await supabase
-        .from('flower_meanings')
-        .select('flower_id')
-        .ilike('meaning', `%${search}%`);
+      const { data: searchMatches, error: searchError } = await supabase
+        .from('flowers')
+        .select('id')
+        .ilike('search_text', `%${search}%`);
 
-      const meaningMatchedIds = meaningMatches?.map(m => m.flower_id) || [];
-
-      // 2단계: 꽃 이름 OR 꽃말 매칭 ID로 필터
-      if (meaningMatchedIds.length > 0) {
-        query = query.or(`name_ko.ilike.%${search}%,id.in.(${meaningMatchedIds.join(',')})`);
-      } else {
-        query = query.ilike('name_ko', `%${search}%`);
+      if (searchError) {
+        console.error('Search query error:', searchError);
+        return NextResponse.json(
+          { error: '검색 중 오류가 발생했습니다.' },
+          { status: 500 },
+        );
       }
+
+      const searchMatchedIds = searchMatches?.map(m => m.id) || [];
+
+      // 검색 결과 없으면 빈 결과 즉시 반환
+      if (searchMatchedIds.length === 0) {
+        return NextResponse.json({
+          success: true,
+          data: {
+            default_season: defaultSeason,
+            flowers: [],
+            total: 0,
+            page,
+            limit,
+            has_next_page: false,
+          },
+        });
+      }
+
+      // 색상 필터와 검색 필터 모두 .in()으로 적용 시 Supabase가 AND로 결합 → 자동 교집합
+      query = query.in('id', searchMatchedIds);
     }
 
     // 페이지네이션
