@@ -2,6 +2,16 @@ import { fetcher } from '@/shared/lib/axios';
 
 // ── Types ──
 
+export type TLikedFlower = {
+  flower_id: string;
+  name_ko: string;
+};
+
+type TLikedFlowersResponse = {
+  flowers: TLikedFlower[];
+  total_count: number;
+};
+
 export type TSelectedFlowerDetail = {
   id: string;
   name_ko: string;
@@ -17,8 +27,8 @@ export type TBouquetSavePayload = {
   message?: string;
   recipe: {
     flowers: {
-      flower_id: number;
-      flower_meaning_id: number;
+      flower_id: string;
+      flower_meaning_id: string;
       quantity: number;
       color: string;
     }[];
@@ -31,6 +41,12 @@ type TBouquetSaveResponse = {
 };
 
 // ── API ──
+
+/** 내가 좋아요한 꽃 목록 조회 */
+export const fetchLikedFlowers = async (): Promise<TLikedFlower[]> => {
+  const { data } = await fetcher.get<TLikedFlowersResponse>('/api/my/liked-flowers');
+  return data.flowers;
+};
 
 /** 선택한 꽃 ID 배열로 꽃 상세 정보 조회 */
 export const fetchSelectedFlowers = async (ids: number[]): Promise<TSelectedFlowerDetail[]> => {

@@ -84,7 +84,7 @@ function FlowerAddModal({ modalId }: TModalProps) {
   const selectedIds = selectedInModal.map((f) => f.id);
 
   return (
-    <div className='bg-gray-50 relative flex flex-col max-w-[360px] min-h-[624px] rounded-t-5'>
+    <div className='bg-gray-50 relative flex flex-col min-w-[360px] min-h-[624px] rounded-t-5'>
       <div className='w-full flex-1 px-4 pt-4 rounded-t-5'>
         <div className='flex justify-between px-micro'>
           <p className='text-title-md'>꽃 추가</p>

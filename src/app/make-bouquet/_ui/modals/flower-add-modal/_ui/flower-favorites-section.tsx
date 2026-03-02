@@ -1,7 +1,8 @@
 'use client';
 
-import { TEMP_FLOWER_FAVORITE_LIST } from '../_datas';
+import { useEffect, useState } from 'react';
 import { Button } from '@/shared/ui/button';
+import { fetchLikedFlowers, TLikedFlower } from '../../../../_api/bouquet-api';
 
 type TProps = {
   selectedIds: string[];
@@ -9,11 +10,41 @@ type TProps = {
 };
 
 function FlowerFavoritesSection({ selectedIds, onToggle }: TProps) {
+  const [likedFlowers, setLikedFlowers] = useState<TLikedFlower[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    fetchLikedFlowers()
+      .then(setLikedFlowers)
+      .catch(() => {
+        // API 실패 시 빈 목록 유지
+      })
+      .finally(() => setIsLoading(false));
+  }, []);
+
+  if (isLoading) {
+    return (
+      <section>
+        <p className='text-title-md'>좋아하는 꽃</p>
+        <p className='mt-3 text-body-md text-gray-400'>불러오는 중...</p>
+      </section>
+    );
+  }
+
+  if (likedFlowers.length === 0) {
+    return (
+      <section>
+        <p className='text-title-md'>좋아하는 꽃</p>
+        <p className='mt-3 text-body-md text-gray-400'>좋아요한 꽃이 없습니다.</p>
+      </section>
+    );
+  }
+
   return (
     <section>
       <p className='text-title-md'>좋아하는 꽃</p>
       <div className='mt-3 flex flex-wrap gap-2'>
-        {TEMP_FLOWER_FAVORITE_LIST.map(({id, name}) => {
+        {likedFlowers.map(({ flower_id: id, name_ko: name }) => {
           const isSelected = selectedIds.includes(id);
           return (
             <Button
