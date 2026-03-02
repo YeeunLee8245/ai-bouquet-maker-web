@@ -3,36 +3,64 @@
 import { Button } from '@/shared/ui/button';
 import React from 'react';
 import PlusIcon from '@/shared/assets/icons/plus.svg';
-import { FLOWER_COMPOSITION_ITEMS } from '../_datas';
 import FlowerCompositionItem from './flower-composition-item';
 import { openModalAtom } from '@/shared/model/modal';
-import { useSetAtom } from 'jotai';
+import { useAtomValue, useSetAtom } from 'jotai';
 import FlowerAddModal from './modals/flower-add-modal/flower-add-modal';
+import { showToastAtom } from '@/shared/model/toast';
+import {
+  bouquetFlowersAtom,
+  removeBouquetFlowerAtom,
+  removeFlowerColorAtom,
+  plusFlowerColorQuantityAtom,
+  minusFlowerColorQuantityAtom,
+  addFlowerColorAtom,
+  updateFlowerColorAtom,
+} from '../_model';
 
 export default function MakeBouquetCompositionContainer() {
   const openModal = useSetAtom(openModalAtom);
+  const showToast = useSetAtom(showToastAtom);
+  const flowers = useAtomValue(bouquetFlowersAtom);
+  const removeFlower = useSetAtom(removeBouquetFlowerAtom);
+  const removeColor = useSetAtom(removeFlowerColorAtom);
+  const plusQuantity = useSetAtom(plusFlowerColorQuantityAtom);
+  const minusQuantity = useSetAtom(minusFlowerColorQuantityAtom);
+  const addColor = useSetAtom(addFlowerColorAtom);
+  const updateColor = useSetAtom(updateFlowerColorAtom);
 
-  const handleDelete = (id: number) => {
-    console.log('delete id: ', id);
+  const handleDelete = (flowerIndex: number) => {
+    if (flowers.length <= 1) {
+      showToast({ message: '한 개 이상의 꽃을 추가해 주세요.' });
+      return;
+    }
+    removeFlower(flowerIndex);
   };
 
-  const handleDeleteColor = (color: string) => {
-    console.log('delete color: ', color);
+  const handleDeleteColor = (flowerIndex: number, colorIndex: number) => {
+    removeColor({ flowerIndex, colorIndex });
   };
 
-  const handlePlusColor = (color: string) => {
-    console.log('plus color: ', color);
+  const handlePlusColor = (flowerIndex: number, colorIndex: number) => {
+    plusQuantity({ flowerIndex, colorIndex });
   };
 
-  const handleMinusColor = (color: string) => {
-    console.log('minus color: ', color);
+  const handleMinusColor = (flowerIndex: number, colorIndex: number) => {
+    minusQuantity({ flowerIndex, colorIndex });
+  };
+
+  const handleAddColor = (flowerIndex: number, color: string) => {
+    addColor({ flowerIndex, color });
+  };
+
+  const handleUpdateColor = (flowerIndex: number, colorIndex: number, color: string) => {
+    updateColor({ flowerIndex, colorIndex, color });
   };
 
   const handleAddFlower = () => {
     openModal({
       id: 'flower-add-modal',
       component: <FlowerAddModal />,
-      position: 'bottom',
     });
   };
 
@@ -48,16 +76,19 @@ export default function MakeBouquetCompositionContainer() {
         </Button>
       </div>
       <div className='mt-3 flex flex-col'>
-        {FLOWER_COMPOSITION_ITEMS.map((item, idx) => (
-          <div key={item.id}>
+        {flowers.map((item, idx) => (
+          <div key={item.flowerId}>
             <FlowerCompositionItem
               item={item}
+              flowerIndex={idx}
               onDelete={handleDelete}
               onDeleteColor={handleDeleteColor}
               onPlusColor={handlePlusColor}
               onMinusColor={handleMinusColor}
+              onAddColor={handleAddColor}
+              onUpdateColor={handleUpdateColor}
             />
-            {idx !== FLOWER_COMPOSITION_ITEMS.length - 1 && <div className='my-4 w-full h-[1px] bg-gray-100'/>}
+            {idx !== flowers.length - 1 && <div className='my-4 w-full h-[1px] bg-gray-100'/>}
           </div>
         ))}
       </div>

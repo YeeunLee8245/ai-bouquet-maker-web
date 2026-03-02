@@ -22,3 +22,9 @@ export type TFlowerCompositionItem = {
   imageUrl: string;
   colorAndQuantities: TFlowerColorAndQuantity[];
 };
+
+export type TBouquetFlowerItem = {
+  flowerId: string;
+  name: string;
+  colorAndQuantities: TFlowerColorAndQuantity[];
+};

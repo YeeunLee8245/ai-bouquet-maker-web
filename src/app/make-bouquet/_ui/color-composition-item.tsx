@@ -1,6 +1,5 @@
 'use client';
 
-import React from 'react';
 import PlusIcon from '@/shared/assets/icons/plus.svg';
 import XIcon from '@/shared/assets/icons/x.svg';
 import { ColorSwitchToggle } from '@/shared/ui/button';
@@ -11,28 +10,44 @@ import ColorPickModal from './modals/color-pick-modal/color-pick-modal';
 type TProps = {
   color: string;
   quantity: number;
-  onPlus: (color: string) => void;
-  onMinus: (color: string) => void;
-  onDelete: (color: string) => void;
+  flowerIndex: number;
+  colorIndex: number;
+  onPlus: (flowerIndex: number, colorIndex: number) => void;
+  onMinus: (flowerIndex: number, colorIndex: number) => void;
+  onDelete: (flowerIndex: number, colorIndex: number) => void;
+  onUpdateColor: (flowerIndex: number, colorIndex: number, color: string) => void;
 };
 
-export default function ColorCompositionItem({ color, quantity, onPlus, onMinus, onDelete }: TProps) {
-  const openMddal = useSetAtom(openModalAtom);
+export default function ColorCompositionItem({
+  color,
+  quantity,
+  flowerIndex,
+  colorIndex,
+  onPlus,
+  onMinus,
+  onDelete,
+  onUpdateColor,
+}: TProps) {
+  const openModal = useSetAtom(openModalAtom);
 
   const handleOpenColorPickModal = () => {
-    openMddal({
-      id: 'color-pick-modal',
-      component: <ColorPickModal />,
+    openModal({
+      id: `color-pick-modal-update-${flowerIndex}-${colorIndex}`,
+      component: (
+        <ColorPickModal
+          onConfirm={(newColor) => onUpdateColor(flowerIndex, colorIndex, newColor)}
+        />
+      ),
       position: 'bottom',
     });
   };
+
   return (
     <div className='flex items-center justify-between'>
       <div className='flex gap-2'>
-        {/* 아이템 삭제 버튼 */}
         <button
           type='button'
-          onClick={() => onDelete(color)}
+          onClick={() => onDelete(flowerIndex, colorIndex)}
           className='m-1'>
           <XIcon className='w-[16px] h-[16px] fill-gray-200'/>
         </button>
@@ -42,18 +57,16 @@ export default function ColorCompositionItem({ color, quantity, onPlus, onMinus,
         />
       </div>
       <div className='w-fit flex items-center rounded-3 bg-gray-50'>
-        {/* 아이템 개수 감소 버튼 */}
         <button
           type='button'
-          onClick={() => onMinus(color)}
+          onClick={() => onMinus(flowerIndex, colorIndex)}
           className='m-1 pl-[4px] pr-[2px] w-[20px] h-[20px] rounded hover:bg-gray-100 transition-colors cursor-pointer group'>
           <span className='block w-[14px] h-[2px] bg-gray-200 group-hover:bg-gray-400 transition-colors'/>
         </button>
         <p className='text-body-md'>{quantity}</p>
-        {/* 아이템 개수 증가 버튼 */}
         <button
           type='button'
-          onClick={() => onPlus(color)}
+          onClick={() => onPlus(flowerIndex, colorIndex)}
           className='m-1 rounded hover:bg-gray-100 transition-colors cursor-pointer group'>
           <PlusIcon className='pl-[2px] pr-[4px] w-[20px] h-[20px] fill-gray-200 group-hover:fill-gray-400 transition-colors' />
         </button>

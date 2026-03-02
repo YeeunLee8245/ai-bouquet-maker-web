@@ -11,7 +11,9 @@ import { selectedFlowersAtom, removeFlowerAtom } from '@/shared/model/selected-f
 import { ActionLabel } from '@/shared/ui/label';
 
 type TProps = {
-  title: string;
+  title?: string;
+  className?: string;
+  children?: React.ReactNode;
 };
 
 function SelectedFlowerChips() {
@@ -77,16 +79,17 @@ function SelectedFlowerChips() {
   );
 }
 
-function BottomActionFooter({ title }: TProps) {
+function BottomActionFooter({ title, children }: TProps) {
   return (
     <footer
       className='py-3 px-4 pb-8 w-full flex flex-col gap-3 border-t border-gray-100 bg-white'
       style={{ paddingBottom: 'max(2rem, env(safe-area-inset-bottom))' }}
     >
       <SelectedFlowerChips />
-      <Button size='lg' asChild>
-        <Link href='/create-bouquet'>{title}</Link>
-      </Button>
+      {title && <Button size='lg' asChild>
+        <Link href='/make-bouquet'>{title}</Link>
+      </Button>}
+      {children}
     </footer>
   );
 }

@@ -1,20 +1,31 @@
-import React from 'react';
+'use client';
+
+import { useEffect } from 'react';
+import { useSetAtom } from 'jotai';
 import MakeBouquetButton from './_ui/make-bouquet-button';
 import MakeBouquetInfoContainer from './_ui/make-bouquet-info-container';
 import MakeBouquetCompositionContainer from './_ui/make-bouquet-composition-container';
 import MakeBouquetPackagingContainer from './_ui/make-bouquet-packaging-container';
 import MakeBouquetSummaryContainer from './_ui/make-bouquet-summary-containert';
 import MakeBouquetPreviewContainer from './_ui/make-bouquet-preview-container';
+import { initBouquetFlowersAtom, resetBouquetFormAtom } from './_model';
 
 type TProps = {
   packagingColors?: string[];
   ribbonColors?: string[];
 };
 
-/**
- * 꽃다발 만들기/수정 페이지
- */
 function MakeBouquetPage({ packagingColors = [], ribbonColors = [] }: TProps) {
+  const initBouquetFlowers = useSetAtom(initBouquetFlowersAtom);
+  const resetBouquetForm = useSetAtom(resetBouquetFormAtom);
+
+  useEffect(() => {
+    initBouquetFlowers();
+    return () => {
+      resetBouquetForm();
+    };
+  }, [initBouquetFlowers, resetBouquetForm]);
+
   return (
     <div>
       <div className='pt-4 pb-2 mx-4 px-1'>
@@ -31,6 +42,6 @@ function MakeBouquetPage({ packagingColors = [], ribbonColors = [] }: TProps) {
       </div>
     </div>
   );
-};
+}
 
 export default MakeBouquetPage;

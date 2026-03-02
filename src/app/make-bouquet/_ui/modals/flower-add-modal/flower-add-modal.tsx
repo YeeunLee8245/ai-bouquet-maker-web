@@ -1,12 +1,42 @@
-import React from 'react';
+'use client';
+
 import FlowerSearchSection from './_ui/flower-search-section';
 import FlowerFavoritesSection from './_ui/flower-favorites-section';
-import BottomActionFooter from '@/widgets/footer/bottom-action-footer';
 import { closeModalAtom, TModalProps } from '@/shared/model/modal';
-import { useSetAtom } from 'jotai';
+import { useAtomValue, useSetAtom } from 'jotai';
+import { selectedFlowersAtom } from '@/shared/model/selected-flowers';
+import { addBouquetFlowerAtom } from '../../../_model';
+import { showToastAtom } from '@/shared/model/toast';
+import { Button } from '@/shared/ui/button';
+import BottomActionFooter from '@/widgets/footer/bottom-action-footer';
 
 function FlowerAddModal({ modalId }: TModalProps) {
   const closeModal = useSetAtom(closeModalAtom);
+  const selectedFlowers = useAtomValue(selectedFlowersAtom);
+  const addBouquetFlower = useSetAtom(addBouquetFlowerAtom);
+  const showToast = useSetAtom(showToastAtom);
+
+  const handleConfirm = () => {
+    let addedCount = 0;
+    let duplicateCount = 0;
+
+    for (const flower of selectedFlowers) {
+      const added = addBouquetFlower({ flowerId: flower.id, name: flower.name });
+      if (added) {
+        addedCount++;
+      } else {
+        duplicateCount++;
+      }
+    }
+
+    if (duplicateCount > 0 && addedCount === 0) {
+      showToast({ message: '이미 추가된 꽃입니다.' });
+    } else if (addedCount > 0) {
+      showToast({ message: `${addedCount}종의 꽃이 추가되었습니다.` });
+    }
+
+    closeModal(modalId);
+  };
 
   return (
     <div className='bg-gray-50 relative flex flex-col max-w-[360px] min-h-[624px] rounded-t-5'>
@@ -26,7 +56,11 @@ function FlowerAddModal({ modalId }: TModalProps) {
         </div>
         <FlowerFavoritesSection />
       </div>
-      <BottomActionFooter title='꽃다발 담기' />
+      <BottomActionFooter>
+        <Button size='lg' onClick={handleConfirm}>
+          꽃다발 담기
+        </Button>
+      </BottomActionFooter>
     </div>
   );
 }

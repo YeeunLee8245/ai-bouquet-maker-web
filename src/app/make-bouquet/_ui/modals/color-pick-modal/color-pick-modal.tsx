@@ -1,18 +1,27 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Button } from '@/shared/ui/button';
 import { getColorNameFromHsl, hslString } from '@/shared/utils/color';
 import { closeModalAtom, TModalProps } from '@/shared/model/modal';
 import { useSetAtom } from 'jotai';
 
-function ColorPickModal({ modalId }: TModalProps) {
+type TProps = TModalProps & {
+  onConfirm?: (color: string) => void;
+};
+
+function ColorPickModal({ modalId, onConfirm }: TProps) {
   const [hue, setHue] = useState(0);
   const [saturation, setSaturation] = useState(100);
   const [lightness, setLightness] = useState(50);
   const closeModal = useSetAtom(closeModalAtom);
 
   const selectedColor = hslString(hue, saturation, lightness);
+
+  const handleConfirm = () => {
+    onConfirm?.(selectedColor);
+    closeModal(modalId);
+  };
 
   return (
     <div className='relative flex flex-col w-[360px] min-h-[584px] bg-gray-50 rounded-t-5'>
@@ -90,7 +99,7 @@ function ColorPickModal({ modalId }: TModalProps) {
 
       </div>
 
-      <Button size='lg' className='w-auto mx-4 mb-8'>
+      <Button size='lg' className='w-auto mx-4 mb-8' onClick={handleConfirm}>
         선택 완료
       </Button>
     </div>
