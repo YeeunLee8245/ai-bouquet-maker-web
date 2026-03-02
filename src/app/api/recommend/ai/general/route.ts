@@ -123,15 +123,15 @@ export async function POST(request: NextRequest) {
       }
 
       const standardizedRecommendations = recommendations.map(rec => {
-        const matchedMeaning = rec.flower.flower_meanings?.find(m => m.id === rec.flowerMeaningId)?.meaning || '';
+        const matchedMeaning = rec.flower.flower_meanings?.find(m => String(m.id) === rec.flowerMeaningId)?.meaning || '';
         const representativeTags = Array.isArray(rec.flower.representative_meanings_tags)
           ? rec.flower.representative_meanings_tags
           : [];
         const tags = [...new Set([matchedMeaning, ...representativeTags].filter(Boolean))].slice(0, 3);
 
         return {
-          id: rec.flower.id,
-          flowerMeaningId: rec.flowerMeaningId || 0,
+          id: String(rec.flower.id),
+          flowerMeaningId: String(rec.flowerMeaningId || '0'),
           name: rec.flower.name_ko,
           meaning: matchedMeaning,
           tags,

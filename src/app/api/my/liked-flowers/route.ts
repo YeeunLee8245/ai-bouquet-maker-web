@@ -26,9 +26,9 @@ import { getPublicUser } from '@/lib/users/auth';
  *                     type: object
  *                     properties:
  *                       flower_id:
- *                         type: integer
+ *                         type: string
  *                         description: 꽃 고유 ID
- *                         example: 42
+ *                         example: "42"
  *                       name_ko:
  *                         type: string
  *                         description: 꽃 한국어 이름
@@ -42,11 +42,11 @@ import { getPublicUser } from '@/lib/users/auth';
  *                 summary: "좋아요한 꽃 목록 조회 성공"
  *                 value:
  *                   flowers:
- *                     - flower_id: 42
+ *                     - flower_id: "42"
  *                       name_ko: "장미"
- *                     - flower_id: 17
+ *                     - flower_id: "17"
  *                       name_ko: "튤립"
- *                     - flower_id: 8
+ *                     - flower_id: "8"
  *                       name_ko: "카네이션"
  *                   total_count: 3
  *       401:
@@ -100,7 +100,7 @@ export async function GET() {
     const flowers = (data as unknown as LikeRow[])
       .filter((row) => row.flowers !== null)
       .map((row) => ({
-        flower_id: row.flower_id,
+        flower_id: String(row.flower_id),
         name_ko: row.flowers!.name_ko,
       }));
 

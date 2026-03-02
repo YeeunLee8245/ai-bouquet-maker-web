@@ -87,8 +87,8 @@ import { toSupabaseResizedImageUrl } from '@shared/utils/image-url';
  *                   items:
  *                     type: object
  *                     properties:
- *                       id: { type: integer, example: 12 }
- *                       flowerMeaningId: { type: integer, example: 24 }
+ *                       id: { type: string, example: "12" }
+ *                       flowerMeaningId: { type: string, example: "24" }
  *                       name: { type: string, example: "안개꽃" }
  *                       meaning: { type: string, description: "매칭된 꽃말", example: "순수한 마음" }
  *                       tags: { type: array, items: { type: string }, example: ['매칭 꽃말', '대표1', '대표2'], description: '매칭된 꽃말 우선 + 대표 꽃말 (최대 3개)' }
@@ -107,8 +107,8 @@ import { toSupabaseResizedImageUrl } from '@shared/utils/image-url';
  *                   recipient: "나 자신"
  *                   occasion: "위로와 응원"
  *                   recommendations:
- *                     - id: 12
- *                       flowerMeaningId: 24
+ *                     - id: "12"
+ *                       flowerMeaningId: "24"
  *                       name: "안개꽃"
  *                       meaning: "순수한 마음"
  *                       tags: ['순수한 마음', '우정', '감사']
@@ -126,8 +126,8 @@ import { toSupabaseResizedImageUrl } from '@shared/utils/image-url';
  *                   recipient: null
  *                   occasion: null
  *                   recommendations:
- *                     - id: 8
- *                       flowerMeaningId: 19
+ *                     - id: "8"
+ *                       flowerMeaningId: "19"
  *                       name: "리시안셔스"
  *                       meaning: "변하지 않는 사랑"
  *                       tags: ['변하지 않는 사랑', '우아함', '희망']
@@ -280,15 +280,15 @@ export async function POST(request: NextRequest) {
 
       // 표준화된 응답 형식으로 변환
       const standardizedRecommendations = recommendations.map(rec => {
-        const matchedMeaning = rec.flower.flower_meanings?.find(m => m.id === rec.flowerMeaningId)?.meaning || '';
+        const matchedMeaning = rec.flower.flower_meanings?.find(m => String(m.id) === rec.flowerMeaningId)?.meaning || '';
         const representativeTags = Array.isArray(rec.flower.representative_meanings_tags)
           ? rec.flower.representative_meanings_tags
           : [];
         const tags = [...new Set([matchedMeaning, ...representativeTags].filter(Boolean))].slice(0, 3);
 
         return {
-          id: rec.flower.id,
-          flowerMeaningId: rec.flowerMeaningId || 0,
+          id: String(rec.flower.id),
+          flowerMeaningId: String(rec.flowerMeaningId || '0'),
           name: rec.flower.name_ko,
           meaning: matchedMeaning,
           tags,

@@ -79,15 +79,15 @@ import { toSupabaseResizedImageUrl } from '@shared/utils/image-url';
  *                 title: { type: string, description: "AI가 생성한 추천 제목", example: "그녀의 우아함을 닮은 보랏빛 선물" }
  *                 message: { type: string, description: "취향 분석 기반 추천 이유", example: "보라색을 좋아하시는 여자친구분을 위해 고귀함과 신비로움을 상징하는..." }
  *                 recipient: { type: string, nullable: true, description: "AI가 분석한 대상 명칭", example: "30대 여자친구" }
- *                 occasion: { type: string, nullable: true, description: "AI가 분석한 선물 상황", example: "일상의 꺜짝 선물" }
+ *                 occasion: { type: string, nullable: true, description: "AI가 분석한 선물 상황", example: "일상의 깜짝 선물" }
  *                 recommendations:
  *                   type: array
  *                   description: "추천된 꽃 목록"
  *                   items:
  *                     type: object
  *                     properties:
- *                       id: { type: integer, example: 15 }
- *                       flowerMeaningId: { type: integer, example: 30 }
+ *                       id: { type: string, example: "15" }
+ *                       flowerMeaningId: { type: string, example: "30" }
  *                       name: { type: string, example: "작약" }
  *                       meaning: { type: string, description: "매칭된 꽃말", example: "고귀함" }
  *                       tags: { type: array, items: { type: string }, example: ['매칭 꽃말', '대표1', '대표2'], description: '매칭된 꽃말 우선 + 대표 꽃말 (최대 3개)' }
@@ -106,8 +106,8 @@ import { toSupabaseResizedImageUrl } from '@shared/utils/image-url';
  *                   recipient: "30대 여자친구"
  *                   occasion: "일상의 깜짝 선물"
  *                   recommendations:
- *                     - id: 15
- *                       flowerMeaningId: 30
+ *                     - id: "15"
+ *                       flowerMeaningId: "30"
  *                       name: "작약"
  *                       meaning: "고귀함"
  *                       tags: ['고귀함', '우아함', '연애']
@@ -125,8 +125,8 @@ import { toSupabaseResizedImageUrl } from '@shared/utils/image-url';
  *                   recipient: null
  *                   occasion: null
  *                   recommendations:
- *                     - id: 11
- *                       flowerMeaningId: 21
+ *                     - id: "11"
+ *                       flowerMeaningId: "21"
  *                       name: "거베라"
  *                       meaning: "희망"
  *                       tags: ['희망', '행복', '순수']
@@ -279,15 +279,15 @@ export async function POST(request: NextRequest) {
 
       // 표준화된 응답 형식으로 변환
       const standardizedRecommendations = recommendations.map(rec => {
-        const matchedMeaning = rec.flower.flower_meanings?.find(m => m.id === rec.flowerMeaningId)?.meaning || '';
+        const matchedMeaning = rec.flower.flower_meanings?.find(m => String(m.id) === rec.flowerMeaningId)?.meaning || '';
         const representativeTags = Array.isArray(rec.flower.representative_meanings_tags)
           ? rec.flower.representative_meanings_tags
           : [];
         const tags = [...new Set([matchedMeaning, ...representativeTags].filter(Boolean))].slice(0, 3);
 
         return {
-          id: rec.flower.id,
-          flowerMeaningId: rec.flowerMeaningId || 0,
+          id: String(rec.flower.id),
+          flowerMeaningId: String(rec.flowerMeaningId || '0'),
           name: rec.flower.name_ko,
           meaning: matchedMeaning,
           tags,
