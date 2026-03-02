@@ -1,10 +1,83 @@
+'use client';
+
+import { useAtomValue, useSetAtom } from 'jotai';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/shared/ui/button';
-import React from 'react';
+import { showToastAtom } from '@/shared/model/toast';
+import {
+  bouquetNameAtom,
+  bouquetOccasionAtom,
+  bouquetRecipientAtom,
+  bouquetMessageAtom,
+  bouquetFlowersAtom,
+  canSaveBouquetAtom,
+} from '../_model';
+import { useState } from 'react';
 
 export default function MakeBouquetButton() {
+  const router = useRouter();
+  const showToast = useSetAtom(showToastAtom);
+  const canSave = useAtomValue(canSaveBouquetAtom);
+  const name = useAtomValue(bouquetNameAtom);
+  const occasion = useAtomValue(bouquetOccasionAtom);
+  const recipient = useAtomValue(bouquetRecipientAtom);
+  const message = useAtomValue(bouquetMessageAtom);
+  const flowers = useAtomValue(bouquetFlowersAtom);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSave = async () => {
+    if (!canSave || isLoading) {return;}
+
+    setIsLoading(true);
+
+    const recipeFlowers = flowers.flatMap((flower) =>
+      flower.colorAndQuantities.map((cq) => ({
+        flower_id: Number(flower.flowerId),
+        flower_meaning_id: 0,
+        quantity: cq.quantity,
+        color: cq.color,
+      })),
+    );
+
+    const payload = {
+      name,
+      ...(occasion && { occasion }),
+      ...(recipient && { recipient }),
+      ...(message && { message }),
+      recipe: {
+        flowers: recipeFlowers,
+      },
+    };
+
+    try {
+      const res = await fetch('/api/recipe/bouquet', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+
+      if (res.ok) {
+        showToast({ message: '꽃다발이 저장되었습니다.' });
+        router.push('/');
+      } else {
+        const data = await res.json();
+        showToast({ message: data.error ?? '저장에 실패했습니다.' });
+      }
+    } catch {
+      showToast({ message: '네트워크 오류가 발생했습니다.' });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
-    <Button size='lg' className='mt-6'>
-      꽃다발 저장
+    <Button
+      size='lg'
+      className='mt-6'
+      disabled={!canSave || isLoading}
+      onClick={handleSave}
+    >
+      {isLoading ? '저장 중...' : '꽃다발 저장'}
     </Button>
   );
 }

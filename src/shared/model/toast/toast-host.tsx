@@ -21,7 +21,7 @@ function ToastItem({ toast }: { toast: TToastItem }) {
   }, [toast.id, toast.duration, removeToast]);
 
   return (
-    <div className='px-4 py-3 rounded-lg bg-gray-800 text-white text-sm shadow-lg animate-fade-in'>
+    <div className='text-body-md gap-2 px-3 py-2 bg-white border border-gray-100 rounded-5 animate-fade-in'>
       {toast.message}
     </div>
   );
@@ -33,7 +33,7 @@ function ToastHost() {
   if (toasts.length === 0) {return null;}
 
   return createPortal(
-    <div className='fixed bottom-20 left-1/2 -translate-x-1/2 z-50 flex flex-col gap-2 items-center'>
+    <div className='w-full px-4 py-2 fixed top-0 left-1/2 -translate-x-1/2 z-50 flex flex-col gap-2 items-center bg-gradient-to-b from-[#98AEAC] to-[#98AEAC00]'>
       {toasts.map((toast) => (
         <ToastItem key={toast.id} toast={toast} />
       ))}
