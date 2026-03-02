@@ -8,6 +8,8 @@ import { useAtom, useSetAtom } from 'jotai';
 import { addBouquetFlowerAtom } from '../../../_model';
 import { showToastAtom } from '@/shared/model/toast';
 import { Button } from '@/shared/ui/button';
+import { fetchSelectedFlowers } from '../../../_api/bouquet-api';
+import { isApiError } from '@/shared/api';
 import BottomActionFooter from '@/widgets/footer/bottom-action-footer';
 import { selectedFlowersAtom, TSelectedFlower } from '@/shared/model/selected-flowers';
 
@@ -50,28 +52,14 @@ function FlowerAddModal({ modalId }: TModalProps) {
     setIsConfirming(true);
 
     try {
-      // /api/recipe/bouquet/selected API 호출하여 꽃 상세 정보 조회
       const ids = selectedInModal.map((f) => Number(f.id));
-      const res = await fetch('/api/recipe/bouquet/selected', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(ids),
-      });
-      const data = await res.json();
-
-      if (!res.ok) {
-        showToast({ message: data.error || '꽃 정보 조회에 실패했습니다.' });
-        return;
-      }
-
-      // API 응답 데이터로 꽃 구성 항목에 추가
-      const flowerDetails: { id: string; name_ko: string }[] = Array.isArray(data) ? data : [];
+      const flowerDetails = await fetchSelectedFlowers(ids);
 
       let addedCount = 0;
       let duplicateCount = 0;
 
       for (const flower of flowerDetails) {
-        const added = addBouquetFlower({ flowerId: flower.id, name: flower.name_ko });
+        const added = addBouquetFlower(flower);
         if (added) {
           addedCount++;
         } else {
@@ -84,8 +72,9 @@ function FlowerAddModal({ modalId }: TModalProps) {
       } else if (addedCount > 0) {
         showToast({ message: `${addedCount}종의 꽃이 추가되었습니다.` });
       }
-    } catch {
-      showToast({ message: '꽃 정보 조회에 실패했습니다.' });
+    } catch (error) {
+      const msg = isApiError(error) ? error.message : '꽃 정보 조회에 실패했습니다.';
+      showToast({ message: msg });
     } finally {
       setIsConfirming(false);
       closeModal(modalId);

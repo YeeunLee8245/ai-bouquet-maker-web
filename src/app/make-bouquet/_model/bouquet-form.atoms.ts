@@ -1,8 +1,8 @@
 import { atom } from 'jotai';
-import { TBouquetFlowerItem } from '../_types';
+import { TFlowerCompositionItem } from '../_types';
 
 export const bouquetNameAtom = atom<string>('');
 export const bouquetOccasionAtom = atom<string>('');
 export const bouquetRecipientAtom = atom<string>('');
 export const bouquetMessageAtom = atom<string>('');
-export const bouquetFlowersAtom = atom<TBouquetFlowerItem[]>([]);
+export const bouquetFlowersAtom = atom<TFlowerCompositionItem[]>([]);

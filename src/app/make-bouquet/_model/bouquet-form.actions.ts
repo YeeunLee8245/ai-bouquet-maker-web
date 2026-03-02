@@ -7,20 +7,36 @@ import {
   bouquetFlowersAtom,
 } from './bouquet-form.atoms';
 import { selectedFlowersAtom } from '@/shared/model/selected-flowers';
-import { TBouquetFlowerItem } from '../_types';
+import { TFlowerCompositionItem } from '../_types';
+import { fetchSelectedFlowers, TSelectedFlowerDetail } from '../_api/bouquet-api';
+
+/**
+ * API 응답 데이터를 꽃다발 폼 아이템으로 변환
+ */
+const toFlowerCompositionItem = (
+  detail: TSelectedFlowerDetail,
+): TFlowerCompositionItem => ({
+  id: detail.id,
+  name: detail.name_ko,
+  keywords: detail.tags,
+  imageUrl: detail.imageUrl ?? '',
+  colorAndQuantities: detail.colors.map((color) => ({ color, quantity: 1 })),
+});
 
 /**
  * 선택한 꽃을 꽃다발 폼에 추가(초기 상태 세팅)
  * - 먼저 selectedFlowersAtom으로 즉시 초기화(id, name)
- * - 이후 /api/recipe/bouquet/selected API 호출하여 꽃 상세 정보(name_ko)로 업데이트
+ * - 이후 API 호출하여 꽃 상세 정보로 업데이트
  */
 export const initBouquetFlowersAtom = atom(null, async (get, set) => {
   const selected = get(selectedFlowersAtom);
 
   // 즉시 초기화 (API 응답 전까지 기본 데이터 표시)
-  const bouquetFlowers: TBouquetFlowerItem[] = selected.map((f) => ({
-    flowerId: f.id,
+  const bouquetFlowers: TFlowerCompositionItem[] = selected.map((f) => ({
+    id: f.id,
     name: f.name,
+    keywords: [],
+    imageUrl: '',
     colorAndQuantities: [],
   }));
   set(bouquetFlowersAtom, bouquetFlowers);
@@ -30,23 +46,13 @@ export const initBouquetFlowersAtom = atom(null, async (get, set) => {
 
   try {
     const ids = selected.map((f) => Number(f.id));
-    const res = await fetch('/api/recipe/bouquet/selected', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(ids),
+    const data = await fetchSelectedFlowers(ids);
+
+    const detailMap = new Map(data.map((d) => [d.id, d]));
+    const updated = bouquetFlowers.map((f) => {
+      const detail = detailMap.get(f.id);
+      return detail ? toFlowerCompositionItem(detail) : f;
     });
-
-    if (!res.ok) {return;}
-
-    const data: { id: string; name_ko: string }[] = await res.json();
-    if (!Array.isArray(data)) {return;}
-
-    // API 응답 기준으로 name 업데이트
-    const detailMap = new Map(data.map((d) => [d.id, d.name_ko]));
-    const updated = bouquetFlowers.map((f) => ({
-      ...f,
-      name: detailMap.get(f.flowerId) ?? f.name,
-    }));
     set(bouquetFlowersAtom, updated);
   } catch {
     // API 실패 시 기존 초기화 데이터 유지
@@ -61,16 +67,16 @@ export const initBouquetFlowersAtom = atom(null, async (get, set) => {
  */
 export const addBouquetFlowerAtom = atom(
   null,
-  (get, set, flower: { flowerId: string; name: string }): boolean => {
+  (get, set, detail: TSelectedFlowerDetail): boolean => {
     const flowers = get(bouquetFlowersAtom);
     // 이미 추가된 꽃인지 확인
-    if (flowers.some((f) => f.flowerId === flower.flowerId)) {
+    if (flowers.some((f) => f.id === detail.id)) {
       return false;
     }
     // 꽃다발 폼에 추가
     set(bouquetFlowersAtom, [
       ...flowers,
-      { flowerId: flower.flowerId, name: flower.name, colorAndQuantities: [] },
+      toFlowerCompositionItem(detail),
     ]);
     return true;
   },

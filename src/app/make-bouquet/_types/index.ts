@@ -16,15 +16,9 @@ export type TFlowerColorAndQuantity = {
 };
 
 export type TFlowerCompositionItem = {
-  id: number;
+  id: string;
   name: string;
   keywords: string[];
   imageUrl: string;
-  colorAndQuantities: TFlowerColorAndQuantity[];
-};
-
-export type TBouquetFlowerItem = {
-  flowerId: string;
-  name: string;
   colorAndQuantities: TFlowerColorAndQuantity[];
 };

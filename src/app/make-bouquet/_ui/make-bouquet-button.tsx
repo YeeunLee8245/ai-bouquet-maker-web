@@ -13,6 +13,8 @@ import {
   canSaveBouquetAtom,
 } from '../_model';
 import { useState } from 'react';
+import { saveBouquet } from '../_api/bouquet-api';
+import { isApiError } from '@/shared/api';
 
 export default function MakeBouquetButton() {
   const router = useRouter();
@@ -32,39 +34,30 @@ export default function MakeBouquetButton() {
 
     const recipeFlowers = flowers.flatMap((flower) =>
       flower.colorAndQuantities.map((cq) => ({
-        flower_id: Number(flower.flowerId),
+        flower_id: Number(flower.id),
         flower_meaning_id: 0,
         quantity: cq.quantity,
         color: cq.color,
       })),
     );
 
-    const payload = {
-      name,
-      ...(occasion && { occasion }),
-      ...(recipient && { recipient }),
-      ...(message && { message }),
-      recipe: {
-        flowers: recipeFlowers,
-      },
-    };
-
     try {
-      const res = await fetch('/api/recipe/bouquet', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
+      await saveBouquet({
+        name,
+        ...(occasion && { occasion }),
+        ...(recipient && { recipient }),
+        ...(message && { message }),
+        recipe: {
+          flowers: recipeFlowers,
+        },
       });
 
-      if (res.ok) {
-        showToast({ message: '꽃다발이 저장되었습니다.' });
-        router.push('/');
-      } else {
-        const data = await res.json();
-        showToast({ message: data.error ?? '저장에 실패했습니다.' });
-      }
-    } catch {
-      showToast({ message: '네트워크 오류가 발생했습니다.' });
+      showToast({ message: '꽃다발이 저장되었습니다.' });
+      // TODO: yeeun 작성 완료 꽃다발 페이지로 이동
+      router.push('/');
+    } catch (error) {
+      const msg = isApiError(error) ? error.message : '네트워크 오류가 발생했습니다.';
+      showToast({ message: msg });
     } finally {
       setIsLoading(false);
     }

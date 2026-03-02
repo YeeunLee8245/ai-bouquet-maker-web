@@ -77,7 +77,7 @@ export default function MakeBouquetCompositionContainer() {
       </div>
       <div className='mt-3 flex flex-col'>
         {flowers.map((item, idx) => (
-          <div key={item.flowerId}>
+          <div key={item.id}>
             <FlowerCompositionItem
               item={item}
               flowerIndex={idx}

@@ -2,14 +2,15 @@
 
 import { ColorPicker } from '@/shared/ui/color-picker';
 import PlusIcon from '@/shared/assets/icons/plus.svg';
+import Image from 'next/image';
 import ColorCompositionItem from './color-composition-item';
 import { openModalAtom } from '@/shared/model/modal';
 import { useSetAtom } from 'jotai';
 import ColorPickModal from './modals/color-pick-modal/color-pick-modal';
-import { TBouquetFlowerItem } from '../_types';
+import { TFlowerCompositionItem } from '../_types';
 
 type TProps = {
-  item: TBouquetFlowerItem;
+  item: TFlowerCompositionItem;
   flowerIndex: number;
   onDeleteColor: (flowerIndex: number, colorIndex: number) => void;
   onPlusColor: (flowerIndex: number, colorIndex: number) => void;
@@ -29,7 +30,7 @@ export default function FlowerCompositionItem({
   onAddColor,
   onUpdateColor,
 }: TProps) {
-  const { name, colorAndQuantities } = item;
+  const { name, keywords, imageUrl, colorAndQuantities } = item;
   const openModal = useSetAtom(openModalAtom);
 
   const handleOpenAddColorModal = () => {
@@ -47,7 +48,7 @@ export default function FlowerCompositionItem({
   return (
     <div>
       <div className='flex justify-between'>
-        <p className='text-body-lg'>{name}</p>
+        <Image src={imageUrl} alt={name} width={60} height={60} className='w-[60px] h-[60px] rounded-2 object-cover' />
         <ColorPicker
           data-state='default'
           variant='additional'
@@ -58,7 +59,15 @@ export default function FlowerCompositionItem({
           />
         </ColorPicker>
       </div>
-      <div className='py-4'>
+      <p className='pt-2 text-body-lg'>{name}</p>
+      <div className='pt-2 flex gap-2 flex-wrap'>
+        {keywords.map((keyword) => (
+          <span key={keyword} className='text-ui-tag bg-gray-100 rounded-3 px-2 py-1 text-gray-400'>
+            {keyword}
+          </span>
+        ))}
+      </div>
+      <div className='py-4 flex flex-col gap-2'>
         {colorAndQuantities.map(({ color, quantity }, colorIndex) => (
           <ColorCompositionItem
             key={`${color}-${colorIndex}`}
