@@ -67,7 +67,7 @@ import { toSupabaseResizedImageUrl } from '@shared/utils/image-url';
  *                     example: "https://example.com/tulip.png"
  *                   colors:
  *                     type: array
- *                     description: 대표 색상(hex) 목록
+ *                     description: flower_meanings의 icon_color 값 목록 (회색 계열 제외)
  *                     items:
  *                       type: string
  *                     example: ["#F8BBD0", "#FF4D6D"]
@@ -162,7 +162,7 @@ export async function POST(request: NextRequest) {
         const colors = Array.from(new Set(
           (flower.flower_meanings || [])
             .map(meaning => meaning.icon_color)
-            .filter((color): color is string => typeof color === 'string' && color.length > 0),
+            .filter((color): color is string => typeof color === 'string' && color.length > 0 && color !== '#9E9E9E'),
         ));
 
         return {
