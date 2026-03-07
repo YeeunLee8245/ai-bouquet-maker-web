@@ -48,7 +48,11 @@ export default function FlowerCompositionItem({
   return (
     <div>
       <div className='flex justify-between'>
-        <Image src={imageUrl} alt={name} width={60} height={60} className='w-[60px] h-[60px] rounded-2 object-cover' />
+        {imageUrl ? (
+          <Image src={imageUrl} alt={name} width={60} height={60} className='w-[60px] h-[60px] rounded-2 object-cover' />
+        ) : (
+          <div className='w-[60px] h-[60px] rounded-2 bg-gray-100 animate-pulse' />
+        )}
         <ColorPicker
           data-state='default'
           variant='additional'
@@ -61,11 +65,16 @@ export default function FlowerCompositionItem({
       </div>
       <p className='pt-2 text-body-lg'>{name}</p>
       <div className='pt-2 flex gap-2 flex-wrap'>
-        {keywords.map((keyword) => (
+        {keywords.length > 0 ? keywords.map((keyword) => (
           <span key={keyword} className='text-ui-tag bg-gray-100 rounded-3 px-2 py-1 text-gray-400'>
             {keyword}
           </span>
-        ))}
+        )) : (
+          <>
+            <span className='rounded-3 px-2 py-1 w-12 h-5 bg-gray-100 animate-pulse' />
+            <span className='rounded-3 px-2 py-1 w-16 h-5 bg-gray-100 animate-pulse' />
+          </>
+        )}
       </div>
       <div className='py-4 flex flex-col gap-2'>
         {colorAndQuantities.map(({ color, quantity }, colorIndex) => (
