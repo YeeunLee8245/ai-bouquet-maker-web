@@ -68,7 +68,7 @@ function FlowerCard({ size, imageUrl, id, name, colors, tags, actionButton, like
         <p className={cn('text-body-lg', size === 'md' && 'pt-micro')}>{name}</p>
         <div className={cn('flex mt-2', size === 'md' && 'gap-1', size === 'lg' && 'gap-2')}>
           {tags.map((tag) => (
-            <span key={tag} className='max-w-[140px] overflow-hidden text-ellipsis whitespace-nowrap py-1 px-2 rounded-3 bg-gray-100 text-ui-tag text-gray-400'>{tag}</span>
+            <span key={tag} className='tag-chip'>{tag}</span>
           ))}
         </div>
       </div>
