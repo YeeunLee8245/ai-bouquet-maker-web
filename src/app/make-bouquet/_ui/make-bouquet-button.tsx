@@ -11,15 +11,16 @@ import {
   bouquetMessageAtom,
   bouquetFlowersAtom,
   canSaveBouquetAtom,
+  firstValidationErrorAtom,
 } from '../_model';
 import { useState } from 'react';
-import { saveBouquet } from '../_api/bouquet-api';
 import { isApiError } from '@/shared/api';
 
 export default function MakeBouquetButton() {
   const router = useRouter();
   const showToast = useSetAtom(showToastAtom);
   const canSave = useAtomValue(canSaveBouquetAtom);
+  const firstError = useAtomValue(firstValidationErrorAtom);
   const name = useAtomValue(bouquetNameAtom);
   const occasion = useAtomValue(bouquetOccasionAtom);
   const recipient = useAtomValue(bouquetRecipientAtom);
@@ -28,7 +29,12 @@ export default function MakeBouquetButton() {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSave = async () => {
-    if (!canSave || isLoading) {return;}
+    if (!canSave || isLoading) {
+      if (firstError) {
+        showToast({ message: firstError });
+      }
+      return;
+    }
 
     setIsLoading(true);
 
@@ -43,19 +49,19 @@ export default function MakeBouquetButton() {
     );
 
     try {
-      await saveBouquet({
-        name,
-        ...(occasion && { occasion }),
-        ...(recipient && { recipient }),
-        ...(message && { message }),
-        recipe: {
-          flowers: recipeFlowers,
-        },
-      });
+      // await saveBouquet({
+      //   name,
+      //   ...(occasion && { occasion }),
+      //   ...(recipient && { recipient }),
+      //   ...(message && { message }),
+      //   recipe: {
+      //     flowers: recipeFlowers,
+      //   },
+      // });
 
-      showToast({ message: '꽃다발이 저장되었습니다.' });
-      // TODO: yeeun 작성 완료 꽃다발 페이지로 이동
-      router.push('/');
+      // showToast({ message: '꽃다발이 저장되었습니다.' });
+      // // TODO: yeeun 작성 완료 꽃다발 페이지로 이동
+      // router.push('/');
     } catch (error) {
       const msg = isApiError(error) ? error.message : '네트워크 오류가 발생했습니다.';
       showToast({ message: msg });
@@ -68,7 +74,6 @@ export default function MakeBouquetButton() {
     <Button
       size='lg'
       className='mt-6'
-      disabled={!canSave || isLoading}
       onClick={handleSave}
     >
       {isLoading ? '저장 중...' : '꽃다발 저장'}

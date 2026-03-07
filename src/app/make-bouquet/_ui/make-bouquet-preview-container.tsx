@@ -1,21 +1,20 @@
 'use client';
 
-import { useAtomValue, useSetAtom } from 'jotai';
-import { canSaveBouquetAtom, firstValidationErrorAtom } from '../_model';
+import { useSetAtom } from 'jotai';
 import { showToastAtom } from '@/shared/model/toast';
 
 export default function MakeBouquetPreviewContainer() {
-  const canSave = useAtomValue(canSaveBouquetAtom);
-  const firstError = useAtomValue(firstValidationErrorAtom);
+  // const canSave = useAtomValue(canSaveBouquetAtom);
+  // const firstError = useAtomValue(firstValidationErrorAtom);
   const showToast = useSetAtom(showToastAtom);
 
   const handleClick = () => {
-    if (!canSave) {
-      if (firstError) {
-        showToast({ message: firstError });
-      }
-      return;
-    }
+    // if (!canSave) {
+    //   if (firstError) {
+    //     showToast({ message: firstError });
+    //   }
+    //   return;
+    // }
     showToast({ message: '미리보기 준비 중입니다.' });
   };
 
