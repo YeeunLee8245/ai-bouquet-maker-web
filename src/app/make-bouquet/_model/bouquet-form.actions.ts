@@ -61,35 +61,50 @@ export const initBouquetFlowersAtom = atom(null, async (get, set) => {
 
 /**
  * 선택한 꽃을 꽃다발 폼에 추가
- * @returnn
- * true: 추가 성공
- * false: 이미 추가된 꽃(중복 추가는 실패)
+ * - bouquetFlowersAtom + selectedFlowersAtom 동시 동기화
+ * @return true: 추가 성공, false: 이미 추가된 꽃(중복)
  */
 export const addBouquetFlowerAtom = atom(
   null,
   (get, set, detail: TSelectedFlowerDetail): boolean => {
     const flowers = get(bouquetFlowersAtom);
-    // 이미 추가된 꽃인지 확인
     if (flowers.some((f) => f.id === detail.id)) {
       return false;
     }
-    // 꽃다발 폼에 추가
     set(bouquetFlowersAtom, [
       ...flowers,
       toFlowerCompositionItem(detail),
     ]);
+    const selected = get(selectedFlowersAtom);
+    if (!selected.some((f) => f.id === detail.id)) {
+      set(selectedFlowersAtom, [...selected, { id: detail.id, name: detail.name_ko }]);
+    }
     return true;
   },
 );
 
 /**
- * 꽃다발 폼에서 꽃을 삭제
+ * 꽃다발 폼에서 꽃을 삭제 (인덱스 기반)
  */
 export const removeBouquetFlowerAtom = atom(
   null,
   (get, set, index: number) => {
     const flowers = get(bouquetFlowersAtom);
     set(bouquetFlowersAtom, flowers.filter((_, i) => i !== index));
+  },
+);
+
+/**
+ * 꽃다발 폼에서 꽃을 삭제 (ID 기반)
+ * - bouquetFlowersAtom + selectedFlowersAtom 동시 동기화
+ */
+export const removeBouquetFlowerByIdAtom = atom(
+  null,
+  (get, set, id: string) => {
+    const flowers = get(bouquetFlowersAtom);
+    set(bouquetFlowersAtom, flowers.filter((f) => f.id !== id));
+    const selected = get(selectedFlowersAtom);
+    set(selectedFlowersAtom, selected.filter((f) => f.id !== id));
   },
 );
 

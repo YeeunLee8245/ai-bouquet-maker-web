@@ -4,35 +4,50 @@ import { useMemo, useState } from 'react';
 import FlowerSearchSection from './_ui/flower-search-section';
 import FlowerFavoritesSection from './_ui/flower-favorites-section';
 import { closeModalAtom, TModalProps } from '@/shared/model/modal';
-import { useAtom, useSetAtom } from 'jotai';
-import { addBouquetFlowerAtom } from '../../../_model';
+import { useAtomValue, useSetAtom } from 'jotai';
+import { addBouquetFlowerAtom, bouquetFlowersAtom, removeBouquetFlowerByIdAtom } from '../../../_model';
 import { showToastAtom } from '@/shared/model/toast';
 import { Button } from '@/shared/ui/button';
 import { fetchSelectedFlowers } from '../../../_api/bouquet-api';
 import { isApiError } from '@/shared/api';
 import BottomActionFooter from '@/widgets/footer/bottom-action-footer';
-import { selectedFlowersAtom, TSelectedFlower } from '@/shared/model/selected-flowers';
+import { TSelectedFlower } from '@/shared/model/selected-flowers';
 
 function FlowerAddModal({ modalId }: TModalProps) {
   const closeModal = useSetAtom(closeModalAtom);
   const addBouquetFlower = useSetAtom(addBouquetFlowerAtom);
+  const removeBouquetFlowerById = useSetAtom(removeBouquetFlowerByIdAtom);
   const showToast = useSetAtom(showToastAtom);
-  // 초기 선택 꽃 상태
-  const [selectedInitFlowers, setSelectedInitFlowers] = useAtom(selectedFlowersAtom);
+
+  // bouquetFlowersAtom에서 이미 추가된 꽃 목록 파생
+  const bouquetFlowers = useAtomValue(bouquetFlowersAtom);
+  const addedFlowers = useMemo<TSelectedFlower[]>(
+    () => bouquetFlowers.map((f) => ({ id: f.id, name: f.name })),
+    [bouquetFlowers],
+  );
 
   // 모달 내부 선택 상태
   const [selectedInModal, setSelectedInModal] = useState<TSelectedFlower[]>([]);
   const [isConfirming, setIsConfirming] = useState(false);
 
   // 꽃 선택 종합 상태
-  const totalSelectedFlowers = useMemo(() => [...selectedInitFlowers, ...selectedInModal], [selectedInitFlowers, selectedInModal]);
+  const totalSelectedFlowers = useMemo(
+    () => [...addedFlowers, ...selectedInModal],
+    [addedFlowers, selectedInModal],
+  );
 
   const handleToggleFlower = (flower: { id: string; name: string }) => {
-    setSelectedInModal((prev) => {
-      const exists = prev.some((f) => f.id === flower.id);
-      if (exists) {return prev.filter((f) => f.id !== flower.id);}
-      return [...prev, flower];
-    });
+    // 모달 내부 선택 해제
+    if (selectedInModal.some((f) => f.id === flower.id)) {
+      setSelectedInModal((prev) => prev.filter((f) => f.id !== flower.id));
+      return;
+    }
+    // 이미 추가된 꽃 중복 체크
+    if (addedFlowers.some((f) => f.id === flower.id)) {
+      showToast({ message: '이미 추가된 꽃이에요' });
+      return;
+    }
+    setSelectedInModal((prev) => [...prev, flower]);
   };
 
   const handleRemoveFlower = (id: string) => {
@@ -40,12 +55,12 @@ function FlowerAddModal({ modalId }: TModalProps) {
       setSelectedInModal((prev) => prev.filter((f) => f.id !== id));
       return;
     }
-    setSelectedInitFlowers((prev) => prev.filter((f) => f.id !== id));
+    removeBouquetFlowerById(id);
   };
 
   const handleConfirm = async () => {
     if (selectedInModal.length === 0) {
-      showToast({ message: '꽃을 선택해 주세요.' });
+      closeModal(modalId);
       return;
     }
 

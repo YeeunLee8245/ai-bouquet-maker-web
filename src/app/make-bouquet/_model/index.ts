@@ -9,7 +9,7 @@ export {
 export {
   initBouquetFlowersAtom,
   addBouquetFlowerAtom,
-  removeBouquetFlowerAtom,
+  removeBouquetFlowerByIdAtom,
   addFlowerColorAtom,
   updateFlowerColorAtom,
   removeFlowerColorAtom,

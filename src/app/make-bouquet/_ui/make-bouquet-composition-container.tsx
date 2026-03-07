@@ -10,31 +10,31 @@ import FlowerAddModal from './modals/flower-add-modal/flower-add-modal';
 import { showToastAtom } from '@/shared/model/toast';
 import {
   bouquetFlowersAtom,
-  removeBouquetFlowerAtom,
   removeFlowerColorAtom,
   plusFlowerColorQuantityAtom,
   minusFlowerColorQuantityAtom,
   addFlowerColorAtom,
   updateFlowerColorAtom,
+  removeBouquetFlowerByIdAtom,
 } from '../_model';
 
 export default function MakeBouquetCompositionContainer() {
   const openModal = useSetAtom(openModalAtom);
   const showToast = useSetAtom(showToastAtom);
   const flowers = useAtomValue(bouquetFlowersAtom);
-  const removeFlower = useSetAtom(removeBouquetFlowerAtom);
+  const removeFlower = useSetAtom(removeBouquetFlowerByIdAtom);
   const removeColor = useSetAtom(removeFlowerColorAtom);
   const plusQuantity = useSetAtom(plusFlowerColorQuantityAtom);
   const minusQuantity = useSetAtom(minusFlowerColorQuantityAtom);
   const addColor = useSetAtom(addFlowerColorAtom);
   const updateColor = useSetAtom(updateFlowerColorAtom);
 
-  const handleDelete = (flowerIndex: number) => {
+  const handleDelete = (id: string) => () => {
     if (flowers.length <= 1) {
       showToast({ message: '한 개 이상의 꽃을 추가해 주세요.' });
       return;
     }
-    removeFlower(flowerIndex);
+    removeFlower(id);
   };
 
   const handleDeleteColor = (flowerIndex: number, colorIndex: number) => {
@@ -81,7 +81,7 @@ export default function MakeBouquetCompositionContainer() {
             <FlowerCompositionItem
               item={item}
               flowerIndex={idx}
-              onDelete={handleDelete}
+              onDelete={handleDelete(item.id)}
               onDeleteColor={handleDeleteColor}
               onPlusColor={handlePlusColor}
               onMinusColor={handleMinusColor}
