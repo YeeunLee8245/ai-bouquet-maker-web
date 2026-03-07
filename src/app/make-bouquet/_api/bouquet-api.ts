@@ -15,6 +15,7 @@ type TLikedFlowersResponse = {
 export type TSelectedFlowerDetail = {
   id: string;
   name_ko: string;
+  defaultMeaningId: string;
   tags: string[];
   imageUrl: string | null;
   colors: string[];
@@ -32,6 +33,10 @@ export type TBouquetSavePayload = {
       quantity: number;
       color: string;
     }[];
+    wrapping: {
+      ribbonColor: string;
+      wrappingColor: string;
+    };
   };
 };
 

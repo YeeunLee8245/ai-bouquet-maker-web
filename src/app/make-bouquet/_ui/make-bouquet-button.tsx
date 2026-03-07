@@ -15,6 +15,8 @@ import {
 } from '../_model';
 import { useState } from 'react';
 import { isApiError } from '@/shared/api';
+import { saveBouquet } from '../_api/bouquet-api';
+import { bouquetRibbonColorAtom, bouquetPackagingColorAtom } from '../_model/bouquet-form.atoms';
 
 export default function MakeBouquetButton() {
   const router = useRouter();
@@ -26,6 +28,8 @@ export default function MakeBouquetButton() {
   const recipient = useAtomValue(bouquetRecipientAtom);
   const message = useAtomValue(bouquetMessageAtom);
   const flowers = useAtomValue(bouquetFlowersAtom);
+  const ribbonColor = useAtomValue(bouquetRibbonColorAtom);
+  const packagingColor = useAtomValue(bouquetPackagingColorAtom);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSave = async () => {
@@ -41,27 +45,30 @@ export default function MakeBouquetButton() {
     const recipeFlowers = flowers.flatMap((flower) =>
       flower.colorAndQuantities.map((cq) => ({
         flower_id: flower.id,
-        // TODO: yeeun 꽃 의미 아이디 추가
-        flower_meaning_id: '',
+        flower_meaning_id: flower.meaningId,
         quantity: cq.quantity,
         color: cq.color,
       })),
     );
 
     try {
-      // await saveBouquet({
-      //   name,
-      //   ...(occasion && { occasion }),
-      //   ...(recipient && { recipient }),
-      //   ...(message && { message }),
-      //   recipe: {
-      //     flowers: recipeFlowers,
-      //   },
-      // });
+      const {data} = await saveBouquet({
+        name,
+        occasion: occasion ?? '',
+        recipient: recipient ?? '',
+        message: message ?? '',
+        recipe: {
+          flowers: recipeFlowers,
+          wrapping: {
+            ribbonColor,
+            wrappingColor: packagingColor,
+          },
+        },
+      });
 
-      // showToast({ message: '꽃다발이 저장되었습니다.' });
-      // // TODO: yeeun 작성 완료 꽃다발 페이지로 이동
-      // router.push('/');
+      showToast({ message: '꽃다발이 저장되었습니다.' });
+      // TODO: yeeun 작성 완료 꽃다발 페이지로 이동
+      router.push(`/my-bouquet/${data.id}`);
     } catch (error) {
       const msg = isApiError(error) ? error.message : '네트워크 오류가 발생했습니다.';
       showToast({ message: msg });

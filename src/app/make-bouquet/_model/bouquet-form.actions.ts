@@ -18,6 +18,7 @@ const toFlowerCompositionItem = (
 ): TFlowerCompositionItem => ({
   id: detail.id,
   name: detail.name_ko,
+  meaningId: detail.defaultMeaningId,
   keywords: detail.tags,
   imageUrl: detail.imageUrl ?? '',
   colorAndQuantities: detail.colors.map((color) => ({ color, quantity: 1 })),
@@ -35,6 +36,7 @@ export const initBouquetFlowersAtom = atom(null, async (get, set) => {
   const bouquetFlowers: TFlowerCompositionItem[] = selected.map((f) => ({
     id: f.id,
     name: f.name,
+    meaningId: '',
     keywords: [],
     imageUrl: '',
     colorAndQuantities: [],

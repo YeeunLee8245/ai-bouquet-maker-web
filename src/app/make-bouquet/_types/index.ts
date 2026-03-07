@@ -18,6 +18,7 @@ export type TFlowerColorAndQuantity = {
 export type TFlowerCompositionItem = {
   id: string;
   name: string;
+  meaningId: string;
   keywords: string[];
   imageUrl: string;
   colorAndQuantities: TFlowerColorAndQuantity[];
