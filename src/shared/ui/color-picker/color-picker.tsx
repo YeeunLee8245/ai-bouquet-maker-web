@@ -1,7 +1,6 @@
 'use client';
 
 import { cn } from '@/shared/utils/styles';
-import { useRef } from 'react';
 import { IColorPickerProps } from './types';
 
 /**
@@ -22,17 +21,14 @@ function ColorPicker(
     children,
     color,
     variant = 'primary',
-    onSelect,
+    ref,
     ...props
   }: IColorPickerProps,
 ) {
-  const ref = useRef<HTMLButtonElement>(null);
-
   return (
     <button
       ref={ref}
       {...{ [DATA_ATTR_STATE]: 'default' }}
-      onClick={() => { onSelect(color); }}
       type='button'
       style={{ background: color}}
       className={cn(

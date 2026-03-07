@@ -10,12 +10,7 @@ import MakeBouquetSummaryContainer from './_ui/make-bouquet-summary-containert';
 import MakeBouquetPreviewContainer from './_ui/make-bouquet-preview-container';
 import { initBouquetFlowersAtom, resetBouquetFormAtom } from './_model';
 
-type TProps = {
-  packagingColors?: string[];
-  ribbonColors?: string[];
-};
-
-function MakeBouquetPage({ packagingColors = [], ribbonColors = [] }: TProps) {
+function MakeBouquetPage() {
   const initBouquetFlowers = useSetAtom(initBouquetFlowersAtom);
   const resetBouquetForm = useSetAtom(resetBouquetFormAtom);
 
@@ -35,7 +30,7 @@ function MakeBouquetPage({ packagingColors = [], ribbonColors = [] }: TProps) {
       <div className='pt-4 pb-8 px-4'>
         <MakeBouquetInfoContainer />
         <MakeBouquetCompositionContainer />
-        <MakeBouquetPackagingContainer packagingColors={packagingColors} ribbonColors={ribbonColors} />
+        <MakeBouquetPackagingContainer />
         <MakeBouquetSummaryContainer />
         <MakeBouquetPreviewContainer />
         <MakeBouquetButton />
