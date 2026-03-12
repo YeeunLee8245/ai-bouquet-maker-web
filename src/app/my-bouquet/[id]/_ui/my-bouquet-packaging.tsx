@@ -1,6 +1,13 @@
 import { ColorPicker } from '@/shared/ui/color-picker';
 
-export default function MyBouquetPackaging() {
+interface MyBouquetPackagingProps {
+  wrapping: {
+    wrappingColor: string | null;
+    ribbonColor: string | null;
+  };
+}
+
+export default function MyBouquetPackaging({ wrapping }: MyBouquetPackagingProps) {
   return (
     <div className='info-border px-micro'>
       <p className='text-title-md'>포장 옵션</p>
@@ -8,22 +15,21 @@ export default function MyBouquetPackaging() {
         <div className='flex flex-col gap-2'>
           <p className='text-body-lg'>포장지</p>
           <div className='flex flex-wrap gap-1'>
-            <ColorPicker color='#83D400' />
-            <ColorPicker color='#83D400' />
-            <ColorPicker color='#83D400' />
-            <ColorPicker color='#83D400' />
-            <ColorPicker color='#83D400' />
-            <ColorPicker color='#83D400' />
-            <ColorPicker color='#83D400' />
-            <ColorPicker color='#83D400' />
-            <ColorPicker color='#83D400' />
+            {wrapping.wrappingColor ? (
+              <ColorPicker color={wrapping.wrappingColor} />
+            ) : (
+              <p className='text-body-xsm text-gray-400'>선택 없음</p>
+            )}
           </div>
         </div>
         <div className='flex flex-col gap-2'>
           <p className='text-body-lg'>리본</p>
           <div className='flex flex-wrap gap-1'>
-            <ColorPicker color='#83D400' />
-            <ColorPicker color='#83D400' />
+            {wrapping.ribbonColor ? (
+              <ColorPicker color={wrapping.ribbonColor} />
+            ) : (
+              <p className='text-body-xsm text-gray-400'>선택 없음</p>
+            )}
           </div>
         </div>
       </div>

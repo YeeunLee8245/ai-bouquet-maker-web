@@ -1,27 +1,63 @@
+'use client';
+
+import { useParams } from 'next/navigation';
 import MakeBouquetPreviewContainer from '@/app/make-bouquet/_ui/make-bouquet-preview-container';
 import MyBouquetInfo from './_ui/my-bouquet-info';
 import MyBouquetComposition from './_ui/my-bouquet-composition';
 import MyBouquetPackaging from './_ui/my-bouquet-packaging';
 import { Button } from '@/shared/ui/button';
+import { useBouquetDetailQuery } from './_model/use-bouquet-detail-query';
 
-/**
- * 내 꽃다발 상세 페이지
- */
 const MyBouquetDetailPage = () => {
+  const { id } = useParams<{ id: string }>();
+  const { data, isLoading } = useBouquetDetailQuery(id);
+
+  if (isLoading) {
+    return (
+      <div className='flex items-center justify-center min-h-[50vh]'>
+        <p className='text-body-md text-gray-400'>불러오는 중...</p>
+      </div>
+    );
+  }
+
+  if (!data) {
+    return (
+      <div className='flex items-center justify-center min-h-[50vh]'>
+        <p className='text-body-md text-gray-400'>꽃다발을 찾을 수 없습니다.</p>
+      </div>
+    );
+  }
+
+  const createdDate = new Date(data.created_at);
+  const formattedDate = createdDate.toLocaleDateString('ko-KR', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+  const formattedTime = createdDate.toLocaleTimeString('ko-KR', {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  });
+
   return (
     <div className=''>
       <div className='p-4 flex items-end justify-between'>
-        <p className='text-title-lg'>꽃다발 이름</p>
+        <p className='text-title-lg'>{data.name}</p>
         <div className='text-end text-body-xsm text-gray-400 whitespace-pre-wrap'>
-          {`${'2025년 12월 4일'}\n${'09:00'}`}
+          {`${formattedDate}\n${formattedTime}`}
         </div>
       </div>
       <div className='flex flex-col gap-4 px-4 pb-6'>
         {/* TODO: yeeun 공통화 */}
         <MakeBouquetPreviewContainer/>
-        <MyBouquetInfo/>
-        <MyBouquetComposition/>
-        <MyBouquetPackaging/>
+        <MyBouquetInfo
+          occasion={data.occasion}
+          recipient={data.recipient}
+          message={data.message}
+        />
+        <MyBouquetComposition flowers={data.flowers} />
+        <MyBouquetPackaging wrapping={data.wrapping} />
       </div>
       <div className='px-4 pb-8 flex flex-col items-center'>
         <Button size='lg' className='w-full'>
