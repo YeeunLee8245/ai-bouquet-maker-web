@@ -66,6 +66,15 @@ function getCurrentSeason(): string {
  *           type: string
  *           enum: [popular, name]
  *           default: name
+ *       - name: name_only
+ *         in: query
+ *         description: |
+ *           `true` 지정 시 꽃 이름으로만 검색합니다. (꽃말 검색 제외)
+ *           꽃다발 만들기 등에서 꽃 이름으로만 빠르게 찾을 때 사용합니다.
+ *           미지정 또는 `false`일 경우 이름 + 꽃말 모두 검색합니다.
+ *         schema:
+ *           type: boolean
+ *           default: false
  *       - name: page
  *         in: query
  *         description: 페이지 번호 (1부터 시작)
@@ -180,6 +189,7 @@ export async function GET(request: NextRequest) {
     const seasonsParam = searchParams.get('seasons');
     const colorsParam = searchParams.get('colors');
     const search = searchParams.get('search') || '';
+    const nameOnly = searchParams.get('name_only') === 'true';
     const sort = searchParams.get('sort') || 'name';
     const page = parseInt(searchParams.get('page') || '1', 10);
     const limit = parseInt(searchParams.get('limit') || '20', 10);
@@ -274,12 +284,13 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // 검색어 필터 (search_text 컬럼으로 단일 쿼리 - 이름 + 꽃말 통합)
+    // 검색어 필터 (search_text 컬럼으로 단일 쿼리 - 이름 + 꽃말 통합 또는 이름만 검색)
     if (search) {
+      const searchColumn = nameOnly ? 'name_ko' : 'search_text';
       const { data: searchMatches, error: searchError } = await supabase
         .from('flowers')
         .select('id')
-        .ilike('search_text', `%${search}%`);
+        .ilike(searchColumn, `%${search}%`);
 
       if (searchError) {
         console.error('Search query error:', searchError);
@@ -353,9 +364,10 @@ export async function GET(request: NextRequest) {
           ? String(meanings[0].id)
           : null;
 
-      // 색상 추출 (icon_color)
+      // 색상 추출 (icon_color) - is_primary가 true인 경우(회색 기본값) 제외
       const flowerColors = [...new Set(
         meanings
+          .filter(m => !m.is_primary)
           .map(m => m.icon_color)
           .filter((color): color is string => Boolean(color)),
       )];

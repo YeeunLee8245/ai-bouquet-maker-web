@@ -56,12 +56,11 @@ import { toSupabaseResizedImageUrl } from '@shared/utils/image-url';
  *                         flower_name: "장미"
  *                         quantity: 5
  *                         color: "#FF0000"
- *                         meaning: "불타는 사랑"
- *                         icon_color: "#FF0000"
- *                         image_url: "https://example.com/rose.png"
+ *                         type: "rose"
  *                     wrapping: { wrappingColor: "#FFFFFF", ribbonColor: "#FF0000" }
  *                     layout: { items: [] }
  *                     created_at: "2024-02-04T12:00:00Z"
+ *                     updated_at: "2024-02-04T12:00:00Z"
  *       404:
  *         description: 레시피를 찾을 수 없음
  *         content:
@@ -256,38 +255,38 @@ export async function GET(
       );
     }
 
-    // 2. 꽃 및 꽃말 정보 추출 및 조회
+    // 2. 꽃 정보 추출 및 조회
     const recipe = bouquet.recipe as BouquetRecipeContent | null;
     const flowersInRecipe = recipe?.flowers || [];
     const flowerIds = Array.from(new Set(flowersInRecipe.map(f => f.flower_id)));
-    const meaningIds = Array.from(new Set(flowersInRecipe.map(f => f.flower_meaning_id)));
+    const meaningIds = Array.from(new Set(flowersInRecipe.map(f => f.flower_meaning_id).filter(Boolean)));
 
-    // 꽃 이름 및 이미지 맵
-    let flowerMap: Record<string, { name_ko: string; image_url: string | null }> = {};
+    // 꽃 이름 맵
+    let flowerMap: Record<string, string> = {};
     if (flowerIds.length > 0) {
       const { data: flowers } = await supabase
         .from('flowers')
-        .select('id, name_ko, images')
+        .select('id, name_ko')
         .in('id', flowerIds);
 
       if (flowers) {
         flowerMap = Object.fromEntries(
-          flowers.map(f => [String(f.id), { name_ko: f.name_ko, image_url: toSupabaseResizedImageUrl(f.images?.[0]) }]),
+          flowers.map(f => [String(f.id), f.name_ko]),
         );
       }
     }
 
-    // 꽃말 텍스트 및 아이콘 컬러 맵
-    let meaningMap: Record<string, { meaning: string; icon_color: string | null }> = {};
+    // 꽃말 아이콘 컬러 맵 (f.color가 없을 때 fallback용)
+    let meaningMap: Record<string, string | null> = {};
     if (meaningIds.length > 0) {
       const { data: meanings } = await supabase
         .from('flower_meanings')
-        .select('id, meaning, icon_color')
+        .select('id, icon_color')
         .in('id', meaningIds);
 
       if (meanings) {
         meaningMap = Object.fromEntries(
-          meanings.map(m => [String(m.id), { meaning: m.meaning, icon_color: m.icon_color }]),
+          meanings.map(m => [String(m.id), m.icon_color]),
         );
       }
     }
@@ -295,13 +294,9 @@ export async function GET(
     // 3. 데이터 포맷팅
     const flowers = flowersInRecipe.map(f => ({
       flower_id: f.flower_id,
-      flower_name: flowerMap[f.flower_id]?.name_ko || '알 수 없음',
-      image_url: flowerMap[f.flower_id]?.image_url || null,
+      flower_name: flowerMap[f.flower_id] || '알 수 없음',
       quantity: f.quantity,
-      color: f.color,
-      flower_meaning_id: f.flower_meaning_id,
-      meaning: meaningMap[f.flower_meaning_id]?.meaning || '알 수 없음',
-      icon_color: meaningMap[f.flower_meaning_id]?.icon_color || null,
+      color: f.color || (f.flower_meaning_id ? meaningMap[f.flower_meaning_id] : null),
       type: f.type,
     }));
 
@@ -311,11 +306,11 @@ export async function GET(
       occasion: bouquet.occasion || null,
       recipient: bouquet.recipient || null,
       message: bouquet.message || null,
+      created_at: bouquet.created_at,
+      updated_at: bouquet.updated_at,
       flowers,
       wrapping: recipe?.wrapping || { ribbonColor: null, wrappingColor: null },
       layout: (bouquet.layout as BouquetLayout) || null,
-      created_at: bouquet.created_at,
-      updated_at: bouquet.updated_at,
     };
 
     return NextResponse.json({
