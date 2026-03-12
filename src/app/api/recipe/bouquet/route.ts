@@ -60,9 +60,9 @@ import { getPublicUser } from '@/lib/users/auth';
  *                       required: [flower_id, flower_meaning_id, quantity, color]
  *                       properties:
  *                         flower_id:
- *                           type: integer
+ *                           type: string
  *                           description: 꽃 기본 정보 ID (flowers 테이블)
- *                           example: 1
+ *                           example: "1"
  *                         flower_meaning_id:
  *                           type: integer
  *                           description: 선택한 구체적인 꽃말/색상 ID (flower_meanings 테이블)
@@ -101,7 +101,7 @@ import { getPublicUser } from '@/lib/users/auth';
  *                       type: object
  *                       description: 개별 꽃 오브젝트의 위치 및 상태
  *                       properties:
- *                         flower_id: { type: integer, description: "꽃 ID" }
+ *                         flower_id: { type: string, description: "꽃 ID" }
  *                         flower_meaning_id: { type: integer, description: "꽃말 ID" }
  *                         x: { type: number, description: "X 좌표 (px 또는 비율)", example: 150.5 }
  *                         y: { type: number, description: "Y 좌표 (px 또는 비율)", example: 200.0 }
@@ -121,7 +121,7 @@ import { getPublicUser } from '@/lib/users/auth';
  *                 message: "생일 축하해! 이 꽃처럼 밝은 한 해 되길."
  *                 recipe:
  *                   flowers:
- *                     - flower_id: 112
+ *                     - flower_id: "112"
  *                       flower_meaning_id: 301
  *                       quantity: 2
  *                       color: "#FFD700"
@@ -130,14 +130,14 @@ import { getPublicUser } from '@/lib/users/auth';
  *                     wrappingColor: "#F5F5DC"
  *                 layout:
  *                   items:
- *                     - flower_id: 112
+ *                     - flower_id: "112"
  *                       flower_meaning_id: 301
  *                       x: 150
  *                       y: 200
  *                       rotation: 0
  *                       z_index: 2
  *                       color: "#FFD700"
- *                     - flower_id: 112
+ *                     - flower_id: "112"
  *                       flower_meaning_id: 301
  *                       x: 180
  *                       y: 220
@@ -154,7 +154,7 @@ import { getPublicUser } from '@/lib/users/auth';
  *                 recipient: "연인"
  *                 recipe:
  *                   flowers:
- *                     - flower_id: 45
+ *                     - flower_id: "45"
  *                       flower_meaning_id: 204
  *                       quantity: 9
  *                       color: "#E31C25"
