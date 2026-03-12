@@ -1,0 +1,8 @@
+<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 전체적인 형태 (약간 연하게) -->
+  <path d="M50 20C30 20 20 40 20 60C20 80 35 90 50 90C65 90 80 80 80 60C80 40 70 20 50 20Z" fill="black" fill-opacity="0.8"/>
+  <!-- 가운데 잎 부분 (가장 진하게 처리하여 입체감 부여) -->
+  <path d="M50 20C40 20 35 35 35 50C35 65 42 75 50 75C58 75 65 65 65 50C65 35 60 20 50 20Z" fill="black" fill-opacity="1.0"/>
+  <!-- 상단 꽃잎 겹치는 부분 (하이라이트 효과를 위해 더 투명하게) -->
+  <path d="M50 20L40 40H60L50 20Z" fill="black" fill-opacity="0.4"/>
+</svg>

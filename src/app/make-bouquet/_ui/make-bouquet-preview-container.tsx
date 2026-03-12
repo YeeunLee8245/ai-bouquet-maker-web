@@ -1,21 +1,18 @@
 'use client';
 
 import { useSetAtom } from 'jotai';
-import { showToastAtom } from '@/shared/model/toast';
+import { openModalAtom } from '@/shared/model/modal';
+import BouquetPreviewModal from './modals/bouquet-preview-modal/bouquet-preview-modal';
 
 export default function MakeBouquetPreviewContainer() {
-  // const canSave = useAtomValue(canSaveBouquetAtom);
-  // const firstError = useAtomValue(firstValidationErrorAtom);
-  const showToast = useSetAtom(showToastAtom);
+  const openModal = useSetAtom(openModalAtom);
 
   const handleClick = () => {
-    // if (!canSave) {
-    //   if (firstError) {
-    //     showToast({ message: firstError });
-    //   }
-    //   return;
-    // }
-    showToast({ message: '미리보기 준비 중입니다.' });
+    openModal({
+      id: 'bouquet-preview-modal',
+      component: <BouquetPreviewModal />,
+      position: 'bottom',
+    });
   };
 
   return (

@@ -20,6 +20,7 @@ export default async function MainPage() {
           <Image
             src='/images/bg_main_top.webp'
             alt=''
+            priority
             width={360}
             height={380}
             className='absolute inset-0 w-full h-full object-cover object-[50%_-48px]'

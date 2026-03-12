@@ -22,7 +22,7 @@ export default function PopularFlowerRecommendation({ flowers }: TProps) {
       <p className='text-title-md px-4'>인기 꽃 추천</p>
       <div className='flex gap-2 overflow-x-auto'>
         {items.map((item) => (
-          <FlowerCard key={item.id} {...item} size='md' className='first:ml-4 last:mr-4' />
+          <FlowerCard key={item.id} priority {...item} size='md' className='first:ml-4 last:mr-4' />
         ))}
       </div>
     </div>

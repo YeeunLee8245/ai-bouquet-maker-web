@@ -1,7 +1,6 @@
 'use client';
 
 import { useParams } from 'next/navigation';
-import MakeBouquetPreviewContainer from '@/app/make-bouquet/_ui/make-bouquet-preview-container';
 import MyBouquetInfo from './_ui/my-bouquet-info';
 import MyBouquetComposition from './_ui/my-bouquet-composition';
 import MyBouquetPackaging from './_ui/my-bouquet-packaging';
@@ -50,7 +49,7 @@ const MyBouquetDetailPage = () => {
       </div>
       <div className='flex flex-col gap-4 px-4 pb-6'>
         {/* TODO: yeeun 공통화 */}
-        <MakeBouquetPreviewContainer/>
+        {/* <MakeBouquetPreviewContainer/> */}
         <MyBouquetInfo
           occasion={data.occasion}
           recipient={data.recipient}

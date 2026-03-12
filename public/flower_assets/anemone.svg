@@ -1,0 +1,19 @@
+<svg width="100%" height="100%" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <g fill="black">
+    <!-- Main Petals (Layered for depth) -->
+    <circle cx="100" cy="65" r="35" opacity="0.6" />
+    <circle cx="135" cy="100" r="35" opacity="0.6" />
+    <circle cx="100" cy="135" r="35" opacity="0.6" />
+    <circle cx="65" cy="100" r="35" opacity="0.6" />
+    
+    <!-- Petal Creases (Darker) -->
+    <path d="M100,100 Q100,40 140,60 Q160,100 100,100" opacity="0.9" />
+    <path d="M100,100 Q160,100 140,140 Q100,160 100,100" opacity="0.9" />
+    <path d="M100,100 Q100,160 60,140 Q40,100 100,100" opacity="0.9" />
+    <path d="M100,100 Q40,100 60,60 Q100,40 100,100" opacity="0.9" />
+    
+    <!-- Central Core (Highest contrast) -->
+    <circle cx="100" cy="100" r="22" opacity="1.0" />
+    <circle cx="100" cy="100" r="12" fill="white" opacity="0.3" /> <!-- Highlights in center -->
+  </g>
+</svg>

@@ -11,6 +11,7 @@ type TProps = {
   name: string;
   colors?: string[];
   tags: string[];
+  priority?: boolean;
   actionButton?: React.ReactNode;
   likeButton?: React.ReactNode;
   searchParams?: Record<string, string>;
@@ -27,7 +28,7 @@ const flowerCardImageSizes: Record<TProps['size'], { width: number; height: numb
   },
 };
 
-function FlowerCard({ size, imageUrl, id, name, colors, tags, actionButton, likeButton, searchParams, className, ...props }: TProps) {
+function FlowerCard({ size, imageUrl, id, name, colors, tags, priority = false, actionButton, likeButton, searchParams, className, ...props }: TProps) {
   const [imageWidth, imageHeight] = [flowerCardImageSizes[size].width, flowerCardImageSizes[size].height];
   const query = searchParams ? `?${new URLSearchParams(searchParams).toString()}` : '';
   return (
@@ -37,6 +38,7 @@ function FlowerCard({ size, imageUrl, id, name, colors, tags, actionButton, like
         href={`/flower-directory/${id}${query}`}
         className={cn('relative')}>
         <Image
+          priority={priority}
           src={imageUrl}
           alt={name}
           width={imageWidth}
