@@ -59,12 +59,12 @@ export default function InlineColorPicker({ initialColor, onApply }: TProps) {
           <input
             type='range'
             min='0'
-            max='100'
+            max='50'
             value={lightness}
             onChange={(e) => setLightness(Number(e.target.value))}
             className='input-range w-full h-2 rounded-6'
             style={{
-              background: `linear-gradient(to right, hsl(${hue},${saturation}%,0%), hsl(${hue},${saturation}%,50%), hsl(${hue},${saturation}%,100%))`,
+              background: `linear-gradient(to right, hsl(${hue},${saturation}%,0%), hsl(${hue},${saturation}%,20%), hsl(${hue},${saturation}%,50%))`,
             }}
           />
         </div>
