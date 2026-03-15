@@ -1,7 +1,5 @@
-export default function Home() {
-  return (
-    <div className='text-caption-medium tablet:text-label-medium pc:text-body-small'>
-      test
-    </div>
-  );
+import { redirect } from 'next/navigation';
+
+export default function RootPage() {
+  redirect('/main');
 }

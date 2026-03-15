@@ -4,7 +4,7 @@ import { Button } from '@/shared/ui/button';
 import { cn } from '@/shared/utils/styles';
 import XIcon from '@/shared/assets/icons/x.svg';
 import ChevronDownIcon from '@/shared/assets/icons/chevron_down.svg';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useRef, useState, useEffect, useCallback } from 'react';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { selectedFlowersAtom, removeFlowerAtom } from '@/shared/model/selected-flowers';
@@ -99,6 +99,13 @@ function DefaultSelectedFlowerChips() {
 }
 
 function BottomActionFooter({ title, children, flowers, onRemoveFlower }: TProps) {
+  const router = useRouter();
+
+  const handleMakeBouquet = () => {
+    document.cookie = 'make-bouquet-allowed=1; max-age=10; path=/';
+    router.push('/make-bouquet');
+  };
+
   return (
     <footer
       className='py-3 px-4 pb-8 w-full flex flex-col gap-3 border-t border-gray-100 bg-white'
@@ -108,9 +115,11 @@ function BottomActionFooter({ title, children, flowers, onRemoveFlower }: TProps
         ? <SelectedFlowerChips flowers={flowers} onRemove={onRemoveFlower} />
         : <DefaultSelectedFlowerChips />
       }
-      {title && <Button size='lg' asChild>
-        <Link href='/make-bouquet'>{title}</Link>
-      </Button>}
+      {title && (
+        <Button size='lg' onClick={handleMakeBouquet}>
+          {title}
+        </Button>
+      )}
       {children}
     </footer>
   );
