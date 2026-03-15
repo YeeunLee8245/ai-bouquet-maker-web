@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <g fill="black">
+    <!-- Outer ring: 10 florets (36° intervals, r=56) -->
+    <g transform="translate(100 100)" opacity="0.58">
+      <path d="M-12,5 C-15,-2 -11,-18 0,-22 C11,-18 15,-2 12,5Z" transform="rotate(0) translate(0 -56)" />
+      <path d="M-12,5 C-15,-2 -11,-18 0,-22 C11,-18 15,-2 12,5Z" transform="rotate(36) translate(0 -56)" />
+      <path d="M-12,5 C-15,-2 -11,-18 0,-22 C11,-18 15,-2 12,5Z" transform="rotate(72) translate(0 -56)" />
+      <path d="M-12,5 C-15,-2 -11,-18 0,-22 C11,-18 15,-2 12,5Z" transform="rotate(108) translate(0 -56)" />
+      <path d="M-12,5 C-15,-2 -11,-18 0,-22 C11,-18 15,-2 12,5Z" transform="rotate(144) translate(0 -56)" />
+      <path d="M-12,5 C-15,-2 -11,-18 0,-22 C11,-18 15,-2 12,5Z" transform="rotate(180) translate(0 -56)" />
+      <path d="M-12,5 C-15,-2 -11,-18 0,-22 C11,-18 15,-2 12,5Z" transform="rotate(216) translate(0 -56)" />
+      <path d="M-12,5 C-15,-2 -11,-18 0,-22 C11,-18 15,-2 12,5Z" transform="rotate(252) translate(0 -56)" />
+      <path d="M-12,5 C-15,-2 -11,-18 0,-22 C11,-18 15,-2 12,5Z" transform="rotate(288) translate(0 -56)" />
+      <path d="M-12,5 C-15,-2 -11,-18 0,-22 C11,-18 15,-2 12,5Z" transform="rotate(324) translate(0 -56)" />
+    </g>
+    <!-- Middle ring: 8 florets (45° intervals, offset 18°, r=40) -->
+    <g transform="translate(100 100)" opacity="0.75">
+      <path d="M-10,4 C-12,-2 -9,-15 0,-18 C9,-15 12,-2 10,4Z" transform="rotate(18) translate(0 -40)" />
+      <path d="M-10,4 C-12,-2 -9,-15 0,-18 C9,-15 12,-2 10,4Z" transform="rotate(63) translate(0 -40)" />
+      <path d="M-10,4 C-12,-2 -9,-15 0,-18 C9,-15 12,-2 10,4Z" transform="rotate(108) translate(0 -40)" />
+      <path d="M-10,4 C-12,-2 -9,-15 0,-18 C9,-15 12,-2 10,4Z" transform="rotate(153) translate(0 -40)" />
+      <path d="M-10,4 C-12,-2 -9,-15 0,-18 C9,-15 12,-2 10,4Z" transform="rotate(198) translate(0 -40)" />
+      <path d="M-10,4 C-12,-2 -9,-15 0,-18 C9,-15 12,-2 10,4Z" transform="rotate(243) translate(0 -40)" />
+      <path d="M-10,4 C-12,-2 -9,-15 0,-18 C9,-15 12,-2 10,4Z" transform="rotate(288) translate(0 -40)" />
+      <path d="M-10,4 C-12,-2 -9,-15 0,-18 C9,-15 12,-2 10,4Z" transform="rotate(333) translate(0 -40)" />
+    </g>
+    <!-- Inner ring: 6 florets (60° intervals, offset 9°, r=24) -->
+    <g transform="translate(100 100)" opacity="0.90">
+      <path d="M-7,3 C-9,-1 -6,-11 0,-14 C6,-11 9,-1 7,3Z" transform="rotate(9) translate(0 -24)" />
+      <path d="M-7,3 C-9,-1 -6,-11 0,-14 C6,-11 9,-1 7,3Z" transform="rotate(69) translate(0 -24)" />
+      <path d="M-7,3 C-9,-1 -6,-11 0,-14 C6,-11 9,-1 7,3Z" transform="rotate(129) translate(0 -24)" />
+      <path d="M-7,3 C-9,-1 -6,-11 0,-14 C6,-11 9,-1 7,3Z" transform="rotate(189) translate(0 -24)" />
+      <path d="M-7,3 C-9,-1 -6,-11 0,-14 C6,-11 9,-1 7,3Z" transform="rotate(249) translate(0 -24)" />
+      <path d="M-7,3 C-9,-1 -6,-11 0,-14 C6,-11 9,-1 7,3Z" transform="rotate(309) translate(0 -24)" />
+    </g>
+    <!-- Center -->
+    <circle cx="100" cy="100" r="14" fill="black" opacity="0.95" />
+    <circle cx="100" cy="100" r="6"  fill="white" opacity="0.25" />
+  </g>
+</svg>

@@ -38,6 +38,10 @@ const FLOWER_SVG_MAP: Record<string, { svgUrl: string; size?: number }> = {
   '클레마티스': { svgUrl: '/flower_assets/clematis.svg' },
   '쿠르쿠마': { svgUrl: '/flower_assets/curcuma.svg' },
   '안개꽃': { svgUrl: '/flower_assets/babys-breath.svg' },
+  '해바라기': { svgUrl: '/flower_assets/sunflower.svg', size: FLOWER_SIZE * 1.4 },
+  '수국': { svgUrl: '/flower_assets/hydrangea.svg', size: FLOWER_SIZE * 1.2 },
+  '거베라': { svgUrl: '/flower_assets/gerbera.svg' },
+  '아이리스': { svgUrl: '/flower_assets/iris.svg' },
 };
 
 const DEFAULT_SVG = '/flower_assets/rose.svg';

@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <g fill="black">
+    <!-- Outer 16 petals (22.5° intervals) -->
+    <g transform="translate(100 100)" opacity="0.65">
+      <path d="M-10,0 C-12,-10 -8,-50 0,-65 C8,-50 12,-10 10,0Z" transform="rotate(0)" />
+      <path d="M-10,0 C-12,-10 -8,-50 0,-65 C8,-50 12,-10 10,0Z" transform="rotate(22.5)" />
+      <path d="M-10,0 C-12,-10 -8,-50 0,-65 C8,-50 12,-10 10,0Z" transform="rotate(45)" />
+      <path d="M-10,0 C-12,-10 -8,-50 0,-65 C8,-50 12,-10 10,0Z" transform="rotate(67.5)" />
+      <path d="M-10,0 C-12,-10 -8,-50 0,-65 C8,-50 12,-10 10,0Z" transform="rotate(90)" />
+      <path d="M-10,0 C-12,-10 -8,-50 0,-65 C8,-50 12,-10 10,0Z" transform="rotate(112.5)" />
+      <path d="M-10,0 C-12,-10 -8,-50 0,-65 C8,-50 12,-10 10,0Z" transform="rotate(135)" />
+      <path d="M-10,0 C-12,-10 -8,-50 0,-65 C8,-50 12,-10 10,0Z" transform="rotate(157.5)" />
+      <path d="M-10,0 C-12,-10 -8,-50 0,-65 C8,-50 12,-10 10,0Z" transform="rotate(180)" />
+      <path d="M-10,0 C-12,-10 -8,-50 0,-65 C8,-50 12,-10 10,0Z" transform="rotate(202.5)" />
+      <path d="M-10,0 C-12,-10 -8,-50 0,-65 C8,-50 12,-10 10,0Z" transform="rotate(225)" />
+      <path d="M-10,0 C-12,-10 -8,-50 0,-65 C8,-50 12,-10 10,0Z" transform="rotate(247.5)" />
+      <path d="M-10,0 C-12,-10 -8,-50 0,-65 C8,-50 12,-10 10,0Z" transform="rotate(270)" />
+      <path d="M-10,0 C-12,-10 -8,-50 0,-65 C8,-50 12,-10 10,0Z" transform="rotate(292.5)" />
+      <path d="M-10,0 C-12,-10 -8,-50 0,-65 C8,-50 12,-10 10,0Z" transform="rotate(315)" />
+      <path d="M-10,0 C-12,-10 -8,-50 0,-65 C8,-50 12,-10 10,0Z" transform="rotate(337.5)" />
+    </g>
+    <!-- Inner 12 petals (30° intervals, offset 11.25°) -->
+    <g transform="translate(100 100)" opacity="0.83">
+      <path d="M-8,0 C-9,-8 -6,-38 0,-50 C6,-38 9,-8 8,0Z" transform="rotate(11.25)" />
+      <path d="M-8,0 C-9,-8 -6,-38 0,-50 C6,-38 9,-8 8,0Z" transform="rotate(41.25)" />
+      <path d="M-8,0 C-9,-8 -6,-38 0,-50 C6,-38 9,-8 8,0Z" transform="rotate(71.25)" />
+      <path d="M-8,0 C-9,-8 -6,-38 0,-50 C6,-38 9,-8 8,0Z" transform="rotate(101.25)" />
+      <path d="M-8,0 C-9,-8 -6,-38 0,-50 C6,-38 9,-8 8,0Z" transform="rotate(131.25)" />
+      <path d="M-8,0 C-9,-8 -6,-38 0,-50 C6,-38 9,-8 8,0Z" transform="rotate(161.25)" />
+      <path d="M-8,0 C-9,-8 -6,-38 0,-50 C6,-38 9,-8 8,0Z" transform="rotate(191.25)" />
+      <path d="M-8,0 C-9,-8 -6,-38 0,-50 C6,-38 9,-8 8,0Z" transform="rotate(221.25)" />
+      <path d="M-8,0 C-9,-8 -6,-38 0,-50 C6,-38 9,-8 8,0Z" transform="rotate(251.25)" />
+      <path d="M-8,0 C-9,-8 -6,-38 0,-50 C6,-38 9,-8 8,0Z" transform="rotate(281.25)" />
+      <path d="M-8,0 C-9,-8 -6,-38 0,-50 C6,-38 9,-8 8,0Z" transform="rotate(311.25)" />
+      <path d="M-8,0 C-9,-8 -6,-38 0,-50 C6,-38 9,-8 8,0Z" transform="rotate(341.25)" />
+    </g>
+    <!-- Center disk -->
+    <circle cx="100" cy="100" r="26" fill="black" opacity="1.0" />
+    <circle cx="100" cy="100" r="13" fill="white" opacity="0.20" />
+  </g>
+</svg>
