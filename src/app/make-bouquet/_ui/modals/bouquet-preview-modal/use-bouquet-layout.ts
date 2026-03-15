@@ -31,6 +31,8 @@ const FLOWER_SVG_MAP: Record<string, string> = {
   '미스티블루': '/flower_assets/misty-blue.svg',
   '카네이션': '/flower_assets/carnation.svg',
   '코스모스': '/flower_assets/cosmos.svg',
+  '동백꽃': '/flower_assets/camellia.svg',
+  '아스틸베': '/flower_assets/astilbe.svg',
 };
 
 const DEFAULT_SVG = '/flower_assets/rose.svg';

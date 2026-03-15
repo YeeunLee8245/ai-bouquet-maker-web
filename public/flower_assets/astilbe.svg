@@ -1,0 +1,107 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <g fill="black">
+    <!-- Background silhouette: teardrop plume mass -->
+    <path fill="black" opacity="0.32"
+      d="M100,178 C58,178 40,148 40,110 C40,72 60,40 100,20 C140,40 160,72 160,110 C160,148 142,178 100,178Z" />
+
+    <!-- Central stem -->
+    <path fill="black" opacity="0.90"
+      d="M97,176 L97,26 L103,26 L103,176Z" />
+
+    <!-- Branch pair 1: attach y=155, tip y=167 -->
+    <path fill="black" opacity="0.70" d="M100,153 L52,165 L52,169 L100,157Z" />
+    <path fill="black" opacity="0.70" d="M100,153 L148,165 L148,169 L100,157Z" />
+    <!-- Branch pair 2: attach y=138, tip y=149 -->
+    <path fill="black" opacity="0.73" d="M100,136 L60,147 L60,151 L100,140Z" />
+    <path fill="black" opacity="0.73" d="M100,136 L140,147 L140,151 L100,140Z" />
+    <!-- Branch pair 3: attach y=121, tip y=130 -->
+    <path fill="black" opacity="0.76" d="M100,119 L66,128 L66,132 L100,123Z" />
+    <path fill="black" opacity="0.76" d="M100,119 L134,128 L134,132 L100,123Z" />
+    <!-- Branch pair 4: attach y=105, tip y=113 -->
+    <path fill="black" opacity="0.79" d="M100,103 L72,111 L72,115 L100,107Z" />
+    <path fill="black" opacity="0.79" d="M100,103 L128,111 L128,115 L100,107Z" />
+    <!-- Branch pair 5: attach y=89, tip y=96 -->
+    <path fill="black" opacity="0.82" d="M100,87 L77,94 L77,98 L100,91Z" />
+    <path fill="black" opacity="0.82" d="M100,87 L123,94 L123,98 L100,91Z" />
+    <!-- Branch pair 6: attach y=74, tip y=80 -->
+    <path fill="black" opacity="0.84" d="M100,72 L82,78 L82,82 L100,76Z" />
+    <path fill="black" opacity="0.84" d="M100,72 L118,78 L118,82 L100,76Z" />
+    <!-- Branch pair 7: attach y=59, tip y=64 -->
+    <path fill="black" opacity="0.86" d="M100,57 L87,62 L87,66 L100,61Z" />
+    <path fill="black" opacity="0.86" d="M100,57 L113,62 L113,66 L100,61Z" />
+    <!-- Branch pair 8: attach y=45, tip y=49 -->
+    <path fill="black" opacity="0.88" d="M100,43 L92,47 L92,51 L100,47Z" />
+    <path fill="black" opacity="0.88" d="M100,43 L108,47 L108,51 L100,47Z" />
+
+    <!-- Flower clusters at branch tips -->
+    <!-- Pair 1 left -->
+    <circle cx="52" cy="167" r="4"   fill="black" opacity="0.85" />
+    <circle cx="46" cy="163" r="3"   fill="black" opacity="0.78" />
+    <circle cx="58" cy="163" r="3"   fill="black" opacity="0.78" />
+    <!-- Pair 1 right -->
+    <circle cx="148" cy="167" r="4"  fill="black" opacity="0.85" />
+    <circle cx="142" cy="163" r="3"  fill="black" opacity="0.78" />
+    <circle cx="154" cy="163" r="3"  fill="black" opacity="0.78" />
+
+    <!-- Pair 2 left -->
+    <circle cx="60" cy="149"  r="3.5" fill="black" opacity="0.85" />
+    <circle cx="54" cy="145"  r="2.5" fill="black" opacity="0.78" />
+    <circle cx="66" cy="145"  r="2.5" fill="black" opacity="0.78" />
+    <!-- Pair 2 right -->
+    <circle cx="140" cy="149" r="3.5" fill="black" opacity="0.85" />
+    <circle cx="134" cy="145" r="2.5" fill="black" opacity="0.78" />
+    <circle cx="146" cy="145" r="2.5" fill="black" opacity="0.78" />
+
+    <!-- Pair 3 left -->
+    <circle cx="66" cy="130"  r="3"   fill="black" opacity="0.85" />
+    <circle cx="60" cy="126"  r="2.5" fill="black" opacity="0.78" />
+    <circle cx="72" cy="126"  r="2.5" fill="black" opacity="0.78" />
+    <!-- Pair 3 right -->
+    <circle cx="134" cy="130" r="3"   fill="black" opacity="0.85" />
+    <circle cx="128" cy="126" r="2.5" fill="black" opacity="0.78" />
+    <circle cx="140" cy="126" r="2.5" fill="black" opacity="0.78" />
+
+    <!-- Pair 4 left -->
+    <circle cx="72" cy="113"  r="3"   fill="black" opacity="0.85" />
+    <circle cx="66" cy="109"  r="2"   fill="black" opacity="0.78" />
+    <circle cx="78" cy="109"  r="2"   fill="black" opacity="0.78" />
+    <!-- Pair 4 right -->
+    <circle cx="128" cy="113" r="3"   fill="black" opacity="0.85" />
+    <circle cx="122" cy="109" r="2"   fill="black" opacity="0.78" />
+    <circle cx="134" cy="109" r="2"   fill="black" opacity="0.78" />
+
+    <!-- Pair 5 left -->
+    <circle cx="77" cy="96"   r="2.5" fill="black" opacity="0.85" />
+    <circle cx="71" cy="92"   r="2"   fill="black" opacity="0.78" />
+    <circle cx="83" cy="92"   r="2"   fill="black" opacity="0.78" />
+    <!-- Pair 5 right -->
+    <circle cx="123" cy="96"  r="2.5" fill="black" opacity="0.85" />
+    <circle cx="117" cy="92"  r="2"   fill="black" opacity="0.78" />
+    <circle cx="129" cy="92"  r="2"   fill="black" opacity="0.78" />
+
+    <!-- Pair 6 left -->
+    <circle cx="82" cy="80"   r="2.5" fill="black" opacity="0.85" />
+    <circle cx="76" cy="76"   r="1.5" fill="black" opacity="0.78" />
+    <circle cx="88" cy="76"   r="1.5" fill="black" opacity="0.78" />
+    <!-- Pair 6 right -->
+    <circle cx="118" cy="80"  r="2.5" fill="black" opacity="0.85" />
+    <circle cx="112" cy="76"  r="1.5" fill="black" opacity="0.78" />
+    <circle cx="124" cy="76"  r="1.5" fill="black" opacity="0.78" />
+
+    <!-- Pair 7 left -->
+    <circle cx="87" cy="64"   r="2"   fill="black" opacity="0.85" />
+    <circle cx="83" cy="60"   r="1.5" fill="black" opacity="0.78" />
+    <!-- Pair 7 right -->
+    <circle cx="113" cy="64"  r="2"   fill="black" opacity="0.85" />
+    <circle cx="117" cy="60"  r="1.5" fill="black" opacity="0.78" />
+
+    <!-- Pair 8 left -->
+    <circle cx="92" cy="49"   r="1.5" fill="black" opacity="0.85" />
+    <!-- Pair 8 right -->
+    <circle cx="108" cy="49"  r="1.5" fill="black" opacity="0.85" />
+
+    <!-- Pointed tip -->
+    <path fill="black" opacity="0.95"
+      d="M98,32 L100,20 L102,32Z" />
+  </g>
+</svg>
