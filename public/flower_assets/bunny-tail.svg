@@ -2,50 +2,60 @@
   <g fill="black">
     <!-- Stem -->
     <path fill="black" opacity="0.82"
-      d="M98,178 L97,145 L103,145 L102,178Z" />
+      d="M98,197 L97,181 L103,181 L102,197Z" />
 
-    <!-- Main oval body: elongated (rx=22, ry=55) -->
-    <ellipse cx="100" cy="90" rx="22" ry="55" fill="black" opacity="0.62" />
+    <!-- Main oval body: very elongated (rx=12, ry=88) — ratio ~7.3x -->
+    <ellipse cx="100" cy="93" rx="12" ry="88" fill="black" opacity="0.62" />
 
     <!-- Fuzzy bumps along perimeter -->
     <!-- Top -->
-    <circle cx="100" cy="35"  r="5"   fill="black" opacity="0.84" />
-    <circle cx="92"  cy="38"  r="4.5" fill="black" opacity="0.82" />
-    <circle cx="108" cy="38"  r="4.5" fill="black" opacity="0.82" />
-    <!-- Upper (θ≈40°) -->
-    <circle cx="86"  cy="48"  r="4.5" fill="black" opacity="0.80" />
-    <circle cx="114" cy="48"  r="4.5" fill="black" opacity="0.80" />
-    <!-- Upper-mid (θ≈60°) -->
-    <circle cx="81"  cy="63"  r="5"   fill="black" opacity="0.78" />
-    <circle cx="119" cy="63"  r="5"   fill="black" opacity="0.78" />
-    <!-- Mid-upper (θ≈75°) -->
-    <circle cx="78"  cy="76"  r="5"   fill="black" opacity="0.76" />
-    <circle cx="122" cy="76"  r="5"   fill="black" opacity="0.76" />
-    <!-- Mid (θ=90°) -->
-    <circle cx="78"  cy="90"  r="5"   fill="black" opacity="0.74" />
-    <circle cx="122" cy="90"  r="5"   fill="black" opacity="0.74" />
-    <!-- Mid-lower (θ≈105°) -->
-    <circle cx="78"  cy="104" r="5"   fill="black" opacity="0.72" />
-    <circle cx="122" cy="104" r="5"   fill="black" opacity="0.72" />
-    <!-- Lower-mid (θ≈120°) -->
-    <circle cx="81"  cy="118" r="5"   fill="black" opacity="0.70" />
-    <circle cx="119" cy="118" r="5"   fill="black" opacity="0.70" />
-    <!-- Lower (θ≈140°) -->
-    <circle cx="86"  cy="132" r="4.5" fill="black" opacity="0.68" />
-    <circle cx="114" cy="132" r="4.5" fill="black" opacity="0.68" />
-    <!-- Bottom (θ≈160°) -->
-    <circle cx="92"  cy="142" r="4.5" fill="black" opacity="0.66" />
-    <circle cx="108" cy="142" r="4.5" fill="black" opacity="0.66" />
-    <circle cx="100" cy="145" r="5"   fill="black" opacity="0.64" />
+    <circle cx="100" cy="5"   r="4"   fill="black" opacity="0.86" />
+    <circle cx="97"  cy="8"   r="3.5" fill="black" opacity="0.84" />
+    <circle cx="103" cy="8"   r="3.5" fill="black" opacity="0.84" />
+    <!-- θ≈30° -->
+    <circle cx="94"  cy="17"  r="3.5" fill="black" opacity="0.82" />
+    <circle cx="106" cy="17"  r="3.5" fill="black" opacity="0.82" />
+    <!-- θ≈45° -->
+    <circle cx="92"  cy="31"  r="4"   fill="black" opacity="0.80" />
+    <circle cx="108" cy="31"  r="4"   fill="black" opacity="0.80" />
+    <!-- θ≈60° -->
+    <circle cx="90"  cy="49"  r="4"   fill="black" opacity="0.78" />
+    <circle cx="110" cy="49"  r="4"   fill="black" opacity="0.78" />
+    <!-- θ≈75° -->
+    <circle cx="88"  cy="70"  r="4"   fill="black" opacity="0.76" />
+    <circle cx="112" cy="70"  r="4"   fill="black" opacity="0.76" />
+    <!-- θ=90° mid -->
+    <circle cx="88"  cy="93"  r="4"   fill="black" opacity="0.74" />
+    <circle cx="112" cy="93"  r="4"   fill="black" opacity="0.74" />
+    <!-- θ≈105° -->
+    <circle cx="88"  cy="116" r="4"   fill="black" opacity="0.72" />
+    <circle cx="112" cy="116" r="4"   fill="black" opacity="0.72" />
+    <!-- θ≈120° -->
+    <circle cx="90"  cy="137" r="4"   fill="black" opacity="0.70" />
+    <circle cx="110" cy="137" r="4"   fill="black" opacity="0.70" />
+    <!-- θ≈135° -->
+    <circle cx="92"  cy="155" r="4"   fill="black" opacity="0.68" />
+    <circle cx="108" cy="155" r="4"   fill="black" opacity="0.68" />
+    <!-- θ≈150° -->
+    <circle cx="94"  cy="169" r="3.5" fill="black" opacity="0.66" />
+    <circle cx="106" cy="169" r="3.5" fill="black" opacity="0.66" />
+    <!-- θ≈165° -->
+    <circle cx="97"  cy="178" r="3.5" fill="black" opacity="0.64" />
+    <circle cx="103" cy="178" r="3.5" fill="black" opacity="0.64" />
+    <!-- Bottom -->
+    <circle cx="100" cy="181" r="4"   fill="black" opacity="0.62" />
 
     <!-- Inner texture dots -->
-    <circle cx="94"  cy="55"  r="3"   fill="black" opacity="0.76" />
-    <circle cx="106" cy="62"  r="3"   fill="black" opacity="0.76" />
-    <circle cx="100" cy="75"  r="3.5" fill="black" opacity="0.74" />
-    <circle cx="92"  cy="88"  r="3"   fill="black" opacity="0.72" />
-    <circle cx="108" cy="95"  r="3"   fill="black" opacity="0.72" />
-    <circle cx="100" cy="108" r="3.5" fill="black" opacity="0.70" />
-    <circle cx="93"  cy="120" r="3"   fill="black" opacity="0.68" />
-    <circle cx="107" cy="128" r="3"   fill="black" opacity="0.68" />
+    <circle cx="97"  cy="18"  r="2"   fill="black" opacity="0.76" />
+    <circle cx="103" cy="30"  r="2"   fill="black" opacity="0.75" />
+    <circle cx="100" cy="45"  r="2.5" fill="black" opacity="0.74" />
+    <circle cx="96"  cy="60"  r="2"   fill="black" opacity="0.73" />
+    <circle cx="104" cy="73"  r="2"   fill="black" opacity="0.72" />
+    <circle cx="100" cy="88"  r="2.5" fill="black" opacity="0.71" />
+    <circle cx="96"  cy="103" r="2"   fill="black" opacity="0.70" />
+    <circle cx="104" cy="118" r="2"   fill="black" opacity="0.69" />
+    <circle cx="100" cy="133" r="2.5" fill="black" opacity="0.68" />
+    <circle cx="97"  cy="148" r="2"   fill="black" opacity="0.67" />
+    <circle cx="103" cy="162" r="2"   fill="black" opacity="0.66" />
   </g>
 </svg>
