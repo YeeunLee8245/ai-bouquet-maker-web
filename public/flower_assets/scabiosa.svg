@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <g fill="black">
+    <!-- Outer 8 ray florets: wider, softer shape -->
+    <g transform="translate(100 100)" opacity="0.62">
+      <path d="M-15,0 C-20,-6 -18,-44 0,-54 C18,-44 20,-6 15,0Z" transform="rotate(0)" />
+      <path d="M-15,0 C-20,-6 -18,-44 0,-54 C18,-44 20,-6 15,0Z" transform="rotate(45)" />
+      <path d="M-15,0 C-20,-6 -18,-44 0,-54 C18,-44 20,-6 15,0Z" transform="rotate(90)" />
+      <path d="M-15,0 C-20,-6 -18,-44 0,-54 C18,-44 20,-6 15,0Z" transform="rotate(135)" />
+      <path d="M-15,0 C-20,-6 -18,-44 0,-54 C18,-44 20,-6 15,0Z" transform="rotate(180)" />
+      <path d="M-15,0 C-20,-6 -18,-44 0,-54 C18,-44 20,-6 15,0Z" transform="rotate(225)" />
+      <path d="M-15,0 C-20,-6 -18,-44 0,-54 C18,-44 20,-6 15,0Z" transform="rotate(270)" />
+      <path d="M-15,0 C-20,-6 -18,-44 0,-54 C18,-44 20,-6 15,0Z" transform="rotate(315)" />
+    </g>
+    <!-- Pincushion center: outer ring of 16 small florets -->
+    <g transform="translate(100 100)" opacity="0.80">
+      <circle r="5" transform="rotate(0) translate(0 -22)" />
+      <circle r="5" transform="rotate(22.5) translate(0 -22)" />
+      <circle r="5" transform="rotate(45) translate(0 -22)" />
+      <circle r="5" transform="rotate(67.5) translate(0 -22)" />
+      <circle r="5" transform="rotate(90) translate(0 -22)" />
+      <circle r="5" transform="rotate(112.5) translate(0 -22)" />
+      <circle r="5" transform="rotate(135) translate(0 -22)" />
+      <circle r="5" transform="rotate(157.5) translate(0 -22)" />
+      <circle r="5" transform="rotate(180) translate(0 -22)" />
+      <circle r="5" transform="rotate(202.5) translate(0 -22)" />
+      <circle r="5" transform="rotate(225) translate(0 -22)" />
+      <circle r="5" transform="rotate(247.5) translate(0 -22)" />
+      <circle r="5" transform="rotate(270) translate(0 -22)" />
+      <circle r="5" transform="rotate(292.5) translate(0 -22)" />
+      <circle r="5" transform="rotate(315) translate(0 -22)" />
+      <circle r="5" transform="rotate(337.5) translate(0 -22)" />
+    </g>
+    <!-- Pincushion inner ring of 8 florets -->
+    <g transform="translate(100 100)" opacity="0.90">
+      <circle r="5" transform="rotate(0) translate(0 -12)" />
+      <circle r="5" transform="rotate(45) translate(0 -12)" />
+      <circle r="5" transform="rotate(90) translate(0 -12)" />
+      <circle r="5" transform="rotate(135) translate(0 -12)" />
+      <circle r="5" transform="rotate(180) translate(0 -12)" />
+      <circle r="5" transform="rotate(225) translate(0 -12)" />
+      <circle r="5" transform="rotate(270) translate(0 -12)" />
+      <circle r="5" transform="rotate(315) translate(0 -12)" />
+    </g>
+    <!-- Center dome -->
+    <circle cx="100" cy="100" r="8" fill="black" opacity="1.0" />
+  </g>
+</svg>

@@ -50,6 +50,16 @@ const FLOWER_SVG_MAP: Record<string, { svgUrl: string; size?: number }> = {
   '글라디올러스': { svgUrl: '/flower_assets/gladiolus.svg' },
   '자스민': { svgUrl: '/flower_assets/jasmine.svg' },
   '목련': { svgUrl: '/flower_assets/magnolia.svg', size: FLOWER_SIZE * 1.2 },
+  '수련': { svgUrl: '/flower_assets/water-lily.svg', size: FLOWER_SIZE * 1.2 },
+  '다알리아': { svgUrl: '/flower_assets/dahlia.svg', size: FLOWER_SIZE * 1.3 },
+  '알스트로메리아': { svgUrl: '/flower_assets/alstroemeria.svg' },
+  '스카비오사': { svgUrl: '/flower_assets/scabiosa.svg' },
+  '라이스플라워': { svgUrl: '/flower_assets/rice-flower.svg' },
+  '라그라스': { svgUrl: '/flower_assets/bunny-tail.svg' },
+  '히페리컴': { svgUrl: '/flower_assets/hypericum.svg' },
+  '왁스플라워': { svgUrl: '/flower_assets/waxflower.svg' },
+  '베로니카': { svgUrl: '/flower_assets/veronica.svg' },
+  '아마릴리스': { svgUrl: '/flower_assets/amaryllis.svg', size: FLOWER_SIZE * 1.4 },
 };
 
 const DEFAULT_SVG = '/flower_assets/rose.svg';

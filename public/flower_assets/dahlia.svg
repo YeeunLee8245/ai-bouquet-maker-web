@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <g fill="black">
+    <!-- Ball dahlia: wide rounded cup-shaped petals in dense concentric rings -->
+
+    <!-- Outer ring: 20 wide rounded petals -->
+    <g transform="translate(100 100)" opacity="0.56">
+      <path d="M-11,0 C-16,-10 -14,-50 0,-62 C14,-50 16,-10 11,0Z" transform="rotate(0)" />
+      <path d="M-11,0 C-16,-10 -14,-50 0,-62 C14,-50 16,-10 11,0Z" transform="rotate(18)" />
+      <path d="M-11,0 C-16,-10 -14,-50 0,-62 C14,-50 16,-10 11,0Z" transform="rotate(36)" />
+      <path d="M-11,0 C-16,-10 -14,-50 0,-62 C14,-50 16,-10 11,0Z" transform="rotate(54)" />
+      <path d="M-11,0 C-16,-10 -14,-50 0,-62 C14,-50 16,-10 11,0Z" transform="rotate(72)" />
+      <path d="M-11,0 C-16,-10 -14,-50 0,-62 C14,-50 16,-10 11,0Z" transform="rotate(90)" />
+      <path d="M-11,0 C-16,-10 -14,-50 0,-62 C14,-50 16,-10 11,0Z" transform="rotate(108)" />
+      <path d="M-11,0 C-16,-10 -14,-50 0,-62 C14,-50 16,-10 11,0Z" transform="rotate(126)" />
+      <path d="M-11,0 C-16,-10 -14,-50 0,-62 C14,-50 16,-10 11,0Z" transform="rotate(144)" />
+      <path d="M-11,0 C-16,-10 -14,-50 0,-62 C14,-50 16,-10 11,0Z" transform="rotate(162)" />
+      <path d="M-11,0 C-16,-10 -14,-50 0,-62 C14,-50 16,-10 11,0Z" transform="rotate(180)" />
+      <path d="M-11,0 C-16,-10 -14,-50 0,-62 C14,-50 16,-10 11,0Z" transform="rotate(198)" />
+      <path d="M-11,0 C-16,-10 -14,-50 0,-62 C14,-50 16,-10 11,0Z" transform="rotate(216)" />
+      <path d="M-11,0 C-16,-10 -14,-50 0,-62 C14,-50 16,-10 11,0Z" transform="rotate(234)" />
+      <path d="M-11,0 C-16,-10 -14,-50 0,-62 C14,-50 16,-10 11,0Z" transform="rotate(252)" />
+      <path d="M-11,0 C-16,-10 -14,-50 0,-62 C14,-50 16,-10 11,0Z" transform="rotate(270)" />
+      <path d="M-11,0 C-16,-10 -14,-50 0,-62 C14,-50 16,-10 11,0Z" transform="rotate(288)" />
+      <path d="M-11,0 C-16,-10 -14,-50 0,-62 C14,-50 16,-10 11,0Z" transform="rotate(306)" />
+      <path d="M-11,0 C-16,-10 -14,-50 0,-62 C14,-50 16,-10 11,0Z" transform="rotate(324)" />
+      <path d="M-11,0 C-16,-10 -14,-50 0,-62 C14,-50 16,-10 11,0Z" transform="rotate(342)" />
+    </g>
+
+    <!-- Ring 2: 16 petals, 11.25° offset -->
+    <g transform="translate(100 100)" opacity="0.68">
+      <path d="M-10,0 C-15,-9 -13,-42 0,-52 C13,-42 15,-9 10,0Z" transform="rotate(11.25)" />
+      <path d="M-10,0 C-15,-9 -13,-42 0,-52 C13,-42 15,-9 10,0Z" transform="rotate(33.75)" />
+      <path d="M-10,0 C-15,-9 -13,-42 0,-52 C13,-42 15,-9 10,0Z" transform="rotate(56.25)" />
+      <path d="M-10,0 C-15,-9 -13,-42 0,-52 C13,-42 15,-9 10,0Z" transform="rotate(78.75)" />
+      <path d="M-10,0 C-15,-9 -13,-42 0,-52 C13,-42 15,-9 10,0Z" transform="rotate(101.25)" />
+      <path d="M-10,0 C-15,-9 -13,-42 0,-52 C13,-42 15,-9 10,0Z" transform="rotate(123.75)" />
+      <path d="M-10,0 C-15,-9 -13,-42 0,-52 C13,-42 15,-9 10,0Z" transform="rotate(146.25)" />
+      <path d="M-10,0 C-15,-9 -13,-42 0,-52 C13,-42 15,-9 10,0Z" transform="rotate(168.75)" />
+      <path d="M-10,0 C-15,-9 -13,-42 0,-52 C13,-42 15,-9 10,0Z" transform="rotate(191.25)" />
+      <path d="M-10,0 C-15,-9 -13,-42 0,-52 C13,-42 15,-9 10,0Z" transform="rotate(213.75)" />
+      <path d="M-10,0 C-15,-9 -13,-42 0,-52 C13,-42 15,-9 10,0Z" transform="rotate(236.25)" />
+      <path d="M-10,0 C-15,-9 -13,-42 0,-52 C13,-42 15,-9 10,0Z" transform="rotate(258.75)" />
+      <path d="M-10,0 C-15,-9 -13,-42 0,-52 C13,-42 15,-9 10,0Z" transform="rotate(281.25)" />
+      <path d="M-10,0 C-15,-9 -13,-42 0,-52 C13,-42 15,-9 10,0Z" transform="rotate(303.75)" />
+      <path d="M-10,0 C-15,-9 -13,-42 0,-52 C13,-42 15,-9 10,0Z" transform="rotate(326.25)" />
+      <path d="M-10,0 C-15,-9 -13,-42 0,-52 C13,-42 15,-9 10,0Z" transform="rotate(348.75)" />
+    </g>
+
+    <!-- Ring 3: 14 petals -->
+    <g transform="translate(100 100)" opacity="0.78">
+      <path d="M-9,0 C-13,-8 -11,-34 0,-42 C11,-34 13,-8 9,0Z" transform="rotate(0)" />
+      <path d="M-9,0 C-13,-8 -11,-34 0,-42 C11,-34 13,-8 9,0Z" transform="rotate(25.71)" />
+      <path d="M-9,0 C-13,-8 -11,-34 0,-42 C11,-34 13,-8 9,0Z" transform="rotate(51.43)" />
+      <path d="M-9,0 C-13,-8 -11,-34 0,-42 C11,-34 13,-8 9,0Z" transform="rotate(77.14)" />
+      <path d="M-9,0 C-13,-8 -11,-34 0,-42 C11,-34 13,-8 9,0Z" transform="rotate(102.86)" />
+      <path d="M-9,0 C-13,-8 -11,-34 0,-42 C11,-34 13,-8 9,0Z" transform="rotate(128.57)" />
+      <path d="M-9,0 C-13,-8 -11,-34 0,-42 C11,-34 13,-8 9,0Z" transform="rotate(154.29)" />
+      <path d="M-9,0 C-13,-8 -11,-34 0,-42 C11,-34 13,-8 9,0Z" transform="rotate(180)" />
+      <path d="M-9,0 C-13,-8 -11,-34 0,-42 C11,-34 13,-8 9,0Z" transform="rotate(205.71)" />
+      <path d="M-9,0 C-13,-8 -11,-34 0,-42 C11,-34 13,-8 9,0Z" transform="rotate(231.43)" />
+      <path d="M-9,0 C-13,-8 -11,-34 0,-42 C11,-34 13,-8 9,0Z" transform="rotate(257.14)" />
+      <path d="M-9,0 C-13,-8 -11,-34 0,-42 C11,-34 13,-8 9,0Z" transform="rotate(282.86)" />
+      <path d="M-9,0 C-13,-8 -11,-34 0,-42 C11,-34 13,-8 9,0Z" transform="rotate(308.57)" />
+      <path d="M-9,0 C-13,-8 -11,-34 0,-42 C11,-34 13,-8 9,0Z" transform="rotate(334.29)" />
+    </g>
+
+    <!-- Ring 4: 12 petals, 15° offset -->
+    <g transform="translate(100 100)" opacity="0.86">
+      <path d="M-8,0 C-12,-7 -10,-26 0,-32 C10,-26 12,-7 8,0Z" transform="rotate(15)" />
+      <path d="M-8,0 C-12,-7 -10,-26 0,-32 C10,-26 12,-7 8,0Z" transform="rotate(45)" />
+      <path d="M-8,0 C-12,-7 -10,-26 0,-32 C10,-26 12,-7 8,0Z" transform="rotate(75)" />
+      <path d="M-8,0 C-12,-7 -10,-26 0,-32 C10,-26 12,-7 8,0Z" transform="rotate(105)" />
+      <path d="M-8,0 C-12,-7 -10,-26 0,-32 C10,-26 12,-7 8,0Z" transform="rotate(135)" />
+      <path d="M-8,0 C-12,-7 -10,-26 0,-32 C10,-26 12,-7 8,0Z" transform="rotate(165)" />
+      <path d="M-8,0 C-12,-7 -10,-26 0,-32 C10,-26 12,-7 8,0Z" transform="rotate(195)" />
+      <path d="M-8,0 C-12,-7 -10,-26 0,-32 C10,-26 12,-7 8,0Z" transform="rotate(225)" />
+      <path d="M-8,0 C-12,-7 -10,-26 0,-32 C10,-26 12,-7 8,0Z" transform="rotate(255)" />
+      <path d="M-8,0 C-12,-7 -10,-26 0,-32 C10,-26 12,-7 8,0Z" transform="rotate(285)" />
+      <path d="M-8,0 C-12,-7 -10,-26 0,-32 C10,-26 12,-7 8,0Z" transform="rotate(315)" />
+      <path d="M-8,0 C-12,-7 -10,-26 0,-32 C10,-26 12,-7 8,0Z" transform="rotate(345)" />
+    </g>
+
+    <!-- Ring 5: 10 petals -->
+    <g transform="translate(100 100)" opacity="0.92">
+      <path d="M-7,0 C-10,-6 -8,-18 0,-22 C8,-18 10,-6 7,0Z" transform="rotate(0)" />
+      <path d="M-7,0 C-10,-6 -8,-18 0,-22 C8,-18 10,-6 7,0Z" transform="rotate(36)" />
+      <path d="M-7,0 C-10,-6 -8,-18 0,-22 C8,-18 10,-6 7,0Z" transform="rotate(72)" />
+      <path d="M-7,0 C-10,-6 -8,-18 0,-22 C8,-18 10,-6 7,0Z" transform="rotate(108)" />
+      <path d="M-7,0 C-10,-6 -8,-18 0,-22 C8,-18 10,-6 7,0Z" transform="rotate(144)" />
+      <path d="M-7,0 C-10,-6 -8,-18 0,-22 C8,-18 10,-6 7,0Z" transform="rotate(180)" />
+      <path d="M-7,0 C-10,-6 -8,-18 0,-22 C8,-18 10,-6 7,0Z" transform="rotate(216)" />
+      <path d="M-7,0 C-10,-6 -8,-18 0,-22 C8,-18 10,-6 7,0Z" transform="rotate(252)" />
+      <path d="M-7,0 C-10,-6 -8,-18 0,-22 C8,-18 10,-6 7,0Z" transform="rotate(288)" />
+      <path d="M-7,0 C-10,-6 -8,-18 0,-22 C8,-18 10,-6 7,0Z" transform="rotate(324)" />
+    </g>
+
+    <!-- Center: tight bud cluster -->
+    <circle cx="100" cy="100" r="12" fill="black" opacity="1.0" />
+    <circle cx="100" cy="100" r="6" fill="white" opacity="0.20" />
+  </g>
+</svg>

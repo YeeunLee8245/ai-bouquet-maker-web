@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <g fill="black">
+    <!-- Background dome silhouette -->
+    <path fill="black" opacity="0.22"
+      d="M100,155 C74,155 54,142 50,124 C46,106 56,82 70,68 C80,58 100,52 100,52 C100,52 120,58 130,68 C144,82 154,106 150,124 C146,142 126,155 100,155Z" />
+
+    <!-- Dome of small round buds: bottom to top, opacity increases upward -->
+    <!-- Bottom row: 5 buds -->
+    <circle cx="70"  cy="148" r="7" fill="black" opacity="0.66" />
+    <circle cx="84"  cy="152" r="7" fill="black" opacity="0.66" />
+    <circle cx="100" cy="153" r="7" fill="black" opacity="0.66" />
+    <circle cx="116" cy="152" r="7" fill="black" opacity="0.66" />
+    <circle cx="130" cy="148" r="7" fill="black" opacity="0.66" />
+
+    <!-- Row 2: 5 buds -->
+    <circle cx="64"  cy="134" r="7" fill="black" opacity="0.72" />
+    <circle cx="79"  cy="138" r="7" fill="black" opacity="0.72" />
+    <circle cx="100" cy="139" r="7" fill="black" opacity="0.72" />
+    <circle cx="121" cy="138" r="7" fill="black" opacity="0.72" />
+    <circle cx="136" cy="134" r="7" fill="black" opacity="0.72" />
+
+    <!-- Row 3: 5 buds -->
+    <circle cx="61"  cy="120" r="7" fill="black" opacity="0.78" />
+    <circle cx="77"  cy="123" r="7" fill="black" opacity="0.78" />
+    <circle cx="100" cy="124" r="7" fill="black" opacity="0.78" />
+    <circle cx="123" cy="123" r="7" fill="black" opacity="0.78" />
+    <circle cx="139" cy="120" r="7" fill="black" opacity="0.78" />
+
+    <!-- Row 4: 4 buds -->
+    <circle cx="68"  cy="106" r="7" fill="black" opacity="0.84" />
+    <circle cx="84"  cy="109" r="7" fill="black" opacity="0.84" />
+    <circle cx="116" cy="109" r="7" fill="black" opacity="0.84" />
+    <circle cx="132" cy="106" r="7" fill="black" opacity="0.84" />
+
+    <!-- Row 5: 3 buds -->
+    <circle cx="80"  cy="93"  r="7" fill="black" opacity="0.88" />
+    <circle cx="100" cy="95"  r="7" fill="black" opacity="0.88" />
+    <circle cx="120" cy="93"  r="7" fill="black" opacity="0.88" />
+
+    <!-- Row 6: 2 buds -->
+    <circle cx="88"  cy="80"  r="6" fill="black" opacity="0.92" />
+    <circle cx="112" cy="80"  r="6" fill="black" opacity="0.92" />
+
+    <!-- Top bud -->
+    <circle cx="100" cy="67"  r="6" fill="black" opacity="0.96" />
+  </g>
+</svg>

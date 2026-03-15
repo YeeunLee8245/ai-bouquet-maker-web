@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <g fill="black">
+    <!-- Main stems -->
+    <path fill="black" opacity="0.70"
+      d="M99,162 L99,128 L101,128 L101,162Z" />
+    <!-- Branch stems -->
+    <path fill="black" opacity="0.68"
+      d="M100,128 C100,128 80,112 72,96 C73,95 75,94 76,94 C82,108 100,126 100,126Z" />
+    <path fill="black" opacity="0.68"
+      d="M100,128 C100,128 120,112 128,96 C127,95 125,94 124,94 C118,108 100,126 100,126Z" />
+    <path fill="black" opacity="0.68"
+      d="M100,128 C98,118 86,108 80,112 C81,114 83,115 83,115 C88,112 99,122 100,126Z" />
+    <path fill="black" opacity="0.68"
+      d="M100,128 C102,118 114,108 120,112 C119,114 117,115 117,115 C112,112 101,122 100,126Z" />
+    <path fill="black" opacity="0.68"
+      d="M100,128 L100,104 L100,104Z" />
+
+    <!-- Flower 1: top center (100,80) -->
+    <g transform="translate(100 80)" opacity="0.90">
+      <path d="M-7,2 C-9,-2 -7,-14 0,-17 C7,-14 9,-2 7,2Z" transform="rotate(0)" />
+      <path d="M-7,2 C-9,-2 -7,-14 0,-17 C7,-14 9,-2 7,2Z" transform="rotate(72)" />
+      <path d="M-7,2 C-9,-2 -7,-14 0,-17 C7,-14 9,-2 7,2Z" transform="rotate(144)" />
+      <path d="M-7,2 C-9,-2 -7,-14 0,-17 C7,-14 9,-2 7,2Z" transform="rotate(216)" />
+      <path d="M-7,2 C-9,-2 -7,-14 0,-17 C7,-14 9,-2 7,2Z" transform="rotate(288)" />
+      <circle r="5" fill="black" opacity="1.0" />
+      <circle r="2.5" fill="white" opacity="0.25" />
+    </g>
+
+    <!-- Flower 2: left (72,96) -->
+    <g transform="translate(72 96)" opacity="0.88">
+      <path d="M-6,2 C-8,-2 -6,-12 0,-15 C6,-12 8,-2 6,2Z" transform="rotate(0)" />
+      <path d="M-6,2 C-8,-2 -6,-12 0,-15 C6,-12 8,-2 6,2Z" transform="rotate(72)" />
+      <path d="M-6,2 C-8,-2 -6,-12 0,-15 C6,-12 8,-2 6,2Z" transform="rotate(144)" />
+      <path d="M-6,2 C-8,-2 -6,-12 0,-15 C6,-12 8,-2 6,2Z" transform="rotate(216)" />
+      <path d="M-6,2 C-8,-2 -6,-12 0,-15 C6,-12 8,-2 6,2Z" transform="rotate(288)" />
+      <circle r="4.5" fill="black" opacity="1.0" />
+    </g>
+
+    <!-- Flower 3: right (128,96) -->
+    <g transform="translate(128 96)" opacity="0.88">
+      <path d="M-6,2 C-8,-2 -6,-12 0,-15 C6,-12 8,-2 6,2Z" transform="rotate(0)" />
+      <path d="M-6,2 C-8,-2 -6,-12 0,-15 C6,-12 8,-2 6,2Z" transform="rotate(72)" />
+      <path d="M-6,2 C-8,-2 -6,-12 0,-15 C6,-12 8,-2 6,2Z" transform="rotate(144)" />
+      <path d="M-6,2 C-8,-2 -6,-12 0,-15 C6,-12 8,-2 6,2Z" transform="rotate(216)" />
+      <path d="M-6,2 C-8,-2 -6,-12 0,-15 C6,-12 8,-2 6,2Z" transform="rotate(288)" />
+      <circle r="4.5" fill="black" opacity="1.0" />
+    </g>
+
+    <!-- Flower 4: inner-left (82,112) -->
+    <g transform="translate(82 112)" opacity="0.86">
+      <path d="M-6,2 C-8,-2 -6,-12 0,-15 C6,-12 8,-2 6,2Z" transform="rotate(0)" />
+      <path d="M-6,2 C-8,-2 -6,-12 0,-15 C6,-12 8,-2 6,2Z" transform="rotate(72)" />
+      <path d="M-6,2 C-8,-2 -6,-12 0,-15 C6,-12 8,-2 6,2Z" transform="rotate(144)" />
+      <path d="M-6,2 C-8,-2 -6,-12 0,-15 C6,-12 8,-2 6,2Z" transform="rotate(216)" />
+      <path d="M-6,2 C-8,-2 -6,-12 0,-15 C6,-12 8,-2 6,2Z" transform="rotate(288)" />
+      <circle r="4.5" fill="black" opacity="1.0" />
+    </g>
+
+    <!-- Flower 5: inner-right (118,112) -->
+    <g transform="translate(118 112)" opacity="0.86">
+      <path d="M-6,2 C-8,-2 -6,-12 0,-15 C6,-12 8,-2 6,2Z" transform="rotate(0)" />
+      <path d="M-6,2 C-8,-2 -6,-12 0,-15 C6,-12 8,-2 6,2Z" transform="rotate(72)" />
+      <path d="M-6,2 C-8,-2 -6,-12 0,-15 C6,-12 8,-2 6,2Z" transform="rotate(144)" />
+      <path d="M-6,2 C-8,-2 -6,-12 0,-15 C6,-12 8,-2 6,2Z" transform="rotate(216)" />
+      <path d="M-6,2 C-8,-2 -6,-12 0,-15 C6,-12 8,-2 6,2Z" transform="rotate(288)" />
+      <circle r="4.5" fill="black" opacity="1.0" />
+    </g>
+
+    <!-- Flower 6: bottom center bud (100,128) -->
+    <g transform="translate(100 128)" opacity="0.84">
+      <path d="M-5,2 C-7,-1 -5,-10 0,-13 C5,-10 7,-1 5,2Z" transform="rotate(0)" />
+      <path d="M-5,2 C-7,-1 -5,-10 0,-13 C5,-10 7,-1 5,2Z" transform="rotate(72)" />
+      <path d="M-5,2 C-7,-1 -5,-10 0,-13 C5,-10 7,-1 5,2Z" transform="rotate(144)" />
+      <path d="M-5,2 C-7,-1 -5,-10 0,-13 C5,-10 7,-1 5,2Z" transform="rotate(216)" />
+      <path d="M-5,2 C-7,-1 -5,-10 0,-13 C5,-10 7,-1 5,2Z" transform="rotate(288)" />
+      <circle r="4" fill="black" opacity="1.0" />
+    </g>
+  </g>
+</svg>

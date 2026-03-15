@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <g fill="black">
+    <!-- Stem below spike -->
+    <path fill="black" opacity="0.86"
+      d="M98,178 L98,120 L102,120 L102,178Z" />
+
+    <!-- Main spike body: narrower than lavender -->
+    <path fill="black" opacity="0.65"
+      d="M100,122 C96,122 90,110 90,88 C90,66 96,50 100,44 C104,50 110,66 110,88 C110,110 104,122 100,122Z" />
+
+    <!-- Left bumps: 17 levels at 4px spacing -->
+    <circle cx="88" cy="116" r="3.5" fill="black" opacity="0.74" />
+    <circle cx="88" cy="112" r="3.5" fill="black" opacity="0.76" />
+    <circle cx="88" cy="108" r="3.5" fill="black" opacity="0.78" />
+    <circle cx="88" cy="104" r="3"   fill="black" opacity="0.80" />
+    <circle cx="88" cy="100" r="3"   fill="black" opacity="0.82" />
+    <circle cx="88" cy="96"  r="3"   fill="black" opacity="0.83" />
+    <circle cx="88" cy="92"  r="3"   fill="black" opacity="0.85" />
+    <circle cx="89" cy="88"  r="2.5" fill="black" opacity="0.86" />
+    <circle cx="89" cy="84"  r="2.5" fill="black" opacity="0.87" />
+    <circle cx="89" cy="80"  r="2.5" fill="black" opacity="0.88" />
+    <circle cx="90" cy="76"  r="2.5" fill="black" opacity="0.89" />
+    <circle cx="90" cy="72"  r="2"   fill="black" opacity="0.90" />
+    <circle cx="91" cy="68"  r="2"   fill="black" opacity="0.91" />
+    <circle cx="91" cy="64"  r="2"   fill="black" opacity="0.92" />
+    <circle cx="92" cy="60"  r="1.5" fill="black" opacity="0.93" />
+    <circle cx="93" cy="56"  r="1.5" fill="black" opacity="0.94" />
+    <circle cx="94" cy="52"  r="1.5" fill="black" opacity="0.95" />
+
+    <!-- Right bumps: 17 levels -->
+    <circle cx="112" cy="116" r="3.5" fill="black" opacity="0.74" />
+    <circle cx="112" cy="112" r="3.5" fill="black" opacity="0.76" />
+    <circle cx="112" cy="108" r="3.5" fill="black" opacity="0.78" />
+    <circle cx="112" cy="104" r="3"   fill="black" opacity="0.80" />
+    <circle cx="112" cy="100" r="3"   fill="black" opacity="0.82" />
+    <circle cx="112" cy="96"  r="3"   fill="black" opacity="0.83" />
+    <circle cx="112" cy="92"  r="3"   fill="black" opacity="0.85" />
+    <circle cx="111" cy="88"  r="2.5" fill="black" opacity="0.86" />
+    <circle cx="111" cy="84"  r="2.5" fill="black" opacity="0.87" />
+    <circle cx="111" cy="80"  r="2.5" fill="black" opacity="0.88" />
+    <circle cx="110" cy="76"  r="2.5" fill="black" opacity="0.89" />
+    <circle cx="110" cy="72"  r="2"   fill="black" opacity="0.90" />
+    <circle cx="109" cy="68"  r="2"   fill="black" opacity="0.91" />
+    <circle cx="109" cy="64"  r="2"   fill="black" opacity="0.92" />
+    <circle cx="108" cy="60"  r="1.5" fill="black" opacity="0.93" />
+    <circle cx="107" cy="56"  r="1.5" fill="black" opacity="0.94" />
+    <circle cx="106" cy="52"  r="1.5" fill="black" opacity="0.95" />
+
+    <!-- Pointed tip -->
+    <path fill="black" opacity="0.97"
+      d="M98,48 L100,40 L102,48Z" />
+  </g>
+</svg>
