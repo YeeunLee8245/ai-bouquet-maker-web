@@ -63,6 +63,7 @@ function BouquetPreviewModal({ modalId }: TModalProps) {
               color={flower.color}
               x={flower.x}
               y={flower.y}
+              size={flower.size}
               selected={selectedIndex === index}
               onSelect={() => handleSelect(index)}
               onMove={(x, y) => handleMove(index, x, y)}

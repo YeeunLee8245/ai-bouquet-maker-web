@@ -8,6 +8,7 @@ type TProps = {
   color: string;
   x: number;
   y: number;
+  size: number;
   selected: boolean;
   onSelect: () => void;
   onMove: (x: number, y: number) => void;
@@ -18,6 +19,7 @@ const CANVAS = 330;
 
 export default function DraggableFlower({
   svgUrl,
+  size,
   color,
   x,
   y,
@@ -29,8 +31,8 @@ export default function DraggableFlower({
   const dragging = useRef(false);
   const offset = useRef({ dx: 0, dy: 0 });
 
-  const clamp = (val: number) =>
-    Math.max(FLOWER_SIZE / 2, Math.min(CANVAS - FLOWER_SIZE / 2, val));
+  const clamp = (size: number, val: number) =>
+    Math.max(size / 2, Math.min(CANVAS - size / 2, val));
 
   const handlePointerDown = useCallback(
     (e: React.PointerEvent) => {
@@ -54,11 +56,11 @@ export default function DraggableFlower({
         return;
       }
       const rect = (e.currentTarget.parentElement as HTMLElement).getBoundingClientRect();
-      const newX = clamp(e.clientX - rect.left - offset.current.dx);
-      const newY = clamp(e.clientY - rect.top - offset.current.dy);
+      const newX = clamp(size, e.clientX - rect.left - offset.current.dx);
+      const newY = clamp(size, e.clientY - rect.top - offset.current.dy);
       onMove(newX, newY);
     },
-    [onMove],
+    [onMove, size],
   );
 
   const handlePointerUp = useCallback(
@@ -81,10 +83,10 @@ export default function DraggableFlower({
       tabIndex={0}
       className='absolute touch-none'
       style={{
-        width: FLOWER_SIZE,
-        height: FLOWER_SIZE,
-        left: x - FLOWER_SIZE / 2,
-        top: y - FLOWER_SIZE / 2,
+        width: size,
+        height: size,
+        left: x - size / 2,
+        top: y - size / 2,
         cursor: 'grab',
         zIndex: selected ? 10 : 1,
       }}
