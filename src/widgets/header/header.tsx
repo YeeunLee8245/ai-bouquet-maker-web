@@ -15,7 +15,7 @@ interface IProps {
   variant?: 'primary' | 'default' | 'white';
 }
 
-const PRIMARY_PATHS = ['/main'];
+const PRIMARY_PATHS = ['/main', '/info'];
 
 const WHITE_PATHS = ['/my-profile'];
 

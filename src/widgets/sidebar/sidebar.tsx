@@ -88,9 +88,9 @@ function Sidebar({ modalId }: TModalProps) {
       </div>
       {/* 하단 메뉴 */}
       <div className='mt-auto'>
-        <button className='text-white text-body-lg'>
+        <Link href='/info' onClick={() => closeModal(modalId)} className='text-white text-body-lg'>
           서비스 소개
-        </button>
+        </Link>
         <div className='text-white text-body-lg mt-1'>문의</div>
         <div className='text-primary-100 text-body-sm'>ai.bouquet.maker@gmail.com</div>
       </div>

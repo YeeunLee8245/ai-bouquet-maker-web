@@ -6,14 +6,18 @@ import QuickPersonTargetRecommendation from './_ui/quick-person-target-recommend
 import PopularFlowerRecommendation from './_ui/popular-flower-recommendation';
 import TodayFlowerContainer from './_ui/today-flower-container';
 import { getMainData } from '../api/main/getMainData';
+import NewUserModalTrigger from './_ui/new-user-modal-trigger';
 // 맞춤 추천 -> 따로 페이지 빼는 것이 아닌 컴포넌트 형태로 중첩해서 띄우기
 /**
  * 메인 페이지
  */
-export default async function MainPage() {
-  const data = await getMainData();
+export default async function MainPage({ searchParams }: { searchParams: Promise<{ is_new_user?: string }> }) {
+  const [data, params] = await Promise.all([getMainData(), searchParams]);
+  const isNewUser = params.is_new_user === 'true';
+
   return (
     <div className='flex w-full h-full min-h-0 flex-col'>
+      <NewUserModalTrigger isNewUser={isNewUser} />
       <div className='relative w-full flex-1 min-h-0 overflow-y-auto'>
         {/* 상단: 배경 이미지 + 히어로 영역 (스크롤 시 함께 올라가서 사라짐) */}
         <section className='relative h-[380px] shrink-0'>
