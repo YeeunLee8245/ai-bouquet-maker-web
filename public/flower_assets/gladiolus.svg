@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <g fill="black">
+    <!-- Background silhouette: wide spike -->
+    <path fill="black" opacity="0.28"
+      d="M100,178 C124,178 138,148 138,115 C138,72 122,34 100,20 C78,34 62,72 62,115 C62,148 76,178 100,178Z" />
+
+    <!-- Central stem -->
+    <path fill="black" opacity="0.88"
+      d="M98,175 L98,24 L102,24 L102,175Z" />
+
+    <!-- Flower 1: y=152 — large, open -->
+    <path fill="black" opacity="0.68" d="M-18,8 C-22,0 -20,-18 0,-22 C20,-18 22,0 18,8Z" transform="translate(78 152)" />
+    <path fill="black" opacity="0.68" d="M-18,8 C-22,0 -20,-18 0,-22 C20,-18 22,0 18,8Z" transform="translate(122 152)" />
+    <!-- Flower 2: y=126 -->
+    <path fill="black" opacity="0.73" d="M-16,7 C-20,0 -18,-16 0,-20 C18,-16 20,0 16,7Z" transform="translate(79 126)" />
+    <path fill="black" opacity="0.73" d="M-16,7 C-20,0 -18,-16 0,-20 C18,-16 20,0 16,7Z" transform="translate(121 126)" />
+    <!-- Flower 3: y=100 -->
+    <path fill="black" opacity="0.78" d="M-13,6 C-16,0 -14,-14 0,-17 C14,-14 16,0 13,6Z" transform="translate(81 100)" />
+    <path fill="black" opacity="0.78" d="M-13,6 C-16,0 -14,-14 0,-17 C14,-14 16,0 13,6Z" transform="translate(119 100)" />
+    <!-- Bud 4: y=76 -->
+    <path fill="black" opacity="0.83" d="M-10,5 C-12,0 -10,-12 0,-15 C10,-12 12,0 10,5Z" transform="translate(83 76)" />
+    <path fill="black" opacity="0.83" d="M-10,5 C-12,0 -10,-12 0,-15 C10,-12 12,0 10,5Z" transform="translate(117 76)" />
+    <!-- Bud 5: y=54 — nearly closed -->
+    <path fill="black" opacity="0.89" d="M-7,4 C-8,0 -7,-9 0,-12 C7,-9 8,0 7,4Z" transform="translate(86 54)" />
+    <path fill="black" opacity="0.89" d="M-7,4 C-8,0 -7,-9 0,-12 C7,-9 8,0 7,4Z" transform="translate(114 54)" />
+
+    <!-- Connecting branches -->
+    <path fill="black" opacity="0.78" d="M100,150 L78,150 L78,154 L100,154Z" />
+    <path fill="black" opacity="0.78" d="M100,150 L122,150 L122,154 L100,154Z" />
+    <path fill="black" opacity="0.78" d="M100,124 L79,124 L79,128 L100,128Z" />
+    <path fill="black" opacity="0.78" d="M100,124 L121,124 L121,128 L100,128Z" />
+    <path fill="black" opacity="0.78" d="M100,98 L81,98 L81,102 L100,102Z" />
+    <path fill="black" opacity="0.78" d="M100,98 L119,98 L119,102 L100,102Z" />
+    <path fill="black" opacity="0.78" d="M100,74 L83,74 L83,78 L100,78Z" />
+    <path fill="black" opacity="0.78" d="M100,74 L117,74 L117,78 L100,78Z" />
+    <path fill="black" opacity="0.78" d="M100,52 L86,52 L86,56 L100,56Z" />
+    <path fill="black" opacity="0.78" d="M100,52 L114,52 L114,56 L100,56Z" />
+
+    <!-- Top bud cluster -->
+    <circle cx="100" cy="38" r="6"  fill="black" opacity="0.92" />
+    <circle cx="93"  cy="44" r="3"  fill="black" opacity="0.86" />
+    <circle cx="107" cy="44" r="3"  fill="black" opacity="0.86" />
+
+    <!-- Pointed tip -->
+    <path fill="black" opacity="0.95" d="M98,28 L100,20 L102,28Z" />
+  </g>
+</svg>

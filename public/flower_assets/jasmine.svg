@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <g fill="black">
+    <!-- Outer 5 petals (72° intervals) — narrow star shape -->
+    <g transform="translate(100 100)" opacity="0.68">
+      <path d="M-7,0 C-8,-8 -5,-32 0,-44 C5,-32 8,-8 7,0Z" transform="rotate(0)" />
+      <path d="M-7,0 C-8,-8 -5,-32 0,-44 C5,-32 8,-8 7,0Z" transform="rotate(72)" />
+      <path d="M-7,0 C-8,-8 -5,-32 0,-44 C5,-32 8,-8 7,0Z" transform="rotate(144)" />
+      <path d="M-7,0 C-8,-8 -5,-32 0,-44 C5,-32 8,-8 7,0Z" transform="rotate(216)" />
+      <path d="M-7,0 C-8,-8 -5,-32 0,-44 C5,-32 8,-8 7,0Z" transform="rotate(288)" />
+    </g>
+    <!-- Inner 5 petals (offset 36°) -->
+    <g transform="translate(100 100)" opacity="0.88">
+      <path d="M-5,0 C-6,-6 -4,-24 0,-33 C4,-24 6,-6 5,0Z" transform="rotate(36)" />
+      <path d="M-5,0 C-6,-6 -4,-24 0,-33 C4,-24 6,-6 5,0Z" transform="rotate(108)" />
+      <path d="M-5,0 C-6,-6 -4,-24 0,-33 C4,-24 6,-6 5,0Z" transform="rotate(180)" />
+      <path d="M-5,0 C-6,-6 -4,-24 0,-33 C4,-24 6,-6 5,0Z" transform="rotate(252)" />
+      <path d="M-5,0 C-6,-6 -4,-24 0,-33 C4,-24 6,-6 5,0Z" transform="rotate(324)" />
+    </g>
+    <!-- Center -->
+    <circle cx="100" cy="100" r="10" fill="black" opacity="1.0" />
+    <circle cx="100" cy="100" r="5"  fill="white" opacity="0.28" />
+  </g>
+</svg>

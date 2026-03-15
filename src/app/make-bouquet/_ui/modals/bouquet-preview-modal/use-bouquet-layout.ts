@@ -42,6 +42,14 @@ const FLOWER_SVG_MAP: Record<string, { svgUrl: string; size?: number }> = {
   '수국': { svgUrl: '/flower_assets/hydrangea.svg', size: FLOWER_SIZE * 1.2 },
   '거베라': { svgUrl: '/flower_assets/gerbera.svg' },
   '아이리스': { svgUrl: '/flower_assets/iris.svg' },
+  '라넌큘러스': { svgUrl: '/flower_assets/ranunculus.svg' },
+  '라일락': { svgUrl: '/flower_assets/lilac.svg', size: FLOWER_SIZE * 1.1 },
+  '라벤더': { svgUrl: '/flower_assets/lavender.svg' },
+  '금어초': { svgUrl: '/flower_assets/snapdragon.svg' },
+  '칼라': { svgUrl: '/flower_assets/calla-lily.svg' },
+  '글라디올러스': { svgUrl: '/flower_assets/gladiolus.svg' },
+  '자스민': { svgUrl: '/flower_assets/jasmine.svg' },
+  '목련': { svgUrl: '/flower_assets/magnolia.svg', size: FLOWER_SIZE * 1.2 },
 };
 
 const DEFAULT_SVG = '/flower_assets/rose.svg';

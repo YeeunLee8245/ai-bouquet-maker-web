@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <g fill="black">
+    <!-- Outer spathe: smooth funnel/cup shape -->
+    <path fill="black" opacity="0.62"
+      d="M100,168 C58,168 24,138 22,106 C20,74 46,42 76,33 L100,28 L124,33 C154,42 180,74 178,106 C176,138 142,168 100,168Z" />
+    <!-- Inner spathe: interior depth -->
+    <path fill="black" opacity="0.80"
+      d="M100,162 C68,162 44,140 42,112 C40,84 60,58 84,48 L100,42 L116,48 C140,58 160,84 158,112 C156,140 132,162 100,162Z" />
+    <!-- Spadix: central club-shaped spike -->
+    <path fill="#ffe908"
+      d="M97,158 C95,130 95,90 97,52 C98,41 100,34 100,34 C100,34 102,41 103,52 C105,90 105,130 103,158Z" />
+  </g>
+</svg>

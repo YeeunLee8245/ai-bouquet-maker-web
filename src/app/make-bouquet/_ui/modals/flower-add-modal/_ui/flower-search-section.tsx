@@ -64,7 +64,7 @@ function FlowerSearchSection({ selectedIds, onToggle }: TProps) {
         className='w-full h-[40px]'
       />
       {(results.length > 0 || isLoading) && (
-        <div className='mt-2 rounded-5 border-1 border-gray-100 min-h-[172px] max-h-[172px] overflow-y-scroll'>
+        <div className='mt-2 rounded-5 border-1 border-gray-100 min-h-[172px] max-h-[172px] overflow-y-auto'>
           {isLoading && results.length === 0 && (
             <div className='flex items-center justify-center h-[172px]'>
               <span className='text-body-md text-gray-400'>검색 중...</span>
@@ -77,7 +77,7 @@ function FlowerSearchSection({ selectedIds, onToggle }: TProps) {
                 key={id}
                 onClick={() => onToggle({ id, name })}
                 className={cn(
-                  'px-4 py-3 flex justify-between items-center cursor-pointer hover:bg-gray-100 active:bg-gray-200 transition-colors',
+                  'px-4 py-3 rounded-4 flex justify-between items-center cursor-pointer hover:bg-gray-100 active:bg-gray-200 transition-colors',
                   isSelected && 'bg-primary-50',
                 )}
               >
