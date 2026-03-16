@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@shared/supabase/server';
 import { BouquetRecipeContent, BouquetLayout } from '@/types/recommendation';
 import { getPublicUser } from '@/lib/users/auth';
-import { toSupabaseResizedImageUrl } from '@shared/utils/image-url';
 
 /**
  * @swagger
@@ -122,10 +121,8 @@ import { toSupabaseResizedImageUrl } from '@shared/utils/image-url';
  *                       type: object
  *                       properties:
  *                         flower_id: { type: integer }
- *                         flower_meaning_id: { type: integer }
  *                         x: { type: number, example: 0.5 }
  *                         y: { type: number, example: 0.7 }
- *                         rotation: { type: number, example: 0 }
  *                         scale: { type: number, example: 1.0 }
  *                         z_index: { type: integer, example: 1 }
  *                         type: { type: string, description: "등록된 아이콘 키 (예: rose, marigold, tulip 등)", example: "rose" }
@@ -149,10 +146,8 @@ import { toSupabaseResizedImageUrl } from '@shared/utils/image-url';
  *                 layout:
  *                   items:
  *                     - flower_id: 1
- *                       flower_meaning_id: 101
  *                       x: 0.5
  *                       y: 0.7
- *                       rotation: 0
  *                       z_index: 1
  *     responses:
  *       200:

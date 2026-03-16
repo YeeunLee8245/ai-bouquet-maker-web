@@ -102,10 +102,8 @@ import { getPublicUser } from '@/lib/users/auth';
  *                       description: 개별 꽃 오브젝트의 위치 및 상태
  *                       properties:
  *                         flower_id: { type: string, description: "꽃 ID" }
- *                         flower_meaning_id: { type: integer, description: "꽃말 ID" }
  *                         x: { type: number, description: "X 좌표 (px 또는 비율)", example: 150.5 }
  *                         y: { type: number, description: "Y 좌표 (px 또는 비율)", example: 200.0 }
- *                         rotation: { type: number, description: "회전 각도 (degree)", example: 45 }
  *                         scale: { type: number, description: "크기 배율", example: 1.2 }
  *                         z_index: { type: integer, description: "레이어 순서", example: 1 }
  *                         color: { type: string, description: "렌더링 색상 (Hex Code)", example: "#FFD700" }
@@ -131,17 +129,13 @@ import { getPublicUser } from '@/lib/users/auth';
  *                 layout:
  *                   items:
  *                     - flower_id: "112"
- *                       flower_meaning_id: 301
  *                       x: 150
  *                       y: 200
- *                       rotation: 0
  *                       z_index: 2
  *                       color: "#FFD700"
  *                     - flower_id: "112"
- *                       flower_meaning_id: 301
  *                       x: 180
  *                       y: 220
- *                       rotation: 15
  *                       z_index: 1
  *                       color: "#FFD700"
  *             from_recommendation:
