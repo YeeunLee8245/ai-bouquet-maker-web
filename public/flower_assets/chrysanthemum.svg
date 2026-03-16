@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <g fill="black">
+    <!-- Chrysanthemum: Many layered thin petals radiating from center -->
+    <!-- Layer 1: Outer thin petals (20 petals) -->
+    <g transform="translate(100 100)" opacity="0.55">
+      <path d="M-4,0 C-5,-25 -4,-55 -2,-78 C0,-82 0,-82 2,-78 C4,-55 5,-25 4,0Z" transform="rotate(0)" />
+      <path d="M-4,0 C-5,-25 -4,-55 -2,-78 C0,-82 0,-82 2,-78 C4,-55 5,-25 4,0Z" transform="rotate(18)" />
+      <path d="M-4,0 C-5,-25 -4,-55 -2,-78 C0,-82 0,-82 2,-78 C4,-55 5,-25 4,0Z" transform="rotate(36)" />
+      <path d="M-4,0 C-5,-25 -4,-55 -2,-78 C0,-82 0,-82 2,-78 C4,-55 5,-25 4,0Z" transform="rotate(54)" />
+      <path d="M-4,0 C-5,-25 -4,-55 -2,-78 C0,-82 0,-82 2,-78 C4,-55 5,-25 4,0Z" transform="rotate(72)" />
+      <path d="M-4,0 C-5,-25 -4,-55 -2,-78 C0,-82 0,-82 2,-78 C4,-55 5,-25 4,0Z" transform="rotate(90)" />
+      <path d="M-4,0 C-5,-25 -4,-55 -2,-78 C0,-82 0,-82 2,-78 C4,-55 5,-25 4,0Z" transform="rotate(108)" />
+      <path d="M-4,0 C-5,-25 -4,-55 -2,-78 C0,-82 0,-82 2,-78 C4,-55 5,-25 4,0Z" transform="rotate(126)" />
+      <path d="M-4,0 C-5,-25 -4,-55 -2,-78 C0,-82 0,-82 2,-78 C4,-55 5,-25 4,0Z" transform="rotate(144)" />
+      <path d="M-4,0 C-5,-25 -4,-55 -2,-78 C0,-82 0,-82 2,-78 C4,-55 5,-25 4,0Z" transform="rotate(162)" />
+      <path d="M-4,0 C-5,-25 -4,-55 -2,-78 C0,-82 0,-82 2,-78 C4,-55 5,-25 4,0Z" transform="rotate(180)" />
+      <path d="M-4,0 C-5,-25 -4,-55 -2,-78 C0,-82 0,-82 2,-78 C4,-55 5,-25 4,0Z" transform="rotate(198)" />
+      <path d="M-4,0 C-5,-25 -4,-55 -2,-78 C0,-82 0,-82 2,-78 C4,-55 5,-25 4,0Z" transform="rotate(216)" />
+      <path d="M-4,0 C-5,-25 -4,-55 -2,-78 C0,-82 0,-82 2,-78 C4,-55 5,-25 4,0Z" transform="rotate(234)" />
+      <path d="M-4,0 C-5,-25 -4,-55 -2,-78 C0,-82 0,-82 2,-78 C4,-55 5,-25 4,0Z" transform="rotate(252)" />
+      <path d="M-4,0 C-5,-25 -4,-55 -2,-78 C0,-82 0,-82 2,-78 C4,-55 5,-25 4,0Z" transform="rotate(270)" />
+      <path d="M-4,0 C-5,-25 -4,-55 -2,-78 C0,-82 0,-82 2,-78 C4,-55 5,-25 4,0Z" transform="rotate(288)" />
+      <path d="M-4,0 C-5,-25 -4,-55 -2,-78 C0,-82 0,-82 2,-78 C4,-55 5,-25 4,0Z" transform="rotate(306)" />
+      <path d="M-4,0 C-5,-25 -4,-55 -2,-78 C0,-82 0,-82 2,-78 C4,-55 5,-25 4,0Z" transform="rotate(324)" />
+      <path d="M-4,0 C-5,-25 -4,-55 -2,-78 C0,-82 0,-82 2,-78 C4,-55 5,-25 4,0Z" transform="rotate(342)" />
+    </g>
+    <!-- Layer 2: Middle petals (16 petals, offset) -->
+    <g transform="translate(100 100)" opacity="0.75">
+      <path d="M-5,0 C-6,-18 -5,-40 -3,-58 C0,-62 0,-62 3,-58 C5,-40 6,-18 5,0Z" transform="rotate(9)" />
+      <path d="M-5,0 C-6,-18 -5,-40 -3,-58 C0,-62 0,-62 3,-58 C5,-40 6,-18 5,0Z" transform="rotate(31.5)" />
+      <path d="M-5,0 C-6,-18 -5,-40 -3,-58 C0,-62 0,-62 3,-58 C5,-40 6,-18 5,0Z" transform="rotate(54)" />
+      <path d="M-5,0 C-6,-18 -5,-40 -3,-58 C0,-62 0,-62 3,-58 C5,-40 6,-18 5,0Z" transform="rotate(76.5)" />
+      <path d="M-5,0 C-6,-18 -5,-40 -3,-58 C0,-62 0,-62 3,-58 C5,-40 6,-18 5,0Z" transform="rotate(99)" />
+      <path d="M-5,0 C-6,-18 -5,-40 -3,-58 C0,-62 0,-62 3,-58 C5,-40 6,-18 5,0Z" transform="rotate(121.5)" />
+      <path d="M-5,0 C-6,-18 -5,-40 -3,-58 C0,-62 0,-62 3,-58 C5,-40 6,-18 5,0Z" transform="rotate(144)" />
+      <path d="M-5,0 C-6,-18 -5,-40 -3,-58 C0,-62 0,-62 3,-58 C5,-40 6,-18 5,0Z" transform="rotate(166.5)" />
+      <path d="M-5,0 C-6,-18 -5,-40 -3,-58 C0,-62 0,-62 3,-58 C5,-40 6,-18 5,0Z" transform="rotate(189)" />
+      <path d="M-5,0 C-6,-18 -5,-40 -3,-58 C0,-62 0,-62 3,-58 C5,-40 6,-18 5,0Z" transform="rotate(211.5)" />
+      <path d="M-5,0 C-6,-18 -5,-40 -3,-58 C0,-62 0,-62 3,-58 C5,-40 6,-18 5,0Z" transform="rotate(234)" />
+      <path d="M-5,0 C-6,-18 -5,-40 -3,-58 C0,-62 0,-62 3,-58 C5,-40 6,-18 5,0Z" transform="rotate(256.5)" />
+      <path d="M-5,0 C-6,-18 -5,-40 -3,-58 C0,-62 0,-62 3,-58 C5,-40 6,-18 5,0Z" transform="rotate(279)" />
+      <path d="M-5,0 C-6,-18 -5,-40 -3,-58 C0,-62 0,-62 3,-58 C5,-40 6,-18 5,0Z" transform="rotate(301.5)" />
+      <path d="M-5,0 C-6,-18 -5,-40 -3,-58 C0,-62 0,-62 3,-58 C5,-40 6,-18 5,0Z" transform="rotate(324)" />
+      <path d="M-5,0 C-6,-18 -5,-40 -3,-58 C0,-62 0,-62 3,-58 C5,-40 6,-18 5,0Z" transform="rotate(346.5)" />
+    </g>
+    <!-- Layer 3: Inner petals (12 petals) -->
+    <g transform="translate(100 100)" opacity="0.9">
+      <path d="M-5,0 C-6,-12 -5,-28 -3,-40 C0,-44 0,-44 3,-40 C5,-28 6,-12 5,0Z" transform="rotate(5)" />
+      <path d="M-5,0 C-6,-12 -5,-28 -3,-40 C0,-44 0,-44 3,-40 C5,-28 6,-12 5,0Z" transform="rotate(35)" />
+      <path d="M-5,0 C-6,-12 -5,-28 -3,-40 C0,-44 0,-44 3,-40 C5,-28 6,-12 5,0Z" transform="rotate(65)" />
+      <path d="M-5,0 C-6,-12 -5,-28 -3,-40 C0,-44 0,-44 3,-40 C5,-28 6,-12 5,0Z" transform="rotate(95)" />
+      <path d="M-5,0 C-6,-12 -5,-28 -3,-40 C0,-44 0,-44 3,-40 C5,-28 6,-12 5,0Z" transform="rotate(125)" />
+      <path d="M-5,0 C-6,-12 -5,-28 -3,-40 C0,-44 0,-44 3,-40 C5,-28 6,-12 5,0Z" transform="rotate(155)" />
+      <path d="M-5,0 C-6,-12 -5,-28 -3,-40 C0,-44 0,-44 3,-40 C5,-28 6,-12 5,0Z" transform="rotate(185)" />
+      <path d="M-5,0 C-6,-12 -5,-28 -3,-40 C0,-44 0,-44 3,-40 C5,-28 6,-12 5,0Z" transform="rotate(215)" />
+      <path d="M-5,0 C-6,-12 -5,-28 -3,-40 C0,-44 0,-44 3,-40 C5,-28 6,-12 5,0Z" transform="rotate(245)" />
+      <path d="M-5,0 C-6,-12 -5,-28 -3,-40 C0,-44 0,-44 3,-40 C5,-28 6,-12 5,0Z" transform="rotate(275)" />
+      <path d="M-5,0 C-6,-12 -5,-28 -3,-40 C0,-44 0,-44 3,-40 C5,-28 6,-12 5,0Z" transform="rotate(305)" />
+      <path d="M-5,0 C-6,-12 -5,-28 -3,-40 C0,-44 0,-44 3,-40 C5,-28 6,-12 5,0Z" transform="rotate(335)" />
+    </g>
+    <!-- Center -->
+    <circle cx="100" cy="100" r="16" fill="black" opacity="1.0" />
+    <circle cx="100" cy="100" r="8" fill="white" opacity="0.25" />
+  </g>
+</svg>

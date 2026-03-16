@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <g fill="black">
+    <!-- Cotton: Fluffy cotton boll - soft rounded lobes -->
+    <!-- Layer 1: Outer fluffy lobes -->
+    <g transform="translate(100 100)" opacity="0.6">
+      <circle cx="0" cy="-55" r="30" fill="black" transform="rotate(0)" />
+      <circle cx="0" cy="-55" r="30" fill="black" transform="rotate(72)" />
+      <circle cx="0" cy="-55" r="30" fill="black" transform="rotate(144)" />
+      <circle cx="0" cy="-55" r="30" fill="black" transform="rotate(216)" />
+      <circle cx="0" cy="-55" r="30" fill="black" transform="rotate(288)" />
+    </g>
+    <!-- Layer 2: Middle fluffy lobes (offset) -->
+    <g transform="translate(100 100)" opacity="0.78">
+      <circle cx="0" cy="-38" r="26" fill="black" transform="rotate(36)" />
+      <circle cx="0" cy="-38" r="26" fill="black" transform="rotate(108)" />
+      <circle cx="0" cy="-38" r="26" fill="black" transform="rotate(180)" />
+      <circle cx="0" cy="-38" r="26" fill="black" transform="rotate(252)" />
+      <circle cx="0" cy="-38" r="26" fill="black" transform="rotate(324)" />
+    </g>
+    <!-- Layer 3: Inner core -->
+    <g transform="translate(100 100)" opacity="0.92">
+      <circle cx="0" cy="-22" r="20" fill="black" transform="rotate(18)" />
+      <circle cx="0" cy="-22" r="20" fill="black" transform="rotate(90)" />
+      <circle cx="0" cy="-22" r="20" fill="black" transform="rotate(162)" />
+      <circle cx="0" cy="-22" r="20" fill="black" transform="rotate(234)" />
+      <circle cx="0" cy="-22" r="20" fill="black" transform="rotate(306)" />
+    </g>
+    <!-- Center -->
+    <circle cx="100" cy="100" r="22" fill="black" opacity="1.0" />
+    <circle cx="100" cy="100" r="12" fill="white" opacity="0.25" />
+  </g>
+</svg>
