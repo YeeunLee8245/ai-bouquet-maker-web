@@ -4,29 +4,15 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { Button } from '@/shared/ui/button';
 import BouquetListItem from './_ui/bouquet-list-item';
-
-// yeeun: TEMP 데이터
-const TEMP_BOUQUETS = [
-  {
-    id: '1',
-    name: '꽃다발 이름',
-    occasion: '상황',
-    recipient: '대상',
-    message: '제출된 내용',
-    flowers: [
-      { id: 'f1', name: '꽃명', colorAndQuantities: [{ color: '#BDBDBD', quantity: 0 }, { color: '#BDBDBD', quantity: 0 }] },
-      { id: 'f2', name: '꽃명', colorAndQuantities: [{ color: '#BDBDBD', quantity: 0 }, { color: '#BDBDBD', quantity: 0 }] },
-      { id: 'f3', name: '꽃명', colorAndQuantities: [{ color: '#BDBDBD', quantity: 0 }, { color: '#BDBDBD', quantity: 0 }] },
-    ],
-    createdAt: '2025년 12월 06일',
-  },
-];
+import { useBouquetListQuery } from './_model/use-bouquet-list-query';
+import { toComponentBouquet } from './_model/bouquet-list-mapper';
 
 /**
  * 내 꽃다발 목록 페이지
  */
 const MyBouquetPage = () => {
-  const [bouquets, setBouquets] = useState(TEMP_BOUQUETS);
+  const { data } = useBouquetListQuery();
+  const bouquets = (data?.bouquets ?? []).map(toComponentBouquet);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
   const allIds = bouquets.map((b) => b.id);
@@ -43,14 +29,12 @@ const MyBouquetPage = () => {
   };
 
   const handleDeleteSelected = () => {
-    // TODO: API 연동
-    setBouquets((prev) => prev.filter((b) => !selectedIds.includes(b.id)));
+    // TODO: 삭제 API 연동
     setSelectedIds([]);
   };
 
   const handleDeleteOne = (id: string) => {
-    // TODO: API 연동
-    setBouquets((prev) => prev.filter((b) => b.id !== id));
+    // TODO: 삭제 API 연동
     setSelectedIds((prev) => prev.filter((i) => i !== id));
   };
 
