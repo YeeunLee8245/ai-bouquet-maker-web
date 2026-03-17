@@ -166,7 +166,7 @@ export async function POST(request: NextRequest) {
     const responseItems = (flowers || [])
       .map(flower => {
         const meanings = flower.flower_meanings || [];
-        
+
         // 기본 꽃말 ID: is_primary: true 우선, 없으면 첫 번째
         const primaryMeaning = meanings.find(m => m.is_primary);
         const defaultMeaningId = primaryMeaning?.id != null

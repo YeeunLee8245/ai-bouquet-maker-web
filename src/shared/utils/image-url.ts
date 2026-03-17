@@ -13,6 +13,10 @@ export function toSupabaseResizedImageUrl(
   _width: number = 1024,
   _height: number = 1024,
 ): string | null {
+  // _width, _height는 유료 플랜 전환 시 사용 예정
+  void _width;
+  void _height;
+
   if (!imageUrl) {
     return null;
   }
@@ -34,4 +38,3 @@ export function toSupabaseResizedImageUrl(
   //   return imageUrl;
   // }
 }
-

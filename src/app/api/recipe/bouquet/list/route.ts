@@ -85,14 +85,18 @@ import { BouquetRecipeContent } from '@/types/recommendation';
  *                         occasion: "생일"
  *                         recipient: "어머니"
  *                         flowers:
- *                           - flower_id: 1
+ *                           - flower_id: "1"
  *                             flower_name: "장미"
- *                             quantity: 5
- *                             color: "#FF0000"
- *                           - flower_id: 5
+ *                             color_and_quantity:
+ *                               - color: "#FF0000"
+ *                                 quantity: 3
+ *                               - color: "#FFCCCC"
+ *                                 quantity: 2
+ *                           - flower_id: "5"
  *                             flower_name: "안개꽃"
- *                             quantity: 3
- *                             color: "#FFFFFF"
+ *                             color_and_quantity:
+ *                               - color: "#FFFFFF"
+ *                                 quantity: 3
  *                         created_at: "2025-12-06T12:00:00Z"
  *                         updated_at: "2025-12-06T15:30:00Z"
  *                     total: 1
@@ -199,13 +203,29 @@ export async function GET(request: NextRequest) {
     const formattedBouquets = (bouquets || []).map(bouquet => {
       const recipe = bouquet.recipe as BouquetRecipeContent | null;
 
-      // 담은 꽃 정보 추출
-      const flowers = (recipe?.flowers || []).map(f => ({
-        flower_id: f.flower_id,
-        flower_name: flowerMap[f.flower_id] || '알 수 없음',
-        quantity: f.quantity,
-        color: f.color || null,
-      }));
+      // 담은 꽃 정보 추출 (flower_id로 그룹핑)
+      const flowerGroupMap = new Map<
+        string,
+        { flower_id: string; flower_name: string; color_and_quantity: { color: string; quantity: number }[] }
+      >();
+
+      (recipe?.flowers || []).forEach(f => {
+        const existing = flowerGroupMap.get(f.flower_id);
+        if (existing) {
+          existing.color_and_quantity.push({
+            color: f.color || '',
+            quantity: f.quantity,
+          });
+        } else {
+          flowerGroupMap.set(f.flower_id, {
+            flower_id: f.flower_id,
+            flower_name: flowerMap[f.flower_id] || '알 수 없음',
+            color_and_quantity: [{ color: f.color || '', quantity: f.quantity }],
+          });
+        }
+      });
+
+      const flowers = Array.from(flowerGroupMap.values());
 
       return {
         id: bouquet.id,
