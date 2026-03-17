@@ -8,11 +8,7 @@ export function toComponentBouquet(item: BouquetListItemData) {
     occasion: item.occasion ?? '',
     recipient: item.recipient ?? '',
     message: item.message ?? '',
-    flowers: item.flowers.map((f) => ({
-      id: f.flower_id,
-      name: f.flower_name,
-      colorAndQuantities: [{ color: f.color ?? '#BDBDBD', quantity: f.quantity }],
-    })),
+    flowers: item.flowers,
     createdAt: formatKoreanDate(item.created_at),
   };
 }

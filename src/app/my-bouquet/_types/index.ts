@@ -1,8 +1,10 @@
 export interface BouquetListFlower {
   flower_id: string;
   flower_name: string;
-  quantity: number;
-  color: string | null;
+  color_and_quantity: {
+    color: string;
+    quantity: number;
+  }[];
 }
 
 export interface BouquetListItemData {

@@ -6,99 +6,73 @@ import { Button } from '@/shared/ui/button';
 import BouquetListItem from './_ui/bouquet-list-item';
 import { useBouquetListQuery } from './_model/use-bouquet-list-query';
 import { toComponentBouquet } from './_model/bouquet-list-mapper';
+import PlusIcon from '@/shared/assets/icons/plus.svg';
 
 /**
  * 내 꽃다발 목록 페이지
  */
 const MyBouquetPage = () => {
-  const { data } = useBouquetListQuery();
+  const { data, isLoading } = useBouquetListQuery();
   const bouquets = (data?.bouquets ?? []).map(toComponentBouquet);
-  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  console.log('bouquets', bouquets);
 
-  const allIds = bouquets.map((b) => b.id);
-  const isAllSelected = allIds.length > 0 && allIds.every((id) => selectedIds.includes(id));
+  const [isCheckableMode, setIsCheckableMode] = useState<boolean>(false);
 
-  const handleSelectAll = () => {
-    setSelectedIds(isAllSelected ? [] : allIds);
-  };
-
-  const handleToggleSelect = (id: string) => {
-    setSelectedIds((prev) =>
-      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id],
+  // TODO: yeeun isLoading true -> shimmer 추가
+  if (isLoading) {
+    return (
+      <div className='min-h-screen bg-gray-50 flex items-center justify-center'>
+        <p className='text-body-md text-gray-400'>불러오는 중...</p>
+      </div>
     );
-  };
-
-  const handleDeleteSelected = () => {
-    // TODO: 삭제 API 연동
-    setSelectedIds([]);
-  };
-
-  const handleDeleteOne = (id: string) => {
-    // TODO: 삭제 API 연동
-    setSelectedIds((prev) => prev.filter((i) => i !== id));
-  };
+  }
+  const {total} = data ?? {};
 
   return (
     <div className='min-h-screen bg-gray-50'>
       {/* 헤더 */}
-      <div className='px-4 pt-4 pb-2 flex items-center justify-between'>
+      <div className='mx-4 px-micro pt-4 pb-2 flex items-center justify-between'>
         <p className='text-title-lg'>내 꽃다발</p>
         <Button size='sm' asChild>
-          <Link href='/make-bouquet'>+ 새 꽃다발 만들기</Link>
+          <Link href='/main/ai-prompt/emotion'>
+            <PlusIcon className='w-[9px] h-[9px] mx-[3.5px]' />
+            <p className='text-ui-cta-sm text-primary-600 hover:text-primary-200'>새 꽃다발 만들기</p>
+          </Link>
         </Button>
       </div>
+      <div className='h-[2px] w-full bg-gray-100'/>
 
-      {/* 선택 삭제 바 */}
-      <div className='px-4 py-2 flex items-center justify-between'>
-        <div className='flex items-center gap-2'>
-          <button
-            onClick={handleSelectAll}
-            className={`w-5 h-5 rounded border-2 flex items-center justify-center flex-shrink-0 transition-colors ${
-              isAllSelected ? 'bg-primary-400 border-primary-400' : 'bg-white border-gray-200'
-            }`}
-          >
-            {isAllSelected && (
-              <svg width='10' height='8' viewBox='0 0 10 8' fill='none'>
-                <path d='M1 4L3.5 6.5L9 1' stroke='white' strokeWidth='1.5' strokeLinecap='round' strokeLinejoin='round' />
-              </svg>
-            )}
+      <div className='pt-4 px-4 pb-8'>
+        {/* TODO: yeeun 컴포넌트 분리 */}
+        {/* 전체 개수 + 선택 버튼 */}
+        <span className='flex items-center justify-between'>
+          <p className='text-ui-label-sm text-gray-400'>{total}개의 꽃다발</p>
+          <button onClick={() => setIsCheckableMode((prev) => !prev)} className='text-body-sm rounded-3 hover:bg-gray-100 hover:text-primary-600'>
+            {isCheckableMode ? '완료' : '선택'}
           </button>
-          <button
-            onClick={handleDeleteSelected}
-            disabled={selectedIds.length === 0}
-            className='text-body-sm text-gray-400 disabled:opacity-40'
-          >
-            선택 삭제
-          </button>
+        </span>
+        {/* TODO: yeeun 컴포넌트 분리 */}
+        {/* 목록 */}
+        <div className='pt-3 flex flex-col gap-4'>
+          {bouquets.map((bouquet) => (
+            <BouquetListItem
+              key={bouquet.id}
+              bouquet={bouquet}
+              // isSelected={selectedIds.includes(bouquet.id)}
+              // onSelect={() => handleToggleSelect(bouquet.id)}
+              // onDelete={handleDeleteOne}
+            />
+          ))}
+          {total === 0 && (
+            <div className='flex flex-col items-center justify-center py-20 gap-2'>
+              <p className='text-body-md text-gray-400 text-center whitespace-pre-wrap'>
+                {'저장된 꽃다발이 없어요🥹\n바로 위 버튼을 눌러 새 꽃다발을 만들어 보세요!'}
+              </p>
+            </div>
+          )}
         </div>
-        <button
-          onClick={() => setSelectedIds([])}
-          className='text-body-sm text-gray-700'
-        >
-          완료
-        </button>
       </div>
 
-      {/* 목록 */}
-      <div className='flex flex-col gap-4 px-4 pb-6'>
-        {bouquets.map((bouquet) => (
-          <BouquetListItem
-            key={bouquet.id}
-            bouquet={bouquet}
-            isSelected={selectedIds.includes(bouquet.id)}
-            onSelect={() => handleToggleSelect(bouquet.id)}
-            onDelete={handleDeleteOne}
-          />
-        ))}
-        {bouquets.length === 0 && (
-          <div className='flex flex-col items-center justify-center py-20 gap-2'>
-            <p className='text-body-md text-gray-400'>저장된 꽃다발이 없어요</p>
-            <Button size='sm' asChild>
-              <Link href='/make-bouquet'>+ 새 꽃다발 만들기</Link>
-            </Button>
-          </div>
-        )}
-      </div>
     </div>
   );
 };
