@@ -23,6 +23,8 @@ export default function AIPromptInput({ placeholder, eventHub }: IProps) {
 
       updateTextCount(textCountRef, item.length);
     };
+
+    eventHub.getInputText = () => textareaRef.current?.value ?? '';
   }, [eventHub]);
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {

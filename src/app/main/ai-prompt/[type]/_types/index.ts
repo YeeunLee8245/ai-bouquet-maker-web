@@ -26,4 +26,5 @@ export interface AIPromptPageParams {
 
 export interface AIPromptEventHub {
   onClickGuideItem?: (item: string) => void;
+  getInputText?: () => string;
 }
