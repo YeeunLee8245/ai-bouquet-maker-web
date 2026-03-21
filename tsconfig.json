@@ -28,7 +28,8 @@
       "@entities/*": ["entities/*"],
       "@shared/*": ["shared/*"],
       "@services/*": ["services/*"],
-      "@hooks/*": ["hooks/*"]
+      "@hooks/*": ["hooks/*"],
+      "@api/*": ["api/*"]
     }
   },
   "include": [

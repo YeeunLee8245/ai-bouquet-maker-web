@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import { deleteBouquet } from '../_api/bouquet-list-api';
+import { deleteBouquet } from '@api/recipe-bouquet.api';
 
 export function useDeleteBouquetMutation(onSuccess?: () => void) {
   return useMutation({
@@ -7,3 +7,4 @@ export function useDeleteBouquetMutation(onSuccess?: () => void) {
     onSuccess,
   });
 }
+ 
