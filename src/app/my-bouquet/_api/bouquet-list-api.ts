@@ -7,3 +7,7 @@ export async function fetchMyBouquetList(page = 1, limit = 10): Promise<BouquetL
   });
   return data.data;
 }
+
+export async function deleteBouquet(id: string): Promise<void> {
+  await fetcher.delete(`/api/recipe/bouquet/${id}`);
+}

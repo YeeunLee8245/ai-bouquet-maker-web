@@ -1,8 +1,11 @@
 'use client';
 
 import Link from 'next/link';
+import { useSetAtom } from 'jotai';
+import { openModalAtom } from '@/shared/model/modal';
 import MessageIcon from '@/shared/assets/icons/message.svg';
 import ColorFlowerIcon from '@/shared/assets/icons/color_flower.svg';
+import DeleteConfirmModal from './delete-confirm-modal';
 
 type BouquetFlower = {
   flower_id: string;
@@ -22,12 +25,27 @@ type Bouquet = {
 
 type Props = {
   bouquet: Bouquet;
+  onDeleteSuccess?: () => void;
   // isSelected: boolean;
   // onSelect: () => void;
-  // onDelete: (id: string) => void;
 };
 
-export default function BouquetListItem({ bouquet}: Props) {// , isSelected, onSelect, onDelete }: Props) {
+export default function BouquetListItem({ bouquet, onDeleteSuccess }: Props) {
+  const openModal = useSetAtom(openModalAtom);
+
+  const handleDeleteClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    openModal({
+      id: `delete-bouquet-${bouquet.id}`,
+      position: 'center',
+      canCloseOnBackgroundClick: true,
+      component: <DeleteConfirmModal
+        modalId={`delete-bouquet-${bouquet.id}`}
+        bouquetId={bouquet.id}
+        onSuccess={onDeleteSuccess} />,
+    });
+  };
+
   return (
     <Link href={`/my-bouquet/${bouquet.id}`} className='info-border flex flex-col'>
       {/* 체크박스 */}
@@ -99,8 +117,10 @@ export default function BouquetListItem({ bouquet}: Props) {// , isSelected, onS
       {/* 푸터 */}
       <div className='mt-3 flex items-center justify-between'>
         <button
-          // onClick={() => onDelete(bouquet.id)}
-          className='text-ui-textbtn-md text-gray-400 hover:text-gray-600'
+          onClick={handleDeleteClick}
+          className='text-ui-textbtn-md text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-3'
+          type='button'
+          aria-label='꽃다발 삭제'
         >
           꽃다발 삭제
         </button>

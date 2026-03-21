@@ -12,9 +12,8 @@ import PlusIcon from '@/shared/assets/icons/plus.svg';
  * 내 꽃다발 목록 페이지
  */
 const MyBouquetPage = () => {
-  const { data, isLoading } = useBouquetListQuery();
+  const { data, isLoading, refetch } = useBouquetListQuery();
   const bouquets = (data?.bouquets ?? []).map(toComponentBouquet);
-  console.log('bouquets', bouquets);
 
   const [isCheckableMode, setIsCheckableMode] = useState<boolean>(false);
 
@@ -58,9 +57,9 @@ const MyBouquetPage = () => {
             <BouquetListItem
               key={bouquet.id}
               bouquet={bouquet}
+              onDeleteSuccess={refetch}
               // isSelected={selectedIds.includes(bouquet.id)}
               // onSelect={() => handleToggleSelect(bouquet.id)}
-              // onDelete={handleDeleteOne}
             />
           ))}
           {total === 0 && (
