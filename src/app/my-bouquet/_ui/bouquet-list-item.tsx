@@ -28,7 +28,6 @@ type Props = {
 };
 
 export default function BouquetListItem({ bouquet}: Props) {// , isSelected, onSelect, onDelete }: Props) {
-  console.log(bouquet);
   return (
     <Link href={`/my-bouquet/${bouquet.id}`} className='info-border flex flex-col'>
       {/* 체크박스 */}
@@ -74,18 +73,23 @@ export default function BouquetListItem({ bouquet}: Props) {// , isSelected, onS
           <ColorFlowerIcon className='ml-[2.4px] mr-[4.6px] w-[14px] h-[14px] fill-primary-300' />
           <p className='text-body-lg'>담은 꽃</p>
         </div>
-        <div className='mt-2 flex gap-2'>
+        <div className='mt-2 flex gap-2 overflow-x-auto'>
           {/* 3종류까지 미리보기 표시 */}
           {bouquet.flowers.slice(0, 3).map(({flower_id, flower_name, color_and_quantity}) => (
-            <div key={flower_id} className='flex-1 border border-gray-100 rounded-4 px-3 py-2 bg-white gap-1'>
-              <p className='text-body-md'>{flower_name}</p>
-              <div className='flex justify-center gap-1'>
-                {color_and_quantity.map(({ color, quantity }, idx) => (
+            <div key={flower_id} className='flex-none border border-gray-100 rounded-4 px-3 py-2 bg-white gap-1'>
+              <p className='text-body-md truncate'>{flower_name}</p>
+              <div className='flex justify-start gap-1'>
+                {color_and_quantity.slice(0, 3).map(({ color, quantity }, idx) => (
                   <div key={idx}>
-                    <div className='m-1 size-8 rounded-full border-2 border-gray-100' style={{ backgroundColor: color }}/>
+                    <div className='m-[1px] size-8 rounded-full border-2 border-gray-100' style={{ backgroundColor: color }}/>
                     <p className='text-body-xsm text-gray-400 mx-1 text-center'>{quantity}</p>
                   </div>
                 ))}
+                {color_and_quantity.length > 3 && (
+                  <div className='flex items-center'>
+                    <p className='text-body-xsm text-gray-400'>+{color_and_quantity.length - 3}</p>
+                  </div>
+                )}
               </div>
             </div>
           ))}

@@ -6,6 +6,7 @@ import XIcon from '@/shared/assets/icons/x.svg';
 import ChevronDownIcon from '@/shared/assets/icons/chevron_down.svg';
 import { useRouter } from 'next/navigation';
 import { useRef, useState, useEffect, useCallback } from 'react';
+import { allowMakeBouquet } from './actions';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { selectedFlowersAtom, removeFlowerAtom } from '@/shared/model/selected-flowers';
 import { ActionLabel } from '@/shared/ui/label';
@@ -101,8 +102,10 @@ function DefaultSelectedFlowerChips() {
 function BottomActionFooter({ title, children, flowers, onRemoveFlower }: TProps) {
   const router = useRouter();
 
-  const handleMakeBouquet = () => {
-    document.cookie = 'make-bouquet-allowed=1; max-age=10; path=/';
+  const handleMakeBouquet = async () => {
+    // document.cookie로 설정한 쿠키가 RSC fetch의 request header에 포함되지 않고 있는듯(cloudflare 배포 환경 한정)
+    // 따라서 server action으로 쿠키 설정
+    await allowMakeBouquet();
     router.push('/make-bouquet');
   };
 
