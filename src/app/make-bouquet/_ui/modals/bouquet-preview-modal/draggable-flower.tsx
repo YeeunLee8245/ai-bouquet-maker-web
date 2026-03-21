@@ -94,6 +94,7 @@ export default function DraggableFlower({
       onPointerMove={handlePointerMove}
       onPointerUp={handlePointerUp}
     >
+      {/* // TODO: yeeun 개선 필요 */}
       <div dangerouslySetInnerHTML={{ __html: svgContent }} />
       {selected && (
         <div
