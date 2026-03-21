@@ -7,4 +7,3 @@ export function useDeleteBouquetMutation(onSuccess?: () => void) {
     onSuccess,
   });
 }
- 

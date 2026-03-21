@@ -8,7 +8,7 @@ import { useAtomValue, useSetAtom } from 'jotai';
 import { addBouquetFlowerAtom, bouquetFlowersAtom, removeBouquetFlowerByIdAtom } from '../../../_model';
 import { showToastAtom } from '@/shared/model/toast';
 import { Button } from '@/shared/ui/button';
-import { fetchSelectedFlowers } from '../../../_api/bouquet-api';
+import { fetchSelectedFlowers } from '@api/recipe-bouquet.api';
 import { isApiError } from '@/shared/api';
 import BottomActionFooter from '@/widgets/footer/bottom-action-footer';
 import { TSelectedFlower } from '@/shared/model/selected-flowers';

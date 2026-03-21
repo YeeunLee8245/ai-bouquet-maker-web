@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { fetchBouquetDetail } from '../_api/bouquet-detail-api';
+import { fetchBouquetDetail } from '@api/recipe-bouquet.api';
 
 export const bouquetDetailQueryKey = (id: string) => ['bouquet', id] as const;
 

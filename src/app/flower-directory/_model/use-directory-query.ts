@@ -6,7 +6,7 @@ import {
   directorySearchAtom,
   directorySortAtom,
 } from './atoms';
-import { fetchDirectory } from '../_api/directory-api';
+import { fetchDirectory } from '@api/flowers.api';
 
 const LIMIT = 20;
 

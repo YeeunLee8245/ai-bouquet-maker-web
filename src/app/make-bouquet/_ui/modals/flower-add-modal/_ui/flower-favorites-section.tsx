@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { Button } from '@/shared/ui/button';
-import { fetchLikedFlowers, TLikedFlower } from '../../../../_api/bouquet-api';
+import { fetchLikedFlowers, TLikedFlower } from '@api/my.api';
 
 type TProps = {
   selectedIds: string[];

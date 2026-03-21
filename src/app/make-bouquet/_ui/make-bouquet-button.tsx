@@ -15,7 +15,7 @@ import {
 } from '../_model';
 import { useState } from 'react';
 import { isApiError } from '@/shared/api';
-import { saveBouquet } from '../_api/bouquet-api';
+import { saveBouquet } from '@api/recipe-bouquet.api';
 import { bouquetRibbonColorAtom, bouquetPackagingColorAtom } from '../_model/bouquet-form.atoms';
 
 export default function MakeBouquetButton() {

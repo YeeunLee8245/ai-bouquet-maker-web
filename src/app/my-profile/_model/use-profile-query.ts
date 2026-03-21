@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { fetchMyProfile } from '../_api/profile-api';
+import { fetchMyProfile } from '@api/my.api';
 
 export const profileQueryKey = ['my-profile'] as const;
 

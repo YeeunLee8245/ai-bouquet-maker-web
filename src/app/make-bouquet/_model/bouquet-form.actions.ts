@@ -8,7 +8,7 @@ import {
 } from './bouquet-form.atoms';
 import { selectedFlowersAtom } from '@/shared/model/selected-flowers';
 import { TFlowerCompositionItem } from '../_types';
-import { fetchSelectedFlowers, TSelectedFlowerDetail } from '../_api/bouquet-api';
+import { fetchSelectedFlowers, TSelectedFlowerDetail } from '@api/recipe-bouquet.api';
 
 /**
  * API 응답 데이터를 꽃다발 폼 아이템으로 변환

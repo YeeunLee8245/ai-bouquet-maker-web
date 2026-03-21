@@ -49,14 +49,6 @@ export default function BouquetListItem({ bouquet, onDeleteSuccess }: Props) {
   return (
     <Link href={`/my-bouquet/${bouquet.id}`} className='info-border flex flex-col'>
       {/* 체크박스 */}
-      {/* <button
-        className='w-5 h-5 rounded border-2 flex items-center justify-center flex-shrink-0 transition-colors bg-white border-gray-200'
-      >
-        <svg width='10' height='8' viewBox='0 0 10 8' fill='none'>
-          <path d='M1 4L3.5 6.5L9 1' stroke='white' strokeWidth='1.5' strokeLinecap='round' strokeLinejoin='round' />
-        </svg>
-      </button> */}
-
       {/* 꽃다발 이름 */}
       <p className='text-title-md'>{bouquet.name}</p>
 

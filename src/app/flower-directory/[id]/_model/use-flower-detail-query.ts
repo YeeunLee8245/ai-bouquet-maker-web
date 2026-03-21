@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { fetchFlowerDetail } from '../_api/flower-detail-api';
+import { fetchFlowerDetail } from '@api/flowers.api';
 
 export const flowerDetailQueryKey = (id: string) => ['flower', id] as const;
 
