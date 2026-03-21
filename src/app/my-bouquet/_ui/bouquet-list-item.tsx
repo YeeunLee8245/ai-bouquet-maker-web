@@ -97,10 +97,10 @@ export default function BouquetListItem({ bouquet}: Props) {// , isSelected, onS
       </div>
 
       {/* 푸터 */}
-      <div className='flex items-center justify-between'>
+      <div className='mt-3 flex items-center justify-between'>
         <button
           // onClick={() => onDelete(bouquet.id)}
-          className='text-body-xsm text-error hover:opacity-70'
+          className='text-ui-textbtn-md text-gray-400 hover:text-gray-600'
         >
           꽃다발 삭제
         </button>

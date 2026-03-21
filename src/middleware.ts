@@ -37,17 +37,6 @@ export default async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL('/main', request.url));
   }
 
-  // /make-bouquet 직접 접근 차단 (쿠키 플래그 없으면 /main redirect)
-  if (pathname.startsWith('/make-bouquet')) {
-    const allowed = request.cookies.get('make-bouquet-allowed');
-    if (!allowed) {
-      return NextResponse.redirect(new URL('/main', request.url));
-    }
-    const response = NextResponse.next();
-    response.cookies.delete('make-bouquet-allowed');
-    return response;
-  }
-
   // 보호된 라우트: 미로그인 시 /login redirect
   const protectedPaths = ['/my-bouquet', '/my-profile'];
   if (protectedPaths.some((path) => pathname.startsWith(path))) {

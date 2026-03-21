@@ -9,8 +9,9 @@ import DirectoryIcon from '@/shared/assets/icons/directory.svg';
 import BouquetIcon from '@/shared/assets/icons/bouquet.svg';
 import Link from 'next/link';
 import { cn } from '@/shared/utils/styles';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useUserAuth } from '@/hooks/use-supabase-user';
+import { showToastAtom } from '@/shared/model/toast/toast.actions';
 
 const SIDEBAR_ITEMS = [
   {
@@ -43,14 +44,22 @@ const UNAUTHENTICATED_ITEMS = [
 
 function Sidebar({ modalId }: TModalProps) {
   const closeModal = useSetAtom(closeModalAtom);
+  const showToast = useSetAtom(showToastAtom);
+  const router = useRouter();
   const pathname = usePathname();
-  const { isLogin, isLoading } = useUserAuth();
+  const { isLogin } = useUserAuth();
 
   const menuItems = isLogin ? [...SIDEBAR_ITEMS, ...AUTHENTICATED_ITEMS] : [...SIDEBAR_ITEMS, ...UNAUTHENTICATED_ITEMS];
 
   const handleClickMenuItem = (path: string) => (e: React.MouseEvent<HTMLAnchorElement>) => {
     if (pathname === path) {
       e.preventDefault();
+      return;
+    }
+    if (!isLogin && path === '/my-bouquet') {
+      e.preventDefault();
+      showToast({ message: '로그인이 필요합니다.' });
+      router.push('/login');
       return;
     }
     closeModal(modalId);

@@ -1,7 +1,8 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useSetAtom } from 'jotai';
+import { useAtomValue, useSetAtom } from 'jotai';
+import { useRouter } from 'next/navigation';
 import MakeBouquetButton from './_ui/make-bouquet-button';
 import MakeBouquetInfoContainer from './_ui/make-bouquet-info-container';
 import MakeBouquetCompositionContainer from './_ui/make-bouquet-composition-container';
@@ -9,17 +10,24 @@ import MakeBouquetPackagingContainer from './_ui/make-bouquet-packaging-containe
 import MakeBouquetSummaryContainer from './_ui/make-bouquet-summary-containert';
 import MakeBouquetPreviewContainer from './_ui/make-bouquet-preview-container';
 import { initBouquetFlowersAtom, resetBouquetFormAtom } from './_model';
+import { selectedFlowersAtom } from '@/shared/model/selected-flowers';
 
 function MakeBouquetPage() {
+  const router = useRouter();
+  const selectedFlowers = useAtomValue(selectedFlowersAtom);
   const initBouquetFlowers = useSetAtom(initBouquetFlowersAtom);
   const resetBouquetForm = useSetAtom(resetBouquetFormAtom);
 
   useEffect(() => {
+    if (selectedFlowers.length === 0) {
+      router.replace('/flower-directory');
+      return;
+    }
     initBouquetFlowers();
     return () => {
       resetBouquetForm();
     };
-  }, [initBouquetFlowers, resetBouquetForm]);
+  }, []);
 
   return (
     <div>
