@@ -6,6 +6,8 @@ import { openModalAtom } from '@/shared/model/modal';
 import MessageIcon from '@/shared/assets/icons/message.svg';
 import ColorFlowerIcon from '@/shared/assets/icons/color_flower.svg';
 import DeleteConfirmModal from './delete-confirm-modal';
+import { Checkbox } from '@/shared/ui/checkbox';
+import { IMyBouquetListHub } from '@/app/my-bouquet/_types';
 
 type BouquetFlower = {
   flower_id: string;
@@ -26,11 +28,10 @@ type Bouquet = {
 type Props = {
   bouquet: Bouquet;
   onDeleteSuccess?: () => void;
-  // isSelected: boolean;
-  // onSelect: () => void;
+  hub: IMyBouquetListHub;
 };
 
-export default function BouquetListItem({ bouquet, onDeleteSuccess }: Props) {
+export default function BouquetListItem({ bouquet, onDeleteSuccess, hub }: Props) {
   const openModal = useSetAtom(openModalAtom);
 
   const handleDeleteClick = (e: React.MouseEvent) => {
@@ -47,8 +48,27 @@ export default function BouquetListItem({ bouquet, onDeleteSuccess }: Props) {
   };
 
   return (
-    <Link href={`/my-bouquet/${bouquet.id}`} className='info-border flex flex-col'>
-      {/* 체크박스 */}
+    <Link
+      href={`/my-bouquet/${bouquet.id}`}
+      className='info-border flex flex-col'
+      data-bouquet-id={bouquet.id}
+      onClick={(e) => {
+        const container = e.currentTarget.closest('[data-select-mode="true"]');
+        // select mode 시 네비게이션 방지
+        if (container) {
+          e.preventDefault();
+          hub.onSelectItem(bouquet.id, true);
+        }
+      }}
+    >
+      {/* 체크박스 — select mode 시만 표시 */}
+      <div
+        className='hidden pointer-events-none group-data-[select-mode=true]/list:block group-data-[select-mode=true]/list:pointer-events-auto group-data-[select-mode=true]/list:mb-2'
+        onClick={(e) => { e.stopPropagation();}}
+      >
+        <Checkbox onChange={(checked) => hub.onSelectItem(bouquet.id, checked)} />
+      </div>
+
       {/* 꽃다발 이름 */}
       <p className='text-title-md'>{bouquet.name}</p>
 
@@ -84,7 +104,6 @@ export default function BouquetListItem({ bouquet, onDeleteSuccess }: Props) {
           <p className='text-body-lg'>담은 꽃</p>
         </div>
         <div className='mt-2 flex gap-2 overflow-x-auto'>
-          {/* 3종류까지 미리보기 표시 */}
           {bouquet.flowers.slice(0, 3).map(({flower_id, flower_name, color_and_quantity}) => (
             <div key={flower_id} className='flex-none border border-gray-100 rounded-4 px-3 py-2 bg-white gap-1'>
               <p className='text-body-md truncate'>{flower_name}</p>
@@ -110,7 +129,7 @@ export default function BouquetListItem({ bouquet, onDeleteSuccess }: Props) {
       <div className='mt-3 flex items-center justify-between'>
         <button
           onClick={handleDeleteClick}
-          className='text-ui-textbtn-md text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-3'
+          className='text-ui-textbtn-md text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-3 group-data-[select-mode=true]/list:hidden'
           type='button'
           aria-label='꽃다발 삭제'
         >

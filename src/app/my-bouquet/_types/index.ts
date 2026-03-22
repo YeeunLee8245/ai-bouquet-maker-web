@@ -30,3 +30,10 @@ export interface BouquetListResponse {
   success: boolean;
   data: BouquetListData;
 }
+
+export interface IMyBouquetListHub {
+  onToggleSelectMode: (pressed: boolean) => void;
+  onSelectItem: (id: string, checked: boolean) => void;
+  onSelectAll: (checked: boolean) => void;
+  onDeleteSelected: () => void;
+}

@@ -24,3 +24,7 @@ export const removeFlowerAtom = atom(
     );
   },
 );
+
+export const resetSelectedFlowersAtom = atom(null, (_get, set) => {
+  set(selectedFlowersAtom, []);
+});

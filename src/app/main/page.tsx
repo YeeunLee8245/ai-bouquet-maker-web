@@ -20,7 +20,7 @@ export default async function MainPage({ searchParams }: { searchParams: Promise
       <NewUserModalTrigger isNewUser={isNewUser} />
       <div className='relative w-full flex-1 min-h-0 overflow-y-auto'>
         {/* 상단: 배경 이미지 + 히어로 영역 (스크롤 시 함께 올라가서 사라짐) */}
-        <section className='relative h-[380px] shrink-0'>
+        <section className='relative h-[316px] shrink-0'>
           <Image
             src='/images/bg_main_top.webp'
             alt=''

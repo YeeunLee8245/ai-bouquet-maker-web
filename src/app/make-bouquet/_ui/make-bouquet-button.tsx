@@ -17,6 +17,7 @@ import { useState } from 'react';
 import { isApiError } from '@/shared/api';
 import { saveBouquet } from '@api/recipe-bouquet.api';
 import { bouquetRibbonColorAtom, bouquetPackagingColorAtom } from '../_model/bouquet-form.atoms';
+import { resetSelectedFlowersAtom } from '@/shared/model/selected-flowers';
 
 export default function MakeBouquetButton() {
   const router = useRouter();
@@ -30,6 +31,7 @@ export default function MakeBouquetButton() {
   const flowers = useAtomValue(bouquetFlowersAtom);
   const ribbonColor = useAtomValue(bouquetRibbonColorAtom);
   const packagingColor = useAtomValue(bouquetPackagingColorAtom);
+  const resetSelectedFlowers = useSetAtom(resetSelectedFlowersAtom);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSave = async () => {
@@ -65,7 +67,7 @@ export default function MakeBouquetButton() {
           },
         },
       });
-
+      resetSelectedFlowers();
       showToast({ message: '꽃다발이 저장되었습니다.' });
       // TODO: yeeun 작성 완료 꽃다발 페이지로 이동
       router.push(`/my-bouquet/${data.id}`);
