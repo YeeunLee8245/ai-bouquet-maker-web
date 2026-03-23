@@ -1,24 +1,37 @@
 import { NextResponse, type NextRequest } from 'next/server';
 import { createServerClient } from '@supabase/ssr';
 
-async function getUser(request: NextRequest) {
+async function updateSession(request: NextRequest) {
+  const response = NextResponse.next({ request });
+
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_PUBLIC_KEY!,
     {
       cookies: {
         getAll() {
-          // 세션 토큰을 쿠키에서 읽어옴
           return request.cookies.getAll();
         },
-        setAll() {}, // 세션 갱신할 필요 없기 때문에 빈 함수
+        setAll(cookiesToSet) {
+          // Refresh Token Rotation 시 새 토큰을 request와 response 모두에 저장
+          // server component에서 토큰을 저장
+          cookiesToSet.forEach(({ name, value }) =>
+            request.cookies.set(name, value),
+          );
+          // middleware에서 토큰을 저장하기 위해 response에 저장
+          cookiesToSet.forEach(({ name, value, options }) =>
+            response.cookies.set(name, value, options),
+          );
+        },
       },
     },
   );
+
   const {
     data: { user },
-  } = await supabase.auth.getUser();
-  return user;
+  } = await supabase.auth.getUser(); // 현재 사용자 정보 조회(token 발급 체크)
+
+  return { user, response };
 }
 
 export default async function middleware(request: NextRequest) {
@@ -37,24 +50,23 @@ export default async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL('/main', request.url));
   }
 
+  // 모든 요청에서 세션 갱신 (token rotation 처리)
+  const { user, response } = await updateSession(request);
+
   // 보호된 라우트: 미로그인 시 /login redirect
   const protectedPaths = ['/my-bouquet', '/my-profile'];
   if (protectedPaths.some((path) => pathname.startsWith(path))) {
-    const user = await getUser(request);
     if (!user) {
       return NextResponse.redirect(new URL('/login', request.url));
     }
   }
 
   // /login: 로그인 상태이면 /main redirect
-  if (pathname === '/login') {
-    const user = await getUser(request);
-    if (user) {
-      return NextResponse.redirect(new URL('/main', request.url));
-    }
+  if (pathname === '/login' && user) {
+    return NextResponse.redirect(new URL('/main', request.url));
   }
 
-  return NextResponse.next();
+  return response;
 }
 
 export const config = {
