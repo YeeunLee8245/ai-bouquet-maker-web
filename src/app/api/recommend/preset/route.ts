@@ -240,7 +240,10 @@ export async function GET(request: NextRequest) {
         const representativeTags = Array.isArray(rec.flower.representative_meanings_tags)
           ? rec.flower.representative_meanings_tags
           : [];
-        const tags = [...new Set([matchedMeaning, ...representativeTags].filter(Boolean))].slice(0, 3);
+        // 3글자 이하인 태그만 필터링
+        const tags = [...new Set([matchedMeaning, ...representativeTags].filter(Boolean))]
+          .filter(tag => tag.length <= 3)
+          .slice(0, 3);
 
         // is_primary가 true인 경우 기본값(회색)이 들어있으므로 제외
         const colors = rec.flower.colors || [...new Set(

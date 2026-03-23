@@ -293,8 +293,10 @@ export async function POST(request: NextRequest) {
           const representativeTags = Array.isArray(rec.flower.representative_meanings_tags)
             ? rec.flower.representative_meanings_tags
             : [];
-          // 매칭된 꽃말을 첫번째로, 그 다음 대표 태그 (중복 제거)
-          const tags = [...new Set([matchedMeaning, ...representativeTags].filter(Boolean))].slice(0, 3);
+          // 매칭된 꽃말을 첫번째로, 그 다음 대표 태그 (중복 제거, 3글자 이하만)
+          const tags = [...new Set([matchedMeaning, ...representativeTags].filter(Boolean))]
+            .filter(tag => tag.length <= 3)
+            .slice(0, 3);
 
           // is_primary가 true인 경우 기본값(회색)이 들어있으므로 제외
           const colors = rec.flower.colors || [...new Set(
