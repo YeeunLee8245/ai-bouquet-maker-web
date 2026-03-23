@@ -13,7 +13,138 @@ import { toSupabaseResizedImageUrl } from '@shared/utils/image-url';
  *     tags:
  *       - Recommend
  *     summary: AI 기본 추천
- *     description: 사용자 자연어를 분석해 모든 태그(emotion/situation/relation/style)에 동일 가중치로 꽃을 추천합니다.
+ *     description: |
+ *       사용자의 자연어 입력을 AI가 분석하여 모든 태그 유형(emotion/situation/relation/style)에
+ *       동일한 가중치를 적용해 꽃을 추천합니다.
+ *
+ *       **토큰 차감:** 성공 시 1토큰이 차감됩니다.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - text
+ *             properties:
+ *               text:
+ *                 type: string
+ *                 minLength: 10
+ *                 maxLength: 1000
+ *                 description: 꽃 추천을 위한 자연어 설명 (최소 10자, 최대 1000자)
+ *                 example: "친구의 생일을 축하해주고 싶어요. 밝고 활기찬 느낌으로 부탁드려요."
+ *     responses:
+ *       200:
+ *         description: 추천 성공
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 recommendationId:
+ *                   type: string
+ *                   format: uuid
+ *                   description: 추천 기록 ID
+ *                 totalCount:
+ *                   type: integer
+ *                   description: 추천된 꽃 개수
+ *                   example: 5
+ *                 title:
+ *                   type: string
+ *                   description: AI가 생성한 추천 제목
+ *                   example: "친구의 생일을 축하하는 꽃다발"
+ *                 message:
+ *                   type: string
+ *                   description: AI가 생성한 추천 메시지
+ *                   example: "밝고 활기찬 느낌의 꽃들로 구성했어요."
+ *                 recipient:
+ *                   type: string
+ *                   nullable: true
+ *                   description: 분석된 수신자 정보
+ *                   example: "친구"
+ *                 occasion:
+ *                   type: string
+ *                   nullable: true
+ *                   description: 분석된 상황 정보
+ *                   example: "생일"
+ *                 recommendations:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                         type: string
+ *                         description: 꽃 ID
+ *                       flowerMeaningId:
+ *                         type: string
+ *                         description: 매칭된 꽃말 ID
+ *                       name:
+ *                         type: string
+ *                         description: 꽃 이름
+ *                         example: "해바라기"
+ *                       meaning:
+ *                         type: string
+ *                         description: 매칭된 꽃말
+ *                         example: "행복한 미래"
+ *                       tags:
+ *                         type: array
+ *                         items:
+ *                           type: string
+ *                         description: 대표 태그 (최대 3개)
+ *                       colors:
+ *                         type: array
+ *                         items:
+ *                           type: string
+ *                         description: 꽃 색상 목록
+ *                       score:
+ *                         type: number
+ *                         description: 추천 점수
+ *                       imageUrl:
+ *                         type: string
+ *                         description: 꽃 이미지 URL
+ *       400:
+ *         description: 잘못된 요청 (텍스트 누락, 길이 제한 위반)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "텍스트를 입력해주세요."
+ *       401:
+ *         description: 인증 필요
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "로그인이 필요한 서비스입니다."
+ *       403:
+ *         description: 토큰 부족
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "사용 가능한 토큰 부족"
+ *       500:
+ *         description: 서버 오류
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "추천 중 오류가 발생했습니다."
  */
 export async function POST(request: NextRequest) {
   try {
