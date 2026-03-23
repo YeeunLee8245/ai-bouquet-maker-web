@@ -2,10 +2,17 @@
 
 import { useSetAtom } from 'jotai';
 import { closeModalAtom, TModalProps } from '@/shared/model/modal';
+import { postOnboard } from '@api/auth.api';
 import Link from 'next/link';
 
 function NewUserWelcomeModal({ modalId }: TModalProps) {
   const closeModal = useSetAtom(closeModalAtom);
+
+  const handleClose = () => {
+    // fire-and-forget: 온보딩 플래그는 비크리티컬, API 실패와 무관하게 모달은 닫힘
+    postOnboard().catch(() => {});
+    closeModal(modalId);
+  };
 
   return (
     <div className='w-[328px] bg-white border-1 border-gray-100 rounded-5 px-7 py-6 flex flex-col gap-6'>
@@ -19,7 +26,7 @@ function NewUserWelcomeModal({ modalId }: TModalProps) {
       <div className='flex flex-col items-center gap-2'>
         <Link
           href='/info'
-          onClick={() => closeModal(modalId)}
+          onClick={handleClose}
           className='text-ui-md font-medium underline underline-offset-2'
         >
           지금 소개 보기
@@ -27,7 +34,7 @@ function NewUserWelcomeModal({ modalId }: TModalProps) {
         <button
           type='button'
           className='text-ui-md text-gray-400'
-          onClick={() => closeModal(modalId)}
+          onClick={handleClose}
         >
           다음에 볼게요
         </button>
