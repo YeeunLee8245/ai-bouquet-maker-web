@@ -6,6 +6,7 @@ import FlowerDescContainer from './_ui/flower-desc-container';
 import FlowerImagesContainer from './_ui/flower-images-container';
 import FlowerSimilarContainer from './_ui/flower-similar-container';
 import FlowerTabContainer from './_ui/flower-tab-container';
+import FlowerDetailSkeleton from './_ui/flower-detail-skeleton';
 import { useMemo } from 'react';
 
 /**
@@ -15,13 +16,15 @@ function FlowerDetailPage() {
   const { id } = useParams<{ id: string }>();
   const searchParams = useSearchParams();
   const prevPath = searchParams.get('prev-path') ?? undefined;
-  const { data, isLoading, isError } = useFlowerDetailQuery(id);
+  const { data, isLoading, isError } = useFlowerDetailQuery(id, {
+    staleTime: 5 * 60 * 1000, // 5분
+  });
 
   // searchParams 전체 반환 값
   const allSearchParams = useMemo(() => Object.fromEntries(searchParams.entries()), [searchParams]);
 
   if (isLoading) {
-    return <div className='flex flex-1 items-center justify-center'>로딩 중...</div>;
+    return <FlowerDetailSkeleton />;
   }
 
   if (isError || !data) {

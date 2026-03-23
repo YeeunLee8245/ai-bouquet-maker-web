@@ -10,6 +10,8 @@ import { toggleFlowerAtom, selectedFlowersAtom } from '@/shared/model/selected-f
 import LikeButton from '@/features/like/ui/like-button';
 import { initLikeFromServer } from '@/features/like/model/atoms';
 import { cn } from '@/shared/utils/styles';
+import FlowerCardSkeleton from '@/shared/ui/skeleton/flower-card-skeleton';
+import DirectoryListSkeleton from './directory-list-skeleton';
 
 type TProps = {
   eventHub: IDirectoryEventHub;
@@ -84,51 +86,51 @@ function DirectoryListContainer({ eventHub }: TProps) {
           ))}
         </span>
       </div>
-      <div className='grid grid-cols-2 gap-x-4 gap-y-8 mt-3'>
-        {isLoading && (
-          <span className='col-span-2 text-center py-8 text-ui-label-sm text-gray-400'>
-            불러오는 중...
-          </span>
-        )}
-        {flowers.map((flower) => (
-          <FlowerCard
-            key={flower.id}
-            size='lg'
-            id={flower.id}
-            imageUrl={flower.imageUrl}
-            name={flower.name}
-            colors={flower.colors}
-            tags={flower.tags}
-            searchParams={{ 'can-create-bouquet': 'true', 'prev-path': '/flower-directory' }}
-            likeButton={flower.isLiked !== undefined
-              ? <LikeButton type='flower' id={flower.id} initialLiked={flower.isLiked} variant='outline' size='lg' />
-              : undefined
-            }
-            actionButton={
-              (() => {
-                const isSelected = selectedFlowers.some(f => f.id === flower.id);
-                return (
-                  <Button
-                    size='md'
-                    onClick={(e) => {
-                      e.preventDefault();
-                      toggleFlower({ id: flower.id, name: flower.name });
-                    }}
-                    className={cn('mt-3', isSelected && 'bg-primary-600 text-primary-200')}
-                  >
-                    {isSelected ? '선택 취소' : '선택하기'}
-                  </Button>
-                );
-              })()
-            }
-          />
-        ))}
-      </div>
+      {isLoading ? (
+        <DirectoryListSkeleton />
+      ) : (
+        <div className='grid grid-cols-2 gap-x-4 gap-y-8 mt-3'>
+          {flowers.map((flower) => (
+            <FlowerCard
+              key={flower.id}
+              size='lg'
+              id={flower.id}
+              imageUrl={flower.imageUrl}
+              name={flower.name}
+              colors={flower.colors}
+              tags={flower.tags}
+              searchParams={{ 'can-create-bouquet': 'true', 'prev-path': '/flower-directory' }}
+              likeButton={flower.isLiked !== undefined
+                ? <LikeButton type='flower' id={flower.id} initialLiked={flower.isLiked} variant='outline' size='lg' />
+                : undefined
+              }
+              actionButton={
+                (() => {
+                  const isSelected = selectedFlowers.some(f => f.id === flower.id);
+                  return (
+                    <Button
+                      size='md'
+                      onClick={(e) => {
+                        e.preventDefault();
+                        toggleFlower({ id: flower.id, name: flower.name });
+                      }}
+                      className={cn('mt-3', isSelected && 'bg-primary-600 text-primary-200')}
+                    >
+                      {isSelected ? '선택 취소' : '선택하기'}
+                    </Button>
+                  );
+                })()
+              }
+            />
+          ))}
+        </div>
+      )}
       {/* 무한스크롤 트리거(센티넬) */}
       <div ref={sentinelRef} className='h-1' />
       {isFetchingNextPage && (
-        <div className='flex justify-center py-4'>
-          <span className='text-ui-label-sm text-gray-400'>불러오는 중...</span>
+        <div className='grid grid-cols-2 gap-x-4 gap-y-8 mt-3'>
+          <FlowerCardSkeleton />
+          <FlowerCardSkeleton />
         </div>
       )}
     </div>

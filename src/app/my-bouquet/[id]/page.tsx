@@ -4,6 +4,7 @@ import { useParams } from 'next/navigation';
 import MyBouquetInfo from './_ui/my-bouquet-info';
 import MyBouquetComposition from './_ui/my-bouquet-composition';
 import MyBouquetPackaging from './_ui/my-bouquet-packaging';
+import BouquetDetailSkeleton from './_ui/bouquet-detail-skeleton';
 import { Button } from '@/shared/ui/button';
 import { useBouquetDetailQuery } from './_model/use-bouquet-detail-query';
 
@@ -12,11 +13,7 @@ const MyBouquetDetailPage = () => {
   const { data, isLoading } = useBouquetDetailQuery(id);
 
   if (isLoading) {
-    return (
-      <div className='flex items-center justify-center min-h-[50vh]'>
-        <p className='text-body-md text-gray-400'>불러오는 중...</p>
-      </div>
-    );
+    return <BouquetDetailSkeleton />;
   }
 
   if (!data) {

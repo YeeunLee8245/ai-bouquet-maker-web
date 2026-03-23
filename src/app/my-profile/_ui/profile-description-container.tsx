@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import ProfileBouquetCard from './profile-bouquet-card';
+import ProfileSkeleton from './profile-skeleton';
 import { useUserAction } from '@/hooks/use-user-action';
 import { useProfileQuery } from '../_model/use-profile-query';
 import { getMyProfileDescriptionFields, getMyProfileBouquetData } from '../_datas';
@@ -11,7 +12,7 @@ function ProfileDescriptionContainer() {
   const { data, isLoading } = useProfileQuery();
 
   if (isLoading) {
-    return <div className='flex flex-col py-4 px-micro text-body-md text-gray-400'>불러오는 중...</div>;
+    return <ProfileSkeleton />;
   }
 
   if (!data) {

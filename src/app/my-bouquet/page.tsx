@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useSetAtom } from 'jotai';
 import { Button } from '@/shared/ui/button';
 import BouquetListItem from './_ui/bouquet-list-item';
+import BouquetListSkeleton from './_ui/bouquet-list-skeleton';
 import { useBouquetListQuery } from './_model/use-bouquet-list-query';
 import { toComponentBouquet } from './_model/bouquet-list-mapper';
 import PlusIcon from '@/shared/assets/icons/plus.svg';
@@ -110,13 +111,8 @@ const MyBouquetPage = () => {
 
   const bouquets = (data?.bouquets ?? []).map(toComponentBouquet);
 
-  // TODO: yeeun isLoading true -> shimmer 추가
   if (isLoading) {
-    return (
-      <div className='min-h-screen bg-gray-50 flex items-center justify-center'>
-        <p className='text-body-md text-gray-400'>불러오는 중...</p>
-      </div>
-    );
+    return <BouquetListSkeleton />;
   }
   const { total } = data ?? {};
 
