@@ -225,29 +225,42 @@ export async function GET(request: NextRequest) {
       console.error('Failed to save preset recommendation:', dbError);
     }
 
-    // 표준화된 응답 형식으로 변환
-    const standardizedRecommendations = recommendations.map(rec => {
-      const matchedMeaning = rec.flower.flower_meanings?.find(m => String(m.id) === String(rec.flowerMeaningId))?.meaning || '';
-      const representativeTags = Array.isArray(rec.flower.representative_meanings_tags)
-        ? rec.flower.representative_meanings_tags
-        : [];
-      const tags = [...new Set([matchedMeaning, ...representativeTags].filter(Boolean))].slice(0, 3);
+    // 중복 꽃 제거를 위한 Set
+    const seenFlowerIds = new Set<string>();
+    const standardizedRecommendations = recommendations
+      .filter(rec => {
+        const flowerId = String(rec.flower.id);
+        if (seenFlowerIds.has(flowerId)) {return false;}
+        seenFlowerIds.add(flowerId);
+        return true;
+      })
+      .map(rec => {
+        // 매칭된 꽃말 + 대표 태그 조합
+        const matchedMeaning = rec.flower.flower_meanings?.find(m => String(m.id) === String(rec.flowerMeaningId))?.meaning || '';
+        const representativeTags = Array.isArray(rec.flower.representative_meanings_tags)
+          ? rec.flower.representative_meanings_tags
+          : [];
+        const tags = [...new Set([matchedMeaning, ...representativeTags].filter(Boolean))].slice(0, 3);
 
-      return {
-        id: rec.flower.id,
-        flowerMeaningId: rec.flowerMeaningId || 0,
-        name: rec.flower.name_ko,
-        meaning: matchedMeaning,
-        tags,
-        colors: rec.flower.colors || [...new Set(
+        // is_primary가 true인 경우 기본값(회색)이 들어있으므로 제외
+        const colors = rec.flower.colors || [...new Set(
           (rec.flower.flower_meanings || [])
+            .filter(m => !m.is_primary && m.icon_color)
             .map(m => m.icon_color)
             .filter((color): color is string => Boolean(color)),
-        )],
-        score: rec.score,
-        imageUrl: toSupabaseResizedImageUrl(rec.flower.images?.[0]),
-      };
-    });
+        )];
+
+        return {
+          id: rec.flower.id,
+          flowerMeaningId: rec.flowerMeaningId || 0,
+          name: rec.flower.name_ko,
+          meaning: matchedMeaning,
+          tags,
+          colors,
+          score: rec.score,
+          imageUrl: toSupabaseResizedImageUrl(rec.flower.images?.[0]),
+        };
+      });
 
     // preset 추천의 경우 title, message 등은 별도로 생성하지 않으므로 기본값 또는 label 사용
     // AI 추천과의 응답 형식 통일을 위해 추가

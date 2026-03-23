@@ -122,28 +122,43 @@ export async function POST(request: NextRequest) {
         );
       }
 
-      const standardizedRecommendations = recommendations.map(rec => {
-        const matchedMeaning = rec.flower.flower_meanings?.find(m => String(m.id) === rec.flowerMeaningId)?.meaning || '';
-        const representativeTags = Array.isArray(rec.flower.representative_meanings_tags)
-          ? rec.flower.representative_meanings_tags
-          : [];
-        const tags = [...new Set([matchedMeaning, ...representativeTags].filter(Boolean))].slice(0, 3);
+      // 중복 꽃 제거를 위한 Set
+      const seenFlowerIds = new Set<string>();
+      const standardizedRecommendations = recommendations
+        .filter(rec => {
+          const flowerId = String(rec.flower.id);
+          if (seenFlowerIds.has(flowerId)) {return false;}
+          seenFlowerIds.add(flowerId);
+          return true;
+        })
+        .map(rec => {
+          // 매칭된 꽃말 + 대표 태그 조합
+          const matchedMeaning = rec.flower.flower_meanings?.find(m => String(m.id) === rec.flowerMeaningId)?.meaning || '';
+          const representativeTags = Array.isArray(rec.flower.representative_meanings_tags)
+            ? rec.flower.representative_meanings_tags
+            : [];
+          // 매칭된 꽃말을 첫번째로, 그 다음 대표 태그 (중복 제거)
+          const tags = [...new Set([matchedMeaning, ...representativeTags].filter(Boolean))].slice(0, 3);
 
-        return {
-          id: String(rec.flower.id),
-          flowerMeaningId: String(rec.flowerMeaningId || '0'),
-          name: rec.flower.name_ko,
-          meaning: matchedMeaning,
-          tags,
-          colors: rec.flower.colors || [...new Set(
+          // is_primary가 true인 경우 기본값(회색)이 들어있으므로 제외
+          const colors = rec.flower.colors || [...new Set(
             (rec.flower.flower_meanings || [])
+              .filter(m => !m.is_primary && m.icon_color)
               .map(m => m.icon_color)
               .filter((color): color is string => Boolean(color)),
-          )],
-          score: rec.score,
-          imageUrl: toSupabaseResizedImageUrl(rec.flower.images?.[0]),
-        };
-      });
+          )];
+
+          return {
+            id: String(rec.flower.id),
+            flowerMeaningId: String(rec.flowerMeaningId || '0'),
+            name: rec.flower.name_ko,
+            meaning: matchedMeaning,
+            tags,
+            colors,
+            score: rec.score,
+            imageUrl: toSupabaseResizedImageUrl(rec.flower.images?.[0]),
+          };
+        });
 
       return NextResponse.json({
         success: true,
