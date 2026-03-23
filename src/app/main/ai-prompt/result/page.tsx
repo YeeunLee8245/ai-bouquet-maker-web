@@ -1,30 +1,14 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { useAtomValue, useSetAtom } from 'jotai';
+import { useSetAtom } from 'jotai';
 import { useRouter } from 'next/navigation';
 import ChevronDownIcon from '@/shared/assets/icons/chevron_down.svg';
 import { FlowerCard } from '@/entities/flower/ui';
-import { Button } from '@/shared/ui/button';
 import LikeButton from '@/features/like/ui/like-button';
-import { resetSelectedFlowersAtom, selectedFlowersAtom, toggleFlowerAtom } from '@/shared/model/selected-flowers';
+import { resetSelectedFlowersAtom } from '@/shared/model/selected-flowers';
+import { SelectButton } from '@features/select-flower';
 import { aiRecommendationResultAtom } from '../_model/recommendation-result.atoms';
-
-function SelectButton({ flowerId, flowerName }: { flowerId: string; flowerName: string }) {
-  const selectedFlowers = useAtomValue(selectedFlowersAtom);
-  const toggleFlower = useSetAtom(toggleFlowerAtom);
-  const isSelected = selectedFlowers.some((f) => f.id === flowerId);
-
-  return (
-    <Button
-      size='md'
-      className={isSelected ? 'mt-3 bg-gray-100 text-gray-500 hover:bg-gray-200 hover:text-gray-600 hover:fill-gray-600' : 'mt-3'}
-      onClick={() => toggleFlower({ id: flowerId, name: flowerName })}
-    >
-      {isSelected ? '선택 취소' : '선택하기'}
-    </Button>
-  );
-}
 
 const AiPromptResultPage = () => {
   const router = useRouter();

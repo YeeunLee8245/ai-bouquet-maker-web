@@ -6,12 +6,12 @@ import { TRelationship } from '../types';
 import OccasionDescription from '@/entities/occasion/ui/occasion-description';
 import { QUICK_RECOMMENDATION_DATA_MAP } from '../_datas';
 import { FlowerCard } from '@/entities/flower/ui';
-import { Button } from '@/shared/ui/button';
 import { useQuery } from '@tanstack/react-query';
 import { fetchPresetRecommendations } from '@api/recommend-preset.api';
 import { FlowerCardSkeleton } from '@/shared/ui/skeleton';
 import { useSetAtom } from 'jotai';
 import { resetSelectedFlowersAtom } from '@/shared/model/selected-flowers';
+import { SelectButton } from '@features/select-flower';
 import { useEffect } from 'react';
 
 function QuickRecommendationOccasionPage() {
@@ -49,7 +49,7 @@ function QuickRecommendationOccasionPage() {
               tags={rec.tags}
               colors={rec.colors}
               imageUrl={rec.imageUrl ?? ''}
-              actionButton={<Button size='md' onClick={() => {}} className='mt-3'>선택하기</Button>}
+              actionButton={<SelectButton flowerId={String(rec.id)} flowerName={rec.name} />}
             />
           ))}
       </div>

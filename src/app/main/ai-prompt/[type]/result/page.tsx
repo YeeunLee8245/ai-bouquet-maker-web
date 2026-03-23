@@ -5,7 +5,7 @@ import React from 'react';
 import ChevronDownIcon from '@/shared/assets/icons/chevron_down.svg';
 import { FlowerCard } from '@/entities/flower/ui';
 import { testDirectoryItem } from '@/app/flower-directory/_datas';
-import { Button } from '@/shared/ui/button';
+import { SelectButton } from '@features/select-flower';
 
 const AiPromptResultPage = () => {
   const detailRef = React.useRef<HTMLDivElement>(null);
@@ -47,7 +47,7 @@ const AiPromptResultPage = () => {
             key={index}
             size='lg'
             {...testDirectoryItem}
-            actionButton={<Button size='md' onClick={() => {}} className='mt-3'>선택하기</Button>}/>
+            actionButton={<SelectButton flowerId={testDirectoryItem.id} flowerName={testDirectoryItem.name} />}/>
         ))}
       </div>
     </div>
