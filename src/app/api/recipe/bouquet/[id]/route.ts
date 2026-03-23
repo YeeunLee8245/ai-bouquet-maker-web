@@ -185,8 +185,33 @@ import { getPublicUser } from '@/lib/users/auth';
  *   delete:
  *     tags:
  *       - Recipe
- *     summary: 꽃다발 레시피 삭제
- *     description: 저장된 꽃다발 레시피를 삭제합니다. 본인 것만 삭제 가능합니다.
+ *     summary: 꽃다발 레시피 삭제 (단일/일괄)
+ *     description: |
+ *       저장된 꽃다발 레시피를 삭제합니다. 본인 것만 삭제 가능합니다.
+ *
+ *       ### 삭제 방식
+ *       - **단일 삭제**: URL 경로의 id 파라미터만 사용 (기존 방식)
+ *       - **일괄 삭제**: Request Body에 ids 배열을 전달하면 해당 ID들을 일괄 삭제
+ *         - 일괄 삭제 시 URL의 id 파라미터는 무시됩니다
+ *     requestBody:
+ *       required: false
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               ids:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                   format: uuid
+ *                 description: 일괄 삭제할 꽃다발 레시피 ID 배열
+ *                 example: ["550e8400-e29b-41d4-a716-446655440000", "550e8400-e29b-41d4-a716-446655440001"]
+ *           examples:
+ *             bulk_delete:
+ *               summary: "일괄 삭제 예시"
+ *               value:
+ *                 ids: ["550e8400-e29b-41d4-a716-446655440000", "550e8400-e29b-41d4-a716-446655440001"]
  *     responses:
  *       200:
  *         description: 삭제 성공
@@ -196,6 +221,7 @@ import { getPublicUser } from '@/lib/users/auth';
  *               type: object
  *               properties:
  *                 success: { type: boolean, example: true }
+ *                 deletedCount: { type: integer, description: "삭제된 레시피 수 (일괄 삭제 시)", example: 3 }
  *       401:
  *         description: 인증 실패
  *         content:
@@ -398,6 +424,41 @@ export async function DELETE(
 
     const supabase = await createClient();
 
+    // Request Body에서 ids 배열 확인 (일괄 삭제)
+    let ids: string[] = [];
+    try {
+      const body = await request.json();
+      if (Array.isArray(body.ids) && body.ids.length > 0) {
+        ids = body.ids.filter((id: unknown): id is string => typeof id === 'string');
+      }
+    } catch {
+      // Body가 없거나 파싱 실패 시 단일 삭제로 처리
+    }
+
+    // 일괄 삭제 (ids 배열이 있는 경우)
+    if (ids.length > 0) {
+      const { data, error } = await supabase
+        .from('bouquet_recipes')
+        .delete()
+        .in('id', ids)
+        .eq('user_id', publicUser.id)
+        .select('id');
+
+      if (error) {
+        console.error('Failed to bulk delete bouquet recipes:', error);
+        return NextResponse.json(
+          { error: '레시피 일괄 삭제에 실패했습니다.' },
+          { status: 500 },
+        );
+      }
+
+      return NextResponse.json({
+        success: true,
+        deletedCount: data?.length || 0,
+      });
+    }
+
+    // 단일 삭제 (기존 방식)
     const { error } = await supabase
       .from('bouquet_recipes')
       .delete()
