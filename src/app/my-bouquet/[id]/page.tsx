@@ -7,6 +7,7 @@ import MyBouquetPackaging from './_ui/my-bouquet-packaging';
 import BouquetDetailSkeleton from './_ui/bouquet-detail-skeleton';
 import { Button } from '@/shared/ui/button';
 import { useBouquetDetailQuery } from './_model/use-bouquet-detail-query';
+import BouquetPreviewSection from './_ui/bouquet-preview-section';
 
 const MyBouquetDetailPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -44,6 +45,9 @@ const MyBouquetDetailPage = () => {
           {`${formattedDate}\n${formattedTime}`}
         </div>
       </div>
+      {/* 꽃다발 미리보기 */}
+      <BouquetPreviewSection flowers={data.flowers} layout={data.layout} />
+
       <div className='flex flex-col gap-4 px-4 pb-6'>
         {/* TODO: yeeun 공통화 */}
         {/* <MakeBouquetPreviewContainer/> */}
