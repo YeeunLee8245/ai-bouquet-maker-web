@@ -268,7 +268,7 @@ export async function GET(request: NextRequest) {
       .from('flowers_with_counts_view')
       .select(`
         id, name_ko, images, representative_meanings_tags, availability,
-        flower_meanings (icon_color, is_primary, meaning)
+        flower_meanings (color, icon_color, is_primary, meaning)
       `, { count: 'exact' })
       .eq('availability', true);
 
@@ -351,6 +351,7 @@ export async function GET(request: NextRequest) {
     const formattedFlowers = filteredFlowers.map(flower => {
       const meanings = (flower.flower_meanings || []) as Array<{
         id?: number | null;
+        color?: string | null;
         icon_color?: string | null;
         is_primary?: boolean | null;
         meaning?: string | null;
@@ -364,10 +365,10 @@ export async function GET(request: NextRequest) {
           ? String(meanings[0].id)
           : null;
 
-      // 색상 추출 (icon_color) - is_primary가 true인 경우(회색 기본값) 제외
+      // 색상 추출 (icon_color) - color가 null이면 기본 색상(회색)이므로 제외
       const flowerColors = [...new Set(
         meanings
-          .filter(m => !m.is_primary)
+          .filter(m => m.color != null)
           .map(m => m.icon_color)
           .filter((color): color is string => Boolean(color)),
       )];

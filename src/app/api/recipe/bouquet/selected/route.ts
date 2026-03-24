@@ -177,8 +177,9 @@ export async function POST(request: NextRequest) {
 
         const colors = Array.from(new Set(
           meanings
+            .filter(meaning => meaning.color != null)
             .map(meaning => meaning.icon_color)
-            .filter((color): color is string => typeof color === 'string' && color.length > 0 && color !== '#9E9E9E'),
+            .filter((color): color is string => typeof color === 'string' && color.length > 0),
         ));
 
         return {
