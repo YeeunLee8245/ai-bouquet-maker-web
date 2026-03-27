@@ -8,6 +8,7 @@ import { aiRecommendationResultAtom } from '@/app/main/ai-prompt/_model/recommen
 import { showToastAtom } from '@/shared/model/toast';
 import { openModalAtom, closeModalAtom } from '@/shared/model/modal';
 import AIAnalyzingModal from '@/app/main/ai-prompt/[type]/_ui/ai-analyzing-modal';
+import LoginRequiredModal, { LOGIN_REQUIRED_MODAL_ID } from './login-required-modal';
 
 const MODAL_ID = 'general-ai-analyzing';
 
@@ -45,7 +46,15 @@ export default function GeneralAIInput() {
       const data = await response.json();
 
       if (!response.ok) {
-        showToast({ message: data.error ?? '추천 중 오류가 발생했습니다.' });
+        if (response.status === 401) {
+          openModal({
+            id: LOGIN_REQUIRED_MODAL_ID,
+            position: 'center',
+            component: <LoginRequiredModal modalId={LOGIN_REQUIRED_MODAL_ID} />,
+          });
+        } else {
+          showToast({ message: data.error ?? '추천 중 오류가 발생했습니다.' });
+        }
         return;
       }
 
@@ -63,6 +72,7 @@ export default function GeneralAIInput() {
     } catch {
       showToast({ message: '추천 중 오류가 발생했습니다.' });
     } finally {
+      // login-required modal (if opened on 401) remains; only the analyzing overlay is dismissed
       closeModal(MODAL_ID);
     }
   };

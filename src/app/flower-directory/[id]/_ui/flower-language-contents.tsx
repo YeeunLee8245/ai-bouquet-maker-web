@@ -1,6 +1,7 @@
 import React from 'react';
-import ColorFlowerIcon from '@/shared/assets/icons/color_flower.svg';
 import { TFlowerMeaning } from '../_types';
+import Image from 'next/image';
+import ColorFlowerIcon from '@/shared/assets/icons/color_flower.svg';
 
 type TProps = {
   meanings: TFlowerMeaning[];
@@ -16,7 +17,12 @@ function FlowerLanguageContents({ meanings }: TProps) {
           <div key={color} className='flex flex-col'>
             <div className='flex items-center gap-1'>
               <span className='pr-[4.8px]'>
-                <ColorFlowerIcon className='w-[14px] h-[14px]' style={{ fill: color }} />
+                {/* 전체일 때는 무지개 색상으로 표시 */}
+                {colorName !== '전체' ? (
+                  <ColorFlowerIcon className='w-[14px] h-[14px]' style={{ fill: color }} />
+                ) : (
+                  <Image src='/images/color_flower_rainbow.png' alt='rainbow' width={14} height={14} />
+                )}
               </span>
               {/* TODO: yeeun 색상 이름 매칭 QA 테스트 주목 필요 */}
               <span className='text-body-lg'>{colorName}</span>
