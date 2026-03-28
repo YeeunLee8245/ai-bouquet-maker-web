@@ -5,7 +5,7 @@ function QuickRecommendationOccasionLayout({ children }: { children: React.React
     <div className='relative flex flex-1 overflow-y-auto'>
       {children}
     </div>
-    <BottomActionFooter title='꽃다발 만들기' />
+    <BottomActionFooter title='꽃다발 만들기' fromAiPrompt />
   </div>;
 }
 

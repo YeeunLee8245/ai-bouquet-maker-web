@@ -13,9 +13,11 @@ import { useSetAtom } from 'jotai';
 import { resetSelectedFlowersAtom } from '@/shared/model/selected-flowers';
 import { SelectButton } from '@features/select-flower';
 import { useEffect } from 'react';
+import { aiRecommendationResultAtom } from '@/app/main/ai-prompt/_model/recommendation-result.atoms';
 
 function QuickRecommendationOccasionPage() {
   const { relationship, occasion } = useParams<{ relationship: TRelationship; occasion: TOccasion }>();
+  const setRecommendationResult = useSetAtom(aiRecommendationResultAtom);
   const resetSelectedFlowers = useSetAtom(resetSelectedFlowersAtom);
   if (!OCCASION_OBJECT[occasion]) {
     notFound();
@@ -29,6 +31,20 @@ function QuickRecommendationOccasionPage() {
   useEffect(() => {
     resetSelectedFlowers();
   }, []);
+
+  useEffect(() => {
+    if (data) {
+      setRecommendationResult({
+        recommendationId: data.recommendationId,
+        title: data.title,
+        message: data.message,
+        recipient: data.recipient,
+        occasion: data.occasion,
+        inputText: `${QUICK_RECOMMENDATION_DATA_MAP[relationship]} ${OCCASION_OBJECT[occasion].label} 추천 꽃`,
+        recommendations: data.recommendations,
+      });
+    }
+  }, [data, relationship, occasion]);
 
   return (
     <div>

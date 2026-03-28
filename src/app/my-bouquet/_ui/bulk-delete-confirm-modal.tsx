@@ -2,7 +2,7 @@
 
 import { useSetAtom } from 'jotai';
 import { closeModalAtom, TModalProps } from '@/shared/model/modal';
-import { deleteBouquet } from '@api/recipe-bouquet.api';
+import { deleteBouquetBulk } from '@api/recipe-bouquet.api';
 import { Button, withAsyncClick } from '@/shared/ui/button';
 
 type Props = TModalProps & {
@@ -16,7 +16,7 @@ export default function BulkDeleteConfirmModal({ modalId, bouquetIds, onSuccess 
   const closeModal = useSetAtom(closeModalAtom);
 
   const handleConfirm = async () => {
-    await Promise.all(bouquetIds.map((id) => deleteBouquet(id)));
+    await deleteBouquetBulk(bouquetIds);
     onSuccess();
     closeModal(modalId);
   };

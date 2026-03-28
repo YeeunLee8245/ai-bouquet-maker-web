@@ -9,6 +9,8 @@ import { useRef, useState, useEffect, useCallback } from 'react';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { selectedFlowersAtom, removeFlowerAtom } from '@/shared/model/selected-flowers';
 import { showToastAtom } from '@/shared/model/toast';
+import { aiRecommendationResultAtom } from '@/app/main/ai-prompt/_model/recommendation-result.atoms';
+import { postUserSelection } from '@api/recommend-user-selection.api';
 import { ActionLabel } from '@/shared/ui/label';
 
 type TFlowerChip = {
@@ -26,6 +28,7 @@ type TProps = {
   className?: string;
   children?: React.ReactNode;
   flowers?: TFlowerChip[];
+  fromAiPrompt?: boolean;
   onRemoveFlower?: (id: string) => void;
 };
 
@@ -99,15 +102,26 @@ function DefaultSelectedFlowerChips() {
   return <SelectedFlowerChips flowers={flowers} onRemove={removeFlower} />;
 }
 
-function BottomActionFooter({ title, children, flowers, onRemoveFlower }: TProps) {
+function BottomActionFooter({ title, children, flowers, onRemoveFlower, fromAiPrompt }: TProps) {
   const router = useRouter();
   const selectedFlowers = useAtomValue(selectedFlowersAtom);
+  const aiResult = useAtomValue(aiRecommendationResultAtom);
   const showToast = useSetAtom(showToastAtom);
 
   const handleMakeBouquet = () => {
     if (selectedFlowers.length === 0) {
       showToast({ message: '꽃을 1개 이상 선택해주세요.' });
       return;
+    }
+    debugger;
+    if (fromAiPrompt && aiResult) {
+      const flowerMeaningIds = selectedFlowers
+        .map((sf) => aiResult.recommendations.find((r) => r.id === sf.id)?.flowerMeaningId)
+        .filter((id): id is string => id !== undefined)
+        .map(Number);
+      if (flowerMeaningIds.length > 0) {
+        postUserSelection(aiResult.recommendationId, flowerMeaningIds);
+      }
     }
     router.push('/make-bouquet');
   };
