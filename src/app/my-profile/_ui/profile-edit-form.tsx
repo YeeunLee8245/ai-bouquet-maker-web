@@ -1,8 +1,11 @@
 'use client';
 
 import { useEffect, useImperativeHandle, useMemo, useState } from 'react'; // forwardRef 삭제
+import { useSetAtom } from 'jotai';
+import { openModalAtom } from '@/shared/model/modal';
 import { useProfileQuery } from '../_model/use-profile-query';
 import { useUpdateProfileMutation } from '../_model/use-profile-mutation';
+import WithdrawModal, { WITHDRAW_MODAL_ID } from './withdraw-modal';
 
 export type TProfileEditFormRef = {
   submit: () => void;
@@ -23,6 +26,7 @@ function ProfileEditForm({
 }) {
   const { data } = useProfileQuery();
   const mutation = useUpdateProfileMutation();
+  const openModal = useSetAtom(openModalAtom);
 
   const [form, setForm] = useState<Record<string, string>>({
     nickname: '',
@@ -82,7 +86,11 @@ function ProfileEditForm({
           />
         </div>
       ))}
-      <button className='text-ui-textbtn-lg text-gray-400'>
+      <button
+        type='button'
+        onClick={() => openModal({ id: WITHDRAW_MODAL_ID, position: 'center', canCloseOnBackgroundClick: true, component: <WithdrawModal /> })}
+        className='text-ui-textbtn-lg text-gray-400'
+      >
         회원 탈퇴
       </button>
     </div>

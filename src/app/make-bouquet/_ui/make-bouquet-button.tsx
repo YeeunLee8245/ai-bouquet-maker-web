@@ -2,7 +2,7 @@
 
 import { useAtomValue, useSetAtom } from 'jotai';
 import { useRouter } from 'next/navigation';
-import { Button } from '@/shared/ui/button';
+import { Button, withAsyncClick } from '@/shared/ui/button';
 import { showToastAtom } from '@/shared/model/toast';
 import {
   bouquetNameAtom,
@@ -13,11 +13,11 @@ import {
   canSaveBouquetAtom,
   firstValidationErrorAtom,
 } from '../_model';
-import { useState } from 'react';
-import { isApiError } from '@/shared/api';
 import { saveBouquet } from '@api/recipe-bouquet.api';
 import { bouquetRibbonColorAtom, bouquetPackagingColorAtom } from '../_model/bouquet-form.atoms';
 import { resetSelectedFlowersAtom } from '@/shared/model/selected-flowers';
+
+const LoadingButton = withAsyncClick(Button);
 
 export default function MakeBouquetButton() {
   const router = useRouter();
@@ -32,17 +32,12 @@ export default function MakeBouquetButton() {
   const ribbonColor = useAtomValue(bouquetRibbonColorAtom);
   const packagingColor = useAtomValue(bouquetPackagingColorAtom);
   const resetSelectedFlowers = useSetAtom(resetSelectedFlowersAtom);
-  const [isLoading, setIsLoading] = useState(false);
 
   const handleSave = async () => {
-    if (!canSave || isLoading) {
-      if (firstError) {
-        showToast({ message: firstError });
-      }
+    if (!canSave) {
+      if (firstError) { showToast({ message: firstError }); }
       return;
     }
-
-    setIsLoading(true);
 
     const recipeFlowers = flowers.flatMap((flower) =>
       flower.colorAndQuantities.map((cq) => ({
@@ -53,39 +48,33 @@ export default function MakeBouquetButton() {
       })),
     );
 
-    try {
-      const {data} = await saveBouquet({
-        name,
-        occasion: occasion ?? '',
-        recipient: recipient ?? '',
-        message: message ?? '',
-        recipe: {
-          flowers: recipeFlowers,
-          wrapping: {
-            ribbonColor,
-            wrappingColor: packagingColor,
-          },
+    const { data } = await saveBouquet({
+      name,
+      occasion: occasion ?? '',
+      recipient: recipient ?? '',
+      message: message ?? '',
+      recipe: {
+        flowers: recipeFlowers,
+        wrapping: {
+          ribbonColor,
+          wrappingColor: packagingColor,
         },
-      });
-      resetSelectedFlowers();
-      showToast({ message: '꽃다발이 저장되었습니다.' });
-      // TODO: yeeun 작성 완료 꽃다발 페이지로 이동
-      router.push(`/my-bouquet/${data.id}`);
-    } catch (error) {
-      const msg = isApiError(error) ? error.message : '네트워크 오류가 발생했습니다.';
-      showToast({ message: msg });
-    } finally {
-      setIsLoading(false);
-    }
+      },
+    });
+    resetSelectedFlowers();
+    showToast({ message: '꽃다발이 저장되었습니다.' });
+    router.push(`/my-bouquet/${data.id}`);
   };
 
   return (
-    <Button
+    <LoadingButton
       size='lg'
       className='mt-6'
       onClick={handleSave}
+      loadingText='저장 중...'
+      errorText='네트워크 오류가 발생했습니다.'
     >
-      {isLoading ? '저장 중...' : '꽃다발 저장'}
-    </Button>
+      꽃다발 저장
+    </LoadingButton>
   );
 }

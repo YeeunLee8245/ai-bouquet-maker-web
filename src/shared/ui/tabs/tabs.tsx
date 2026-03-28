@@ -21,75 +21,69 @@ function TabsRoot({ value, defaultValue, onValueChange, children, ...props }: TT
   );
 }
 
-const TabsList = React.forwardRef<HTMLDivElement, TTabsListProps>(
-  ({ children, ...props }, ref) => {
-    return (
-      <div ref={ref} role='tablist' {...props}>
-        {children}
-      </div>
-    );
-  },
-);
+function TabsList({ children, ref, ...props }: TTabsListProps) {
+  return (
+    <div ref={ref} role='tablist' {...props}>
+      {children}
+    </div>
+  );
+}
 TabsList.displayName = 'Tabs.List';
 
-const TabsTrigger = React.forwardRef<HTMLButtonElement, TTabsTriggerProps>(
-  ({ value, children, ...props }, ref) => {
-    const { value: active, setValue: setValue, idBase } = useTabsContext();
-    const selected = active === value;
-    const tabId = `${idBase}-tab-${value}`;
-    const panelId = `${idBase}-panel-${value}`;
+function TabsTrigger({ value, children, ref, ...props }: TTabsTriggerProps) {
+  const { value: active, setValue, idBase } = useTabsContext();
+  const selected = active === value;
+  const tabId = `${idBase}-tab-${value}`;
+  const panelId = `${idBase}-panel-${value}`;
 
-    const onKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        setValue(value);
-      }
-      props.onKeyDown?.(e);
-    };
+  const onKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      setValue(value);
+    }
+    props.onKeyDown?.(e);
+  };
 
-    return (
-      <button
-        ref={ref}
-        type='button'
-        role='tab'
-        id={tabId}
-        aria-selected={selected}
-        aria-controls={panelId}
-        tabIndex={selected ? 0 : -1}
-        data-state={selected ? 'active' : 'inactive'}
-        onClick={() => setValue(value)}
-        onKeyDown={onKeyDown}
-        {...props}
-      >
-        {children}
-      </button>
-    );
-  },
-);
+  return (
+    <button
+      ref={ref}
+      type='button'
+      role='tab'
+      id={tabId}
+      aria-selected={selected}
+      aria-controls={panelId}
+      tabIndex={selected ? 0 : -1}
+      data-state={selected ? 'active' : 'inactive'}
+      onClick={() => setValue(value)}
+      onKeyDown={onKeyDown}
+      {...props}
+    >
+      {children}
+    </button>
+  );
+}
 TabsTrigger.displayName = 'Tabs.Trigger';
 
-const TabsContent = React.forwardRef<HTMLDivElement, TTabsContentProps>(
-  ({ value, children, ...props }, ref) => {
-    const { value: active, idBase } = useTabsContext();
-    const selected = active === value;
-    const tabId = `${idBase}-tab-${value}`;
-    const panelId = `${idBase}-panel-${value}`;
+function TabsContent({ value, children, ref, ...props }: TTabsContentProps) {
+  const { value: active, idBase } = useTabsContext();
+  const selected = active === value;
+  const tabId = `${idBase}-tab-${value}`;
+  const panelId = `${idBase}-panel-${value}`;
 
-    return (
-      <div
-        ref={ref}
-        role='tabpanel'
-        id={panelId}
-        aria-labelledby={tabId}
-        hidden={!selected}
-        tabIndex={0}
-        {...props}
-      >
-        {children}
-      </div>
-    );
-  },
-);
+  return (
+    <div
+      ref={ref}
+      role='tabpanel'
+      id={panelId}
+      aria-labelledby={tabId}
+      hidden={!selected}
+      tabIndex={0}
+      {...props}
+    >
+      {children}
+    </div>
+  );
+}
 TabsContent.displayName = 'Tabs.Content';
 
 export const Tabs = Object.assign(TabsRoot, {

@@ -22,15 +22,19 @@ export type TTabsProps = {
   onValueChange?: (value: string) => void;
 } & React.HTMLAttributes<HTMLDivElement>;
 
-export type TTabsListProps = React.HTMLAttributes<HTMLDivElement>;
+export type TTabsListProps = React.HTMLAttributes<HTMLDivElement> & {
+  ref?: React.Ref<HTMLDivElement>;
+};
 
 export type TTabsTriggerProps = Omit<
   React.ButtonHTMLAttributes<HTMLButtonElement>,
   'value' | 'onClick'
 > & {
   value: string;
+  ref?: React.Ref<HTMLButtonElement>;
 };
 
 export type TTabsContentProps = React.HTMLAttributes<HTMLDivElement> & {
   value: string;
+  ref?: React.Ref<HTMLDivElement>;
 };
