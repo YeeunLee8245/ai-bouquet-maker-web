@@ -15,6 +15,7 @@ import { aiRecommendationResultAtom } from '../_model/recommendation-result.atom
 import { showToastAtom } from '@/shared/model/toast';
 import { openModalAtom, closeModalAtom } from '@/shared/model/modal';
 import AIAnalyzingModal from './_ui/ai-analyzing-modal';
+import { useWalletBalance } from '@/shared/hooks/useWalletBalance';
 
 const MODAL_ID = 'ai-analyzing';
 
@@ -34,6 +35,7 @@ function AIPromptPage() {
   const showToast = useSetAtom(showToastAtom);
   const openModal = useSetAtom(openModalAtom);
   const closeModal = useSetAtom(closeModalAtom);
+  const { isTokenEmpty } = useWalletBalance();
 
   if (!AI_PROMPT_DATAS.includes(type)) {
     notFound();
@@ -115,8 +117,8 @@ function AIPromptPage() {
         </div>
       </div>
       <div className='pt-4 px-4 pb-8 flex flex-col gap-4'>
-        <AIPromptInput eventHub={eventHub} placeholder={placeholder} />
-        <Button size='lg' onClick={handleRecommend}>꽃 추천 받기</Button>
+        <AIPromptInput eventHub={eventHub} placeholder={placeholder} disabled={isTokenEmpty} />
+        <Button size='lg' onClick={handleRecommend} disabled={isTokenEmpty}>꽃 추천 받기</Button>
       </div>
       <AIPromptGuideContainer eventHub={eventHub} guide={guide} />
     </div>
