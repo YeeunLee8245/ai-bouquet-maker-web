@@ -47,9 +47,10 @@ function Sidebar({ modalId }: TModalProps) {
   const showToast = useSetAtom(showToastAtom);
   const router = useRouter();
   const pathname = usePathname();
-  const { isLogin } = useUserAuth();
+  const { isLogin, isLoading } = useUserAuth();
 
-  const menuItems = isLogin ? [...SIDEBAR_ITEMS, ...AUTHENTICATED_ITEMS] : [...SIDEBAR_ITEMS, ...UNAUTHENTICATED_ITEMS];
+  const authItems = isLoading ? [] : isLogin ? AUTHENTICATED_ITEMS : UNAUTHENTICATED_ITEMS;
+  const menuItems = [...SIDEBAR_ITEMS, ...authItems];
 
   const handleClickMenuItem = (path: string) => (e: React.MouseEvent<HTMLAnchorElement>) => {
     if (pathname === path) {
