@@ -20,3 +20,6 @@ __pycache__/
 # open-next
 .open-next/
 .agent/*
+
+# MCP config (contains access tokens)
+.mcp.json

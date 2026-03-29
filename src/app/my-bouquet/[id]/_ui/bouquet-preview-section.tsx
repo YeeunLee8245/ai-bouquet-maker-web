@@ -84,7 +84,7 @@ export default function BouquetPreviewSection({ flowers, layout }: TProps) {
   }, [flowers, layout]);
 
   return (
-    <div className='flex justify-center px-4'>
+    <div className='flex justify-center'>
       <div
         className='relative overflow-hidden rounded-4 border-1 border-gray-100 bg-amber-100'
         style={{ width: 330, height: 330 }}

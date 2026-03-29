@@ -45,21 +45,28 @@ export default function MyBouquetComposition({ flowers }: MyBouquetCompositionPr
         <p className='text-title-md'>꽃 구성</p>
         <p className='text-body-xsm text-gray-400'>{`총 ${totalQuantity}송이, ${totalKinds}종의 꽃`}</p>
       </div>
-      <div className='mt-3 flex flex-col'>
-        {groups.map((group) => (
-          <div key={group.flower_id}>
-            <p className='text-body-lg'>{group.flower_name}</p>
-            <div className='flex gap-2 mt-2'>
-              {group.tags.map((tag) => (
-                <span key={tag} className='tag-chip'>{tag}</span>
-              ))}
+      <div className='mt-3 flex flex-col gap-4'>
+        {groups.map((group, index) => (
+          <div key={group.flower_id} className='flex flex-col gap-3'>
+            {index > 0 && <div className='h-px bg-gray-100' />}
+            <div className='flex flex-col gap-2'>
+              <p className='text-body-lg'>{group.flower_name}</p>
+              <div className='flex flex-wrap gap-x-2 gap-y-1'>
+                {group.tags.map((tag) => (
+                  <span key={tag} className='tag-chip'>{tag}</span>
+                ))}
+              </div>
             </div>
-            <div className='flex gap-1 mt-3'>
-              {group.colorAndQuantities.map(({ color, quantity }, index) => (
-                <div key={color} className='flex flex-col'>
-                  <div className='w-[32px] h-[32px] rounded-full border-2 border-gray-100 bg-[#BDBDBD] m-1' style={{ backgroundColor: color }}/>
-                  <p className='w-[32px] text-center text-body-xsm mx-1 text-gray-400'>{quantity}</p>
-                  {index !== group.colorAndQuantities.length - 1 && <div className='w-full h-[1px] bg-gray-100 py-[2px] my-4'/>}
+            <div className='flex gap-1'>
+              {group.colorAndQuantities.map(({ color, quantity }) => (
+                <div key={color} className='flex flex-col items-center'>
+                  <div className='p-px'>
+                    <div
+                      className='w-8 h-8 rounded-full border-2 border-gray-100'
+                      style={{ backgroundColor: color }}
+                    />
+                  </div>
+                  <p className='w-8 text-center text-body-xsm text-gray-400'>{quantity}</p>
                 </div>
               ))}
             </div>
