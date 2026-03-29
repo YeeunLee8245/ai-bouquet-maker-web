@@ -44,9 +44,12 @@ export async function GET() {
 
     return NextResponse.json({ balance });
   } catch (error) {
-    console.error('[Wallet Balance] GET Error:', error);
+    console.error(`[Wallet Balance] GET Error:`, error instanceof Error ? error.message : error);
+    if (error instanceof Error && error.stack) {
+      console.error(error.stack);
+    }
     return NextResponse.json(
-      { error: '잔액 조회 중 오류가 발생했습니다.' },
+      { error: '잔액 조회 중 오류가 발생했습니다.', detail: error instanceof Error ? error.message : String(error) },
       { status: 500 },
     );
   }
