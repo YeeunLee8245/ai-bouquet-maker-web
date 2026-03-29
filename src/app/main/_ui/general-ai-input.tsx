@@ -31,7 +31,7 @@ export default function GeneralAIInput() {
     const text = value.trim();
 
     if (text.length < 10) {
-      showToast({ message: '좀 더 자세히 설명해주세요. (최소 10자)' });
+      showToast({ message: '더 자세히 설명해주세요. (최소 10자)' });
       return;
     }
 
