@@ -92,18 +92,17 @@ export async function GET(request: NextRequest) {
     // 장애 시에도 UX 깨지지 않게 기존 유저 취급
   }
 
-  // 4️⃣ 일일 로그인 보상 지급 (비동기 / UX 영향 없음)
-  (async () => {
-    try {
-      const { getPublicUser } = await import('@/lib/users/auth');
-      await getPublicUser();
-    } catch (err) {
-      console.error(
-        '[AuthCallback] Failed to trigger daily bonus via getPublicUser:',
-        err,
-      );
-    }
-  })();
+  // 4️⃣ 일일 로그인 보상 지급 (getPublicUser 내부에서 처리됨)
+  // 서버리스 환경의 안정성을 위해 await를 호출합니다.
+  try {
+    const { getPublicUser } = await import('@/lib/users/auth');
+    await getPublicUser();
+  } catch (err) {
+    console.error(
+      '[AuthCallback] Failed to trigger daily bonus via getPublicUser:',
+      err,
+    );
+  }
 
   // 5️⃣ 최종 redirect URL 생성
   const destination = resolveNextDestination(request.url, next, '/');
