@@ -6,11 +6,12 @@ interface IProps {
   placeholder: string;
   eventHub: AIPromptEventHub;
   disabled?: boolean;
+  onLoginRequired?: () => void;
 }
 
 const MAX_TEXT_LENGTH = 1000;
 
-export default function AIPromptInput({ placeholder, eventHub, disabled }: IProps) {
+export default function AIPromptInput({ placeholder, eventHub, disabled, onLoginRequired }: IProps) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const textCountRef = useRef<HTMLDivElement>(null);
 
@@ -44,6 +45,8 @@ export default function AIPromptInput({ placeholder, eventHub, disabled }: IProp
         placeholder={placeholder}
         ref={textareaRef}
         onChange={handleChange}
+        onClick={onLoginRequired}
+        readOnly={!!onLoginRequired}
         maxLength={MAX_TEXT_LENGTH}
         disabled={disabled}
       />

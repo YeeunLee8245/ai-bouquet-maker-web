@@ -7,11 +7,9 @@ import { SearchInput } from '@/shared/ui/input';
 import { aiRecommendationResultAtom } from '@/app/main/ai-prompt/_model/recommendation-result.atoms';
 import { showToastAtom } from '@/shared/model/toast';
 import { openModalAtom, closeModalAtom } from '@/shared/model/modal';
-import AIAnalyzingModal from '@/app/main/ai-prompt/[type]/_ui/ai-analyzing-modal';
+import AIAnalyzingModal, { AI_ANALYZING_MODAL_ID } from '@/app/main/ai-prompt/[type]/_ui/ai-analyzing-modal';
 import LoginRequiredModal, { LOGIN_REQUIRED_MODAL_ID } from './login-required-modal';
 import { useWalletBalance } from '@/shared/hooks/useWalletBalance';
-
-const MODAL_ID = 'general-ai-analyzing';
 
 export default function GeneralAIInput() {
   const [value, setValue] = useState('');
@@ -38,7 +36,7 @@ export default function GeneralAIInput() {
     }
 
     openModal({
-      id: MODAL_ID,
+      id: AI_ANALYZING_MODAL_ID,
       position: 'center',
       canCloseOnBackgroundClick: false,
       component: <AIAnalyzingModal />,
@@ -81,7 +79,7 @@ export default function GeneralAIInput() {
       showToast({ message: '추천 중 오류가 발생했습니다.' });
     } finally {
       // login-required modal (if opened on 401) remains; only the analyzing overlay is dismissed
-      closeModal(MODAL_ID);
+      closeModal(AI_ANALYZING_MODAL_ID);
     }
   };
 

@@ -2,6 +2,8 @@
 
 import CamelliaIcon from '@/shared/assets/icons/camellia.svg';
 
+export const AI_ANALYZING_MODAL_ID = 'ai-analyzing-modal';
+
 function AIAnalyzingModal() {
   return (
     <div className='bg-white rounded-4 px-10 py-8 flex flex-col items-center gap-4'>

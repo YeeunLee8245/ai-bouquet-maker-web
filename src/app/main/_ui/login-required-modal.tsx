@@ -8,7 +8,7 @@ import { cn } from '@/shared/utils/styles';
 
 export const LOGIN_REQUIRED_MODAL_ID = 'login-required';
 
-export default function LoginRequiredModal({ modalId }: TModalProps) {
+export default function LoginRequiredModal({ modalId, nextPath }: TModalProps & { nextPath?: string }) {
   const closeModal = useSetAtom(closeModalAtom);
 
   return (
@@ -32,6 +32,7 @@ export default function LoginRequiredModal({ modalId }: TModalProps) {
             <LoginButton
               key={id}
               provider={provider}
+              nextPath={nextPath}
               className={cn(
                 id === 'google' && 'bg-white border border-gray-100 rounded-4 transition hover:border-primary-400 hover:shadow-sm [&>span]:left-[11.33px]',
                 id === 'kakao' && 'bg-[#FFE400] rounded-4 transition hover:brightness-95 hover:shadow-inner [&>span]:left-[12.3px]',

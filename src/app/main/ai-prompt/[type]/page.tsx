@@ -1,6 +1,6 @@
 'use client';
 
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, useRouter, usePathname } from 'next/navigation';
 import { notFound } from 'next/navigation';
 import { AI_PROMPT_DATA_MAP, AI_PROMPT_DATAS } from './_datas';
 import { AIPromptType, AIPromptPageParams, AIPromptEventHub } from './_types';
@@ -14,10 +14,10 @@ import { useSetAtom } from 'jotai';
 import { aiRecommendationResultAtom } from '../_model/recommendation-result.atoms';
 import { showToastAtom } from '@/shared/model/toast';
 import { openModalAtom, closeModalAtom } from '@/shared/model/modal';
-import AIAnalyzingModal from './_ui/ai-analyzing-modal';
+import AIAnalyzingModal, { AI_ANALYZING_MODAL_ID } from './_ui/ai-analyzing-modal';
 import { useWalletBalance } from '@/shared/hooks/useWalletBalance';
-
-const MODAL_ID = 'ai-analyzing';
+import { useUserAuth } from '@/hooks/use-supabase-user';
+import LoginRequiredModal, { LOGIN_REQUIRED_MODAL_ID } from '../../_ui/login-required-modal';
 
 /**
  * AI 프롬프트 페이지
@@ -31,10 +31,12 @@ function AIPromptPage() {
   const params = useParams<AIPromptPageParams>();
   const type = params.type as AIPromptType;
   const router = useRouter();
+  const pathname = usePathname();
   const setRecommendationResult = useSetAtom(aiRecommendationResultAtom);
   const showToast = useSetAtom(showToastAtom);
   const openModal = useSetAtom(openModalAtom);
   const closeModal = useSetAtom(closeModalAtom);
+  const { isLogin } = useUserAuth();
   const { isTokenEmpty } = useWalletBalance();
 
   if (!AI_PROMPT_DATAS.includes(type)) {
@@ -59,6 +61,15 @@ function AIPromptPage() {
   const { title, description, placeholder, guide } = AI_PROMPT_DATA_MAP[type];
 
   const handleRecommend = async () => {
+    if (!isLogin) {
+      openModal({
+        id: LOGIN_REQUIRED_MODAL_ID,
+        position: 'center',
+        component: <LoginRequiredModal modalId={LOGIN_REQUIRED_MODAL_ID} nextPath={pathname} />,
+      });
+      return;
+    }
+
     const text = eventHub.getInputText?.() ?? '';
 
     if (text.length < 10) {
@@ -67,7 +78,7 @@ function AIPromptPage() {
     }
 
     openModal({
-      id: MODAL_ID,
+      id: AI_ANALYZING_MODAL_ID,
       position: 'center',
       canCloseOnBackgroundClick: false,
       component: <AIAnalyzingModal />,
@@ -101,9 +112,17 @@ function AIPromptPage() {
     } catch {
       showToast({ message: '추천 중 오류가 발생했습니다.' });
     } finally {
-      closeModal(MODAL_ID);
+      closeModal(AI_ANALYZING_MODAL_ID);
     }
   };
+
+  const handleLoginRequired = !isLogin ? () => {
+    openModal({
+      id: LOGIN_REQUIRED_MODAL_ID,
+      position: 'center',
+      component: <LoginRequiredModal modalId={LOGIN_REQUIRED_MODAL_ID} nextPath={pathname} />,
+    });
+  } : undefined;
 
   return (
     <div className='flex flex-col h-full overflow-y-auto hide-scrollbar'>
@@ -117,10 +136,10 @@ function AIPromptPage() {
         </div>
       </div>
       <div className='pt-4 px-4 pb-8 flex flex-col gap-4'>
-        <AIPromptInput eventHub={eventHub} placeholder={placeholder} disabled={isTokenEmpty} />
+        <AIPromptInput eventHub={eventHub} placeholder={placeholder} disabled={isTokenEmpty} onLoginRequired={handleLoginRequired} />
         <Button size='lg' onClick={handleRecommend} disabled={isTokenEmpty}>꽃 추천 받기</Button>
       </div>
-      <AIPromptGuideContainer eventHub={eventHub} guide={guide} />
+      <AIPromptGuideContainer eventHub={eventHub} guide={guide} onLoginRequired={handleLoginRequired} />
     </div>
   );
 }

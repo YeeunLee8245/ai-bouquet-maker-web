@@ -4,12 +4,14 @@ import { AIPromptEventHub, AIPromptGuide } from '../_types';
 interface IProps {
   guide: AIPromptGuide;
   eventHub: AIPromptEventHub;
+  onLoginRequired?: () => void;
 }
 
-export default function AIPromptGuideContainer({ eventHub, guide }: IProps) {
+export default function AIPromptGuideContainer({ eventHub, guide, onLoginRequired }: IProps) {
   const { title, description, items } = guide;
 
   const handleClickGuideItem = (item: string) => () => {
+    onLoginRequired?.();
     eventHub.onClickGuideItem?.(item);
   };
 
