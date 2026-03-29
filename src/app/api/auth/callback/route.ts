@@ -22,11 +22,45 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 import { createClient } from '@shared/supabase/server';
+import { createAdminClient } from '@shared/supabase/admin';
 import { checkAndGrantDailyBonus } from '@/lib/users/attendance';
 
 import { resolveNextDestination } from '../helpers';
 
 const LOGIN_PATH = '/login';
+const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+async function findPublicUserIdByAuthId(authUserId: string) {
+  const supabaseAdmin = createAdminClient();
+
+  for (let attempt = 1; attempt <= 5; attempt += 1) {
+    const { data, error } = await supabaseAdmin
+      .from('users')
+      .select('id')
+      .eq('auth_id', authUserId)
+      .maybeSingle();
+
+    if (data?.id) {
+      if (attempt > 1) {
+        console.log(
+          `[AuthCallback] Public user became available after retry ${attempt} for auth user ${authUserId}`,
+        );
+      }
+      return data.id;
+    }
+
+    if (error) {
+      console.error(
+        `[AuthCallback] Failed to fetch public user on attempt ${attempt}:`,
+        error,
+      );
+    }
+
+    await wait(250 * attempt);
+  }
+
+  return null;
+}
 
 const redirectToLogin = (request: NextRequest, message: string) => {
   const urlString = resolveNextDestination(request.url, LOGIN_PATH, LOGIN_PATH);
@@ -96,19 +130,20 @@ export async function GET(request: NextRequest) {
   // 4️⃣ 일일 로그인 보상 지급 (getPublicUser 내부에서 처리됨)
   // 서버리스 환경의 안정성을 위해 await를 호출합니다.
   try {
-    const { data: rewardUser, error: rewardUserError } = await supabase
-      .from('users')
-      .select('id')
-      .eq('auth_id', authUser.id)
-      .single();
+    const publicUserId = await findPublicUserIdByAuthId(authUser.id);
 
-    if (rewardUserError || !rewardUser) {
+    if (!publicUserId) {
       console.error(
-        '[AuthCallback] Failed to fetch public user for daily bonus:',
-        rewardUserError,
+        `[AuthCallback] Public user was not ready for daily bonus. authUserId=${authUser.id}`,
       );
     } else {
-      await checkAndGrantDailyBonus(rewardUser.id);
+      console.log(
+        `[AuthCallback] Triggering daily bonus for authUserId=${authUser.id}, publicUserId=${publicUserId}`,
+      );
+      const bonusGranted = await checkAndGrantDailyBonus(publicUserId);
+      console.log(
+        `[AuthCallback] Daily bonus result for publicUserId=${publicUserId}: ${bonusGranted}`,
+      );
     }
   } catch (err) {
     console.error('[AuthCallback] Failed to trigger daily bonus:', err);
