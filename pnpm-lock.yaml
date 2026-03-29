@@ -56,9 +56,6 @@ importers:
       tailwind-merge:
         specifier: ^3.4.0
         version: 3.5.0
-      xstate:
-        specifier: ^5.25.0
-        version: 5.28.0
     devDependencies:
       '@eslint/js':
         specifier: ^9.39.2
@@ -5106,9 +5103,6 @@ packages:
 
   xml@1.0.1:
     resolution: {integrity: sha512-huCv9IH9Tcf95zuYCsQraZtWnJvBtLVE0QHMOs8bWyZAFZNDcYjsPq1nEx8jKA9y+Beo9v+7OBPRisQTjinQMw==}
-
-  xstate@5.28.0:
-    resolution: {integrity: sha512-Iaqq6ZrUzqeUtA3hC5LQKZfR8ZLzEFTImMHJM3jWEdVvXWdKvvVLXZEiNQWm3SCA9ZbEou/n5rcsna1wb9t28A==}
 
   y18n@5.0.8:
     resolution: {integrity: sha512-0pfFzegeDWJHJIAmTLRP2DwHjdF5s7jo9tuztdQxAhINCdvS+3nGINqPd00AphqJR/0LhANUS6/+7SCb98YOfA==}
@@ -11308,8 +11302,6 @@ snapshots:
       repeat-string: 1.6.1
 
   xml@1.0.1: {}
-
-  xstate@5.28.0: {}
 
   y18n@5.0.8: {}
 
