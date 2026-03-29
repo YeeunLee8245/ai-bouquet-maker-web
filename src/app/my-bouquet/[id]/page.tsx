@@ -9,6 +9,7 @@ import { Button } from '@/shared/ui/button';
 import { useBouquetDetailQuery } from './_model/use-bouquet-detail-query';
 import Link from 'next/link';
 import { openModalAtom } from '@/shared/model/modal/modal.actions';
+import { showToastAtom } from '@/shared/model/toast';
 import { useSetAtom } from 'jotai';
 import BouquetPreviewModal from './_ui/bouquet-preview-modal';
 
@@ -16,6 +17,7 @@ const MyBouquetDetailPage = () => {
   const { id } = useParams<{ id: string }>();
   const { data, isLoading, isError } = useBouquetDetailQuery(id);
   const openModal = useSetAtom(openModalAtom);
+  const showToast = useSetAtom(showToastAtom);
 
   if (isLoading) {
     return <BouquetDetailSkeleton />;
@@ -43,6 +45,16 @@ const MyBouquetDetailPage = () => {
     minute: '2-digit',
     hour12: false,
   });
+
+  const handleShareClick = async () => {
+    const url = `${window.location.origin}/my-bouquet/${id}`;
+    if (navigator.share) {
+      await navigator.share({ title: data.name, url });
+    } else {
+      await navigator.clipboard.writeText(url);
+      showToast({ message: '공유 주소 복사 완료!' });
+    }
+  };
 
   const handlePreviewClick = () => {
     openModal({
@@ -81,10 +93,13 @@ const MyBouquetDetailPage = () => {
           <MyBouquetPackaging wrapping={data.wrapping} />
         </div>
         <div className='flex flex-col gap-3 items-center'>
-          <Button size='lg' className='w-full'>
-            꽃다발 수정
+          <Button size='lg' className='w-full' asChild>
+            <Link href={`/my-bouquet/${id}/modify`}>꽃다발 수정</Link>
           </Button>
-          <button className='w-fit px-2 text-gray-400 text-ui-textbtn-lg hover:text-primary-600 hover:bg-gray-100 hover:rounded-4'>
+          <button
+            className='w-fit px-2 text-gray-400 text-ui-textbtn-lg hover:text-primary-600 hover:bg-gray-100 hover:rounded-4'
+            onClick={handleShareClick}
+          >
             공유하기
           </button>
         </div>

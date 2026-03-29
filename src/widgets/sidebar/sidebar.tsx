@@ -100,8 +100,11 @@ function Sidebar({ modalId }: TModalProps) {
         <Link href='/info' onClick={() => closeModal(modalId)} className='text-white text-body-lg'>
           서비스 소개
         </Link>
-        <div className='text-white text-body-lg mt-1'>문의</div>
-        <div className='text-primary-100 text-body-sm'>ai.bouquet.maker@gmail.com</div>
+        <button type='button' className='flex flex-col items-start'>
+          <div className='text-white text-body-lg mt-1'>문의</div>
+          <div className='text-primary-100 text-body-sm'>ai.bouquet.maker@gmail.com</div>
+        </button>
+        <div className='text-primary-100 text-body-sm'>&copy; 2026 꽃다발 레시피</div>
       </div>
     </div>
   );
