@@ -22,6 +22,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 import { createClient } from '@shared/supabase/server';
+import { checkAndGrantDailyBonus } from '@/lib/users/attendance';
 
 import { resolveNextDestination } from '../helpers';
 
@@ -95,13 +96,22 @@ export async function GET(request: NextRequest) {
   // 4️⃣ 일일 로그인 보상 지급 (getPublicUser 내부에서 처리됨)
   // 서버리스 환경의 안정성을 위해 await를 호출합니다.
   try {
-    const { getPublicUser } = await import('@/lib/users/auth');
-    await getPublicUser();
+    const { data: rewardUser, error: rewardUserError } = await supabase
+      .from('users')
+      .select('id')
+      .eq('auth_id', authUser.id)
+      .single();
+
+    if (rewardUserError || !rewardUser) {
+      console.error(
+        '[AuthCallback] Failed to fetch public user for daily bonus:',
+        rewardUserError,
+      );
+    } else {
+      await checkAndGrantDailyBonus(rewardUser.id);
+    }
   } catch (err) {
-    console.error(
-      '[AuthCallback] Failed to trigger daily bonus via getPublicUser:',
-      err,
-    );
+    console.error('[AuthCallback] Failed to trigger daily bonus:', err);
   }
 
   // 5️⃣ 최종 redirect URL 생성
