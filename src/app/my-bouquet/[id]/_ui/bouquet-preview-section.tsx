@@ -7,7 +7,7 @@ import {
   FLOWER_SIZE,
   DEFAULT_SVG,
   computePositions,
-} from '@/lib/flowers/bouquet-layout';
+} from '@entities/flower/model/bouquet-layout';
 import type { BouquetDetailData, BouquetDetailFlower } from '../_types';
 
 // ── StaticFlower ──────────────────────────────────────────────
@@ -24,7 +24,7 @@ type TFlowerItem = {
 function StaticFlower({ svgUrl, color, x, y, size }: Omit<TFlowerItem, 'id'>) {
   const svgContent = useSvgContent(svgUrl, color);
 
-  if (!svgContent) return null;
+  if (!svgContent) {return null;}
 
   return (
     <div

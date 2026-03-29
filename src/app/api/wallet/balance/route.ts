@@ -44,7 +44,7 @@ export async function GET() {
 
     return NextResponse.json({ balance });
   } catch (error) {
-    console.error(`[Wallet Balance] GET Error:`, error instanceof Error ? error.message : error);
+    console.error('[Wallet Balance] GET Error:', error instanceof Error ? error.message : error);
     if (error instanceof Error && error.stack) {
       console.error(error.stack);
     }

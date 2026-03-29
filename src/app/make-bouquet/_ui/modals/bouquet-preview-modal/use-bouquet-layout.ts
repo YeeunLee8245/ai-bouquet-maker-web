@@ -8,9 +8,9 @@ import {
   FLOWER_SIZE,
   DEFAULT_SVG,
   computePositions,
-} from '@/lib/flowers/bouquet-layout';
+} from '@entities/flower/model/bouquet-layout';
 
-export type { TPreviewFlower } from '@/lib/flowers/bouquet-layout';
+export type { TPreviewFlower } from '@entities/flower/model/bouquet-layout';
 
 export function useBouquetLayout() {
   const bouquetFlowers = useAtomValue(bouquetFlowersAtom);
