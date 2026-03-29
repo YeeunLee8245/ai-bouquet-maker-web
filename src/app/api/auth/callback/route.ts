@@ -137,13 +137,7 @@ export async function GET(request: NextRequest) {
         `[AuthCallback] Public user was not ready for daily bonus. authUserId=${authUser.id}`,
       );
     } else {
-      console.log(
-        `[AuthCallback] Triggering daily bonus for authUserId=${authUser.id}, publicUserId=${publicUserId}`,
-      );
-      const bonusGranted = await checkAndGrantDailyBonus(publicUserId);
-      console.log(
-        `[AuthCallback] Daily bonus result for publicUserId=${publicUserId}: ${bonusGranted}`,
-      );
+      await checkAndGrantDailyBonus(publicUserId);
     }
   } catch (err) {
     console.error('[AuthCallback] Failed to trigger daily bonus:', err);
