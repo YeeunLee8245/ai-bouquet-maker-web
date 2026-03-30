@@ -17,8 +17,8 @@ function FlowerLanguageContents({ meanings }: TProps) {
           <div key={color} className='flex flex-col'>
             <div className='flex items-center gap-1'>
               <span className='pr-[4.8px]'>
-                {/* 전체일 때는 무지개 색상으로 표시 */}
-                {colorName !== '전체' ? (
+                {/* 기본일 때는 무지개 색상으로 표시 */}
+                {colorName !== '기본' ? (
                   <ColorFlowerIcon className='w-[14px] h-[14px]' style={{ fill: color }} />
                 ) : (
                   <Image src='/images/color_flower_rainbow.png' alt='rainbow' width={14} height={14} />
