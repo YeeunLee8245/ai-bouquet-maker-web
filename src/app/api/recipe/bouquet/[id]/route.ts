@@ -51,11 +51,14 @@ import { getPublicUser } from '@/lib/users/auth';
  *                     recipient: "어머니"
  *                     message: "항상 건강하세요!"
  *                     flowers:
- *                       - flower_id: 1
+ *                       - flower_id: "1"
  *                         flower_name: "장미"
- *                         quantity: 5
- *                         color: "#FF0000"
- *                         type: "rose"
+ *                         tags: ["사랑", "열정", "감사"]
+ *                         color_and_quantity:
+ *                           - color: "#FF0000"
+ *                             quantity: 3
+ *                           - color: "#FFC0CB"
+ *                             quantity: 2
  *                     wrapping: { wrappingColor: "#FFFFFF", ribbonColor: "#FF0000" }
  *                     layout: { items: [] }
  *                     created_at: "2024-02-04T12:00:00Z"
@@ -297,29 +300,53 @@ export async function GET(
       }
     }
 
-    // 꽃말 아이콘 컬러 맵 (f.color가 없을 때 fallback용)
-    let meaningMap: Record<string, string | null> = {};
+    // 꽃말 맵 (icon_color + meaning)
+    let meaningMap: Record<string, { icon_color: string | null; meaning: string }> = {};
     if (meaningIds.length > 0) {
       const { data: meanings } = await supabase
         .from('flower_meanings')
-        .select('id, icon_color')
+        .select('id, icon_color, meaning')
         .in('id', meaningIds);
 
       if (meanings) {
         meaningMap = Object.fromEntries(
-          meanings.map(m => [String(m.id), m.icon_color]),
+          meanings.map(m => [String(m.id), { icon_color: m.icon_color, meaning: m.meaning }]),
         );
       }
     }
 
-    // 3. 데이터 포맷팅
-    const flowers = flowersInRecipe.map(f => ({
-      flower_id: f.flower_id,
-      flower_name: flowerMap[f.flower_id] || '알 수 없음',
-      quantity: f.quantity,
-      color: f.color || (f.flower_meaning_id ? meaningMap[f.flower_meaning_id] : null),
-      type: f.type,
-    }));
+    // 3. 데이터 포맷팅 - flower_id 기준으로 그룹핑
+    const flowersGrouped = new Map<string, {
+      flower_id: string;
+      flower_name: string;
+      tags: string[];
+      color_and_quantity: Array<{ color: string; quantity: number }>;
+    }>();
+
+    for (const f of flowersInRecipe) {
+      const meaningInfo = f.flower_meaning_id ? meaningMap[String(f.flower_meaning_id)] : null;
+      const color = f.color || meaningInfo?.icon_color || '#CCCCCC';
+      const meaning = meaningInfo?.meaning;
+
+      if (flowersGrouped.has(f.flower_id)) {
+        const existing = flowersGrouped.get(f.flower_id)!;
+        // color_and_quantity 배열에 추가
+        existing.color_and_quantity.push({ color, quantity: f.quantity });
+        // 중복되지 않는 꽃말 추가
+        if (meaning && !existing.tags.includes(meaning)) {
+          existing.tags.push(meaning);
+        }
+      } else {
+        flowersGrouped.set(f.flower_id, {
+          flower_id: f.flower_id,
+          flower_name: flowerMap[f.flower_id] || '알 수 없음',
+          tags: meaning ? [meaning] : [],
+          color_and_quantity: [{ color, quantity: f.quantity }],
+        });
+      }
+    }
+
+    const flowers = Array.from(flowersGrouped.values());
 
     const responseData = {
       id: bouquet.id,
