@@ -2,7 +2,7 @@
 
 import { useMemo } from 'react';
 import { useAtomValue } from 'jotai';
-import { bouquetFlowersAtom } from '../../../_model/bouquet-form.atoms';
+import { bouquetFlowersAtom } from '../../../model/bouquet-form.atoms';
 import {
   FLOWER_SVG_MAP,
   FLOWER_SIZE,

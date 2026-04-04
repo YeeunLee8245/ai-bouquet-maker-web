@@ -1,5 +1,5 @@
 import { atom } from 'jotai';
-import { TFlowerCompositionItem } from '../_types';
+import type { TFlowerCompositionItem } from './bouquet-form.types';
 
 export const bouquetNameAtom = atom<string>('');
 export const bouquetOccasionAtom = atom<string>('');

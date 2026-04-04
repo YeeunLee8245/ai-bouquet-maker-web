@@ -1,7 +1,7 @@
 import React from 'react';
 import BouquetPackagingSection from './bouquet-packaging-section';
 
-export default function MakeBouquetPackagingContainer() {
+export default function BouquetPackagingContainer() {
   return (
     <div className='mt-4 p-4 border-1 border-gray-100 rounded-5 bg-white'>
       <p className='text-title-md px-micro'>포장 옵션</p>

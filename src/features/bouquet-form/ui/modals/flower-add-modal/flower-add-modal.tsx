@@ -5,7 +5,7 @@ import FlowerSearchSection from './_ui/flower-search-section';
 import FlowerFavoritesSection from './_ui/flower-favorites-section';
 import { closeModalAtom, TModalProps } from '@/shared/model/modal';
 import { useAtomValue, useSetAtom } from 'jotai';
-import { addBouquetFlowerAtom, bouquetFlowersAtom, removeBouquetFlowerByIdAtom } from '../../../_model';
+import { addBouquetFlowerAtom, bouquetFlowersAtom, removeBouquetFlowerByIdAtom } from '../../../model';
 import { showToastAtom } from '@/shared/model/toast';
 import { Button } from '@/shared/ui/button';
 import { fetchSelectedFlowers } from '@api/recipe-bouquet.api';

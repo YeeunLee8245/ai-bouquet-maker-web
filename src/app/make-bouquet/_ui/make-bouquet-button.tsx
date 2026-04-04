@@ -10,11 +10,12 @@ import {
   bouquetRecipientAtom,
   bouquetMessageAtom,
   bouquetFlowersAtom,
+  bouquetPackagingColorAtom,
+  bouquetRibbonColorAtom,
   canSaveBouquetAtom,
-  firstValidationErrorAtom,
-} from '../_model';
+  bouquetValidationErrorAtom,
+} from '@features/bouquet-form';
 import { saveBouquet } from '@api/recipe-bouquet.api';
-import { bouquetRibbonColorAtom, bouquetPackagingColorAtom } from '../_model/bouquet-form.atoms';
 import { resetSelectedFlowersAtom } from '@/shared/model/selected-flowers';
 
 const LoadingButton = withAsyncClick(Button);
@@ -23,7 +24,7 @@ export default function MakeBouquetButton() {
   const router = useRouter();
   const showToast = useSetAtom(showToastAtom);
   const canSave = useAtomValue(canSaveBouquetAtom);
-  const firstError = useAtomValue(firstValidationErrorAtom);
+  const firstError = useAtomValue(bouquetValidationErrorAtom);
   const name = useAtomValue(bouquetNameAtom);
   const occasion = useAtomValue(bouquetOccasionAtom);
   const recipient = useAtomValue(bouquetRecipientAtom);
@@ -55,10 +56,7 @@ export default function MakeBouquetButton() {
       message: message ?? '',
       recipe: {
         flowers: recipeFlowers,
-        wrapping: {
-          ribbonColor,
-          wrappingColor: packagingColor,
-        },
+        wrapping: { ribbonColor, wrappingColor: packagingColor },
       },
     });
     resetSelectedFlowers();

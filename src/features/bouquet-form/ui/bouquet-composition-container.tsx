@@ -16,9 +16,9 @@ import {
   addFlowerColorAtom,
   updateFlowerColorAtom,
   removeBouquetFlowerByIdAtom,
-} from '../_model';
+} from '../model';
 
-export default function MakeBouquetCompositionContainer() {
+export default function BouquetCompositionContainer() {
   const openModal = useSetAtom(openModalAtom);
   const showToast = useSetAtom(showToastAtom);
   const flowers = useAtomValue(bouquetFlowersAtom);
@@ -37,31 +37,8 @@ export default function MakeBouquetCompositionContainer() {
     removeFlower(id);
   };
 
-  const handleDeleteColor = (flowerIndex: number, colorIndex: number) => {
-    removeColor({ flowerIndex, colorIndex });
-  };
-
-  const handlePlusColor = (flowerIndex: number, colorIndex: number) => {
-    plusQuantity({ flowerIndex, colorIndex });
-  };
-
-  const handleMinusColor = (flowerIndex: number, colorIndex: number) => {
-    minusQuantity({ flowerIndex, colorIndex });
-  };
-
-  const handleAddColor = (flowerIndex: number, color: string) => {
-    addColor({ flowerIndex, color });
-  };
-
-  const handleUpdateColor = (flowerIndex: number, colorIndex: number, color: string) => {
-    updateColor({ flowerIndex, colorIndex, color });
-  };
-
   const handleAddFlower = () => {
-    openModal({
-      id: 'flower-add-modal',
-      component: <FlowerAddModal />,
-    });
+    openModal({ id: 'flower-add-modal', component: <FlowerAddModal /> });
   };
 
   return (
@@ -69,9 +46,7 @@ export default function MakeBouquetCompositionContainer() {
       <div className='flex justify-between'>
         <p className='text-title-md'>꽃 구성</p>
         <Button size='sm' className='pl-1' onClick={handleAddFlower}>
-          <span className='mx-[3.5px]'>
-            <PlusIcon className='w-[13px] h-[13px]' />
-          </span>
+          <span className='mx-[3.5px]'><PlusIcon className='w-[13px] h-[13px]' /></span>
           <span className='text-ui-cta-sm'>꽃 추가</span>
         </Button>
       </div>
@@ -82,13 +57,13 @@ export default function MakeBouquetCompositionContainer() {
               item={item}
               flowerIndex={idx}
               onDelete={handleDelete(item.id)}
-              onDeleteColor={handleDeleteColor}
-              onPlusColor={handlePlusColor}
-              onMinusColor={handleMinusColor}
-              onAddColor={handleAddColor}
-              onUpdateColor={handleUpdateColor}
+              onDeleteColor={(fi, ci) => removeColor({ flowerIndex: fi, colorIndex: ci })}
+              onPlusColor={(fi, ci) => plusQuantity({ flowerIndex: fi, colorIndex: ci })}
+              onMinusColor={(fi, ci) => minusQuantity({ flowerIndex: fi, colorIndex: ci })}
+              onAddColor={(fi, color) => addColor({ flowerIndex: fi, color })}
+              onUpdateColor={(fi, ci, color) => updateColor({ flowerIndex: fi, colorIndex: ci, color })}
             />
-            {idx !== flowers.length - 1 && <div className='my-4 w-full h-[1px] bg-gray-100'/>}
+            {idx !== flowers.length - 1 && <div className='my-4 w-full h-[1px] bg-gray-100' />}
           </div>
         ))}
       </div>

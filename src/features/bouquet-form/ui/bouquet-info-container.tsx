@@ -7,9 +7,9 @@ import {
   bouquetOccasionAtom,
   bouquetRecipientAtom,
   bouquetMessageAtom,
-} from '../_model';
-import { bouquetNameErrorAtom } from '../_model/bouquet-form.derived';
-import { MAKE_BOUQUET_INFO_DATAS } from '../_datas';
+  bouquetNameErrorAtom,
+  MAKE_BOUQUET_INFO_DATAS,
+} from '../model';
 import type { PrimitiveAtom } from 'jotai';
 
 const FIELD_ATOMS: PrimitiveAtom<string>[] = [
@@ -20,10 +20,7 @@ const FIELD_ATOMS: PrimitiveAtom<string>[] = [
 ];
 
 function BouquetInfoField({
-  title,
-  placeholder,
-  isRequired,
-  fieldAtom,
+  title, placeholder, isRequired, fieldAtom,
 }: {
   title: string;
   placeholder: string;
@@ -47,15 +44,13 @@ function BouquetInfoField({
         className='mt-2 w-full py-2 px-3 rounded-4 border-1 border-gray-100'
       />
       {showError && (
-        <p className='mx-micro mt-2 text-body-xsm text-[#E86652]'>
-          {nameError}
-        </p>
+        <p className='mx-micro mt-2 text-body-xsm text-[#E86652]'>{nameError}</p>
       )}
     </div>
   );
 }
 
-export default function MakeBouquetInfoContainer() {
+export default function BouquetInfoContainer() {
   return (
     <div className='p-4 border-1 border-gray-100 rounded-5 bg-white'>
       <p className='text-title-md px-micro'>꽃다발 정보</p>

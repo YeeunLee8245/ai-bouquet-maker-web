@@ -19,14 +19,7 @@ type TProps = {
 };
 
 export default function ColorCompositionItem({
-  color,
-  quantity,
-  flowerIndex,
-  colorIndex,
-  onPlus,
-  onMinus,
-  onDelete,
-  onUpdateColor,
+  color, quantity, flowerIndex, colorIndex, onPlus, onMinus, onDelete, onUpdateColor,
 }: TProps) {
   const openModal = useSetAtom(openModalAtom);
 
@@ -34,9 +27,7 @@ export default function ColorCompositionItem({
     openModal({
       id: `color-pick-modal-update-${flowerIndex}-${colorIndex}`,
       component: (
-        <ColorPickModal
-          onConfirm={(newColor) => onUpdateColor(flowerIndex, colorIndex, newColor)}
-        />
+        <ColorPickModal onConfirm={(newColor) => onUpdateColor(flowerIndex, colorIndex, newColor)} />
       ),
       position: 'bottom',
     });
@@ -45,29 +36,25 @@ export default function ColorCompositionItem({
   return (
     <div className='flex items-center justify-between'>
       <div className='flex gap-2'>
-        <button
-          type='button'
-          onClick={() => onDelete(flowerIndex, colorIndex)}
-          className='m-1'>
-          <XIcon className='w-[16px] h-[16px] fill-gray-200'/>
+        <button type='button' onClick={() => onDelete(flowerIndex, colorIndex)} className='m-1'>
+          <XIcon className='w-[16px] h-[16px] fill-gray-200' />
         </button>
-        <ColorSwitchToggle
-          colorHex={color}
-          onClick={handleOpenColorPickModal}
-        />
+        <ColorSwitchToggle colorHex={color} onClick={handleOpenColorPickModal} />
       </div>
       <div className='w-fit flex items-center rounded-3 bg-gray-50'>
         <button
           type='button'
           onClick={() => onMinus(flowerIndex, colorIndex)}
-          className='m-1 pl-[4px] pr-[2px] w-[20px] h-[20px] rounded hover:bg-gray-100 transition-colors cursor-pointer group'>
-          <span className='block w-[14px] h-[2px] bg-gray-200 group-hover:bg-gray-400 transition-colors'/>
+          className='m-1 pl-[4px] pr-[2px] w-[20px] h-[20px] rounded hover:bg-gray-100 transition-colors cursor-pointer group'
+        >
+          <span className='block w-[14px] h-[2px] bg-gray-200 group-hover:bg-gray-400 transition-colors' />
         </button>
         <p className='text-body-md'>{quantity}</p>
         <button
           type='button'
           onClick={() => onPlus(flowerIndex, colorIndex)}
-          className='m-1 rounded hover:bg-gray-100 transition-colors cursor-pointer group'>
+          className='m-1 rounded hover:bg-gray-100 transition-colors cursor-pointer group'
+        >
           <PlusIcon className='pl-[2px] pr-[4px] w-[20px] h-[20px] fill-gray-200 group-hover:fill-gray-400 transition-colors' />
         </button>
       </div>

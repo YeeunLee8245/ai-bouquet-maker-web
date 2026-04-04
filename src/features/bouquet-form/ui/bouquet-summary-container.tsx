@@ -1,16 +1,14 @@
 'use client';
 
 import { useAtomValue } from 'jotai';
-import { bouquetFlowersAtom } from '../_model';
+import { bouquetFlowersAtom } from '../model';
 
-export default function MakeBouquetSummaryContainer() {
+export default function BouquetSummaryContainer() {
   const flowers = useAtomValue(bouquetFlowersAtom);
-
   const totalQuantity = flowers.reduce(
     (sum, f) => sum + f.colorAndQuantities.reduce((s, cq) => s + cq.quantity, 0),
     0,
   );
-  const flowerTypes = flowers.length;
 
   return (
     <div className='mt-4 p-4 border-1 border-gray-100 rounded-5 bg-white'>
@@ -19,7 +17,7 @@ export default function MakeBouquetSummaryContainer() {
         <span className='text-body-lg text-gray-400'>총 송이 수</span>
         <span className='text-body-lg text-end'>{totalQuantity}송이</span>
         <span className='text-body-lg text-gray-400'>꽃 종류</span>
-        <span className='text-body-lg text-end'>{flowerTypes}종</span>
+        <span className='text-body-lg text-end'>{flowers.length}종</span>
       </div>
     </div>
   );
