@@ -56,9 +56,9 @@ export default function BouquetPreviewSection({ flowers, layout }: TProps) {
         const name = flower?.flower_name ?? '';
         const { svgUrl = DEFAULT_SVG, size = FLOWER_SIZE } = FLOWER_SVG_MAP[name] ?? {};
         return {
-          id: `${item.flower_id}-${item.flower_meaning_id}-${i}`,
+          id: `${item.flower_id}-${i}`,
           svgUrl,
-          color: item.color ?? flower?.color ?? '#ff69b4',
+          color: item.color ?? flower?.color_and_quantity?.[0]?.color ?? '#ff69b4',
           x: item.x,
           y: item.y,
           size,
@@ -69,8 +69,10 @@ export default function BouquetPreviewSection({ flowers, layout }: TProps) {
     const flat: { svgUrl: string; color: string; size: number }[] = [];
     for (const flower of flowers) {
       const { svgUrl = DEFAULT_SVG, size = FLOWER_SIZE } = FLOWER_SVG_MAP[flower.flower_name] ?? {};
-      for (let i = 0; i < flower.quantity; i++) {
-        flat.push({ svgUrl, color: flower.color, size });
+      for (const { color, quantity } of flower.color_and_quantity) {
+        for (let i = 0; i < quantity; i++) {
+          flat.push({ svgUrl, color, size });
+        }
       }
     }
 

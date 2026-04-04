@@ -3,13 +3,8 @@ import { FlowerType } from '@/types/bouquet';
 export interface BouquetDetailFlower {
   flower_id: string;
   flower_name: string;
-  image_url: string | null;
-  quantity: number;
-  color: string;
-  flower_meaning_id: string;
-  meaning: string;
-  icon_color: string | null;
-  type?: FlowerType;
+  tags: string[];
+  color_and_quantity: Array<{ color: string; quantity: number }>;
 }
 
 export interface BouquetDetailData {
