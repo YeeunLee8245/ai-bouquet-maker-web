@@ -52,6 +52,7 @@ function FlowerFavoritesSection({ selectedIds, onToggle }: TProps) {
               size='sm'
               data-state={isSelected ? 'selected' : 'default'}
               onClick={() => onToggle({ id, name })}
+              className='flex-shrink-0'
             >
               {name}
             </Button>
