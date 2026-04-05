@@ -13,6 +13,8 @@
     "lint": "eslint ./src",
     "lint:debug": "eslint ./src --debug",
     "lint:fix": "eslint ./src --fix",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "update-types": "npx supabase gen types typescript --project-id jzknltafoksihencnztd > src/types/supabase.ts",
     "db-push": "npx supabase db push",
     "cloudflare:build": "exec opennextjs-cloudflare build"
@@ -41,6 +43,8 @@
     "@stylistic/eslint-plugin": "^5.6.1",
     "@svgr/webpack": "^8.1.0",
     "@tailwindcss/postcss": "^4",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
@@ -48,9 +52,12 @@
     "eslint": "^9",
     "eslint-config-next": "16.0.7",
     "eslint-plugin-unused-imports": "^4.1.4",
+    "jsdom": "^29.0.1",
     "tailwindcss": "^4.1.17",
     "typescript": "^5",
     "typescript-eslint": "^8.49.0",
+    "vite-tsconfig-paths": "^6.1.1",
+    "vitest": "^4.1.2",
     "wrangler": "^4.60.0"
   }
 }
