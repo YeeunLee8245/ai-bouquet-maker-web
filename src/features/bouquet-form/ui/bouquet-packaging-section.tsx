@@ -4,13 +4,13 @@ import { ColorPicker } from '@/shared/ui/color-picker';
 import { useEffect, useRef, useState } from 'react';
 import PlusIcon from '@/shared/assets/icons/plus.svg';
 import { openModalAtom } from '@/shared/model/modal';
-import { Atom, useAtom, useSetAtom } from 'jotai';
+import { atom, useAtom, useSetAtom } from 'jotai';
 import ColorPickModal from './modals/color-pick-modal/color-pick-modal';
 import { MAKE_BOUQUET_PACKAGING_DEFAULT_COLORS } from '../model';
 
 type TProps = {
   title: string;
-  colorAtom: Atom<string>;
+  colorAtom: ReturnType<typeof atom<string>>;
 };
 
 export default function BouquetPackagingSection({ title, colorAtom }: TProps) {

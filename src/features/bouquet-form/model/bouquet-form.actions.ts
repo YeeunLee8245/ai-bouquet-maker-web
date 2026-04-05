@@ -101,52 +101,55 @@ export const removeBouquetFlowerByIdAtom = atom(null, (get, set, id: string) => 
   set(selectedFlowersAtom, get(selectedFlowersAtom).filter((f) => f.id !== id));
 });
 
+const updateFlowerAt = (
+  flowers: TFlowerCompositionItem[],
+  index: number,
+  updater: (f: TFlowerCompositionItem) => TFlowerCompositionItem,
+): TFlowerCompositionItem[] => {
+  const updated = [...flowers];
+  updated[index] = updater(flowers[index]);
+  return updated;
+};
+
 export const addFlowerColorAtom = atom(null, (get, set, params: { flowerIndex: number; color: string }) => {
-  set(bouquetFlowersAtom, get(bouquetFlowersAtom).map((f, i) =>
-    i !== params.flowerIndex ? f : { ...f, colorAndQuantities: [...f.colorAndQuantities, { color: params.color, quantity: 1 }] },
-  ));
+  set(bouquetFlowersAtom, updateFlowerAt(get(bouquetFlowersAtom), params.flowerIndex, (f) => ({
+    ...f,
+    colorAndQuantities: [...f.colorAndQuantities, { color: params.color, quantity: 1 }],
+  })));
 });
 
 export const updateFlowerColorAtom = atom(null, (get, set, params: { flowerIndex: number; colorIndex: number; color: string }) => {
-  set(bouquetFlowersAtom, get(bouquetFlowersAtom).map((f, i) =>
-    i !== params.flowerIndex ? f : {
-      ...f,
-      colorAndQuantities: f.colorAndQuantities.map((cq, ci) =>
-        ci === params.colorIndex ? { ...cq, color: params.color } : cq,
-      ),
-    },
-  ));
+  set(bouquetFlowersAtom, updateFlowerAt(get(bouquetFlowersAtom), params.flowerIndex, (f) => ({
+    ...f,
+    colorAndQuantities: f.colorAndQuantities.map((cq, ci) =>
+      ci === params.colorIndex ? { ...cq, color: params.color } : cq,
+    ),
+  })));
 });
 
 export const removeFlowerColorAtom = atom(null, (get, set, params: { flowerIndex: number; colorIndex: number }) => {
-  set(bouquetFlowersAtom, get(bouquetFlowersAtom).map((f, i) =>
-    i !== params.flowerIndex ? f : {
-      ...f,
-      colorAndQuantities: f.colorAndQuantities.filter((_, ci) => ci !== params.colorIndex),
-    },
-  ));
+  set(bouquetFlowersAtom, updateFlowerAt(get(bouquetFlowersAtom), params.flowerIndex, (f) => ({
+    ...f,
+    colorAndQuantities: f.colorAndQuantities.filter((_, ci) => ci !== params.colorIndex),
+  })));
 });
 
 export const plusFlowerColorQuantityAtom = atom(null, (get, set, params: { flowerIndex: number; colorIndex: number }) => {
-  set(bouquetFlowersAtom, get(bouquetFlowersAtom).map((f, i) =>
-    i !== params.flowerIndex ? f : {
-      ...f,
-      colorAndQuantities: f.colorAndQuantities.map((cq, ci) =>
-        ci === params.colorIndex ? { ...cq, quantity: cq.quantity + 1 } : cq,
-      ),
-    },
-  ));
+  set(bouquetFlowersAtom, updateFlowerAt(get(bouquetFlowersAtom), params.flowerIndex, (f) => ({
+    ...f,
+    colorAndQuantities: f.colorAndQuantities.map((cq, ci) =>
+      ci === params.colorIndex ? { ...cq, quantity: cq.quantity + 1 } : cq,
+    ),
+  })));
 });
 
 export const minusFlowerColorQuantityAtom = atom(null, (get, set, params: { flowerIndex: number; colorIndex: number }) => {
-  set(bouquetFlowersAtom, get(bouquetFlowersAtom).map((f, i) =>
-    i !== params.flowerIndex ? f : {
-      ...f,
-      colorAndQuantities: f.colorAndQuantities.map((cq, ci) =>
-        ci === params.colorIndex ? { ...cq, quantity: Math.max(1, cq.quantity - 1) } : cq,
-      ),
-    },
-  ));
+  set(bouquetFlowersAtom, updateFlowerAt(get(bouquetFlowersAtom), params.flowerIndex, (f) => ({
+    ...f,
+    colorAndQuantities: f.colorAndQuantities.map((cq, ci) =>
+      ci === params.colorIndex ? { ...cq, quantity: Math.max(1, cq.quantity - 1) } : cq,
+    ),
+  })));
 });
 
 export const resetBouquetFormAtom = atom(null, (_get, set) => {
