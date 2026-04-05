@@ -4,13 +4,13 @@ import { OCCASION_OBJECT } from '../model/constants';
 import { OCCASION_IMAGE_CONFIG } from '../model/occasion-image-config';
 import type { TOccasion } from '../model/types';
 
-export interface OccasionImageProps {
+export interface IOccasionImageProps {
   type: TOccasion;
   className?: string;
   priority?: boolean;
 }
 
-export function OccasionImage({ type, className, priority }: OccasionImageProps) {
+export function OccasionImage({ type, className, priority }: IOccasionImageProps) {
   const { src, width, height, className: defaultClassName } = OCCASION_IMAGE_CONFIG[type];
   const alt = OCCASION_OBJECT[type].label;
 

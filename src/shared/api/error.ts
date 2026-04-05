@@ -1,11 +1,11 @@
-import type { ApiError } from './types';
+import type { IApiError } from './types';
 
-export function isApiError(error: unknown): error is ApiError {
+export function isApiError(error: unknown): error is IApiError {
   return (
     typeof error === 'object' &&
     error !== null &&
     'message' in error &&
-    typeof (error as ApiError).message === 'string'
+    typeof (error as IApiError).message === 'string'
   );
 }
 

@@ -1,10 +1,10 @@
 import React, { useLayoutEffect, useRef } from 'react';
-import { AIPromptEventHub } from '../_types';
+import { IAIPromptEventHub } from '../_types';
 import { updateTextCount } from '@/shared/utils/dom';
 
 interface IProps {
   placeholder: string;
-  eventHub: AIPromptEventHub;
+  eventHub: IAIPromptEventHub;
   disabled?: boolean;
   onLoginRequired?: () => void;
 }

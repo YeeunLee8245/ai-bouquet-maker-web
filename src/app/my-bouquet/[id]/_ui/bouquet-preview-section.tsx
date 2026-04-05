@@ -8,7 +8,7 @@ import {
   DEFAULT_SVG,
   computePositions,
 } from '@entities/flower/model/bouquet-layout';
-import type { BouquetDetailData, BouquetDetailFlower } from '../_types';
+import type { IBouquetDetailData, IBouquetDetailFlower } from '../_types';
 
 // ── StaticFlower ──────────────────────────────────────────────
 
@@ -44,8 +44,8 @@ function StaticFlower({ svgUrl, color, x, y, size }: Omit<TFlowerItem, 'id'>) {
 // ── BouquetPreviewSection ─────────────────────────────────────
 
 type TProps = {
-  flowers: BouquetDetailFlower[];
-  layout: BouquetDetailData['layout'];
+  flowers: IBouquetDetailFlower[];
+  layout: IBouquetDetailData['layout'];
 };
 
 export default function BouquetPreviewSection({ flowers, layout }: TProps) {

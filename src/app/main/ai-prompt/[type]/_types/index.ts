@@ -2,29 +2,29 @@ import { AI_PROMPT_DATAS } from '../_datas';
 
 export type AIPromptType = (typeof AI_PROMPT_DATAS)[number];
 
-export interface AIPromptGuide {
+export interface IAIPromptGuide {
   title: string;
   description?: string;
   items: string[];
 }
 
-export interface AIPromptData {
+export interface IAIPromptData {
   title: string;
   description: string;
   placeholder: string;
-  guide: AIPromptGuide;
+  guide: IAIPromptGuide;
 }
 
-export type AIPromptDataMapType = {
-  [K in AIPromptType]: AIPromptData;
+export type TAIPromptDataMapType = {
+  [K in AIPromptType]: IAIPromptData;
 };
 
-export interface AIPromptPageParams {
+export interface IAIPromptPageParams {
   type: AIPromptType;
   [key: string]: string | string[] | undefined;
 }
 
-export interface AIPromptEventHub {
+export interface IAIPromptEventHub {
   onClickGuideItem?: (item: string) => void;
   getInputText?: () => string;
 }

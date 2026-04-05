@@ -1,9 +1,9 @@
 import React from 'react';
-import { AIPromptEventHub, AIPromptGuide } from '../_types';
+import { IAIPromptEventHub, IAIPromptGuide } from '../_types';
 
 interface IProps {
-  guide: AIPromptGuide;
-  eventHub: AIPromptEventHub;
+  guide: IAIPromptGuide;
+  eventHub: IAIPromptEventHub;
   onLoginRequired?: () => void;
 }
 

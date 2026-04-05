@@ -1,19 +1,19 @@
 import { FlowerType } from '@/types/bouquet';
 
-export interface BouquetDetailFlower {
+export interface IBouquetDetailFlower {
   flower_id: string;
   flower_name: string;
   tags: string[];
   color_and_quantity: Array<{ color: string; quantity: number }>;
 }
 
-export interface BouquetDetailData {
+export interface IBouquetDetailData {
   id: string;
   name: string;
   occasion: string | null;
   recipient: string | null;
   message: string | null;
-  flowers: BouquetDetailFlower[];
+  flowers: IBouquetDetailFlower[];
   wrapping: {
     ribbonColor: string | null;
     wrappingColor: string | null;
@@ -35,7 +35,7 @@ export interface BouquetDetailData {
   updated_at: string;
 }
 
-export interface BouquetDetailResponse {
+export interface IBouquetDetailResponse {
   success: boolean;
-  data: BouquetDetailData;
+  data: IBouquetDetailData;
 }

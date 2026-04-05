@@ -3,7 +3,7 @@
 import { useParams, useRouter, usePathname } from 'next/navigation';
 import { notFound } from 'next/navigation';
 import { AI_PROMPT_DATA_MAP, AI_PROMPT_DATAS } from './_datas';
-import { AIPromptType, AIPromptPageParams, AIPromptEventHub } from './_types';
+import { AIPromptType, IAIPromptPageParams, IAIPromptEventHub } from './_types';
 import OutlineHeartIcon from '@/shared/assets/icons/outline_heart.svg';
 import PersonIcon from '@/shared/assets/icons/person.svg';
 import { cloneElement } from 'react';
@@ -28,7 +28,7 @@ import LoginRequiredModal, { LOGIN_REQUIRED_MODAL_ID } from '../../_ui/login-req
  *
  */
 function AIPromptPage() {
-  const params = useParams<AIPromptPageParams>();
+  const params = useParams<IAIPromptPageParams>();
   const type = params.type as AIPromptType;
   const router = useRouter();
   const pathname = usePathname();
@@ -53,7 +53,7 @@ function AIPromptPage() {
       break;
   }
 
-  const eventHub: AIPromptEventHub = {
+  const eventHub: IAIPromptEventHub = {
     onClickGuideItem: undefined,
     getInputText: undefined,
   };

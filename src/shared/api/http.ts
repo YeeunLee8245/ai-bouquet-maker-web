@@ -1,7 +1,7 @@
 import axios from 'axios';
 import type { AxiosError } from 'axios';
 import { createClient } from '@/shared/supabase/client';
-import type { ApiError } from './types';
+import type { IApiError } from './types';
 
 export const http = axios.create({
   baseURL: process.env.NEXT_PUBLIC_SITE_URL,
@@ -23,7 +23,7 @@ http.interceptors.request.use(async (config) => {
 });
 
 // ── Response: normalize errors into ApiError ──
-function toApiError(error: AxiosError<{ code?: string; message?: string; details?: unknown }>): ApiError {
+function toApiError(error: AxiosError<{ code?: string; message?: string; details?: unknown }>): IApiError {
   const res = error.response;
 
   if (res) {

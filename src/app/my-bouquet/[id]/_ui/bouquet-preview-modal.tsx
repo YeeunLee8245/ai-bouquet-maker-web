@@ -3,11 +3,11 @@
 import { useSetAtom } from 'jotai';
 import { closeModalAtom, TModalProps } from '@/shared/model/modal';
 import BouquetPreviewSection from './bouquet-preview-section';
-import type { BouquetDetailData, BouquetDetailFlower } from '../_types';
+import type { IBouquetDetailData, IBouquetDetailFlower } from '../_types';
 
 type TProps = TModalProps & {
-  flowers: BouquetDetailFlower[];
-  layout: BouquetDetailData['layout'];
+  flowers: IBouquetDetailFlower[];
+  layout: IBouquetDetailData['layout'];
 };
 
 export default function BouquetPreviewModal({ modalId, flowers, layout }: TProps) {

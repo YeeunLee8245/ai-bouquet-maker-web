@@ -1,8 +1,8 @@
-import { AIPromptDataMapType } from '../_types';
+import { TAIPromptDataMapType } from '../_types';
 
 export const AI_PROMPT_DATAS = ['emotion', 'recipient'] as const;
 
-export const AI_PROMPT_DATA_MAP: AIPromptDataMapType = {
+export const AI_PROMPT_DATA_MAP: TAIPromptDataMapType = {
   emotion: {
     title: '전하고 싶은 마음이 있나요?',
     description: '상대를 향한 감정을 자유롭게 표현해 주세요.\nAI가 분석해 가장 적합한 꽃을 추천해 드려요.',

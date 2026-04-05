@@ -3,12 +3,12 @@ import { OCCASION_OBJECT } from '../model/constants';
 import { TOccasion } from '../model/types';
 import { OccasionImage } from './occasion-image';
 
-export interface OccasionItemProps {
+export interface IOccasionItemProps {
   type: TOccasion;
   relationship: string;
 }
 
-export function OccasionItem({ type, relationship }: OccasionItemProps) {
+export function OccasionItem({ type, relationship }: IOccasionItemProps) {
   return (
     <Link
       href={`/main/quick-recommendation/${relationship}/${type}`}

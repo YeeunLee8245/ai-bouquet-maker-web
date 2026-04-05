@@ -1,10 +1,10 @@
-import type { BouquetDetailFlower } from '../_types';
+import type { IBouquetDetailFlower } from '../_types';
 
-interface MyBouquetCompositionProps {
-  flowers: BouquetDetailFlower[];
+interface IMyBouquetCompositionProps {
+  flowers: IBouquetDetailFlower[];
 }
 
-export default function MyBouquetComposition({ flowers }: MyBouquetCompositionProps) {
+export default function MyBouquetComposition({ flowers }: IMyBouquetCompositionProps) {
   const totalQuantity = flowers.reduce(
     (sum, f) => sum + f.color_and_quantity.reduce((s, cq) => s + cq.quantity, 0),
     0,

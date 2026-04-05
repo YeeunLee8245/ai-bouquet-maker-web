@@ -1,13 +1,13 @@
 import { ColorPicker } from '@/shared/ui/color-picker';
 
-interface MyBouquetPackagingProps {
+interface IMyBouquetPackagingProps {
   wrapping: {
     wrappingColor: string | null;
     ribbonColor: string | null;
   };
 }
 
-export default function MyBouquetPackaging({ wrapping }: MyBouquetPackagingProps) {
+export default function MyBouquetPackaging({ wrapping }: IMyBouquetPackagingProps) {
   return (
     <div className='info-border px-micro'>
       <p className='text-title-md'>포장 옵션</p>

@@ -155,7 +155,7 @@ export async function GET(
 
     // 2. 선택된 꽃(flower_meanings) 정보 조회
     const selectedIds = recommendation.selected_flower_meanings_ids || [];
-    interface SelectedFlower {
+    interface ISelectedFlower {
       flower_meaning_id: number;
       meaning: string;
       color: string | null;
@@ -164,7 +164,7 @@ export async function GET(
       name: string;
       image_url: string | null;
     }
-    let selected_flowers: SelectedFlower[] = [];
+    let selected_flowers: ISelectedFlower[] = [];
 
     if (selectedIds.length > 0) {
       const { data: meanings, error: meaningError } = await supabase

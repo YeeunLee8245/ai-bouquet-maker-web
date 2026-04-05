@@ -3,13 +3,13 @@
 import { Input } from '@/shared/ui/input';
 import { MY_BOUQUET_INFO_DATAS } from '../_datas';
 
-interface MyBouquetInfoProps {
+interface IMyBouquetInfoProps {
   occasion: string | null;
   recipient: string | null;
   message: string | null;
 }
 
-export default function MyBouquetInfo({ occasion, recipient, message }: MyBouquetInfoProps) {
+export default function MyBouquetInfo({ occasion, recipient, message }: IMyBouquetInfoProps) {
   const valueMap: Record<string, string | null> = {
     occasion,
     recipient,

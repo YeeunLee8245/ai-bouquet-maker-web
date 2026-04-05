@@ -1,12 +1,12 @@
 import ChevronDownIcon from '@/shared/assets/icons/chevron_down.svg';
 
-interface ProfileBouquetCardProps {
+interface IProfileBouquetCardProps {
   label?: string;
   content?: string;
   canClick?: boolean;
 }
 
-function ProfileBouquetCard({ label = '', content = '', canClick = false }: ProfileBouquetCardProps) {
+function ProfileBouquetCard({ label = '', content = '', canClick = false }: IProfileBouquetCardProps) {
   return (
     <>
       <div className='flex justify-between mx-micro items-center'>
