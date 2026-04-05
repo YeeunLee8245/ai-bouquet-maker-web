@@ -14,7 +14,7 @@ type TProps = {
   onMove: (x: number, y: number) => void;
 };
 
-const FLOWER_SIZE = 60;
+// const FLOWER_SIZE = 60;
 const CANVAS = 330;
 
 export default function DraggableFlower({

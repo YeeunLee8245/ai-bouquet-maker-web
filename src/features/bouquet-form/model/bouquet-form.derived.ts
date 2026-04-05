@@ -37,7 +37,7 @@ export const canSaveBouquetAtom = atom((get) => {
   return (
     get(bouquetNameErrorAtom) === null &&
     get(bouquetFlowersErrorAtom) === null &&
-    !get(bouquetEmptyColorsErrorAtom) &&
+    get(bouquetEmptyColorsErrorAtom) === null &&
     get(bouquetPackagingColorErrorAtom) === null &&
     get(bouquetRibbonColorErrorAtom) === null
   );

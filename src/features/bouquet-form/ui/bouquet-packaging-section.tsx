@@ -1,23 +1,35 @@
 'use client';
 
 import { ColorPicker } from '@/shared/ui/color-picker';
-import React, { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import PlusIcon from '@/shared/assets/icons/plus.svg';
 import { openModalAtom } from '@/shared/model/modal';
-import { useSetAtom } from 'jotai';
+import { Atom, useAtom, useSetAtom } from 'jotai';
 import ColorPickModal from './modals/color-pick-modal/color-pick-modal';
 import { MAKE_BOUQUET_PACKAGING_DEFAULT_COLORS } from '../model';
-import { bouquetPackagingColorAtom, bouquetRibbonColorAtom } from '../model/bouquet-form.atoms';
 
 type TProps = {
   title: string;
+  colorAtom: Atom<string>;
 };
 
-export default function BouquetPackagingSection({ title }: TProps) {
-  const [colors, setColors] = useState<string[]>(MAKE_BOUQUET_PACKAGING_DEFAULT_COLORS);
-  const setSelectedColor = useSetAtom(title === '포장지' ? bouquetPackagingColorAtom : bouquetRibbonColorAtom);
+export default function BouquetPackagingSection({ title, colorAtom }: TProps) {
+  const [currentColor, setSelectedColor] = useAtom(colorAtom);
+  const [colors, setColors] = useState<string[]>(() =>
+    currentColor && !MAKE_BOUQUET_PACKAGING_DEFAULT_COLORS.includes(currentColor)
+      ? [...MAKE_BOUQUET_PACKAGING_DEFAULT_COLORS, currentColor]
+      : MAKE_BOUQUET_PACKAGING_DEFAULT_COLORS,
+  );
   const colorRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const openModal = useSetAtom(openModalAtom);
+
+  // 저장된 색상을 초기 선택 상태로 반영
+  useEffect(() => {
+    const index = colors.indexOf(currentColor);
+    if (index === -1) { return; }
+    colorRefs.current.forEach((el) => el?.setAttribute('data-state', 'default'));
+    colorRefs.current[index]?.setAttribute('data-state', 'selected');
+  }, [currentColor, colors]);
 
   const handleOpenColorPickModal = () => {
     openModal({

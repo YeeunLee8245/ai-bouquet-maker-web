@@ -25,6 +25,7 @@ const MyBouquetModifyPage = () => {
   const resetForm = useSetAtom(resetBouquetFormAtom);
   const [isInitialized, setIsInitialized] = useState(false);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (data && !isInitialized) {
       initForm(data);
