@@ -33,8 +33,8 @@ export const DIRECTORY_SEASON_LIST = Object.keys(DIRECTORY_SEASON_NAME_MAP).map(
   name: DIRECTORY_SEASON_NAME_MAP[key as keyof typeof DIRECTORY_SEASON_NAME_MAP],
 }));
 
-export const directoryDefaultSelectedColors = [DIRECTORY_COLOR_LIST[0]];
-export const directoryDefaultSelectedSeasons = [DIRECTORY_SEASON_LIST[0]];
+export const directoryDefaultSelectedColors = [];
+export const directoryDefaultSelectedSeasons = [];
 
 export const directoryDefaultSortOptions = [
   {

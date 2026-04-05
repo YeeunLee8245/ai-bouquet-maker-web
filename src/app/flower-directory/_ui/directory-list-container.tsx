@@ -12,6 +12,7 @@ import { initLikeFromServer } from '@/features/like/model/atoms';
 import { cn } from '@/shared/utils/styles';
 import FlowerCardSkeleton from '@/shared/ui/skeleton/flower-card-skeleton';
 import DirectoryListSkeleton from './directory-list-skeleton';
+import { Skeleton } from '@/shared/ui/skeleton';
 
 type TProps = {
   eventHub: IDirectoryEventHub;
@@ -72,7 +73,9 @@ function DirectoryListContainer({ eventHub }: TProps) {
   return (
     <div className='flex flex-col border-t-2 border-gray-100 mt-4'>
       <div className='flex items-center justify-between pt-4'>
-        <span className='text-ui-label-sm text-gray-400 pl-micro'>{total}개의 꽃</span>
+        <span className='text-ui-label-sm text-gray-400 pl-micro'>{
+          isLoading ? <Skeleton className='w-16 h-4' /> : `${total}개의 꽃`}
+        </span>
         <span className='pr-micro flex items-center gap-1'>
           {directoryDefaultSortOptions.map(({ id, name }) => (
             <button

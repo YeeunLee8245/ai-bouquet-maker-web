@@ -40,7 +40,7 @@ function DirectoryFilterContainer({ eventHub }: TProps) {
     <div
       ref={containerRef}
       className='grid transition-[grid-template-rows] duration-300 ease-in-out'
-      style={{ gridTemplateRows: '0fr' }}
+      style={{ gridTemplateRows: '1fr' }}
     >
       <div data-filter-section className='min-h-0 overflow-hidden'>
         <div className='flex flex-col gap-2 pb-4'>
