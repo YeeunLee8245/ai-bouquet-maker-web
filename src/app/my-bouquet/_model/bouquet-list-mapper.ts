@@ -1,7 +1,7 @@
 import { formatKoreanDate } from '@/shared/utils/date';
-import type { BouquetListItemData } from '../_types';
+import type { IBouquetListItemData } from '../_types';
 
-export function toComponentBouquet(item: BouquetListItemData) {
+export function toComponentBouquet(item: IBouquetListItemData) {
   return {
     id: item.id,
     name: item.name,

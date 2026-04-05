@@ -1,4 +1,4 @@
-export interface BouquetListFlower {
+export interface IBouquetListFlower {
   flower_id: string;
   flower_name: string;
   color_and_quantity: {
@@ -7,28 +7,28 @@ export interface BouquetListFlower {
   }[];
 }
 
-export interface BouquetListItemData {
+export interface IBouquetListItemData {
   id: string;
   name: string;
   occasion: string | null;
   recipient: string | null;
   message: string | null;
-  flowers: BouquetListFlower[];
+  flowers: IBouquetListFlower[];
   created_at: string;
   updated_at: string;
 }
 
-export interface BouquetListData {
-  bouquets: BouquetListItemData[];
+export interface IBouquetListData {
+  bouquets: IBouquetListItemData[];
   total: number;
   page: number;
   limit: number;
   has_next_page: boolean;
 }
 
-export interface BouquetListResponse {
+export interface IBouquetListResponse {
   success: boolean;
-  data: BouquetListData;
+  data: IBouquetListData;
 }
 
 export interface IMyBouquetListHub {
