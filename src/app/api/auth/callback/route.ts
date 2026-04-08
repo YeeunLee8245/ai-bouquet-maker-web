@@ -42,7 +42,7 @@ async function findPublicUserIdByAuthId(authUserId: string) {
 
     if (data?.id) {
       if (attempt > 1) {
-        console.log(
+        console.warn(
           `[AuthCallback] Public user became available after retry ${attempt} for auth user ${authUserId}`,
         );
       }
