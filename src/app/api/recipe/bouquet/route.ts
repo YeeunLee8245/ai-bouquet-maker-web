@@ -12,11 +12,15 @@ import { getPublicUser } from '@/lib/users/auth';
  *     description: |
  *       사용자가 직접 구성한 꽃다발 레시피를 저장합니다.
  *       AI 추천 결과(recommendation_id)를 기반으로 생성하거나, 처음부터 직접 만들 수 있습니다.
+ *       저장 포맷은 `PUT /api/recipe/bouquet/{id}` 요청 포맷과 동일합니다.
  *
- *       ### 🎨 프론트엔드 개발 가이드
- *       - **`color` (Hex)**: 사용자가 미리보기나 색상피커를 통해 자유롭게 선택한 '미리보기용 꽃 색상'입니다. 실제 꽃다발 렌더링에 사용됩니다.
- *       - **`icon_color` (Hex)**: DB에 정의된 꽃말별 '상징 색상'입니다. 꽃 구성 목록이나 선택 버튼의 아이콘 색상으로 사용됩니다.
- *       - **색상 커스텀 시**: 유저가 색상을 커스텀하게 바꿀 때는 `flower_meaning_id`를 해당 꽃의 대표 ID(`is_primary: true`)로 유지하는 것을 권장합니다.
+ *       ### 🎨 프론트엔드 개발 가이드 (v2 - colorInfos 기반)
+ *       - **색상 선택 흐름**: `/api/recipe/bouquet/selected`에서 받은 `colorInfos` 배열에서 색상을 선택합니다.
+ *       - **`tags` 기준**: `colorInfos.tags`는 `flower_meanings.meaning`을 쉼표(,)로 분리한 값입니다.
+ *       - **hex ↔ meaningId 1:1 매핑**: 사용자가 색상(hex)을 선택하면, 해당 colorInfo의 `meaningId`를 `flower_meaning_id`로 저장합니다.
+ *       - **`color` (Hex)**: 선택한 색상의 hex 값을 그대로 저장합니다. (렌더링용)
+ *       - **`flower_meaning_id`**: 선택한 색상에 매핑된 meaningId를 저장합니다. (`flower_meanings.meaning` 조회용)
+ *       - **colorInfos 첫 번째 항목**: is_primary가 true인 기본 색상이 가장 먼저 옵니다.
  *     requestBody:
  *       required: true
  *       content:
@@ -50,7 +54,7 @@ import { getPublicUser } from '@/lib/users/auth';
  *                 example: "18561ccb-20c4-4bdb-8905-ec2647f471c5"
  *               recipe:
  *                 type: object
- *                 description: 꽃다발의 기술적 구성 정보 (꽃 종류, 수량, 포장재 등)
+ *                 description: 꽃다발의 기술적 구성 정보 (`PUT /api/recipe/bouquet/{id}`와 동일한 저장 형식)
  *                 required: [flowers]
  *                 properties:
  *                   flowers:
@@ -64,9 +68,9 @@ import { getPublicUser } from '@/lib/users/auth';
  *                           description: 꽃 기본 정보 ID (flowers 테이블)
  *                           example: "1"
  *                         flower_meaning_id:
- *                           type: integer
+ *                           type: string
  *                           description: 선택한 구체적인 꽃말/색상 ID (flower_meanings 테이블)
- *                           example: 101
+ *                           example: "101"
  *                         quantity:
  *                           type: integer
  *                           description: 해당 꽃의 포함 수량
@@ -75,10 +79,6 @@ import { getPublicUser } from '@/lib/users/auth';
  *                           type: string
  *                           description: 선택한 실제 렌더링 색상 (Hex Code)
  *                           example: "#FF8D3E"
- *                         type:
- *                           type: string
- *                           description: "등록된 아이콘 키 (rose, marigold, tulip, peony 등)"
- *                           example: "rose"
  *                   wrapping:
  *                     type: object
  *                     description: 포장지 및 리본 구성 (선택 사항)
@@ -120,7 +120,7 @@ import { getPublicUser } from '@/lib/users/auth';
  *                 recipe:
  *                   flowers:
  *                     - flower_id: "112"
- *                       flower_meaning_id: 301
+ *                       flower_meaning_id: "301"
  *                       quantity: 2
  *                       color: "#FFD700"
  *                   wrapping:
@@ -149,7 +149,7 @@ import { getPublicUser } from '@/lib/users/auth';
  *                 recipe:
  *                   flowers:
  *                     - flower_id: "45"
- *                       flower_meaning_id: 204
+ *                       flower_meaning_id: "204"
  *                       quantity: 9
  *                       color: "#E31C25"
  *                 layout:

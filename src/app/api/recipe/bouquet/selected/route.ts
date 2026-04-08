@@ -2,6 +2,17 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@shared/supabase/server';
 import { toSupabaseResizedImageUrl } from '@shared/utils/image-url';
 
+function toTagsFromMeaning(meaning: string | null | undefined): string[] {
+  if (!meaning) {
+    return [];
+  }
+
+  return meaning
+    .split(',')
+    .map(tag => tag.trim())
+    .filter(Boolean);
+}
+
 /**
  * @swagger
  * /api/recipe/bouquet/selected:
@@ -17,6 +28,9 @@ import { toSupabaseResizedImageUrl } from '@shared/utils/image-url';
  *       - 요청 본문은 **배열 자체**입니다. (예: `[12, 5, 31]`)
  *       - 응답도 **배열 자체**입니다. (예: `[{...}, {...}]`)
  *       - 응답 순서는 요청한 ID 순서를 최대한 유지합니다.
+ *       - **colorInfos**: 각 색상(hex)별로 meaningId와 tags가 1:1 매핑됩니다.
+ *       - **tags 생성 기준**: `flower_meanings.meaning` 값을 쉼표(,)로 분리해 `tags` 배열로 제공합니다.
+ *         색상을 선택하면 해당 색상의 meaningId와 tags를 사용해야 합니다.
  *     requestBody:
  *       required: true
  *       content:
@@ -44,7 +58,7 @@ import { toSupabaseResizedImageUrl } from '@shared/utils/image-url';
  *               type: array
  *               items:
  *                 type: object
- *                 required: [id, name_ko, tags, imageUrl, colors]
+ *                 required: [id, name_ko, imageUrl, colorInfos]
  *                 properties:
  *                   id:
  *                     type: string
@@ -54,43 +68,53 @@ import { toSupabaseResizedImageUrl } from '@shared/utils/image-url';
  *                     type: string
  *                     description: 꽃 한글명
  *                     example: "튤립"
- *                   defaultMeaningId:
- *                     type: string
- *                     description: 기본 꽃말 ID (is_primary:true 우선, 없으면 첫 번째)
- *                     example: "101"
- *                   tags:
- *                     type: array
- *                     description: 대표 꽃말 태그
- *                     items:
- *                       type: string
- *                     example: ["사랑", "응원", "감사"]
  *                   imageUrl:
  *                     type: string
  *                     nullable: true
  *                     description: 대표 이미지 URL
  *                     example: "https://example.com/tulip.png"
- *                   colors:
+ *                   colorInfos:
  *                     type: array
- *                     description: flower_meanings의 icon_color 값 목록 (회색 계열 제외)
+ *                     description: 색상별 꽃말 정보 (hex-meaningId 1:1 매핑)
  *                     items:
- *                       type: string
- *                     example: ["#F8BBD0", "#FF4D6D"]
+ *                       type: object
+ *                       required: [hex, meaningId, tags]
+ *                       properties:
+ *                         hex:
+ *                           type: string
+ *                           description: 색상 Hex 코드 (icon_color)
+ *                           example: "#F8BBD0"
+ *                         meaningId:
+ *                           type: string
+ *                           description: 꽃말 ID (flower_meanings.id)
+ *                           example: "101"
+ *                         tags:
+ *                           type: array
+ *                           description: 해당 꽃말의 meaning을 쉼표 기준 분리한 태그
+ *                           items:
+ *                             type: string
+ *                           example: ["사랑", "응원", "감사"]
  *             examples:
  *               success:
  *                 summary: 정상 조회 응답
  *                 value:
  *                   - id: "12"
  *                     name_ko: "튤립"
- *                     defaultMeaningId: "101"
- *                     tags: ["사랑", "응원"]
  *                     imageUrl: "/images/flowers/tulip.png"
- *                     colors: ["#F8BBD0", "#FF4D6D"]
+ *                     colorInfos:
+ *                       - hex: "#F8BBD0"
+ *                         meaningId: "101"
+ *                         tags: ["사랑", "응원"]
+ *                       - hex: "#FF4D6D"
+ *                         meaningId: "102"
+ *                         tags: ["열정", "감사"]
  *                   - id: "5"
  *                     name_ko: "장미"
- *                     defaultMeaningId: "205"
- *                     tags: ["열정", "감사"]
  *                     imageUrl: "/images/flowers/rose.png"
- *                     colors: ["#E31C25", "#FF8A80"]
+ *                     colorInfos:
+ *                       - hex: "#E31C25"
+ *                         meaningId: "205"
+ *                         tags: ["열정", "사랑"]
  *       400:
  *         description: 요청 형식 오류 (배열이 아니거나 유효한 ID 없음)
  *         content:
@@ -137,13 +161,12 @@ export async function POST(request: NextRequest) {
         id,
         name_ko,
         images,
-        representative_meanings_tags,
         flower_meanings (
           id,
-          meaning,
           color,
           icon_color,
-          is_primary
+          is_primary,
+          meaning
         )
       `)
       .in('id', uniqueIds);
@@ -167,28 +190,30 @@ export async function POST(request: NextRequest) {
       .map(flower => {
         const meanings = flower.flower_meanings || [];
 
-        // 기본 꽃말 ID: is_primary: true 우선, 없으면 첫 번째
-        const primaryMeaning = meanings.find(m => m.is_primary);
-        const defaultMeaningId = primaryMeaning?.id != null
-          ? String(primaryMeaning.id)
-          : meanings[0]?.id != null
-            ? String(meanings[0].id)
-            : null;
-
-        const colors = Array.from(new Set(
-          meanings
-            .filter(meaning => meaning.color != null)
-            .map(meaning => meaning.icon_color)
-            .filter((color): color is string => typeof color === 'string' && color.length > 0),
-        ));
+        // colorInfos: hex-meaningId 1:1 매핑, is_primary를 가장 위로 정렬
+        const colorInfos = meanings
+          .filter(m => m.icon_color != null && m.icon_color.length > 0)
+          .sort((a, b) => {
+            // is_primary가 true인 것을 가장 위로
+            if (a.is_primary && !b.is_primary) {
+              return -1;
+            }
+            if (!a.is_primary && b.is_primary) {
+              return 1;
+            }
+            return 0;
+          })
+          .map(m => ({
+            hex: m.icon_color as string,
+            meaningId: String(m.id),
+            tags: toTagsFromMeaning(m.meaning),
+          }));
 
         return {
           id: String(flower.id),
           name_ko: flower.name_ko,
-          defaultMeaningId,
           imageUrl: toSupabaseResizedImageUrl((flower.images as string[] | null)?.[0]),
-          tags: flower.representative_meanings_tags || [],
-          colors,
+          colorInfos,
         };
       })
       .sort((a, b) => (orderMap.get(Number(a.id)) ?? 0) - (orderMap.get(Number(b.id)) ?? 0));

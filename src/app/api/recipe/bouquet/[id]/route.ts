@@ -3,6 +3,17 @@ import { createClient } from '@shared/supabase/server';
 import { BouquetRecipeContent, BouquetLayout } from '@/types/recommendation';
 import { getPublicUser } from '@/lib/users/auth';
 
+function toTagsFromMeaning(meaning: string | null | undefined): string[] {
+  if (!meaning) {
+    return [];
+  }
+
+  return meaning
+    .split(',')
+    .map(tag => tag.trim())
+    .filter(Boolean);
+}
+
 /**
  * @swagger
  * /api/recipe/bouquet/{id}:
@@ -23,10 +34,10 @@ import { getPublicUser } from '@/lib/users/auth';
  *       특정 꽃다발 레시피의 상세 정보를 조회합니다.
  *       꽃다발의 구성(꽃종류, 수량, 색상), 포장 옵션, 그리고 미리보기를 위한 레이아웃 좌표 정보를 포함합니다.
  *
- *       ### 🎨 프론트엔드 개발 가이드
- *       - **`color` (Hex)**: 꽃다발 렌더링용 실제 색상.
- *       - **`icon_color` (Hex)**: 목록 아이콘용 상징 색상.
- *       - **`meaning` (Text)**: API에서 JOIN하여 반환하는 꽃말 텍스트입니다. 화면에 즉시 렌더링 가능합니다.
+ *       ### 🎨 프론트엔드 개발 가이드 (v2 - colorInfos 기반)
+ *       - **`color` (Hex)**: 저장된 꽃 색상 (렌더링용)
+ *       - **`meaningId`**: 해당 색상에 매핑된 flower_meaning_id
+ *       - **`tags` (Array)**: `flower_meanings.meaning`을 쉼표 기준으로 분리한 태그들
  *     responses:
  *       200:
  *         description: 조회 성공
@@ -81,9 +92,12 @@ import { getPublicUser } from '@/lib/users/auth';
  *       사용자가 만든 기존 꽃다발 레시피의 정보를 업데이트합니다.
  *       본인이 작성한 레시피만 수정 가능합니다.
  *
- *       ### 🎨 프론트엔드 개발 가이드
+ *       ### 🎨 프론트엔드 개발 가이드 (v2 - colorInfos 기반)
  *       - **필드 선택적 수정**: 수정하려는 필드만 보내는 것이 아니라, **전체 객체 구조**를 맞춰서 보내는 것을 권장합니다 (특히 `recipe`, `layout`).
- *       - **`color` vs `icon_color`**: 생성(POST) API 가이드와 동일합니다. 커스텀 색상 저장 시 `color`에는 Hex를, `flower_meaning_id`에는 가급적 Primary ID를 사용해 주세요.
+ *       - **`tags` 기준**: 상세 응답의 `tags`는 `flower_meanings.meaning`을 쉼표(,)로 분리한 값입니다.
+ *       - **hex ↔ meaningId 1:1 매핑**: 색상을 변경하면 해당 colorInfo의 `meaningId`를 `flower_meaning_id`로 저장합니다.
+ *       - **`color`**: 선택한 색상의 hex 값 (렌더링용)
+ *       - **`flower_meaning_id`**: 선택한 색상에 매핑된 meaningId (`flower_meanings.meaning` 조회용)
  *     requestBody:
  *       required: true
  *       content:
@@ -105,8 +119,8 @@ import { getPublicUser } from '@/lib/users/auth';
  *                       type: object
  *                       required: [flower_id, flower_meaning_id, quantity, color]
  *                       properties:
- *                         flower_id: { type: integer, example: 1 }
- *                         flower_meaning_id: { type: integer, example: 101 }
+ *                         flower_id: { type: string, example: "1" }
+ *                         flower_meaning_id: { type: string, example: "101" }
  *                         quantity: { type: integer, example: 12 }
  *                         color: { type: string, example: "#FFC0CB" }
  *                   wrapping:
@@ -123,7 +137,7 @@ import { getPublicUser } from '@/lib/users/auth';
  *                     items:
  *                       type: object
  *                       properties:
- *                         flower_id: { type: integer }
+ *                         flower_id: { type: string }
  *                         x: { type: number, example: 0.5 }
  *                         y: { type: number, example: 0.7 }
  *                         scale: { type: number, example: 1.0 }
@@ -139,8 +153,8 @@ import { getPublicUser } from '@/lib/users/auth';
  *                 message: "세상에서 제일 사랑해"
  *                 recipe:
  *                   flowers:
- *                     - flower_id: 1
- *                       flower_meaning_id: 101
+ *                     - flower_id: "1"
+ *                       flower_meaning_id: "101"
  *                       quantity: 12
  *                       color: "#FFC0CB"
  *                   wrapping:
@@ -148,7 +162,7 @@ import { getPublicUser } from '@/lib/users/auth';
  *                     ribbonColor: "#FF69B4"
  *                 layout:
  *                   items:
- *                     - flower_id: 1
+ *                     - flower_id: "1"
  *                       x: 0.5
  *                       y: 0.7
  *                       z_index: 1
@@ -301,7 +315,7 @@ export async function GET(
     }
 
     // 꽃말 맵 (icon_color + meaning)
-    let meaningMap: Record<string, { icon_color: string | null; meaning: string }> = {};
+    let meaningMap: Record<string, { icon_color: string | null; meaning: string | null }> = {};
     if (meaningIds.length > 0) {
       const { data: meanings } = await supabase
         .from('flower_meanings')
@@ -320,28 +334,30 @@ export async function GET(
       flower_id: string;
       flower_name: string;
       tags: string[];
-      color_and_quantity: Array<{ color: string; quantity: number }>;
+      color_and_quantity: Array<{ color: string; quantity: number; meaningId: string | null }>;
     }>();
 
     for (const f of flowersInRecipe) {
       const meaningInfo = f.flower_meaning_id ? meaningMap[String(f.flower_meaning_id)] : null;
       const color = f.color || meaningInfo?.icon_color || '#CCCCCC';
-      const meaning = meaningInfo?.meaning;
+      const meaningTags = toTagsFromMeaning(meaningInfo?.meaning);
 
       if (flowersGrouped.has(f.flower_id)) {
         const existing = flowersGrouped.get(f.flower_id)!;
         // color_and_quantity 배열에 추가
-        existing.color_and_quantity.push({ color, quantity: f.quantity });
-        // 중복되지 않는 꽃말 추가
-        if (meaning && !existing.tags.includes(meaning)) {
-          existing.tags.push(meaning);
+        existing.color_and_quantity.push({ color, quantity: f.quantity, meaningId: f.flower_meaning_id || null });
+        // 중복되지 않는 태그 추가
+        for (const tag of meaningTags) {
+          if (!existing.tags.includes(tag)) {
+            existing.tags.push(tag);
+          }
         }
       } else {
         flowersGrouped.set(f.flower_id, {
           flower_id: f.flower_id,
           flower_name: flowerMap[f.flower_id] || '알 수 없음',
-          tags: meaning ? [meaning] : [],
-          color_and_quantity: [{ color, quantity: f.quantity }],
+          tags: [...meaningTags],
+          color_and_quantity: [{ color, quantity: f.quantity, meaningId: f.flower_meaning_id || null }],
         });
       }
     }
