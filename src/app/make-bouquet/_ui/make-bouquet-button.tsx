@@ -43,7 +43,8 @@ export default function MakeBouquetButton() {
     const recipeFlowers = flowers.flatMap((flower) =>
       flower.colorAndQuantities.map((cq) => ({
         flower_id: flower.id,
-        flower_meaning_id: flower.meaningId,
+        // TODO: yeeun 의미 아이디 default 처리 필요
+        flower_meaning_id: cq.meaningId ?? flower.meaningId,
         quantity: cq.quantity,
         color: cq.color,
       })),

@@ -15,10 +15,10 @@ import { fetchSelectedFlowers, TSelectedFlowerDetail } from '@api/recipe-bouquet
 const toFlowerCompositionItem = (detail: TSelectedFlowerDetail): TFlowerCompositionItem => ({
   id: detail.id,
   name: detail.name_ko,
-  meaningId: detail.defaultMeaningId,
-  keywords: detail.tags,
+  meaningId: detail.colorInfos[0]?.meaningId ?? '',
+  keywords: [...new Set(detail.colorInfos.flatMap((c) => c.tags))],
   imageUrl: detail.imageUrl ?? '',
-  colorAndQuantities: detail.colors.map((color) => ({ color, quantity: 1 })),
+  colorAndQuantities: detail.colorInfos.map((c) => ({ color: c.hex, quantity: 1, meaningId: c.meaningId })),
 });
 
 /** [Create] 선택한 꽃을 꽃다발 폼에 초기 세팅 */
@@ -67,7 +67,7 @@ export const initBouquetFormFromDetailAtom = atom(null, async (_get, set, detail
     meaningId: '',
     keywords: f.tags,
     imageUrl: '',
-    colorAndQuantities: f.color_and_quantity,
+    colorAndQuantities: f.color_and_quantity.map((cq) => ({ ...cq, meaningId: cq.meaningId ?? undefined })),
   }));
   set(bouquetFlowersAtom, bouquetFlowers);
 
@@ -78,7 +78,7 @@ export const initBouquetFormFromDetailAtom = atom(null, async (_get, set, detail
     const detailMap = new Map(fetched.map((d) => [d.id, d]));
     set(bouquetFlowersAtom, bouquetFlowers.map((f) => {
       const d = detailMap.get(f.id);
-      return d ? { ...f, meaningId: d.defaultMeaningId, imageUrl: d.imageUrl ?? '', keywords: d.tags } : f;
+      return d ? { ...f, meaningId: d.colorInfos[0]?.meaningId ?? f.meaningId, imageUrl: d.imageUrl ?? '', keywords: [...new Set(d.colorInfos.flatMap((c) => c.tags))] } : f;
     }));
   } catch {
     // 실패 시 임시값 유지 (meaningId='', imageUrl='')

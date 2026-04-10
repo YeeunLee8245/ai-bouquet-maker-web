@@ -4,7 +4,7 @@ export interface IBouquetDetailFlower {
   flower_id: string;
   flower_name: string;
   tags: string[];
-  color_and_quantity: Array<{ color: string; quantity: number }>;
+  color_and_quantity: Array<{ color: string; quantity: number; meaningId?: string | null }>;
 }
 
 export interface IBouquetDetailData {

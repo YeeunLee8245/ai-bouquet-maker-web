@@ -7,6 +7,7 @@ export type TMakeBouquetInfoData = {
 export type TFlowerColorAndQuantity = {
   color: string;
   quantity: number;
+  meaningId?: string;
 };
 
 export type TFlowerCompositionItem = {
@@ -31,7 +32,7 @@ export type TBouquetDetailInitData = {
     flower_id: string;
     flower_name: string;
     tags: string[];
-    color_and_quantity: Array<{ color: string; quantity: number }>;
+    color_and_quantity: Array<{ color: string; quantity: number; meaningId?: string | null }>;
   }>;
   wrapping: {
     wrappingColor: string | null;
