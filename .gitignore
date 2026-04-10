@@ -7,6 +7,7 @@ tsconfig.tsbuildinfo
 # next.js
 /.next/
 /out/
+next-env.d.ts
 
 # python
 __pycache__/
@@ -26,3 +27,7 @@ __pycache__/
 
 # MCP config (contains access tokens)
 .mcp.json
+
+# playwright
+playwright-report/
+test-results/

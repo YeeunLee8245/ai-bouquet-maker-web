@@ -74,7 +74,7 @@ function Header({ variant: variantProp = 'default' }: IProps) {
         />
         {variant === 'primary' ? <WhiteTitleIcon /> : <PrimaryTitleIcon />}
       </Link>
-      <button type='button' onClick={handleOpenSidebar}>
+      <button type='button' aria-label='메뉴 열기' onClick={handleOpenSidebar}>
         <DrawerIcon className={cn('w-[18px] h-[16px] mx-[3px]', variant === 'primary' ? 'fill-white stroke-white' : 'fill-primary-600 stroke-primary-600')}/>
       </button>
     </header>
