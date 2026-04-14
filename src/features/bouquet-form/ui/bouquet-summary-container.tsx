@@ -6,7 +6,7 @@ import { bouquetFlowersAtom } from '../model';
 export default function BouquetSummaryContainer() {
   const flowers = useAtomValue(bouquetFlowersAtom);
   const totalQuantity = flowers.reduce(
-    (sum, f) => sum + f.colorAndQuantities.reduce((s, cq) => s + cq.quantity, 0),
+    (sum, f) => sum + f.colorInfos.reduce((s, ci) => s + ci.quantity, 0),
     0,
   );
 

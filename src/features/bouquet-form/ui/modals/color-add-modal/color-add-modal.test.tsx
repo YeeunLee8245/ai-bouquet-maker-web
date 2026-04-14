@@ -22,12 +22,12 @@ describe('ColorAddModal', () => {
   afterEach(() => cleanup());
 
   it('색상 스와치 6개를 렌더링한다', () => {
-    renderWithStore(<ColorAddModal colorAndQuantities={[]} onConfirm={onConfirm} />);
+    renderWithStore(<ColorAddModal colorInfos={[]} onConfirm={onConfirm} />);
     expect(screen.getAllByRole('button')).toHaveLength(6);
   });
 
   it('중복되지 않는 색상 클릭 시 onConfirm을 호출한다', () => {
-    renderWithStore(<ColorAddModal colorAndQuantities={[]} onConfirm={onConfirm} />);
+    renderWithStore(<ColorAddModal colorInfos={[]} onConfirm={onConfirm} />);
     fireEvent.click(screen.getByLabelText(PRESET_COLORS[0]));
     expect(onConfirm).toHaveBeenCalledWith(PRESET_COLORS[0]);
   });
@@ -35,7 +35,7 @@ describe('ColorAddModal', () => {
   it('중복 색상 클릭 시 onConfirm을 호출하지 않는다', () => {
     renderWithStore(
       <ColorAddModal
-        colorAndQuantities={[{ color: PRESET_COLORS[0], quantity: 1 }]}
+        colorInfos={[{ hex: PRESET_COLORS[0], quantity: 1, meaningId: '', tags: [] }]}
         onConfirm={onConfirm}
       />,
     );
@@ -49,7 +49,7 @@ describe('ColorAddModal', () => {
     const store = createStore();
     renderWithStore(
       <ColorAddModal
-        colorAndQuantities={[{ color: PRESET_COLORS[0], quantity: 1 }]}
+        colorInfos={[{ hex: PRESET_COLORS[0], quantity: 1, meaningId: '', tags: [] }]}
         onConfirm={onConfirm}
       />,
       store,

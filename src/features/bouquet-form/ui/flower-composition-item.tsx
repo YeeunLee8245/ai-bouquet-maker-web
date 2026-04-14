@@ -6,7 +6,7 @@ import Image from 'next/image';
 import ColorCompositionItem from './color-composition-item';
 import { openModalAtom } from '@/shared/model/modal';
 import { useSetAtom } from 'jotai';
-import ColorPickModal from './modals/color-pick-modal/color-pick-modal';
+import ColorAddModal from './modals/color-add-modal/color-add-modal';
 import type { TFlowerCompositionItem } from '../model';
 
 type TProps = {
@@ -23,14 +23,20 @@ type TProps = {
 export default function FlowerCompositionItem({
   item, flowerIndex, onDeleteColor, onPlusColor, onMinusColor, onDelete, onAddColor, onUpdateColor,
 }: TProps) {
-  const { name, keywords, imageUrl, colorAndQuantities } = item;
+  const { name, keywords, imageUrl, colorInfos } = item;
   const openModal = useSetAtom(openModalAtom);
 
   const handleOpenAddColorModal = () => {
     openModal({
       id: `color-pick-modal-add-${flowerIndex}`,
-      component: <ColorPickModal onConfirm={(color) => onAddColor(flowerIndex, color)} />,
+      component: (
+        <ColorAddModal
+          colorInfos={colorInfos}
+          onConfirm={(color) => onAddColor(flowerIndex, color)}
+        />
+      ),
       position: 'bottom',
+      canCloseOnBackgroundClick: true,
     });
   };
 
@@ -52,22 +58,13 @@ export default function FlowerCompositionItem({
         </ColorPicker>
       </div>
       <p className='pt-2 text-body-lg'>{name}</p>
-      <div className='pt-2 flex gap-2 flex-wrap'>
-        {keywords.length > 0 ? keywords.map((keyword) => (
-          <span key={keyword} className='text-ui-tag bg-gray-100 rounded-3 px-2 py-1 text-gray-400'>{keyword}</span>
-        )) : (
-          <>
-            <span className='rounded-3 px-2 py-1 w-12 h-5 bg-gray-100 animate-pulse' />
-            <span className='rounded-3 px-2 py-1 w-16 h-5 bg-gray-100 animate-pulse' />
-          </>
-        )}
-      </div>
       <div className='py-4 flex flex-col gap-2'>
-        {colorAndQuantities.map(({ color, quantity }, colorIndex) => (
+        {colorInfos.map(({ hex, quantity, tags }, colorIndex) => (
           <ColorCompositionItem
-            key={`${color}-${colorIndex}`}
-            color={color}
+            key={`${hex}-${colorIndex}`}
+            color={hex}
             quantity={quantity}
+            tags={tags}
             flowerIndex={flowerIndex}
             colorIndex={colorIndex}
             onPlus={onPlusColor}

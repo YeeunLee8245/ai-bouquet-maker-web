@@ -4,7 +4,7 @@ import { useSetAtom } from 'jotai';
 import { closeModalAtom, TModalProps } from '@/shared/model/modal';
 import { showToastAtom } from '@/shared/model/toast';
 import { hslString } from '@/shared/utils/color';
-import type { TFlowerColorAndQuantity } from '@/features/bouquet-form/model';
+import type { TFlowerColorInfo } from '@/features/bouquet-form/model';
 
 // TODO: yeeun 추후 API에서 받아오도록 수정
 export const PRESET_COLORS = [
@@ -17,16 +17,16 @@ export const PRESET_COLORS = [
 ];
 
 type TProps = TModalProps & {
-  colorAndQuantities: TFlowerColorAndQuantity[];
+  colorInfos: TFlowerColorInfo[];
   onConfirm: (color: string) => void;
 };
 
-export default function ColorAddModal({ modalId, colorAndQuantities, onConfirm }: TProps) {
+export default function ColorAddModal({ modalId, colorInfos, onConfirm }: TProps) {
   const closeModal = useSetAtom(closeModalAtom);
   const showToast = useSetAtom(showToastAtom);
 
   const handleColorClick = (color: string) => {
-    const isDuplicate = colorAndQuantities.some((cq) => cq.color === color);
+    const isDuplicate = colorInfos.some((ci) => ci.hex === color);
     if (isDuplicate) {
       showToast({ message: '이미 추가된 색상입니다' });
       return;

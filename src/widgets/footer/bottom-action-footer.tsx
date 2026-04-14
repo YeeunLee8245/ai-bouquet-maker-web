@@ -113,7 +113,7 @@ function BottomActionFooter({ title, children, flowers, onRemoveFlower, fromAiPr
       showToast({ message: '꽃을 1개 이상 선택해주세요.' });
       return;
     }
-    debugger;
+
     if (fromAiPrompt && aiResult) {
       const flowerMeaningIds = selectedFlowers
         .map((sf) => aiResult.recommendations.find((r) => r.id === sf.id)?.flowerMeaningId)

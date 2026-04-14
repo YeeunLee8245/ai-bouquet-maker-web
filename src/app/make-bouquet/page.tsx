@@ -21,7 +21,6 @@ function MakeBouquetPage() {
   const initBouquetFlowers = useSetAtom(initBouquetFlowersAtom);
   const resetBouquetForm = useSetAtom(resetBouquetFormAtom);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (selectedFlowers.length === 0) {
       router.replace('/flower-directory');
@@ -29,6 +28,7 @@ function MakeBouquetPage() {
     }
     initBouquetFlowers();
     return () => { resetBouquetForm(); };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

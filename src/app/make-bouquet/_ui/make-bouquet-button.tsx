@@ -41,12 +41,12 @@ export default function MakeBouquetButton() {
     }
 
     const recipeFlowers = flowers.flatMap((flower) =>
-      flower.colorAndQuantities.map((cq) => ({
+      flower.colorInfos.map((ci) => ({
         flower_id: flower.id,
         // TODO: yeeun 의미 아이디 default 처리 필요
-        flower_meaning_id: cq.meaningId ?? flower.meaningId,
-        quantity: cq.quantity,
-        color: cq.color,
+        flower_meaning_id: ci.meaningId || flower.meaningId,
+        quantity: ci.quantity,
+        color: ci.hex,
       })),
     );
 

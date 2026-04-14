@@ -41,11 +41,11 @@ export default function ModifyBouquetButton({ id }: TProps) {
     }
 
     const recipeFlowers = flowers.flatMap((flower) =>
-      flower.colorAndQuantities.map((cq) => ({
+      flower.colorInfos.map((ci) => ({
         flower_id: flower.id,
-        flower_meaning_id: cq.meaningId ?? flower.meaningId,
-        quantity: cq.quantity,
-        color: cq.color,
+        flower_meaning_id: ci.meaningId || flower.meaningId,
+        quantity: ci.quantity,
+        color: ci.hex,
       })),
     );
 

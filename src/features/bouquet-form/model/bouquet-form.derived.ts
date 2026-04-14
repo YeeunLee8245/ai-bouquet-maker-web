@@ -18,7 +18,7 @@ export const bouquetFlowersErrorAtom = atom((get) => {
 
 export const bouquetEmptyColorsErrorAtom = atom((get) => {
   const flowers = get(bouquetFlowersAtom);
-  return flowers.some((f) => f.colorAndQuantities.length === 0)
+  return flowers.some((f) => f.colorInfos.length === 0)
     ? '모든 꽃에 색상을 하나 이상 추가해 주세요.'
     : null;
 });

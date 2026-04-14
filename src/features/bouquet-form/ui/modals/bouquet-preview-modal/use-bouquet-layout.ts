@@ -19,10 +19,10 @@ export function useBouquetLayout() {
     const flatFlowers: { svgUrl: string; color: string; name: string; size: number }[] = [];
 
     for (const flower of bouquetFlowers) {
-      for (const cq of flower.colorAndQuantities) {
-        for (let i = 0; i < cq.quantity; i++) {
+      for (const ci of flower.colorInfos) {
+        for (let i = 0; i < ci.quantity; i++) {
           const { svgUrl = DEFAULT_SVG, size = FLOWER_SIZE } = FLOWER_SVG_MAP[flower.name] ?? {};
-          flatFlowers.push({ svgUrl, color: cq.color, name: flower.name, size });
+          flatFlowers.push({ svgUrl, color: ci.hex, name: flower.name, size });
         }
       }
     }

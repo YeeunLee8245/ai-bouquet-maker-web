@@ -4,10 +4,11 @@ export type TMakeBouquetInfoData = {
   isRequired: boolean;
 };
 
-export type TFlowerColorAndQuantity = {
-  color: string;
+export type TFlowerColorInfo = {
+  hex: string;
   quantity: number;
-  meaningId?: string;
+  meaningId: string;
+  tags: string[];
 };
 
 export type TFlowerCompositionItem = {
@@ -16,7 +17,7 @@ export type TFlowerCompositionItem = {
   meaningId: string;
   keywords: string[];
   imageUrl: string;
-  colorAndQuantities: TFlowerColorAndQuantity[];
+  colorInfos: TFlowerColorInfo[];
 };
 
 /**
