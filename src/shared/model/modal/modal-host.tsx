@@ -1,10 +1,12 @@
 'use client';
 
 import { useAtomValue, useSetAtom } from 'jotai';
-import React, { useRef } from 'react';
+import React, { useCallback, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { modalStackAtom } from './modal.atoms';
-import { TModalDescriptor, TModalProps, TAnchorSide } from './modal.types';
+import { TModalDescriptor, TModalProps } from './modal.types';
 import { closeModalAtom } from './modal.actions';
+import { applyAnchorPosition } from '@/shared/utils/anchor-position';
 
 const POSITION_CLASSES: Record<string, string> = {
   center: 'items-center justify-center',
@@ -12,43 +14,43 @@ const POSITION_CLASSES: Record<string, string> = {
   bottom: 'items-end justify-center',
 };
 
-function getAnchorStyle(anchorEl: HTMLElement | null | undefined, anchorSide: TAnchorSide): React.CSSProperties {
-  const rect = anchorEl?.getBoundingClientRect();
-  if (!rect) {return {};}
+// --- AnchorModalItem ---
 
-  switch (anchorSide) {
-    case 'bottom': return { top: rect.bottom, left: rect.left };
-    case 'top':    return { bottom: window.innerHeight - rect.top, left: rect.left };
-    case 'left':   return { top: rect.top, right: window.innerWidth - rect.left };
-    case 'right':  return { top: rect.top, left: rect.right };
-  }
+type AnchorModalItemProps = {
+  descriptor: TModalDescriptor;
+  onClose: () => void;
+};
+
+function AnchorModalItem({ descriptor, onClose }: AnchorModalItemProps) {
+  const { id, component, anchor } = descriptor;
+  const { el: anchorEl, position: anchorPosition = 'bottom-right', gap: anchorGap = 0 } = anchor ?? {};
+
+  const refCallback = useCallback((node: HTMLDivElement | null) => {
+    if (!node || !anchorEl) {return;}
+    applyAnchorPosition(node, anchorEl, anchorPosition, anchorGap);
+  }, [anchorEl, anchorPosition, anchorGap]);
+
+  return createPortal(
+    <>
+      <div className='fixed inset-0 z-50' onClick={onClose} />
+      <div ref={refCallback} className='fixed z-[51]'>
+        {React.cloneElement(component, { modalId: id } as React.PropsWithChildren<TModalProps>)}
+      </div>
+    </>,
+    document.body,
+  );
 }
 
-type ModalItemProps = {
+// --- StandardModalItem ---
+
+type StandardModalItemProps = {
   descriptor: TModalDescriptor;
   index: number;
   containerRef: React.RefObject<(HTMLDivElement | null)[]>;
   onBackgroundClick: (e: React.MouseEvent<HTMLDivElement>) => void;
 };
 
-function AnchorModalItem({ descriptor, index, containerRef, onBackgroundClick }: ModalItemProps) {
-  const { id, component, anchorEl, anchorSide = 'bottom' } = descriptor;
-  const anchorStyle = getAnchorStyle(anchorEl, anchorSide);
-
-  return (
-    <div key={id} onClick={onBackgroundClick} className='fixed inset-0 z-50'>
-      <div
-        ref={(el) => { containerRef.current[index] = el; }}
-        className='absolute'
-        style={anchorStyle}
-      >
-        {React.cloneElement(component, { modalId: id } as React.PropsWithChildren<TModalProps>)}
-      </div>
-    </div>
-  );
-}
-
-function StandardModalItem({ descriptor, index, containerRef, onBackgroundClick }: ModalItemProps) {
+function StandardModalItem({ descriptor, index, containerRef, onBackgroundClick }: StandardModalItemProps) {
   const { id, component, backgroundColor, position = 'bottom' } = descriptor;
   const positionClasses = POSITION_CLASSES[position] ?? POSITION_CLASSES.bottom;
 
@@ -68,6 +70,8 @@ function StandardModalItem({ descriptor, index, containerRef, onBackgroundClick 
   );
 }
 
+// --- ModalHost ---
+
 function ModalHost() {
   const stack = useAtomValue(modalStackAtom);
   const containerRef = useRef<(HTMLDivElement | null)[]>([]);
@@ -80,6 +84,16 @@ function ModalHost() {
       {stack.map((descriptor, index) => {
         const canClose = !!descriptor.canCloseOnBackgroundClick;
 
+        if (descriptor.position === 'anchor') {
+          return (
+            <AnchorModalItem
+              key={descriptor.id}
+              descriptor={descriptor}
+              onClose={() => { if (canClose) {closeModal();} }}
+            />
+          );
+        }
+
         const handleBackgroundClick = (e: React.MouseEvent<HTMLDivElement>) => {
           const container = containerRef.current[index];
           if (!canClose || !container) {return;}
@@ -87,11 +101,15 @@ function ModalHost() {
           closeModal();
         };
 
-        const props: ModalItemProps = { descriptor, index, containerRef, onBackgroundClick: handleBackgroundClick };
-
-        return descriptor.position === 'anchor'
-          ? <AnchorModalItem key={descriptor.id} {...props} />
-          : <StandardModalItem key={descriptor.id} {...props} />;
+        return (
+          <StandardModalItem
+            key={descriptor.id}
+            descriptor={descriptor}
+            index={index}
+            containerRef={containerRef}
+            onBackgroundClick={handleBackgroundClick}
+          />
+        );
       })}
     </>
   );

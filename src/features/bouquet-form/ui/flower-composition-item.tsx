@@ -25,9 +25,9 @@ type TProps = {
 export default function FlowerCompositionItem({
   item, availableColors, flowerIndex, onDeleteColor, onPlusColor, onMinusColor, onDelete, onAddColor, onUpdateColor,
 }: TProps) {
-  const { name, keywords, imageUrl, colorInfos } = item;
+  const { name, imageUrl, colorInfos } = item;
   const openModal = useSetAtom(openModalAtom);
-  const colorPickerRef = useRef<HTMLDivElement>(null);
+  const colorPickerRef = useRef<HTMLButtonElement>(null);
 
   const handleOpenAddColorModal = () => {
     openModal({
@@ -40,8 +40,7 @@ export default function FlowerCompositionItem({
         />
       ),
       position: 'anchor',
-      anchorEl: colorPickerRef.current,
-      anchorSide: 'bottom',
+      anchor: { el: colorPickerRef.current, position: 'bottom-right', gap: 4 },
       canCloseOnBackgroundClick: true,
     });
   };
@@ -54,16 +53,15 @@ export default function FlowerCompositionItem({
         ) : (
           <div className='w-[60px] h-[60px] rounded-2 bg-gray-100 animate-pulse' />
         )}
-        <div ref={colorPickerRef}>
-          <ColorPicker
-            data-state='default'
-            variant='additional'
-            color='linear-gradient(324deg, #83D400 5.7%, #89CE00 11.24%, #90C800 16.59%, #96C000 21.81%, #9DB800 26.94%, #A4AF00 32.05%, #ACA500 37.19%, #B59900 42.42%, #BD8B00 47.8%, #C77C00 53.38%, #D16A00 59.22%, #DC5500 65.38%, #E73B00 71.91%, #ED2900 83.1%, #F11E00 88.7%, #F40E00 94.3%)'
-            onClick={handleOpenAddColorModal}
-          >
-            <PlusIcon className='m-auto w-[12px] h-[12px] fill-white' />
-          </ColorPicker>
-        </div>
+        <ColorPicker
+          ref={colorPickerRef}
+          data-state='default'
+          variant='additional'
+          color='linear-gradient(324deg, #83D400 5.7%, #89CE00 11.24%, #90C800 16.59%, #96C000 21.81%, #9DB800 26.94%, #A4AF00 32.05%, #ACA500 37.19%, #B59900 42.42%, #BD8B00 47.8%, #C77C00 53.38%, #D16A00 59.22%, #DC5500 65.38%, #E73B00 71.91%, #ED2900 83.1%, #F11E00 88.7%, #F40E00 94.3%)'
+          onClick={handleOpenAddColorModal}
+        >
+          <PlusIcon className='m-auto w-[12px] h-[12px] fill-white' />
+        </ColorPicker>
       </div>
       <p className='pt-2 text-body-lg'>{name}</p>
       <div className='py-4 flex flex-col gap-2'>
