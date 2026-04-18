@@ -55,6 +55,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "babel-plugin-react-compiler": "^19.0.0-beta-94eed63c49-20241105",
+    "csstype": "^3.2.3",
     "eslint": "^9",
     "eslint-config-next": "16.0.7",
     "eslint-plugin-unused-imports": "^4.1.4",

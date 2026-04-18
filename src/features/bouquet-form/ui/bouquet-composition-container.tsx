@@ -19,9 +19,10 @@ import {
 } from '../model';
 
 export default function BouquetCompositionContainer() {
+  const flowers = useAtomValue(bouquetFlowersAtom);
+  // -- Action Atoms --
   const openModal = useSetAtom(openModalAtom);
   const showToast = useSetAtom(showToastAtom);
-  const flowers = useAtomValue(bouquetFlowersAtom);
   const removeFlower = useSetAtom(removeBouquetFlowerByIdAtom);
   const removeColor = useSetAtom(removeFlowerColorAtom);
   const plusQuantity = useSetAtom(plusFlowerColorQuantityAtom);
@@ -55,12 +56,13 @@ export default function BouquetCompositionContainer() {
           <div key={item.id}>
             <FlowerCompositionItem
               item={item}
+              availableColors={item.availableColors}
               flowerIndex={idx}
               onDelete={handleDelete(item.id)}
               onDeleteColor={(fi, ci) => removeColor({ flowerIndex: fi, colorIndex: ci })}
               onPlusColor={(fi, ci) => plusQuantity({ flowerIndex: fi, colorIndex: ci })}
               onMinusColor={(fi, ci) => minusQuantity({ flowerIndex: fi, colorIndex: ci })}
-              onAddColor={(fi, color) => addColor({ flowerIndex: fi, color })}
+              onAddColor={(fi, color) => addColor({ flowerIndex: fi, ...color })}
               onUpdateColor={(fi, ci, color) => updateColor({ flowerIndex: fi, colorIndex: ci, color })}
             />
             {idx !== flowers.length - 1 && <div className='my-4 w-full h-[1px] bg-gray-100' />}

@@ -10,7 +10,8 @@ type TProps = TModalProps & {
   onConfirm?: (color: string) => void;
 };
 
-function ColorPickModal({ modalId, onConfirm }: TProps) {
+/** 색상 선택(HSL) 모달 */
+function ColorHSLPickModal({ modalId, onConfirm }: TProps) {
   const [hue, setHue] = useState(0);
   const [saturation, setSaturation] = useState(100);
   const [lightness, setLightness] = useState(50);
@@ -106,4 +107,4 @@ function ColorPickModal({ modalId, onConfirm }: TProps) {
   );
 }
 
-export default ColorPickModal;
+export default ColorHSLPickModal;

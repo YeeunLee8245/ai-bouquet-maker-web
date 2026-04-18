@@ -19,6 +19,7 @@ const toFlowerCompositionItem = (detail: TSelectedFlowerDetail): TFlowerComposit
   keywords: [...new Set(detail.colorInfos.flatMap((c) => c.tags))],
   imageUrl: detail.imageUrl ?? '',
   colorInfos: detail.colorInfos.map((c) => ({ hex: c.hex, quantity: 1, meaningId: c.meaningId, tags: c.tags })),
+  availableColors: detail.colorInfos.map(({ hex, tags, meaningId }) => ({ hex, tags, meaningId })),
 });
 
 /** [Create] 선택한 꽃을 꽃다발 폼에 초기 세팅 */
@@ -32,6 +33,7 @@ export const initBouquetFlowersAtom = atom(null, async (get, set) => {
     keywords: [],
     imageUrl: '',
     colorInfos: [],
+    availableColors: [],
   }));
   set(bouquetFlowersAtom, bouquetFlowers);
 
@@ -68,6 +70,7 @@ export const initBouquetFormFromDetailAtom = atom(null, async (_get, set, detail
     keywords: f.tags,
     imageUrl: '',
     colorInfos: f.color_and_quantity.map((cq) => ({ hex: cq.color, quantity: cq.quantity, meaningId: cq.meaningId ?? '', tags: [] })),
+    availableColors: [],
   }));
   set(bouquetFlowersAtom, bouquetFlowers);
 
@@ -78,7 +81,7 @@ export const initBouquetFormFromDetailAtom = atom(null, async (_get, set, detail
     const detailMap = new Map(fetched.map((d) => [d.id, d]));
     set(bouquetFlowersAtom, bouquetFlowers.map((f) => {
       const d = detailMap.get(f.id);
-      return d ? { ...f, meaningId: d.colorInfos[0]?.meaningId ?? f.meaningId, imageUrl: d.imageUrl ?? '', keywords: [...new Set(d.colorInfos.flatMap((c) => c.tags))] } : f;
+      return d ? { ...f, meaningId: d.colorInfos[0]?.meaningId ?? f.meaningId, imageUrl: d.imageUrl ?? '', keywords: [...new Set(d.colorInfos.flatMap((c) => c.tags))], availableColors: d.colorInfos.map(({ hex, tags, meaningId }) => ({ hex, tags, meaningId })) } : f;
     }));
   } catch {
     // 실패 시 임시값 유지 (meaningId='', imageUrl='')
@@ -111,10 +114,10 @@ const updateFlowerAt = (
   return updated;
 };
 
-export const addFlowerColorAtom = atom(null, (get, set, params: { flowerIndex: number; color: string }) => {
+export const addFlowerColorAtom = atom(null, (get, set, params: { flowerIndex: number; hex: string; tags: string[]; meaningId: string }) => {
   set(bouquetFlowersAtom, updateFlowerAt(get(bouquetFlowersAtom), params.flowerIndex, (f) => ({
     ...f,
-    colorInfos: [...f.colorInfos, { hex: params.color, quantity: 1, meaningId: '', tags: [] }],
+    colorInfos: [...f.colorInfos, { hex: params.hex, quantity: 1, meaningId: params.meaningId, tags: params.tags }],
   })));
 });
 

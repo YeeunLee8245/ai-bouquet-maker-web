@@ -5,7 +5,7 @@ import XIcon from '@/shared/assets/icons/x.svg';
 import { ColorSwitchToggle } from '@/shared/ui/button';
 import { openModalAtom } from '@/shared/model/modal';
 import { useSetAtom } from 'jotai';
-import ColorPickModal from './modals/color-pick-modal/color-pick-modal';
+import ColorHSLPickModal from './modals/color-pick-modal/color-pick-modal';
 
 type TProps = {
   color: string;
@@ -28,7 +28,7 @@ export default function ColorCompositionItem({
     openModal({
       id: `color-pick-modal-update-${flowerIndex}-${colorIndex}`,
       component: (
-        <ColorPickModal onConfirm={(newColor) => onUpdateColor(flowerIndex, colorIndex, newColor)} />
+        <ColorHSLPickModal onConfirm={(newColor) => onUpdateColor(flowerIndex, colorIndex, newColor)} />
       ),
       position: 'bottom',
     });

@@ -11,6 +11,8 @@ export type TFlowerColorInfo = {
   tags: string[];
 };
 
+export type TAvailableColor = Omit<TFlowerColorInfo, 'quantity'>;
+
 export type TFlowerCompositionItem = {
   id: string;
   name: string;
@@ -18,6 +20,7 @@ export type TFlowerCompositionItem = {
   keywords: string[];
   imageUrl: string;
   colorInfos: TFlowerColorInfo[];
+  availableColors: TAvailableColor[];
 };
 
 /**

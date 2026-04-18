@@ -4,7 +4,8 @@ import { useSetAtom } from 'jotai';
 import { closeModalAtom, TModalProps } from '@/shared/model/modal';
 import { showToastAtom } from '@/shared/model/toast';
 import { hslString } from '@/shared/utils/color';
-import type { TFlowerColorInfo } from '@/features/bouquet-form/model';
+import type { TFlowerColorInfo, TAvailableColor } from '@/features/bouquet-form/model';
+import { ColorPicker } from '@/shared/ui/color-picker';
 
 // TODO: yeeun 추후 API에서 받아오도록 수정
 export const PRESET_COLORS = [
@@ -18,16 +19,19 @@ export const PRESET_COLORS = [
 
 type TProps = TModalProps & {
   colorInfos: TFlowerColorInfo[];
-  onConfirm: (color: string) => void;
+  availableColors: TAvailableColor[];
+  onConfirm: (color: TAvailableColor) => void;
 };
 
-export default function ColorAddModal({ modalId, colorInfos, onConfirm }: TProps) {
+/** 색상 palette 모달 */
+export default function ColorPaletteModal({ modalId, colorInfos, availableColors, onConfirm }: TProps) {
   const closeModal = useSetAtom(closeModalAtom);
   const showToast = useSetAtom(showToastAtom);
 
-  const handleColorClick = (color: string) => {
-    const isDuplicate = colorInfos.some((ci) => ci.hex === color);
-    if (isDuplicate) {
+  const addedHexSet = new Set(colorInfos.map((ci) => ci.hex));
+
+  const handleColorClick = (color: TAvailableColor) => {
+    if (addedHexSet.has(color.hex)) {
       showToast({ message: '이미 추가된 색상입니다' });
       return;
     }
@@ -37,16 +41,19 @@ export default function ColorAddModal({ modalId, colorInfos, onConfirm }: TProps
 
   return (
     <div className='flex items-center gap-1 bg-white border border-gray-100 rounded-xl px-3 py-2 shadow-[0px_2px_2px_0px_rgba(0,0,0,0.08)]'>
-      {PRESET_COLORS.map((color) => (
-        <button
-          key={color}
-          type='button'
-          aria-label={color}
-          onClick={() => handleColorClick(color)}
-          className='w-8 h-8 rounded-full border-2 border-transparent hover:border-gray-300 transition-colors shrink-0'
-          style={{ backgroundColor: color }}
-        />
-      ))}
+      {availableColors.map((color) => {
+        const isAdded = addedHexSet.has(color.hex);
+        return (
+          <button
+            key={color.hex}
+            type='button'
+            className='color-circle-toggle'
+            data-state={isAdded ? 'on' : undefined}
+            style={{ backgroundColor: color.hex }}
+            onClick={() => handleColorClick(color)}
+          />
+        );
+      })}
     </div>
   );
 }

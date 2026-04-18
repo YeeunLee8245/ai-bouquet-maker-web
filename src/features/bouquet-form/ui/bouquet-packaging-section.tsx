@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import PlusIcon from '@/shared/assets/icons/plus.svg';
 import { openModalAtom } from '@/shared/model/modal';
 import { atom, useAtom, useSetAtom } from 'jotai';
-import ColorPickModal from './modals/color-pick-modal/color-pick-modal';
+import ColorHSLPickModal from './modals/color-pick-modal/color-pick-modal';
 import { MAKE_BOUQUET_PACKAGING_DEFAULT_COLORS } from '../model';
 
 type TProps = {
@@ -34,7 +34,7 @@ export default function BouquetPackagingSection({ title, colorAtom }: TProps) {
   const handleOpenColorPickModal = () => {
     openModal({
       id: 'color-pick-modal',
-      component: <ColorPickModal onConfirm={(color) => setColors((prev) => [...prev, color])} />,
+      component: <ColorHSLPickModal onConfirm={(color) => setColors((prev) => [...prev, color])} />,
       position: 'bottom',
     });
   };

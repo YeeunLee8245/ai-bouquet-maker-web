@@ -17,11 +17,7 @@ function ColorSwitchToggle({ pressed, onPressedChange, className, colorHex, ...p
       size='sm'
       variant='custom'
       onPressedChange={onPressedChange}
-      className={cn('relative w-8 h-8 rounded-full border-2 border-gray-100',
-        'hover:border-white hover:after:content-[""] hover:after:absolute hover:after:inset-0 hover:after:bg-black/40 hover:after:rounded-full ',
-        'data-[state="on"]:border-white data-[state="on"]:after:content-[""] data-[state="on"]:after:absolute data-[state="on"]:after:inset-0 data-[state="on"]:after:bg-black/40 data-[state="on"]:after:rounded-full',
-        className,
-      )}
+      className={cn('color-circle-toggle', className)}
       style={{ backgroundColor: colorHex }}
       {...props}>
       {pressed && <div
