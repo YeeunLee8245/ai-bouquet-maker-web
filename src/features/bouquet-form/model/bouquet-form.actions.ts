@@ -8,7 +8,7 @@ import {
   bouquetPackagingColorAtom,
   bouquetRibbonColorAtom,
 } from './bouquet-form.atoms';
-import { selectedFlowersAtom } from '@/shared/model/selected-flowers';
+import { selectedFlowersAtom } from '@/entities/flower/model/selected-flowers';
 import type { TFlowerCompositionItem, TBouquetDetailInitData } from './bouquet-form.types';
 import { fetchSelectedFlowers, TSelectedFlowerDetail } from '@api/recipe-bouquet.api';
 

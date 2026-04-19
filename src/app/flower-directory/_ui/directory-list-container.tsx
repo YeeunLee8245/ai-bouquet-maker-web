@@ -6,7 +6,7 @@ import { directorySortAtom } from '../_model/atoms';
 import { useDirectoryQuery } from '../_model/use-directory-query';
 import { FlowerCard } from '@/entities/flower/ui';
 import { Button } from '@/shared/ui/button';
-import { toggleFlowerAtom, selectedFlowersAtom } from '@/shared/model/selected-flowers';
+import { toggleFlowerAtom, selectedFlowersAtom } from '@/entities/flower/model/selected-flowers';
 import LikeButton from '@/features/like/ui/like-button';
 import { initLikeFromServer } from '@/features/like/model/atoms';
 import { cn } from '@/shared/utils/styles';

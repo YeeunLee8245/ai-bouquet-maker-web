@@ -3,7 +3,7 @@ import BottomActionFooter from '@/widgets/footer/bottom-action-footer';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { Suspense, useEffect } from 'react';
 import { useSetAtom } from 'jotai';
-import { resetSelectedFlowersAtom } from '@/shared/model/selected-flowers';
+import { resetSelectedFlowersAtom } from '@/entities/flower/model/selected-flowers';
 
 type TProps = {
   children: React.ReactNode;

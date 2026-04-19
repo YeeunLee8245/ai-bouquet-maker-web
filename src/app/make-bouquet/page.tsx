@@ -15,7 +15,7 @@ import {
   resetBouquetFormAtom,
   BOUQUET_FROM_AI_PARAM,
 } from '@features/bouquet-form';
-import { selectedFlowersAtom } from '@/shared/model/selected-flowers';
+import { selectedFlowersAtom } from '@/entities/flower/model/selected-flowers';
 import { aiRecommendationResultAtom } from '@/app/main/ai-prompt/_model/recommendation-result.atoms';
 
 function MakeBouquetPage() {

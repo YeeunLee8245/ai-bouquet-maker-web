@@ -11,7 +11,7 @@ import { Button } from '@/shared/ui/button';
 import { fetchSelectedFlowers } from '@api/recipe-bouquet.api';
 import { isApiError } from '@/shared/api';
 import BottomActionFooter from '@/widgets/footer/bottom-action-footer';
-import { TSelectedFlower } from '@/shared/model/selected-flowers';
+import { TSelectedFlower } from '@/entities/flower/model/selected-flowers';
 
 function FlowerAddModal({ modalId }: TModalProps) {
   const closeModal = useSetAtom(closeModalAtom);

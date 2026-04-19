@@ -7,7 +7,7 @@ import ChevronDownIcon from '@/shared/assets/icons/chevron_down.svg';
 import { useRouter } from 'next/navigation';
 import { useRef, useState, useEffect, useCallback } from 'react';
 import { useAtomValue, useSetAtom } from 'jotai';
-import { selectedFlowersAtom, removeFlowerAtom } from '@/shared/model/selected-flowers';
+import { selectedFlowersAtom, removeFlowerAtom } from '@/entities/flower/model/selected-flowers';
 import { showToastAtom } from '@/shared/model/toast';
 import { aiRecommendationResultAtom } from '@/app/main/ai-prompt/_model/recommendation-result.atoms';
 import { postUserSelection } from '@api/recommend-user-selection.api';

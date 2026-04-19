@@ -16,7 +16,7 @@ import {
   bouquetValidationErrorAtom,
 } from '@features/bouquet-form';
 import { saveBouquet } from '@api/recipe-bouquet.api';
-import { resetSelectedFlowersAtom } from '@/shared/model/selected-flowers';
+import { resetSelectedFlowersAtom } from '@/entities/flower/model/selected-flowers';
 
 const LoadingButton = withAsyncClick(Button);
 

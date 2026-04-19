@@ -2,7 +2,7 @@
 
 import { useAtomValue, useSetAtom } from 'jotai';
 import { Button } from '@/shared/ui/button';
-import { selectedFlowersAtom, toggleFlowerAtom } from '@/shared/model/selected-flowers';
+import { selectedFlowersAtom, toggleFlowerAtom } from '@/entities/flower/model/selected-flowers';
 
 type TProps = {
   flowerId: string;

@@ -1,5 +1,5 @@
 import BottomActionFooter from '@/widgets/footer/bottom-action-footer';
-import { SelectedFlowersInitializer } from '@/shared/model/selected-flowers';
+import { SelectedFlowersInitializer } from '@/entities/flower/model/selected-flowers';
 
 function AiPromptResultLayout({ children }: { children: React.ReactNode }) {
   return (
