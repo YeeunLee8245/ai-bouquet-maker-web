@@ -52,6 +52,19 @@ export const initBouquetFlowersAtom = atom(null, async (get, set) => {
   }
 });
 
+/** [Modify] AI 추천 결과로 꽃다발 폼 정보 적용 */
+export const BOUQUET_FROM_AI_PARAM = 'fromAi';
+
+export const applyAiResultToBouquetAtom = atom(
+  null,
+  (_get, set, info: { title: string; occasion: string | null; recipient: string | null; message: string }) => {
+    set(bouquetNameAtom, info.title);
+    set(bouquetOccasionAtom, info.occasion ?? '');
+    set(bouquetRecipientAtom, info.recipient ?? '');
+    set(bouquetMessageAtom, info.message);
+  },
+);
+
 /** [Modify] 상세 API 데이터로 폼 전체를 초기 세팅 */
 export const initBouquetFormFromDetailAtom = atom(null, async (_get, set, detail: TBouquetDetailInitData) => {
   // 텍스트·포장 atoms 즉시 세팅

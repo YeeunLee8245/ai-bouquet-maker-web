@@ -151,5 +151,19 @@ export async function GET(request: NextRequest) {
     redirectUrl.searchParams.set('is_new_user', 'true');
   }
 
+  // 6️⃣ 모바일 Chrome의 Desktop mode 자동 활성화 방지
+  // 구형 Android Chrome은 302 응답(HTML 없음)을 모바일 미지원으로 판단해 Desktop mode를 활성화함.
+  // 모바일일 때는 viewport meta를 포함한 200 HTML로 응답해 Chrome이 모바일 도메인으로 인식하도록 함.
+  const ua = request.headers.get('user-agent') ?? '';
+  const isMobile = /Mobile|Android/i.test(ua);
+
+  if (isMobile) {
+    const target = redirectUrl.toString();
+    return new Response(
+      `<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"><meta http-equiv="refresh" content="0;url=${target}"></head><body><script>location.replace(${JSON.stringify(target)})</script></body></html>`,
+      { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' } },
+    );
+  }
+
   return NextResponse.redirect(redirectUrl);
 }

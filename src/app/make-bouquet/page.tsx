@@ -11,14 +11,19 @@ import {
   BouquetSummaryContainer,
   BouquetPreviewContainer,
   initBouquetFlowersAtom,
+  applyAiResultToBouquetAtom,
   resetBouquetFormAtom,
+  BOUQUET_FROM_AI_PARAM,
 } from '@features/bouquet-form';
 import { selectedFlowersAtom } from '@/shared/model/selected-flowers';
+import { aiRecommendationResultAtom } from '@/app/main/ai-prompt/_model/recommendation-result.atoms';
 
 function MakeBouquetPage() {
   const router = useRouter();
   const selectedFlowers = useAtomValue(selectedFlowersAtom);
+  const aiResult = useAtomValue(aiRecommendationResultAtom);
   const initBouquetFlowers = useSetAtom(initBouquetFlowersAtom);
+  const applyAiResultToBouquet = useSetAtom(applyAiResultToBouquetAtom);
   const resetBouquetForm = useSetAtom(resetBouquetFormAtom);
 
   useEffect(() => {
@@ -27,6 +32,16 @@ function MakeBouquetPage() {
       return;
     }
     initBouquetFlowers();
+    // AI 추천 결과로 꽃다발 폼 정보 적용
+    const fromAi = new URLSearchParams(window.location.search).has(BOUQUET_FROM_AI_PARAM);
+    if (fromAi && aiResult) {
+      applyAiResultToBouquet({
+        title: aiResult.title,
+        occasion: aiResult.occasion,
+        recipient: aiResult.recipient,
+        message: aiResult.message,
+      });
+    }
     return () => { resetBouquetForm(); };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

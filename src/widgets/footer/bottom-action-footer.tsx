@@ -11,6 +11,7 @@ import { selectedFlowersAtom, removeFlowerAtom } from '@/shared/model/selected-f
 import { showToastAtom } from '@/shared/model/toast';
 import { aiRecommendationResultAtom } from '@/app/main/ai-prompt/_model/recommendation-result.atoms';
 import { postUserSelection } from '@api/recommend-user-selection.api';
+import { BOUQUET_FROM_AI_PARAM } from '@features/bouquet-form';
 import { ActionLabel } from '@/shared/ui/label';
 
 type TFlowerChip = {
@@ -122,6 +123,8 @@ function BottomActionFooter({ title, children, flowers, onRemoveFlower, fromAiPr
       if (flowerMeaningIds.length > 0) {
         postUserSelection(aiResult.recommendationId, flowerMeaningIds);
       }
+      router.push(`/make-bouquet?${BOUQUET_FROM_AI_PARAM}`);
+      return;
     }
     router.push('/make-bouquet');
   };
