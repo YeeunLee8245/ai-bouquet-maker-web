@@ -1,7 +1,9 @@
 'use client';
 import BottomActionFooter from '@/widgets/footer/bottom-action-footer';
 import { usePathname, useSearchParams } from 'next/navigation';
-import { Suspense } from 'react';
+import { Suspense, useEffect } from 'react';
+import { useSetAtom } from 'jotai';
+import { resetSelectedFlowersAtom } from '@/shared/model/selected-flowers';
 
 type TProps = {
   children: React.ReactNode;
@@ -14,6 +16,11 @@ type TProps = {
 function BottomActionFooterContainer() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const resetSelectedFlowers = useSetAtom(resetSelectedFlowersAtom);
+
+  useEffect(() => {
+    resetSelectedFlowers();
+  }, []);
   // 꽃 사전 페이지 또는 꽃 상세 페이지에서 꽃다발 만들기 버튼 표시
   const canCreateBouquet = pathname === '/flower-directory' || searchParams.get('can-create-bouquet') === 'true';
 

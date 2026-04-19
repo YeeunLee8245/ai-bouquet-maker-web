@@ -1,25 +1,19 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { useAtomValue, useSetAtom } from 'jotai';
+import { useAtomValue } from 'jotai';
 import { useRouter } from 'next/navigation';
 import ChevronDownIcon from '@/shared/assets/icons/chevron_down.svg';
 import { FlowerCard } from '@/entities/flower/ui';
 import LikeButton from '@/features/like/ui/like-button';
-import { resetSelectedFlowersAtom } from '@/shared/model/selected-flowers';
 import { SelectButton } from '@features/select-flower';
 import { aiRecommendationResultAtom } from '../_model/recommendation-result.atoms';
 
 const AiPromptResultPage = () => {
   const router = useRouter();
-  const resetSelectedFlowers = useSetAtom(resetSelectedFlowersAtom);
   const result = useAtomValue(aiRecommendationResultAtom);
   const detailRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
-
-  useEffect(() => {
-    resetSelectedFlowers();
-  }, []);
 
   useEffect(() => {
     if (!result) {

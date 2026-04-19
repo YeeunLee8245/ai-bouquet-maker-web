@@ -5,7 +5,6 @@ import { closeModalAtom, TModalProps } from '@/shared/model/modal';
 import { showToastAtom } from '@/shared/model/toast';
 import { hslString } from '@/shared/utils/color';
 import type { TFlowerColorInfo, TAvailableColor } from '@/features/bouquet-form/model';
-import { ColorPicker } from '@/shared/ui/color-picker';
 
 // TODO: yeeun 추후 API에서 받아오도록 수정
 export const PRESET_COLORS = [
