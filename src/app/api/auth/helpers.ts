@@ -75,18 +75,6 @@ export const buildCallbackUrl = (requestUrl: string, next?: string | null) => {
   return url.toString();
 };
 
-/**
- * Desktop mode 전환 후 UA가 위장되어도 실제 Android 기기를 감지.
- * Sec-CH-UA-Platform은 Desktop mode와 무관하게 실제 OS를 반환함.
- */
-export const detectMobile = (request: { headers: { get: (key: string) => string | null } }): boolean => {
-  const platform = request.headers.get('sec-ch-ua-platform') ?? '';
-  if (/android/i.test(platform)) { return true; }
-
-  const ua = request.headers.get('user-agent') ?? '';
-  return /Mobile|Android/i.test(ua);
-};
-
 export const resolveNextDestination = (
   requestUrl: string,
   next: string | null,

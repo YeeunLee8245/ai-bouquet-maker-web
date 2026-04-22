@@ -25,7 +25,7 @@ import { createClient } from '@shared/supabase/server';
 import { createAdminClient } from '@shared/supabase/admin';
 import { checkAndGrantDailyBonus } from '@/lib/users/attendance';
 
-import { resolveNextDestination, detectMobile } from '../helpers';
+import { resolveNextDestination } from '../helpers';
 
 const LOGIN_PATH = '/login';
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -149,27 +149,6 @@ export async function GET(request: NextRequest) {
 
   if (isNewUser) {
     redirectUrl.searchParams.set('is_new_user', 'true');
-  }
-
-  // 6️⃣ 모바일 Chrome의 Desktop mode 자동 활성화 방지
-  // Sec-CH-UA-Platform으로 실제 OS를 감지 (Desktop mode로 UA가 위장되어도 신뢰 가능)
-  // [!] 첫 번째 앱 도메인 응답이 bare 302이면 일부 Android Chrome이 Desktop mode를 활성화
-
-  // [DEBUG] Client Hints 검증용 — 확인 후 제거
-  console.warn('[AuthCallback:hints]', JSON.stringify({
-    ua: request.headers.get('user-agent'),
-    platform: request.headers.get('sec-ch-ua-platform'),
-    mobile: request.headers.get('sec-ch-ua-mobile'),
-    chUa: request.headers.get('sec-ch-ua'),
-    detected: detectMobile(request),
-  }));
-
-  if (detectMobile(request)) {
-    const target = redirectUrl.toString();
-    return new Response(
-      `<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"><meta http-equiv="refresh" content="0;url=${target}"></head><body><script>location.replace(${JSON.stringify(target)})</script></body></html>`,
-      { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' } },
-    );
   }
 
   return NextResponse.redirect(redirectUrl);
