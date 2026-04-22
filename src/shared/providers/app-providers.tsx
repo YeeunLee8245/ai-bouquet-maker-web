@@ -6,7 +6,6 @@ import { Provider as JotaiProvider } from 'jotai';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { ToastProvider } from './toast-provider';
 import AuthInitializer from './auth-initializer';
-import DesktopModeGuard from './desktop-mode-guard';
 
 type TProps = {
   children: React.ReactNode;
@@ -18,7 +17,6 @@ function AppProviders({ children }: TProps) {
       <QueryClientProvider client={queryClient}>
         <JotaiProvider>
           <AuthInitializer />
-          <DesktopModeGuard />
           {children}
           {
             process.env.NODE_ENV === 'development' &&
