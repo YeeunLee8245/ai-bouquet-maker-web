@@ -1,42 +1,35 @@
-'use client';
+export const dynamic = 'force-dynamic';
 
-import { IDirectoryEventHub } from './_types';
-import DirectoryFilterToggle from './_ui/directory-filter-toggle';
-import DirectoryFilterContainer from './_ui/directory-filter-container';
-import DirectorySearchInput from './_ui/directory-search-input';
-import DirectoryFilterKeywordContainer from './_ui/directory-filter-keyword-container';
-import { useMemo } from 'react';
-import DirectoryListContainer from './_ui/directory-list-container';
-import { ScrollToTopButton } from '@/shared/ui/scroll-to-top/scroll-to-top-button';
-import ArrowUpIcon from '@/shared/assets/icons/up_arrow.svg';
+import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
+import { createServerQueryClient } from '@/shared/lib/server-query';
+import { fetchDirectory } from '@api/flowers.api';
+import { directoryQueryKey, directoryDefaultQueryParams } from './_model/use-directory-query';
+import DirectoryPageContent from './_ui/directory-page-content';
 
 /**
  * 꽃 사전 리스트 페이지
  */
-const FlowerDirectoryPage = () => {
-  const eventHub = useMemo<IDirectoryEventHub>(() => ({
-    onToggleFilterSection: undefined,
-    onClickColorFilter: undefined,
-    onClickSeasonFilter: undefined,
-    onClickResetFilter: undefined,
-    onSearchKeyword: undefined,
-  }), []);
+export default async function FlowerDirectoryPage() {
+  const queryClient = createServerQueryClient();
+
+  try {
+    await queryClient.prefetchInfiniteQuery({
+      queryKey: directoryQueryKey(directoryDefaultQueryParams),
+      queryFn: ({ pageParam }) => fetchDirectory({
+        ...directoryDefaultQueryParams,
+        search: undefined,
+        page: pageParam,
+        limit: 20,
+      }),
+      initialPageParam: 1,
+    });
+  } catch {
+    // 빌드 타임 또는 미인증 상태에서 prefetch 실패 시 무시 — 클라이언트에서 Suspense로 처리
+  }
 
   return (
-    <div className='flex-1 px-4 overflow-y-scroll'>
-      <div className='py-4 flex justify-between items-center'>
-        <span className='text-title-lg'>꽃 사전</span>
-        <DirectoryFilterToggle eventHub={eventHub} />
-      </div>
-      <DirectoryFilterContainer eventHub={eventHub} />
-      <DirectorySearchInput eventHub={eventHub} />
-      <DirectoryFilterKeywordContainer eventHub={eventHub} />
-      <DirectoryListContainer eventHub={eventHub} />
-      <ScrollToTopButton className='bottom-[20px]'>
-        <ArrowUpIcon className='w-[14px] h-[15px] text-white'/>
-      </ScrollToTopButton>
-    </div>
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <DirectoryPageContent />
+    </HydrationBoundary>
   );
-};
-
-export default FlowerDirectoryPage;
+}

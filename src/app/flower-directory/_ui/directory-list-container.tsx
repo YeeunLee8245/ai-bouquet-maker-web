@@ -1,4 +1,4 @@
-import { useRef, useEffect, useMemo } from 'react';
+import { useRef, useEffect, useMemo, useTransition } from 'react';
 import { useSetAtom, useAtom, useAtomValue, useStore } from 'jotai';
 import { IDirectoryEventHub } from '../_types';
 import { directoryDefaultSortOptions } from '../_datas';
@@ -11,8 +11,6 @@ import LikeButton from '@/features/like/ui/like-button';
 import { initLikeFromServer } from '@/features/like/model/atoms';
 import { cn } from '@/shared/utils/styles';
 import FlowerCardSkeleton from '@/shared/ui/skeleton/flower-card-skeleton';
-import DirectoryListSkeleton from './directory-list-skeleton';
-import { Skeleton } from '@/shared/ui/skeleton';
 
 type TProps = {
   eventHub: IDirectoryEventHub;
@@ -24,13 +22,13 @@ function DirectoryListContainer({ eventHub }: TProps) {
   const toggleFlower = useSetAtom(toggleFlowerAtom);
   const selectedFlowers = useAtomValue(selectedFlowersAtom);
   const [sort, setSort] = useAtom(directorySortAtom);
+  const [isPending, startTransition] = useTransition();
 
   const {
     data,
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-    isLoading,
   } = useDirectoryQuery();
 
   useEffect(() => {
@@ -39,14 +37,6 @@ function DirectoryListContainer({ eventHub }: TProps) {
 
     const observer = new IntersectionObserver(
       (entries) => {
-        /**
-         * 무한 스크롤 처리
-         * isIntersecting: 센티넬이 뷰포트 안에 들어오는지 여부
-         * hasNextPage: 다음 페이지가 있는지 여부
-         * isFetchingNextPage: 다음 페이지를 불러오는지 여부
-         *
-         * 뷰포트와 요소가 교차하고 다음 페이지가 있으며 다음 페이지를 불러오지 않는 경우: 다음 페이지를 불러옴
-         */
         if (entries[entries.length - 1]?.isIntersecting && hasNextPage && !isFetchingNextPage) {
           fetchNextPage();
         }
@@ -70,16 +60,25 @@ function DirectoryListContainer({ eventHub }: TProps) {
     });
   }, [flowers, store]);
 
+  const handleSortChange = (sortId: string) => {
+    startTransition(() => {
+      setSort(sortId as 'name' | 'popular');
+    });
+  };
+
   return (
-    <div className='flex flex-col border-t-2 border-gray-100 mt-4'>
+    <div className={cn(
+      'flex flex-col border-t-2 border-gray-100 mt-4',
+      isPending && 'opacity-50 pointer-events-none',
+    )}>
       <div className='flex items-center justify-between pt-4'>
-        <span className='text-ui-label-sm text-gray-400 pl-micro'>{
-          isLoading ? <Skeleton className='w-16 h-4' /> : `${total}개의 꽃`}
+        <span className='text-ui-label-sm text-gray-400 pl-micro'>
+          {`${total}개의 꽃`}
         </span>
         <span className='pr-micro flex items-center gap-1'>
           {directoryDefaultSortOptions.map(({ id, name }) => (
             <button
-              onClick={() => setSort(id)}
+              onClick={() => handleSortChange(id)}
               key={id}
               aria-current={id === sort ? 'true' : 'false'}
               className='text-ui-textbtn-sm text-gray-400 aria-current:text-gray-700'
@@ -89,45 +88,41 @@ function DirectoryListContainer({ eventHub }: TProps) {
           ))}
         </span>
       </div>
-      {isLoading ? (
-        <DirectoryListSkeleton />
-      ) : (
-        <div className='grid grid-cols-2 gap-x-4 gap-y-8 mt-3'>
-          {flowers.map((flower) => (
-            <FlowerCard
-              key={flower.id}
-              size='lg'
-              id={flower.id}
-              imageUrl={flower.imageUrl}
-              name={flower.name}
-              colors={flower.colors}
-              tags={flower.tags}
-              searchParams={{ 'can-create-bouquet': 'true', 'prev-path': '/flower-directory' }}
-              likeButton={flower.isLiked !== undefined
-                ? <LikeButton type='flower' id={flower.id} initialLiked={flower.isLiked} variant='outline' size='lg' />
-                : undefined
-              }
-              actionButton={
-                (() => {
-                  const isSelected = selectedFlowers.some(f => f.id === flower.id);
-                  return (
-                    <Button
-                      size='md'
-                      onClick={(e) => {
-                        e.preventDefault();
-                        toggleFlower({ id: flower.id, name: flower.name });
-                      }}
-                      className={cn('mt-3', isSelected && 'bg-primary-600 text-primary-200')}
-                    >
-                      {isSelected ? '선택 취소' : '선택하기'}
-                    </Button>
-                  );
-                })()
-              }
-            />
-          ))}
-        </div>
-      )}
+      <div className='grid grid-cols-2 gap-x-4 gap-y-8 mt-3'>
+        {flowers.map((flower) => (
+          <FlowerCard
+            key={flower.id}
+            size='lg'
+            id={flower.id}
+            imageUrl={flower.imageUrl}
+            name={flower.name}
+            colors={flower.colors}
+            tags={flower.tags}
+            searchParams={{ 'can-create-bouquet': 'true', 'prev-path': '/flower-directory' }}
+            likeButton={flower.isLiked !== undefined
+              ? <LikeButton type='flower' id={flower.id} initialLiked={flower.isLiked} variant='outline' size='lg' />
+              : undefined
+            }
+            actionButton={
+              (() => {
+                const isSelected = selectedFlowers.some(f => f.id === flower.id);
+                return (
+                  <Button
+                    size='md'
+                    onClick={(e) => {
+                      e.preventDefault();
+                      toggleFlower({ id: flower.id, name: flower.name });
+                    }}
+                    className={cn('mt-3', isSelected && 'bg-primary-600 text-primary-200')}
+                  >
+                    {isSelected ? '선택 취소' : '선택하기'}
+                  </Button>
+                );
+              })()
+            }
+          />
+        ))}
+      </div>
       {/* 무한스크롤 트리거(센티넬) */}
       <div ref={sentinelRef} className='h-1' />
       {isFetchingNextPage && (
