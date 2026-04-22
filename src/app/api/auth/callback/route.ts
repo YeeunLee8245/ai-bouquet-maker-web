@@ -154,6 +154,16 @@ export async function GET(request: NextRequest) {
   // 6️⃣ 모바일 Chrome의 Desktop mode 자동 활성화 방지
   // Sec-CH-UA-Platform으로 실제 OS를 감지 (Desktop mode로 UA가 위장되어도 신뢰 가능)
   // [!] 첫 번째 앱 도메인 응답이 bare 302이면 일부 Android Chrome이 Desktop mode를 활성화
+
+  // [DEBUG] Client Hints 검증용 — 확인 후 제거
+  console.warn('[AuthCallback:hints]', JSON.stringify({
+    ua: request.headers.get('user-agent'),
+    platform: request.headers.get('sec-ch-ua-platform'),
+    mobile: request.headers.get('sec-ch-ua-mobile'),
+    chUa: request.headers.get('sec-ch-ua'),
+    detected: detectMobile(request),
+  }));
+
   if (detectMobile(request)) {
     const target = redirectUrl.toString();
     return new Response(
