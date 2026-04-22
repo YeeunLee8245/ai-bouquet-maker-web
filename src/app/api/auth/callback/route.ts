@@ -25,7 +25,7 @@ import { createClient } from '@shared/supabase/server';
 import { createAdminClient } from '@shared/supabase/admin';
 import { checkAndGrantDailyBonus } from '@/lib/users/attendance';
 
-import { resolveNextDestination } from '../helpers';
+import { resolveNextDestination, detectMobile } from '../helpers';
 
 const LOGIN_PATH = '/login';
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -152,19 +152,9 @@ export async function GET(request: NextRequest) {
   }
 
   // 6️⃣ 모바일 Chrome의 Desktop mode 자동 활성화 방지
-  // 구형 Android Chrome은 302 응답(HTML 없음)을 모바일 미지원으로 판단해 Desktop mode를 활성화함.
-  // 모바일일 때는 viewport meta를 포함한 200 HTML로 응답해 Chrome이 모바일 도메인으로 인식하도록 함.
-  const ua = request.headers.get('user-agent') ?? '';
-  const isMobile = /Mobile|Android/i.test(ua);
-
-  // [DEBUG] Desktop mode 원인 추적용 — 확인 후 제거
-  console.warn('[AuthCallback:debug]', JSON.stringify({
-    ua,
-    isMobile,
-    destination: redirectUrl.toString(),
-  }));
-
-  if (isMobile) {
+  // Sec-CH-UA-Platform으로 실제 OS를 감지 (Desktop mode로 UA가 위장되어도 신뢰 가능)
+  // [!] 첫 번째 앱 도메인 응답이 bare 302이면 일부 Android Chrome이 Desktop mode를 활성화
+  if (detectMobile(request)) {
     const target = redirectUrl.toString();
     return new Response(
       `<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"><meta http-equiv="refresh" content="0;url=${target}"></head><body><script>location.replace(${JSON.stringify(target)})</script></body></html>`,

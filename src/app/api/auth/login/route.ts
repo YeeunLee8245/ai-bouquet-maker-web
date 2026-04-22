@@ -33,7 +33,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 import { createClient } from '@shared/supabase/server';
 
-import { buildCallbackUrl, resolveProvider } from '../helpers';
+import { buildCallbackUrl, resolveProvider, detectMobile } from '../helpers';
 
 export async function GET(request: NextRequest) {
   try {
@@ -52,6 +52,16 @@ export async function GET(request: NextRequest) {
 
     if (error || !data?.url) {
       throw new Error(error?.message ?? '로그인을 시작할 수 없어요.');
+    }
+
+    // 모바일 Chrome의 Desktop mode 자동 활성화 방지
+    // [!] 첫 번째 앱 도메인 응답이 bare 302이면 일부 Android Chrome이 Desktop mode를 활성화
+    if (detectMobile(request)) {
+      const target = data.url;
+      return new Response(
+        `<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"></head><body><script>location.replace(${JSON.stringify(target)})</script></body></html>`,
+        { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' } },
+      );
     }
 
     return NextResponse.redirect(data.url, { status: 302 });
