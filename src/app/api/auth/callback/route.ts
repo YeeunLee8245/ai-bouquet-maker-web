@@ -157,6 +157,13 @@ export async function GET(request: NextRequest) {
   const ua = request.headers.get('user-agent') ?? '';
   const isMobile = /Mobile|Android/i.test(ua);
 
+  // [DEBUG] Desktop mode 원인 추적용 — 확인 후 제거
+  console.warn('[AuthCallback:debug]', JSON.stringify({
+    ua,
+    isMobile,
+    destination: redirectUrl.toString(),
+  }));
+
   if (isMobile) {
     const target = redirectUrl.toString();
     return new Response(
