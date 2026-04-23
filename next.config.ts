@@ -10,6 +10,9 @@ const nextConfig: NextConfig = {
       },
     },
   },
+  outputFileTracingExcludes: {
+    '*': ['node_modules/next/dist/compiled/@vercel/og/**'],
+  },
   images: {
     // 이미지 최적화 비활성화
     // 일일 접속 유지 1000명 이상되면 고려.
