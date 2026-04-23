@@ -1,5 +1,5 @@
 import { useAtomValue } from 'jotai';
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
 import {
   directoryColorsAtom,
   directorySeasonsAtom,
@@ -17,6 +17,13 @@ export const directoryQueryKey = (params: {
   sort: string;
 }) => ['flower-directory', params] as const;
 
+export const directoryDefaultQueryParams = {
+  colors: [] as string[],
+  seasons: [] as string[],
+  search: '',
+  sort: 'popular' as const,
+};
+
 export function useDirectoryQuery() {
   const colors = useAtomValue(directoryColorsAtom);
   const seasons = useAtomValue(directorySeasonsAtom);
@@ -26,7 +33,7 @@ export function useDirectoryQuery() {
   const colorArr = [...colors];
   const seasonArr = [...seasons];
 
-  return useInfiniteQuery({
+  return useSuspenseInfiniteQuery({
     queryKey: directoryQueryKey({ colors: colorArr, seasons: seasonArr, search, sort }),
     queryFn: ({ pageParam }) => fetchDirectory({
       colors: colorArr,
@@ -39,9 +46,6 @@ export function useDirectoryQuery() {
     initialPageParam: 1,
     getNextPageParam: (lastPage) =>
       lastPage.has_next_page ? lastPage.page + 1 : undefined,
-    /**
-     * 캐시 유지 시간을 무한으로 설정하여 페이지 이동 시, 데이터가 변경되지 않도록 함
-     */
     staleTime: Infinity,
   });
 }

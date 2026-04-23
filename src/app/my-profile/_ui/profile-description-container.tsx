@@ -2,22 +2,13 @@
 
 import Link from 'next/link';
 import ProfileBouquetCard from './profile-bouquet-card';
-import ProfileSkeleton from './profile-skeleton';
 import { useUserAction } from '@/hooks/use-user-action';
 import { useProfileQuery } from '../_model/use-profile-query';
 import { getMyProfileDescriptionFields, getMyProfileBouquetData } from '../_datas';
 
 function ProfileDescriptionContainer() {
   const { signOut } = useUserAction();
-  const { data, isLoading } = useProfileQuery();
-
-  if (isLoading) {
-    return <ProfileSkeleton />;
-  }
-
-  if (!data) {
-    return <div className='flex flex-col py-4 px-micro text-body-md text-gray-400'>프로필 정보를 불러올 수 없습니다.</div>;
-  }
+  const { data } = useProfileQuery();
 
   const { profile, stats } = data;
 
