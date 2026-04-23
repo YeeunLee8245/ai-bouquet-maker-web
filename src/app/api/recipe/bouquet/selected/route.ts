@@ -2,15 +2,41 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@shared/supabase/server';
 import { toSupabaseResizedImageUrl } from '@shared/utils/image-url';
 
-function toTagsFromMeaning(meaning: string | null | undefined): string[] {
-  if (!meaning) {
+const TAG_TOTAL_CHAR_LIMIT = 8;
+const TAG_MAX_COUNT = 3;
+
+function normalizeTags(rawTags: string[] | null | undefined): string[] {
+  if (!Array.isArray(rawTags)) {
     return [];
   }
 
-  return meaning
-    .split(',')
+  return rawTags
     .map(tag => tag.trim())
     .filter(Boolean);
+}
+
+function mergeTagsWithTotalCharLimit(
+  emotionTags: string[],
+  styleTags: string[],
+): string[] {
+  const merged = [...new Set([...emotionTags, ...styleTags])];
+  const result: string[] = [];
+  let totalChars = 0;
+
+  for (const tag of merged) {
+    if (result.length >= TAG_MAX_COUNT) {
+      break;
+    }
+
+    const nextTotal = totalChars + tag.length;
+    if (nextTotal > TAG_TOTAL_CHAR_LIMIT) {
+      continue;
+    }
+    result.push(tag);
+    totalChars = nextTotal;
+  }
+
+  return result;
 }
 
 /**
@@ -28,9 +54,9 @@ function toTagsFromMeaning(meaning: string | null | undefined): string[] {
  *       - 요청 본문은 **배열 자체**입니다. (예: `[12, 5, 31]`)
  *       - 응답도 **배열 자체**입니다. (예: `[{...}, {...}]`)
  *       - 응답 순서는 요청한 ID 순서를 최대한 유지합니다.
- *       - **colorInfos**: 각 색상(hex)별로 meaningId와 tags가 1:1 매핑됩니다.
- *       - **tags 생성 기준**: `flower_meanings.meaning` 값을 쉼표(,)로 분리해 `tags` 배열로 제공합니다.
- *         색상을 선택하면 해당 색상의 meaningId와 tags를 사용해야 합니다.
+ *       - **colorInfos**: 각 색상(hex)별로 meaningId와 태그가 1:1 매핑됩니다.
+ *       - **기본 꽃말 제외**: `color`가 `null`인 기본(회색) 꽃말은 응답에서 제외됩니다.
+ *       - **tags 생성 기준**: `emotion_tags + style_tags`를 합쳐 중복 제거 후, 최대 3개/총 글자수 8자 이내로 제공합니다.
  *     requestBody:
  *       required: true
  *       content:
@@ -90,10 +116,10 @@ function toTagsFromMeaning(meaning: string | null | undefined): string[] {
  *                           example: "101"
  *                         tags:
  *                           type: array
- *                           description: 해당 꽃말의 meaning을 쉼표 기준 분리한 태그
+ *                           description: emotion_tags + style_tags 기반 표시 태그 (중복 제거, 최대 3개, 총 글자수 8자 이내)
  *                           items:
  *                             type: string
- *                           example: ["사랑", "응원", "감사"]
+ *                           example: ["사랑", "우아한"]
  *             examples:
  *               success:
  *                 summary: 정상 조회 응답
@@ -104,17 +130,17 @@ function toTagsFromMeaning(meaning: string | null | undefined): string[] {
  *                     colorInfos:
  *                       - hex: "#F8BBD0"
  *                         meaningId: "101"
- *                         tags: ["사랑", "응원"]
+ *                         tags: ["사랑", "우아한"]
  *                       - hex: "#FF4D6D"
  *                         meaningId: "102"
- *                         tags: ["열정", "감사"]
+ *                         tags: ["열정", "화려한"]
  *                   - id: "5"
  *                     name_ko: "장미"
  *                     imageUrl: "/images/flowers/rose.png"
  *                     colorInfos:
  *                       - hex: "#E31C25"
  *                         meaningId: "205"
- *                         tags: ["열정", "사랑"]
+ *                         tags: ["열정", "로맨틱"]
  *       400:
  *         description: 요청 형식 오류 (배열이 아니거나 유효한 ID 없음)
  *         content:
@@ -166,7 +192,8 @@ export async function POST(request: NextRequest) {
           color,
           icon_color,
           is_primary,
-          meaning
+          emotion_tags,
+          style_tags
         )
       `)
       .in('id', uniqueIds);
@@ -192,7 +219,8 @@ export async function POST(request: NextRequest) {
 
         // colorInfos: hex-meaningId 1:1 매핑, is_primary를 가장 위로 정렬
         const colorInfos = meanings
-          .filter(m => m.icon_color != null && m.icon_color.length > 0)
+          // 기본 꽃말(회색): color가 null인 항목은 제외
+          .filter(m => m.color != null && m.icon_color != null && m.icon_color.length > 0)
           .sort((a, b) => {
             // is_primary가 true인 것을 가장 위로
             if (a.is_primary && !b.is_primary) {
@@ -203,11 +231,15 @@ export async function POST(request: NextRequest) {
             }
             return 0;
           })
-          .map(m => ({
-            hex: m.icon_color as string,
-            meaningId: String(m.id),
-            tags: toTagsFromMeaning(m.meaning),
-          }));
+          .map(m => {
+            const emotionTags = normalizeTags(m.emotion_tags);
+            const styleTags = normalizeTags(m.style_tags);
+            return {
+              hex: m.icon_color as string,
+              meaningId: String(m.id),
+              tags: mergeTagsWithTotalCharLimit(emotionTags, styleTags),
+            };
+          });
 
         return {
           id: String(flower.id),
