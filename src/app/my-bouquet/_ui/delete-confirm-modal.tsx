@@ -24,7 +24,7 @@ export default function DeleteConfirmModal({ modalId, bouquetId, onSuccess }: Pr
   return (
     <div className='w-[328px] bg-white border-1 border-gray-100 rounded-5 px-7 py-6 flex flex-col gap-6'>
       <div className='flex flex-col gap-2'>
-        <p className='text-title-sm'>꽃다발을 삭제할까요?</p>
+        <p className='text-title-md'>꽃다발을 삭제할까요?</p>
         <p className='text-body-md text-gray-400'>삭제된 꽃다발은 복구할 수 없어요.</p>
       </div>
       <div className='flex flex-col items-center gap-2'>
@@ -41,7 +41,7 @@ export default function DeleteConfirmModal({ modalId, bouquetId, onSuccess }: Pr
           aria-label='취소'
           onClick={() => closeModal(modalId)}
           disabled={isPending}
-          className='text-ui-md text-gray-400'
+          className='text-ui-textbtn-lg text-gray-400'
         >
           취소
         </button>

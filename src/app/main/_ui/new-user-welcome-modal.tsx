@@ -27,13 +27,13 @@ function NewUserWelcomeModal({ modalId }: TModalProps) {
         <Link
           href='/info'
           onClick={handleClose}
-          className='text-ui-md font-medium underline underline-offset-2'
+          className='text-ui-textbtn-lg font-medium underline underline-offset-2'
         >
           지금 소개 보기
         </Link>
         <button
           type='button'
-          className='text-ui-md text-gray-400'
+          className='text-ui-textbtn-lg text-gray-400'
           onClick={handleClose}
         >
           다음에 볼게요
