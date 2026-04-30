@@ -32,7 +32,13 @@ function FlowerCard({ size, imageUrl, id, name, colors, tags, priority = false, 
   const [imageWidth, imageHeight] = [flowerCardImageSizes[size].width, flowerCardImageSizes[size].height];
   const query = searchParams ? `?${new URLSearchParams(searchParams).toString()}` : '';
   return (
-    <div className={cn('flex flex-col', `min-w-[${imageWidth}px]`, className)} {...props}>
+    <div
+      className={cn('flex flex-col',
+        size === 'md' ? 'min-w-[122px] tablet:min-w-[156px]' : 'min-w-[156px]',
+        className,
+      )}
+      {...props}
+    >
       <Link
         aria-label={`${name} 상세 페이지 보기`}
         href={`/flower-directory/${id}${query}`}
@@ -45,13 +51,9 @@ function FlowerCard({ size, imageUrl, id, name, colors, tags, priority = false, 
           height={imageHeight}
           className={cn('object-cover',
             'max-w-none',
-            size === 'md' && 'rounded-4 border-1 border-gray-100',
-            size === 'lg' && 'rounded-3',
+            size === 'md' && 'w-[122px] h-[156px] tablet:w-[156px] tablet:h-[200px] rounded-4 border-1 border-gray-100',
+            size === 'lg' && 'w-[156px] h-[200px] rounded-3',
           )}
-          style={{
-            width: imageWidth,
-            height: imageHeight,
-          }}
         />
         {likeButton && (
           <div className='absolute top-2 right-2' onClick={(e) => e.preventDefault()}>

@@ -42,7 +42,7 @@ function FlowerTabContainer({ meanings, floweringTimes, management }: TProps) {
               key={value}
               value={value}
               ref={(el) => { triggerRefs.current[value] = el; }}
-              className='relative py-3 text-center flex-1'
+              className='relative py-3 tablet:py-4 text-center flex-1'
             >
               <p className='text-ui-tap-lg text-primary-600'>{label}</p>
             </Tabs.Trigger>

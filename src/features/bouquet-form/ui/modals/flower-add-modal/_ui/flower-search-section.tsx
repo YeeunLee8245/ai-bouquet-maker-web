@@ -64,9 +64,9 @@ function FlowerSearchSection({ selectedIds, onToggle }: TProps) {
         className='w-full h-[40px]'
       />
       {(results.length > 0 || isLoading) && (
-        <div className='mt-2 rounded-5 border-1 border-gray-100 min-h-[172px] max-h-[172px] overflow-y-auto'>
+        <div className='mt-2 rounded-5 border-1 border-gray-100 min-h-[172px] max-h-[172px] tablet:min-h-[200px] tablet:max-h-[200px] overflow-y-auto'>
           {isLoading && results.length === 0 && (
-            <div className='flex items-center justify-center h-[172px]'>
+            <div className='flex items-center justify-center h-[172px] tablet:h-[200px]'>
               <span className='text-body-md text-gray-400'>검색 중...</span>
             </div>
           )}
@@ -91,7 +91,7 @@ function FlowerSearchSection({ selectedIds, onToggle }: TProps) {
         </div>
       )}
       {debouncedSearch.trim() && !isLoading && results.length === 0 && (
-        <div className='mt-2 rounded-5 border-1 border-gray-100 min-h-[172px] flex items-center justify-center'>
+        <div className='mt-2 rounded-5 border-1 border-gray-100 min-h-[172px] tablet:min-h-[200px] flex items-center justify-center'>
           <span className='text-body-md text-gray-400'>검색 결과가 없습니다.</span>
         </div>
       )}
