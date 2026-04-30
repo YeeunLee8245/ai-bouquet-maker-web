@@ -38,7 +38,7 @@ export default function QuickPersonTargetRecommendation({ recipients }: TProps) 
   };
 
   return (
-    <div className='flex flex-col gap-3 px-4 pt-1 pb-4'>
+    <div className='flex flex-col gap-3 px-4 pt-1 pb-4 tablet:px-6 pc:px-8'>
       <p className='text-title-md'>빠른 대상 추천</p>
       <span ref={buttonWrapperRef} className='flex gap-2 overflow-y-auto hide-scrollbar'>
         {items.map((item) => (
@@ -48,7 +48,7 @@ export default function QuickPersonTargetRecommendation({ recipients }: TProps) 
             {item.name}</Link>
         ))}
       </span>
-      <div className='flex items-center justify-between'>
+      <div className='flex items-center justify-between tablet:hidden'>
         {(Object.values(MOVE_DIRECTION) as MoveDirection[]).map((direction) => (
           <button
             key={direction}

@@ -20,7 +20,7 @@ export default async function MainPage({ searchParams }: { searchParams: Promise
       <NewUserModalTrigger isNewUser={isNewUser} />
       <div className='relative w-full flex-1 min-h-0 overflow-y-auto'>
         {/* 상단: 배경 이미지 + 히어로 영역 (스크롤 시 함께 올라가서 사라짐) */}
-        <section className='relative h-[316px] shrink-0'>
+        <section className='relative shrink-0'>
           <Image
             src='/images/bg_main_top.webp'
             alt=''
@@ -29,7 +29,7 @@ export default async function MainPage({ searchParams }: { searchParams: Promise
             height={380}
             className='absolute inset-0 w-full h-full object-cover object-[50%_-48px]'
           />
-          <div className='absolute inset-0 px-4 py-5'>
+          <div className='relative px-4 py-5 tablet:px-6 pc:px-8'>
             <p className='px-1 text-title-lg text-white whitespace-pre-wrap'>
               {'어떤 꽃으로 마음을\n전하고 싶으신가요?'}
             </p>

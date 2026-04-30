@@ -27,7 +27,11 @@ export default function TodayFlowerContainer({ flower }: TProps) {
         <p className='text-title-md text-gray-700'>오늘의 추천 꽃</p>
 
         {/* cover 이미지 + 하단 그라데이션 오버레이 + 텍스트 */}
-        <Link href={`/flower-directory/${flower?.id}`} aria-label={`${name} 상세 페이지 보기`} className='relative w-[140px] h-[196px]'>
+        <Link
+          href={`/flower-directory/${flower?.id}`}
+          aria-label={`${name} 상세 페이지 보기`}
+          className='relative w-[140px] h-[196px] tablet:w-[200px] tablet:h-[280px]'
+        >
           <div className='absolute inset-0 rounded-[24px] overflow-hidden shadow-[0_6px_20px_rgba(0,0,0,0.12)]'>
             <Image
               src={imageUrl}
