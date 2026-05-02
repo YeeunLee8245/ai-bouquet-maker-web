@@ -13,6 +13,9 @@ import { aiRecommendationResultAtom } from '@/app/main/ai-prompt/_model/recommen
 import { postUserSelection } from '@api/recommend-user-selection.api';
 import { BOUQUET_FROM_AI_PARAM } from '@features/bouquet-form';
 import { ActionLabel } from '@/shared/ui/label';
+import { openModalAtom } from '@/shared/model/modal';
+import LoginRequiredModal, { LOGIN_REQUIRED_MODAL_ID } from '@/app/main/_ui/login-required-modal';
+import { useUserAuth } from '@/hooks/use-supabase-user';
 
 type TFlowerChip = {
   id: string;
@@ -108,8 +111,19 @@ function BottomActionFooter({ title, children, flowers, onRemoveFlower, fromAiPr
   const selectedFlowers = useAtomValue(selectedFlowersAtom);
   const aiResult = useAtomValue(aiRecommendationResultAtom);
   const showToast = useSetAtom(showToastAtom);
+  const openModal = useSetAtom(openModalAtom);
+  const { isLogin } = useUserAuth();
 
   const handleMakeBouquet = () => {
+    if (!isLogin) {
+      openModal({
+        id: LOGIN_REQUIRED_MODAL_ID,
+        position: 'center',
+        component: <LoginRequiredModal modalId={LOGIN_REQUIRED_MODAL_ID} />,
+      });
+      return;
+    }
+
     if (selectedFlowers.length === 0) {
       showToast({ message: '꽃을 1개 이상 선택해주세요.' });
       return;
