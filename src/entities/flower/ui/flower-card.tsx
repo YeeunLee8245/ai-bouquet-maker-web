@@ -34,7 +34,7 @@ function FlowerCard({ size, imageUrl, id, name, colors, tags, priority = false, 
   return (
     <div
       className={cn('flex flex-col',
-        size === 'md' ? 'min-w-[122px] tablet:min-w-[156px]' : 'min-w-[156px]',
+        size === 'md' ? 'min-w-[122px] tablet:min-w-[156px]' : 'min-w-[156px] tablet:min-w-0 tablet:w-full',
         className,
       )}
       {...props}
@@ -42,7 +42,7 @@ function FlowerCard({ size, imageUrl, id, name, colors, tags, priority = false, 
       <Link
         aria-label={`${name} 상세 페이지 보기`}
         href={`/flower-directory/${id}${query}`}
-        className={cn('relative')}>
+        className={cn('relative', size === 'lg' && 'tablet:block tablet:w-full')}>
         <Image
           priority={priority}
           src={imageUrl}
@@ -52,7 +52,7 @@ function FlowerCard({ size, imageUrl, id, name, colors, tags, priority = false, 
           className={cn('object-cover',
             'max-w-none',
             size === 'md' && 'w-[122px] h-[156px] tablet:w-[156px] tablet:h-[200px] rounded-4 border-1 border-gray-100',
-            size === 'lg' && 'w-[156px] h-[200px] rounded-3',
+            size === 'lg' && 'w-[156px] h-[200px] tablet:w-full tablet:h-auto tablet:aspect-[156/200] rounded-3',
           )}
         />
         {likeButton && (

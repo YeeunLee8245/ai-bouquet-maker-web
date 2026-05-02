@@ -16,12 +16,21 @@ export default function TodayFlowerContainer({ flower }: TProps) {
   return (
     <div className='relative'>
       {/* 배경 이미지 */}
+      {/* mobile */}
       <Image
         src='/images/bg_main_bottom.webp'
         alt='main'
         width={360}
         height={324}
-        className='absolute z-[-1] bottom-0 left-0 w-full h-[324px] object-cover object-bottom'
+        className='absolute z-[-1] bottom-0 left-0 w-full h-[324px] object-cover object-bottom tablet:hidden'
+      />
+      {/* tablet+ */}
+      <Image
+        src='/images/bg_main_bottom_wide.webp'
+        alt='main'
+        width={3072}
+        height={1664}
+        className='absolute z-[-1] bottom-0 left-0 w-full h-[324px] object-cover object-bottom hidden tablet:block'
       />
       <div className='relative flex flex-col gap-3 items-center border-t-2 border-gray-100 pt-5 pb-9'>
         <p className='text-title-md text-gray-700'>오늘의 추천 꽃</p>

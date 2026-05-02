@@ -31,7 +31,7 @@ export default function RootLayout({
   return (
     <AppProviders>
       <html lang='ko'>
-        <body className='flex flex-col h-dvh overflow-hidden w-[360px] mx-auto'>
+        <body className='flex flex-col h-dvh overflow-hidden w-full'>
           <Header />
           <main className='max-h-[calc(100%-48px)] h-full overscroll-contain overflow-y-auto scrollbar-hide'>
             {children}

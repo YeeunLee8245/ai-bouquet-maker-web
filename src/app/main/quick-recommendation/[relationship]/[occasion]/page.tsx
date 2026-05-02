@@ -47,7 +47,7 @@ function QuickRecommendationOccasionPage() {
         title={`${QUICK_RECOMMENDATION_DATA_MAP[relationship]} ${OCCASION_OBJECT[occasion].label} 추천 꽃`}
         description={OCCASION_OBJECT[occasion].description}
       />
-      <div className='p-4 grid grid-cols-2 gap-x-4 gap-y-8'>
+      <div className='p-4 tablet:px-6 tablet:pt-6 tablet:pb-8 pc:px-8 grid grid-cols-2 tablet:grid-cols-4 gap-x-4 pc:gap-x-5 gap-y-8 tablet:gap-y-10'>
         {isPending
           ? Array.from({ length: 6 }).map((_, i) => <FlowerCardSkeleton key={i} />)
           : data?.recommendations.map((rec) => (

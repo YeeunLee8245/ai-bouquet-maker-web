@@ -16,10 +16,10 @@ export default function AIPromptGuideContainer({ eventHub, guide, onLoginRequire
   };
 
   return (
-    <div className='border-t-2 border-gray-100 pt-4 px-4 pb-8'>
+    <div className='border-t-2 border-gray-100 pt-4 px-4 tablet:px-6 pc:px-8 pb-8'>
       <div className='text-body-md text-center mt-2'>{title}</div>
       <div className='text-body-sm text-gray-400 text-center mt-1 whitespace-pre-wrap'>{description}</div>
-      <div className='mt-5 flex flex-col gap-2'>
+      <div className='mt-5 flex flex-col gap-2 tablet:max-w-[328px] tablet:mx-auto'>
         {items.map((item, index) => (
           <button
             key={index}

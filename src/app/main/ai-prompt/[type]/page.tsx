@@ -126,18 +126,20 @@ function AIPromptPage() {
 
   return (
     <div className='flex flex-col h-full overflow-y-auto hide-scrollbar'>
-      <div className='pt-4 pb-2 px-4'>
-        {
-          IconComponent && (cloneElement(IconComponent, { className: `${IconComponent.props.className} w-[18px] h-[18px] ml-[4.4px] my-1` }))
-        }
-        <div className='ml-1'>
-          <div className='mt-3 text-title-lg'>{title}</div>
-          <div className='mt-1 text-body-md text-gray-400 whitespace-pre-wrap'>{description}</div>
+      <div className='px-4 tablet:px-6 pc:px-8'>
+        <div className='pt-4 pb-2 pc:max-w-[720px] pc:mx-auto'>
+          {
+            IconComponent && (cloneElement(IconComponent, { className: `${IconComponent.props.className} w-[18px] h-[18px] ml-[4.4px] my-1` }))
+          }
+          <div className='ml-1'>
+            <div className='mt-3 text-title-lg'>{title}</div>
+            <div className='mt-1 text-body-md text-gray-400 whitespace-pre-wrap'>{description}</div>
+          </div>
         </div>
-      </div>
-      <div className='pt-4 px-4 pb-8 flex flex-col gap-4'>
-        <AIPromptInput eventHub={eventHub} placeholder={placeholder} disabled={isTokenEmpty} onLoginRequired={handleLoginRequired} />
-        <Button size='lg' onClick={handleRecommend} disabled={isTokenEmpty}>꽃 추천 받기</Button>
+        <div className='pt-4 pb-8 flex flex-col gap-4 pc:max-w-[720px] pc:mx-auto'>
+          <AIPromptInput eventHub={eventHub} placeholder={placeholder} disabled={isTokenEmpty} onLoginRequired={handleLoginRequired} />
+          <Button size='lg' onClick={handleRecommend} disabled={isTokenEmpty}>꽃 추천 받기</Button>
+        </div>
       </div>
       <AIPromptGuideContainer eventHub={eventHub} guide={guide} onLoginRequired={handleLoginRequired} />
     </div>
