@@ -1,3 +1,5 @@
+'use client';
+
 import { cn } from '@/shared/utils/styles';
 import Image from 'next/image';
 import React from 'react';
