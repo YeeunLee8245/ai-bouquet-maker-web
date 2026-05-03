@@ -4,60 +4,35 @@ import React, { cloneElement } from 'react';
 import { closeModalAtom, TModalProps } from '@/shared/model/modal';
 import { useSetAtom } from 'jotai';
 import UpArrowIcon from '@/shared/assets/icons/up_arrow.svg';
-import PersonIcon from '@/shared/assets/icons/person.svg';
-import DirectoryIcon from '@/shared/assets/icons/directory.svg';
-import BouquetIcon from '@/shared/assets/icons/bouquet.svg';
 import Link from 'next/link';
 import { cn } from '@/shared/utils/styles';
 import { usePathname, useRouter } from 'next/navigation';
-import { useUserAuth } from '@/hooks/use-supabase-user';
 import { showToastAtom } from '@/shared/model/toast/toast.actions';
 
-const SIDEBAR_ITEMS = [
-  {
-    path: '/flower-directory',
-    icon: <DirectoryIcon />,
-    label: '꽃 사전',
-  },
-  {
-    path: '/my-bouquet',
-    icon: <BouquetIcon />,
-    label: '내 꽃다발',
-  },
-];
+export type TNavItem = {
+  href: string;
+  label: string;
+  icon: React.ReactElement<React.SVGProps<SVGSVGElement>>;
+  isLoginRequired?: boolean;
+};
 
-const AUTHENTICATED_ITEMS = [
-  {
-    path: '/my-profile',
-    icon: <PersonIcon />,
-    label: '내 프로필',
-  },
-];
+interface ISidebarProps extends TModalProps {
+  navItems: TNavItem[];
+  isLogin: boolean;
+}
 
-const UNAUTHENTICATED_ITEMS = [
-  {
-    path: '/login',
-    icon: <PersonIcon />,
-    label: '로그인',
-  },
-];
-
-function Sidebar({ modalId }: TModalProps) {
+function Sidebar({ modalId, navItems, isLogin }: ISidebarProps) {
   const closeModal = useSetAtom(closeModalAtom);
   const showToast = useSetAtom(showToastAtom);
   const router = useRouter();
   const pathname = usePathname();
-  const { isLogin, isLoading } = useUserAuth();
 
-  const authItems = isLoading ? [] : isLogin ? AUTHENTICATED_ITEMS : UNAUTHENTICATED_ITEMS;
-  const menuItems = [...SIDEBAR_ITEMS, ...authItems];
-
-  const handleClickMenuItem = (path: string) => (e: React.MouseEvent<HTMLAnchorElement>) => {
-    if (pathname === path) {
+  const handleClickMenuItem = (href: string, isLoginRequired?: boolean) => (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (pathname === href) {
       e.preventDefault();
       return;
     }
-    if (!isLogin && path === '/my-bouquet') {
+    if (isLoginRequired && !isLogin) {
       e.preventDefault();
       showToast({ message: '로그인이 필요합니다.' });
       router.push('/login');
@@ -66,9 +41,7 @@ function Sidebar({ modalId }: TModalProps) {
   };
 
   return (
-    <div
-      className='w-[268px] h-[100dvh] bg-primary-400 animate-slide-in-from-right px-7 py-11 flex flex-col'
-    >
+    <div className='w-[268px] h-[100dvh] bg-primary-400 animate-slide-in-from-right px-7 py-11 flex flex-col'>
       {/* 닫기 버튼 */}
       <button
         type='button'
@@ -79,16 +52,15 @@ function Sidebar({ modalId }: TModalProps) {
       </button>
       {/* 상단 메뉴 */}
       <div className='mt-10 flex flex-col justify-start gap-4'>
-        { menuItems.map((item) => (
+        {navItems.map((item) => (
           <Link
-            key={item.path}
-            href={item.path}
-            onClick={handleClickMenuItem(item.path)}
-            className={
-              cn(
-                'flex items-center gap-3 px-3 py-2 rounded-5 transition-colors hover:bg-primary-300 active:bg-primary-500',
-                pathname === item.path ? 'bg-primary-300' : '',
-              )}
+            key={item.href}
+            href={item.href}
+            onClick={handleClickMenuItem(item.href, item.isLoginRequired)}
+            className={cn(
+              'flex items-center gap-3 px-3 py-2 rounded-5 transition-colors hover:bg-primary-300 active:bg-primary-500',
+              pathname === item.href ? 'bg-primary-300' : '',
+            )}
           >
             {cloneElement(item.icon, { className: 'w-[20px] h-[20px] fill-white mx-[3px]' })}
             <span className='text-white text-title-lg'>{item.label}</span>
