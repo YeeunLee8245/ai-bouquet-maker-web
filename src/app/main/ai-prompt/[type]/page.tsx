@@ -18,7 +18,7 @@ import AIAnalyzingModal, { AI_ANALYZING_MODAL_ID } from './_ui/ai-analyzing-moda
 import { useWalletBalance } from '@/shared/hooks/useWalletBalance';
 import { useUserAuth } from '@/hooks/use-supabase-user';
 import LoginRequiredModal, { LOGIN_REQUIRED_MODAL_ID } from '../../_ui/login-required-modal';
-import PageScroll from '@/widgets/footer/page-scroll';
+import PageScroll from '@/app/_ui/page-scroll';
 
 /**
  * AI 프롬프트 페이지

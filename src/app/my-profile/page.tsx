@@ -1,7 +1,7 @@
 export const dynamic = 'force-dynamic';
 
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
-import PageScroll from '@/widgets/footer/page-scroll';
+import PageScroll from '@/app/_ui/page-scroll';
 import { createServerQueryClient } from '@/shared/lib/server-query';
 import { serverFetchJson } from '@/shared/api/server-fetch';
 import { profileQueryKey } from './_model/use-profile-query';

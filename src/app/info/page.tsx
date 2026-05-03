@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import PageScroll from '@/widgets/footer/page-scroll';
+import PageScroll from '@/app/_ui/page-scroll';
 
 const FEATURES = [
   {

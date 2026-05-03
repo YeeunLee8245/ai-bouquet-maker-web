@@ -1,6 +1,6 @@
 import BottomActionFooter from '@/widgets/footer/bottom-action-footer';
 import { SelectedFlowersInitializer } from '@/entities/flower/model/selected-flowers';
-import PageScroll from '@/widgets/footer/page-scroll';
+import PageScroll from '@/app/_ui/page-scroll';
 
 function QuickRecommendationOccasionLayout({ children }: { children: React.ReactNode }) {
   return <div className='relative h-full flex flex-col'>

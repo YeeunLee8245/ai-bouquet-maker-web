@@ -1,6 +1,6 @@
 'use client';
 import BottomActionFooter from '@/widgets/footer/bottom-action-footer';
-import PageScroll from '@/widgets/footer/page-scroll';
+import PageScroll from '@/app/_ui/page-scroll';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { Suspense, useEffect } from 'react';
 import { useSetAtom } from 'jotai';

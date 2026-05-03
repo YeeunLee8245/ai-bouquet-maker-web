@@ -1,4 +1,4 @@
-import PageScroll from '@/widgets/footer/page-scroll';
+import PageScroll from '@/app/_ui/page-scroll';
 
 /**
  * 맞춤 추천 페이지

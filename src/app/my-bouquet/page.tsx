@@ -1,5 +1,5 @@
 import { Suspense } from 'react';
-import PageScroll from '@/widgets/footer/page-scroll';
+import PageScroll from '@/app/_ui/page-scroll';
 
 export const dynamic = 'force-dynamic';
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';

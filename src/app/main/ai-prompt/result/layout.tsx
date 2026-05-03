@@ -1,5 +1,5 @@
 import BottomActionFooter from '@/widgets/footer/bottom-action-footer';
-import PageScroll from '@/widgets/footer/page-scroll';
+import PageScroll from '@/app/_ui/page-scroll';
 import { SelectedFlowersInitializer } from '@/entities/flower/model/selected-flowers';
 
 function AiPromptResultLayout({ children }: { children: React.ReactNode }) {

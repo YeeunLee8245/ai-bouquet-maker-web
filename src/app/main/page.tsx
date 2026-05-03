@@ -1,6 +1,6 @@
 import StarIcon from '@/shared/assets/icons/star.svg';
 import Image from 'next/image';
-import PageScroll from '@/widgets/footer/page-scroll';
+import PageScroll from '@/app/_ui/page-scroll';
 import GeneralAIInput from './_ui/general-ai-input';
 import SpecificAIButtons from './_ui/specific-ai-buttons';
 import QuickPersonTargetRecommendation from './_ui/quick-person-target-recommendation';

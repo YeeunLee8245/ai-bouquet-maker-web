@@ -1,5 +1,5 @@
 import { cn } from '@/shared/utils/styles';
-import PcFooter from './pc-footer';
+import PcFooter from '@/widgets/footer/pc-footer';
 
 type TProps = {
   hidePcFooter?: boolean;

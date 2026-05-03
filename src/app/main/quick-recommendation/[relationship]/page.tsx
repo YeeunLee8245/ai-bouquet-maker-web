@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import PageScroll from '@/widgets/footer/page-scroll';
+import PageScroll from '@/app/_ui/page-scroll';
 import { QUICK_PERSON_TARGET_RECOMMENDATION_LIST } from '../../_datas';
 import { notFound, useParams } from 'next/navigation';
 import { QUICK_RECOMMENDATION_DATA_MAP } from './_datas';

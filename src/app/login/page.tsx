@@ -1,7 +1,7 @@
 import { LOGIN_PROVIDER_LIST } from './_datas';
 import LoginButton from './_ui/login-button';
 import { cn } from '@/shared/utils/styles';
-import PageScroll from '@/widgets/footer/page-scroll';
+import PageScroll from '@/app/_ui/page-scroll';
 
 /**
  * 로그인 페이지

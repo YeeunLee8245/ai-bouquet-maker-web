@@ -17,7 +17,7 @@ import BouquetDetailSkeleton from '../_ui/bouquet-detail-skeleton';
 import ModifyBouquetButton from './_ui/modify-bouquet-button';
 import { Button } from '@/shared/ui/button';
 import Link from 'next/link';
-import PageScroll from '@/widgets/footer/page-scroll';
+import PageScroll from '@/app/_ui/page-scroll';
 
 const MyBouquetModifyPage = () => {
   const { id } = useParams<{ id: string }>();

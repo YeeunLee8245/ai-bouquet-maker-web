@@ -1,5 +1,5 @@
 import { Suspense } from 'react';
-import PageScroll from '@/widgets/footer/page-scroll';
+import PageScroll from '@/app/_ui/page-scroll';
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 import { createServerQueryClient } from '@/shared/lib/server-query';
 import { serverFetchJson } from '@/shared/api/server-fetch';
