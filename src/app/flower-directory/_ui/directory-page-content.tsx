@@ -21,7 +21,7 @@ export default function DirectoryPageContent() {
   }), []);
 
   return (
-    <div className='flex-1 px-4 overflow-y-scroll'>
+    <div className='flex-1 px-4 tablet:px-6 pc:px-8 overflow-y-scroll'>
       <div className='py-4 flex justify-between items-center'>
         <span className='text-title-lg'>꽃 사전</span>
         <DirectoryFilterToggle eventHub={eventHub} />
