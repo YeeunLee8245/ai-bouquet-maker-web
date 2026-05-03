@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import PageScroll from '@/widgets/footer/page-scroll';
 import { QUICK_PERSON_TARGET_RECOMMENDATION_LIST } from '../../_datas';
 import { notFound, useParams } from 'next/navigation';
 import { QUICK_RECOMMENDATION_DATA_MAP } from './_datas';
@@ -25,7 +26,7 @@ function QuickRecommendationPage() {
   });
 
   return (
-    <div>
+    <PageScroll>
       <div className='px-5 pt-4 pb-2 tablet:pl-6 tablet:pr-4'>
         <div className='text-title-lg'>
           {`${QUICK_RECOMMENDATION_DATA_MAP[relationship]}에게 전할 꽃`}
@@ -41,7 +42,7 @@ function QuickRecommendationPage() {
             <OccasionItem key={item.value} relationship={relationship} type={item.value as TOccasion} />
           ))}
       </div>
-    </div>
+    </PageScroll>
   );
 }
 

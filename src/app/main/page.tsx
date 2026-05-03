@@ -1,5 +1,6 @@
 import StarIcon from '@/shared/assets/icons/star.svg';
 import Image from 'next/image';
+import PageScroll from '@/widgets/footer/page-scroll';
 import GeneralAIInput from './_ui/general-ai-input';
 import SpecificAIButtons from './_ui/specific-ai-buttons';
 import QuickPersonTargetRecommendation from './_ui/quick-person-target-recommendation';
@@ -18,7 +19,7 @@ export default async function MainPage({ searchParams }: { searchParams: Promise
   return (
     <div className='flex w-full h-full min-h-0 flex-col'>
       <NewUserModalTrigger isNewUser={isNewUser} />
-      <div className='relative w-full flex-1 min-h-0 overflow-y-auto'>
+      <PageScroll className='relative w-full flex-1 min-h-0'>
         {/* 상단: 배경 이미지 + 히어로 영역 (스크롤 시 함께 올라가서 사라짐) */}
         <section className='relative shrink-0'>
           <Image
@@ -47,7 +48,7 @@ export default async function MainPage({ searchParams }: { searchParams: Promise
         <PopularFlowerRecommendation flowers={data?.popularFlowers} />
         {/* 오늘의 추천 꽃 */}
         <TodayFlowerContainer flower={data?.todaysFlower} />
-      </div>
+      </PageScroll>
     </div>
   );
 }

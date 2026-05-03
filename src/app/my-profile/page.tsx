@@ -1,6 +1,7 @@
 export const dynamic = 'force-dynamic';
 
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
+import PageScroll from '@/widgets/footer/page-scroll';
 import { createServerQueryClient } from '@/shared/lib/server-query';
 import { serverFetchJson } from '@/shared/api/server-fetch';
 import { profileQueryKey } from './_model/use-profile-query';
@@ -17,8 +18,10 @@ export default async function MyProfilePage() {
   });
 
   return (
-    <HydrationBoundary state={dehydrate(queryClient)}>
-      <ProfilePageContent ProfileFallback={<ProfileSkeleton />} />
-    </HydrationBoundary>
+    <PageScroll>
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        <ProfilePageContent ProfileFallback={<ProfileSkeleton />} />
+      </HydrationBoundary>
+    </PageScroll>
   );
 }

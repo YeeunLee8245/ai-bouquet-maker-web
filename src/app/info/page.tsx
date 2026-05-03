@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import PageScroll from '@/widgets/footer/page-scroll';
 
 const FEATURES = [
   {
@@ -34,43 +35,45 @@ const PRIVACY_POLICY = `## 개인정보의 보유 및 이용기간
 
 export default function InfoPage() {
   return (
-    <div className='flex w-full flex-col'>
-      {/* 상단 히어로 영역 */}
-      <section className='relative h-[120px] shrink-0'>
-        <Image
-          src='/images/bg_main_top.webp'
-          alt=''
-          priority
-          width={360}
-          height={120}
-          className='absolute inset-0 w-full h-full object-cover object-top'
-        />
-        <div className='absolute inset-0 px-5 flex items-end pb-5'>
-          <h1 className='text-title-lg text-white'>서비스 소개</h1>
-        </div>
-      </section>
+    <PageScroll>
+      <div className='flex w-full flex-col'>
+        {/* 상단 히어로 영역 */}
+        <section className='relative h-[120px] shrink-0'>
+          <Image
+            src='/images/bg_main_top.webp'
+            alt=''
+            priority
+            width={360}
+            height={120}
+            className='absolute inset-0 w-full h-full object-cover object-top'
+          />
+          <div className='absolute inset-0 px-5 flex items-end pb-5'>
+            <h1 className='text-title-lg text-white'>서비스 소개</h1>
+          </div>
+        </section>
 
-      {/* 기능 카드 목록 */}
-      <section className='flex flex-col gap-3 px-4 py-4'>
-        {FEATURES.map((feature) => (
-          <Link
-            key={feature.title}
-            href={feature.href}
-            className='block w-full rounded-2xl bg-white px-5 py-4 shadow-sm'
-          >
-            <p className='text-body-lg text-gray-700 mb-1'>{feature.title}</p>
-            <p className='text-body-xsm text-gray-400 whitespace-pre-line'>{feature.description}</p>
-          </Link>
-        ))}
-      </section>
+        {/* 기능 카드 목록 */}
+        <section className='flex flex-col gap-3 px-4 py-4'>
+          {FEATURES.map((feature) => (
+            <Link
+              key={feature.title}
+              href={feature.href}
+              className='block w-full rounded-2xl bg-white px-5 py-4 shadow-sm'
+            >
+              <p className='text-body-lg text-gray-700 mb-1'>{feature.title}</p>
+              <p className='text-body-xsm text-gray-400 whitespace-pre-line'>{feature.description}</p>
+            </Link>
+          ))}
+        </section>
 
-      {/* 개인정보 처리방침 */}
-      <section className='mt-2 bg-white px-5 py-6'>
-        <h2 className='text-body-lg text-gray-700 mb-4'>개인정보 처리방침</h2>
-        <div className='text-body-xsm text-gray-400 whitespace-pre-line leading-relaxed'>
-          {PRIVACY_POLICY}
-        </div>
-      </section>
-    </div>
+        {/* 개인정보 처리방침 */}
+        <section className='mt-2 bg-white px-5 py-6'>
+          <h2 className='text-body-lg text-gray-700 mb-4'>개인정보 처리방침</h2>
+          <div className='text-body-xsm text-gray-400 whitespace-pre-line leading-relaxed'>
+            {PRIVACY_POLICY}
+          </div>
+        </section>
+      </div>
+    </PageScroll>
   );
 }

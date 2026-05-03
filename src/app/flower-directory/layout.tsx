@@ -1,5 +1,6 @@
 'use client';
 import BottomActionFooter from '@/widgets/footer/bottom-action-footer';
+import PageScroll from '@/widgets/footer/page-scroll';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { Suspense, useEffect } from 'react';
 import { useSetAtom } from 'jotai';
@@ -39,10 +40,10 @@ export default function FlowerDirectoryLayout({ children, modal }: TProps) {
   return (
     <Suspense fallback={null}>
       <div className='relative h-full flex flex-col'>
-        <div className='relative flex flex-1 overflow-y-auto'>
+        <PageScroll className='relative flex flex-1' hidePcFooter>
           {children}
           {modal}
-        </div>
+        </PageScroll>
         <BottomActionFooterContainer />
       </div>
     </Suspense>

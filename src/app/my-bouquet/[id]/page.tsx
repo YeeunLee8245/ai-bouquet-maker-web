@@ -1,4 +1,5 @@
 import { Suspense } from 'react';
+import PageScroll from '@/widgets/footer/page-scroll';
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 import { createServerQueryClient } from '@/shared/lib/server-query';
 import { serverFetchJson } from '@/shared/api/server-fetch';
@@ -24,10 +25,12 @@ export default async function MyBouquetDetailPage({ params }: TProps) {
   });
 
   return (
-    <HydrationBoundary state={dehydrate(queryClient)}>
-      <Suspense fallback={<BouquetDetailSkeleton />}>
-        <BouquetDetailContent id={id} />
-      </Suspense>
-    </HydrationBoundary>
+    <PageScroll>
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        <Suspense fallback={<BouquetDetailSkeleton />}>
+          <BouquetDetailContent id={id} />
+        </Suspense>
+      </HydrationBoundary>
+    </PageScroll>
   );
 }

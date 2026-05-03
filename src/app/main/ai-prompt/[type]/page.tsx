@@ -18,6 +18,7 @@ import AIAnalyzingModal, { AI_ANALYZING_MODAL_ID } from './_ui/ai-analyzing-moda
 import { useWalletBalance } from '@/shared/hooks/useWalletBalance';
 import { useUserAuth } from '@/hooks/use-supabase-user';
 import LoginRequiredModal, { LOGIN_REQUIRED_MODAL_ID } from '../../_ui/login-required-modal';
+import PageScroll from '@/widgets/footer/page-scroll';
 
 /**
  * AI 프롬프트 페이지
@@ -125,7 +126,7 @@ function AIPromptPage() {
   } : undefined;
 
   return (
-    <div className='flex flex-col h-full overflow-y-auto hide-scrollbar'>
+    <PageScroll className='flex flex-col h-full hide-scrollbar'>
       <div className='px-4 tablet:px-6 pc:px-8'>
         <div className='pt-4 pb-2 pc:max-w-[720px] pc:mx-auto'>
           {
@@ -142,7 +143,7 @@ function AIPromptPage() {
         </div>
       </div>
       <AIPromptGuideContainer eventHub={eventHub} guide={guide} onLoginRequired={handleLoginRequired} />
-    </div>
+    </PageScroll>
   );
 }
 
