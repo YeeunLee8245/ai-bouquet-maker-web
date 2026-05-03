@@ -50,7 +50,7 @@ function FlowerImagesContainer({ images, prevPath }: TProps) {
           <UpArrowIcon className='w-[17.5px] h-[18.3px] text-white'/>
         </button>
       </div>
-      {/* PC 썸네일 스트립 */}
+      {/* PC 썸네일 리스트 */}
       <div className='hidden pc:flex gap-2 mt-2'>
         {images.slice(0, 6).map(({ url, name }, idx) => (
           <button
