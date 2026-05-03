@@ -11,6 +11,9 @@ import LikeButton from '@/features/like/ui/like-button';
 import { initLikeFromServer } from '@/features/like/model/atoms';
 import { cn } from '@/shared/utils/styles';
 import FlowerCardSkeleton from '@/shared/ui/skeleton/flower-card-skeleton';
+import { openModalAtom } from '@/shared/model/modal';
+import LoginRequiredModal, { LOGIN_REQUIRED_MODAL_ID } from '@/app/main/_ui/login-required-modal';
+import { useUserAuth } from '@/hooks/use-supabase-user';
 
 type TProps = {
   eventHub: IDirectoryEventHub;
@@ -21,6 +24,8 @@ function DirectoryListContainer({ eventHub }: TProps) {
   const store = useStore();
   const toggleFlower = useSetAtom(toggleFlowerAtom);
   const selectedFlowers = useAtomValue(selectedFlowersAtom);
+  const openModal = useSetAtom(openModalAtom);
+  const { isLogin } = useUserAuth();
   const [sort, setSort] = useAtom(directorySortAtom);
   const [isPending, startTransition] = useTransition();
 
@@ -111,6 +116,14 @@ function DirectoryListContainer({ eventHub }: TProps) {
                     size='md'
                     onClick={(e) => {
                       e.preventDefault();
+                      if (!isLogin) {
+                        openModal({
+                          id: LOGIN_REQUIRED_MODAL_ID,
+                          position: 'center',
+                          component: <LoginRequiredModal modalId={LOGIN_REQUIRED_MODAL_ID} />,
+                        });
+                        return;
+                      }
                       toggleFlower({ id: flower.id, name: flower.name });
                     }}
                     className={cn('mt-3', isSelected && 'bg-primary-600 text-primary-200')}
