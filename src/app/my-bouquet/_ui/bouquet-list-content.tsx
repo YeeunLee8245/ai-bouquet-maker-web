@@ -107,7 +107,7 @@ export default function BouquetListContent() {
 
   return (
     <div className='min-h-screen bg-gray-50'>
-      <div className='mx-4 px-micro pt-4 pb-2 flex items-center justify-between'>
+      <div className='mx-4 px-micro tablet:mx-0 tablet:px-6 pc:px-8 pt-4 pb-2 flex items-center justify-between'>
         <p className='text-title-lg'>내 꽃다발</p>
         <Button size='sm' asChild>
           <Link href='/main/ai-prompt/emotion'>
@@ -118,9 +118,9 @@ export default function BouquetListContent() {
       </div>
       <div className='h-[2px] w-full bg-gray-100' />
 
-      <div ref={containerRef} className='pt-4 px-4 pb-8 group/list'>
+      <div ref={containerRef} className='pt-4 tablet:pt-6 px-4 tablet:px-6 pc:px-8 pb-8 group/list'>
         <MyBouquetListController total={total ?? 0} hub={hub} />
-        <div className='pt-3 flex flex-col gap-4'>
+        <div className='pt-3 flex flex-col gap-4 pc:grid pc:grid-cols-2 pc:gap-x-6 pc:gap-y-8'>
           {bouquets.map((bouquet) => (
             <BouquetListItem
               key={bouquet.id}
