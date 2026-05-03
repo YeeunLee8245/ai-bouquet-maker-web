@@ -1,18 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@shared/supabase/server';
-import { getUser } from '@/lib/users/auth';
-import { toSupabaseResizedImageUrl } from '@shared/utils/image-url';
-
-/**
- * 현재 계절 가져오기 (서버 시간 기준)
- */
-function getCurrentSeason(): string {
-  const month = new Date().getMonth() + 1; // 1-12
-  if (month >= 3 && month <= 5) {return 'spring';}
-  if (month >= 6 && month <= 8) {return 'summer';}
-  if (month >= 9 && month <= 11) {return 'autumn';}
-  return 'winter'; // 12, 1, 2월
-}
+import { queryDirectory } from '@/lib/flowers/query-directory';
 
 /**
  * @swagger
@@ -181,11 +168,8 @@ function getCurrentSeason(): string {
  */
 export async function GET(request: NextRequest) {
   try {
-    const supabase = await createClient();
     const searchParams = request.nextUrl.searchParams;
 
-    // 파라미터 파싱
-    const defaultSeason = getCurrentSeason();
     const seasonsParam = searchParams.get('seasons');
     const colorsParam = searchParams.get('colors');
     const search = searchParams.get('search') || '';
@@ -194,219 +178,17 @@ export async function GET(request: NextRequest) {
     const page = parseInt(searchParams.get('page') || '1', 10);
     const limit = parseInt(searchParams.get('limit') || '20', 10);
 
-    // 계절 필터
     const seasons = seasonsParam
       ? seasonsParam.split(',').map(s => s.trim())
       : null;
 
-    // 색상 필터
     const colors = colorsParam
       ? colorsParam.split(',').map(c => c.trim()).filter(Boolean)
       : [];
 
-    // 현재 사용자 확인 (좋아요 여부 표시용)
-    const user = await getUser();
-    let userLikes: Set<number> = new Set();
+    const data = await queryDirectory({ seasons, colors, search, nameOnly, sort, page, limit });
 
-    if (user) {
-      const { data: publicUser } = await supabase
-        .from('users')
-        .select('id')
-        .eq('auth_id', user.id)
-        .single();
-
-      if (publicUser) {
-        const { data: likes } = await supabase
-          .from('user_flower_likes')
-          .select('flower_id')
-          .eq('user_id', publicUser.id);
-
-        if (likes) {
-          userLikes = new Set(likes.map(l => l.flower_id));
-        }
-      }
-    }
-
-    // 색상 필터가 있는 경우 flower_id 조회 (존재하지 않는 색상은 결과 0건으로 처리)
-    let colorFilteredFlowerIds: number[] | null = null;
-
-    if (colors.length > 0) {
-      const { data: colorMatches, error: colorError } = await supabase
-        .from('flowers_with_meanings_view')
-        .select('flower_id')
-        .in('color', colors);
-
-      if (colorError) {
-        console.error('Color filter query error:', colorError);
-        return NextResponse.json(
-          { error: '색상 필터 조회 중 오류가 발생했습니다.' },
-          { status: 500 },
-        );
-      }
-
-      // 중복 제거된 flower_id 목록
-      colorFilteredFlowerIds = [...new Set(colorMatches?.map(m => m.flower_id) || [])];
-
-      // 매칭되는 꽃이 없으면 빈 결과 반환
-      if (colorFilteredFlowerIds.length === 0) {
-        return NextResponse.json({
-          success: true,
-          data: {
-            default_season: defaultSeason,
-            flowers: [],
-            total: 0,
-            page,
-            limit,
-            has_next_page: false,
-          },
-        });
-      }
-    }
-
-    // 꽃 데이터 조회 (최적화된 컬럼 선택)
-    let query = supabase
-      .from('flowers_with_counts_view')
-      .select(`
-        id, name_ko, images, representative_meanings_tags, availability,
-        flower_meanings (color, icon_color, is_primary, meaning)
-      `, { count: 'exact' })
-      .eq('availability', true);
-
-    // 색상 필터 적용 (flower_id로 필터)
-    if (colorFilteredFlowerIds !== null) {
-      query = query.in('id', colorFilteredFlowerIds);
-    }
-
-    // 계절 필터 적용 (seasons 파라미터가 있을 때만)
-    if (seasons) {
-      query = query.or(
-        `${seasons.map(s => `seasons.cs.{${s}}`).join(',')},seasons.cs.{all_year}`,
-      );
-    }
-
-    // 검색어 필터 (search_text 컬럼으로 단일 쿼리 - 이름 + 꽃말 통합 또는 이름만 검색)
-    if (search) {
-      const searchColumn = nameOnly ? 'name_ko' : 'search_text';
-      const { data: searchMatches, error: searchError } = await supabase
-        .from('flowers')
-        .select('id')
-        .ilike(searchColumn, `%${search}%`);
-
-      if (searchError) {
-        console.error('Search query error:', searchError);
-        return NextResponse.json(
-          { error: '검색 중 오류가 발생했습니다.' },
-          { status: 500 },
-        );
-      }
-
-      const searchMatchedIds = searchMatches?.map(m => m.id) || [];
-
-      // 검색 결과 없으면 빈 결과 즉시 반환
-      if (searchMatchedIds.length === 0) {
-        return NextResponse.json({
-          success: true,
-          data: {
-            default_season: defaultSeason,
-            flowers: [],
-            total: 0,
-            page,
-            limit,
-            has_next_page: false,
-          },
-        });
-      }
-
-      // 색상 필터와 검색 필터 모두 .in()으로 적용 시 Supabase가 AND로 결합 → 자동 교집합
-      query = query.in('id', searchMatchedIds);
-    }
-
-    // 페이지네이션
-    const from = (page - 1) * limit;
-    const to = from + limit - 1;
-    query = query.range(from, to);
-
-    // 정렬 (name: 이름순)
-    if (sort === 'name') {
-      query = query.order('name_ko', { ascending: true });
-    } else {
-      // popular: like_count순으로 정렬 (동률일 경우 id순)
-      query = query.order('like_count', { ascending: false });
-      query = query.order('id', { ascending: true });
-    }
-
-    const { data: flowers, error, count } = await query;
-
-    if (error) {
-      console.error('Flower dictionary query error:', error);
-      return NextResponse.json(
-        { error: '꽃 목록 조회 중 오류가 발생했습니다.' },
-        { status: 500 },
-      );
-    }
-
-    const filteredFlowers = flowers || [];
-
-    // FlowerCard에 맞는 형태로 변환
-    const formattedFlowers = filteredFlowers.map(flower => {
-      const meanings = (flower.flower_meanings || []) as Array<{
-        id?: number | null;
-        color?: string | null;
-        icon_color?: string | null;
-        is_primary?: boolean | null;
-        meaning?: string | null;
-      }>;
-
-      // 기본 꽃말 ID: is_primary: true 우선, 없으면 첫 번째
-      const primaryMeaning = meanings.find(m => m.is_primary);
-      const defaultMeaningId = primaryMeaning?.id != null
-        ? String(primaryMeaning.id)
-        : meanings[0]?.id != null
-          ? String(meanings[0].id)
-          : null;
-
-      // 색상 추출 (icon_color) - color가 null이면 기본 색상(회색)이므로 제외
-      const flowerColors = [...new Set(
-        meanings
-          .filter(m => m.color != null)
-          .map(m => m.icon_color)
-          .filter((color): color is string => Boolean(color)),
-      )];
-
-      // 태그 추출 (신규 컬럼 우선, 없으면 조인 데이터에서 추출)
-      let tags = flower.representative_meanings_tags?.slice(0, 3) || [];
-
-      if (tags.length === 0) {
-        tags = meanings
-          .filter((m): m is { is_primary: boolean; meaning: string } => Boolean(m.is_primary) && typeof m.meaning === 'string')
-          .map(m => m.meaning)
-          .slice(0, 3);
-      }
-
-      const imageUrl = toSupabaseResizedImageUrl((flower.images as string[])?.[0]) || '/temp_tulip.png';
-
-      return {
-        id: String(flower.id),
-        imageUrl,
-        name: flower.name_ko,
-        defaultMeaningId,
-        isLiked: user ? userLikes.has(flower.id) : undefined,
-        colors: flowerColors,
-        tags,
-      };
-    });
-
-    return NextResponse.json({
-      success: true,
-      data: {
-        default_season: defaultSeason,
-        flowers: formattedFlowers,
-        total: count || 0,
-        page,
-        limit,
-        has_next_page: (count || 0) > page * limit,
-      },
-    });
+    return NextResponse.json({ success: true, data });
   } catch (error) {
     console.error('Flower dictionary error:', error);
     return NextResponse.json(

@@ -1,3 +1,5 @@
+'use client';
+
 import { cn } from '@/shared/utils/styles';
 import Image from 'next/image';
 import React from 'react';
@@ -15,6 +17,7 @@ type TProps = {
   actionButton?: React.ReactNode;
   likeButton?: React.ReactNode;
   searchParams?: Record<string, string>;
+  onLinkPrefetch?: (href: string) => void;
 } & React.HTMLAttributes<HTMLDivElement>;
 
 const flowerCardImageSizes: Record<TProps['size'], { width: number; height: number }> = {
@@ -28,9 +31,10 @@ const flowerCardImageSizes: Record<TProps['size'], { width: number; height: numb
   },
 };
 
-function FlowerCard({ size, imageUrl, id, name, colors, tags, priority = false, actionButton, likeButton, searchParams, className, ...props }: TProps) {
+function FlowerCard({ size, imageUrl, id, name, colors, tags, priority = false, actionButton, likeButton, searchParams, onLinkPrefetch, className, ...props }: TProps) {
   const [imageWidth, imageHeight] = [flowerCardImageSizes[size].width, flowerCardImageSizes[size].height];
   const query = searchParams ? `?${new URLSearchParams(searchParams).toString()}` : '';
+  const href = `/flower-directory/${id}${query}`;
   return (
     <div
       className={cn('flex flex-col',
@@ -41,7 +45,10 @@ function FlowerCard({ size, imageUrl, id, name, colors, tags, priority = false, 
     >
       <Link
         aria-label={`${name} 상세 페이지 보기`}
-        href={`/flower-directory/${id}${query}`}
+        href={href}
+        prefetch={false}
+        onMouseEnter={() => onLinkPrefetch?.(href)}
+        onTouchStart={() => onLinkPrefetch?.(href)}
         className={cn('relative', size === 'lg' && 'tablet:block tablet:w-full')}>
         <Image
           priority={priority}

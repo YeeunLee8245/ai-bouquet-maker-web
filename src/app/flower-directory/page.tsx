@@ -2,7 +2,7 @@ export const dynamic = 'force-dynamic';
 
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 import { createServerQueryClient } from '@/shared/lib/server-query';
-import { fetchDirectory } from '@api/flowers.api';
+import { queryDirectory } from '@/lib/flowers/query-directory';
 import { directoryQueryKey, directoryDefaultQueryParams } from './_model/use-directory-query';
 import DirectoryPageContent from './_ui/directory-page-content';
 
@@ -15,16 +15,15 @@ export default async function FlowerDirectoryPage() {
   try {
     await queryClient.prefetchInfiniteQuery({
       queryKey: directoryQueryKey(directoryDefaultQueryParams),
-      queryFn: ({ pageParam }) => fetchDirectory({
-        ...directoryDefaultQueryParams,
-        search: undefined,
+      queryFn: ({ pageParam }) => queryDirectory({
+        sort: directoryDefaultQueryParams.sort,
         page: pageParam,
         limit: 20,
       }),
       initialPageParam: 1,
     });
   } catch {
-    // 빌드 타임 또는 미인증 상태에서 prefetch 실패 시 무시 — 클라이언트에서 Suspense로 처리
+    // prefetch 실패 시 클라이언트에서 Suspense로 처리
   }
 
   return (

@@ -1,4 +1,7 @@
+'use client';
+
 import { useRef, useEffect, useMemo, useTransition } from 'react';
+import { useRouter } from 'next/navigation';
 import { useSetAtom, useAtom, useAtomValue, useStore } from 'jotai';
 import { IDirectoryEventHub } from '../_types';
 import { directoryDefaultSortOptions } from '../_datas';
@@ -26,6 +29,7 @@ function DirectoryListContainer({ eventHub }: TProps) {
   const selectedFlowers = useAtomValue(selectedFlowersAtom);
   const openModal = useSetAtom(openModalAtom);
   const { isLogin } = useUserAuth();
+  const router = useRouter();
   const [sort, setSort] = useAtom(directorySortAtom);
   const [isPending, startTransition] = useTransition();
 
@@ -104,6 +108,7 @@ function DirectoryListContainer({ eventHub }: TProps) {
             colors={flower.colors}
             tags={flower.tags}
             searchParams={{ 'can-create-bouquet': 'true', 'prev-path': '/flower-directory' }}
+            onLinkPrefetch={(href) => router.prefetch(href)}
             likeButton={flower.isLiked !== undefined
               ? <LikeButton type='flower' id={flower.id} initialLiked={flower.isLiked} variant='outline' size='lg' />
               : undefined
