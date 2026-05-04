@@ -2,8 +2,8 @@ import Skeleton from './skeleton';
 
 function FlowerCardSkeleton() {
   return (
-    <div className='flex flex-col min-w-[156px] tablet:min-w-0 tablet:w-full'>
-      <Skeleton className='w-[156px] h-[200px] tablet:w-full tablet:h-auto tablet:aspect-[156/200] rounded-3' />
+    <div className='flex flex-col w-full'>
+      <Skeleton className='w-full h-auto aspect-[156/200] rounded-3' />
       <div className='mt-2'>
         <Skeleton className='h-5 w-20 rounded-2' />
         <div className='flex mt-2 gap-2'>
