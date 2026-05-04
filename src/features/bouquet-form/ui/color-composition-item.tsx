@@ -5,7 +5,7 @@ import XIcon from '@/shared/assets/icons/x.svg';
 import { ColorSwitchToggle } from '@/shared/ui/button';
 import { openModalAtom } from '@/shared/model/modal';
 import { useSetAtom } from 'jotai';
-import ColorHSLPickModal from './modals/color-pick-modal/color-pick-modal';
+import ColorHSLPickModal from './modals/color-hsl-pick-modal/color-hsl-pick-modal';
 
 type TProps = {
   color: string;
