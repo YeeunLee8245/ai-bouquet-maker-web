@@ -7,7 +7,7 @@ import Image from 'next/image';
 import ColorCompositionItem from './color-composition-item';
 import { openModalAtom } from '@/shared/model/modal';
 import { useSetAtom } from 'jotai';
-import ColorPaletteModal from './modals/color-add-modal/color-palette-modal';
+import ColorPaletteModal from './modals/color-palette-modal/color-palette-modal';
 import type { TFlowerCompositionItem, TAvailableColor } from '../model';
 
 type TProps = {

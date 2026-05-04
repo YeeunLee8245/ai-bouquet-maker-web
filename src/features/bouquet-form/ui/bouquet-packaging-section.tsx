@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import PlusIcon from '@/shared/assets/icons/plus.svg';
 import { openModalAtom } from '@/shared/model/modal';
 import { atom, useAtom, useSetAtom } from 'jotai';
-import ColorHSLPickModal from './modals/color-pick-modal/color-pick-modal';
+import ColorHSLPickModal from './modals/color-hsl-pick-modal/color-hsl-pick-modal';
 import { MAKE_BOUQUET_PACKAGING_DEFAULT_COLORS } from '../model';
 
 type TProps = {
