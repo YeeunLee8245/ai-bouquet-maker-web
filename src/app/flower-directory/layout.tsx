@@ -1,10 +1,18 @@
 'use client';
-import BottomActionFooter from '@/widgets/footer/bottom-action-footer';
+import { ActionBar } from '@/shared/ui/action-bar';
+import { SelectedFlowerChips } from '@/entities/flower/ui';
+import { Button } from '@/shared/ui/button';
+import { useMakeBouquet } from '@features/bouquet-form';
+import { useMediaQuery } from '@/shared/hooks/useMediaQuery';
+import { useAtomValue, useSetAtom } from 'jotai';
+import {
+  selectedFlowersAtom,
+  removeFlowerAtom,
+  resetSelectedFlowersAtom,
+} from '@/entities/flower/model/selected-flowers';
 import PageScroll from '@/app/_ui/page-scroll';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { Suspense, useEffect } from 'react';
-import { useSetAtom } from 'jotai';
-import { resetSelectedFlowersAtom } from '@/entities/flower/model/selected-flowers';
 
 type TProps = {
   children: React.ReactNode;
@@ -18,17 +26,31 @@ function BottomActionFooterContainer() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const resetSelectedFlowers = useSetAtom(resetSelectedFlowersAtom);
+  const flowers = useAtomValue(selectedFlowersAtom);
+  const removeFlower = useSetAtom(removeFlowerAtom);
+  const { handleMakeBouquet } = useMakeBouquet();
+  const isPc = useMediaQuery('(min-width: 1024px)');
 
   useEffect(() => {
     resetSelectedFlowers();
   }, []);
-  // 꽃 사전 페이지 또는 꽃 상세 페이지에서 꽃다발 만들기 버튼 표시
-  const canCreateBouquet = pathname === '/flower-directory' || searchParams.get('can-create-bouquet') === 'true';
+
+  const canCreateBouquet =
+    pathname === '/flower-directory' || searchParams.get('can-create-bouquet') === 'true';
+
+  if (!canCreateBouquet) {return null;}
 
   return (
-    <>
-      {canCreateBouquet && <BottomActionFooter title='꽃다발 만들기' />}
-    </>
+    <ActionBar>
+      <SelectedFlowerChips flowers={flowers} onRemove={removeFlower} twoLineThreshold={isPc} />
+      <Button
+        size='lg'
+        className='pc:w-[360px] pc:shrink-0'
+        onClick={handleMakeBouquet}
+      >
+        꽃다발 만들기
+      </Button>
+    </ActionBar>
   );
 }
 
@@ -36,7 +58,6 @@ function BottomActionFooterContainer() {
  * 꽃 사전 레이아웃
  */
 export default function FlowerDirectoryLayout({ children, modal }: TProps) {
-
   return (
     <Suspense fallback={null}>
       <div className='relative h-full flex flex-col'>
