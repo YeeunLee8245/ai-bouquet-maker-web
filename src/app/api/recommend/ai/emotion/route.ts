@@ -14,7 +14,7 @@ import { toSupabaseResizedImageUrl } from '@shared/utils/image-url';
  *       - Recommend
  *     summary: AI 감정 기반 꽃 추천
  *     description: |
- *       사용자의 감정이나 고민, 상황 텍스트를 AI가 심층 분석하여 어울리는 꽃들을 추천합니다.
+ *       사용자의 감정이나 고민, 상황 텍스트를 로컬 태그 분석으로 해석하여 어울리는 꽃들을 추천합니다.
  *       단순 키워드 매칭이 아닌 문맥을 파악한 감성적인 접근을 제공합니다.
  *
  *       ### 🎨 프론트엔드 개발 가이드
@@ -29,7 +29,7 @@ import { toSupabaseResizedImageUrl } from '@shared/utils/image-url';
  *       1. 토큰 잔액 확인 (부족 시 403 반환)
  *       2. 사용자 조회
  *       3. DB INSERT (status='pending')
- *       4. AI 분석 수행 (OpenAI 감정 분석)
+ *       4. 로컬 태그 분석 수행
  *       5. 결과 UPDATE
  *          ├─ 성공: status='success' + 결과 저장 → 토큰 차감
  *          └─ 실패: status='failed' + error_msg 저장 (토큰 차감 X)
@@ -45,7 +45,7 @@ import { toSupabaseResizedImageUrl } from '@shared/utils/image-url';
  *       | situation_tags 매칭 | **5점** | 상황 태그 매칭 |
  *       | relation_tags 매칭 | **3점** | 관계 태그 매칭 |
  *       | style_tags 매칭 | **2점** | 스타일 태그 매칭 |
- *       | AI 추천 꽃 보너스 | **+18점** | AI가 직접 추천한 꽃 |
+ *       | AI 추천 꽃 보너스 | **+18점** | 분석 결과의 추천 꽃 목록과 매칭된 꽃 |
  *       | 추천 색상 매칭 | **+6점** | AI 추천 색상과 일치 |
  *       | 대표 꽃말 보너스 | **+2점** | is_primary가 true인 꽃말 |
  *
