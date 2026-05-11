@@ -13,6 +13,7 @@ import {
 import PageScroll from '@/app/_ui/page-scroll';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { Suspense, useEffect } from 'react';
+import { BREAKPOINTS } from '@/shared/constants/breakpoints';
 
 type TProps = {
   children: React.ReactNode;
@@ -29,12 +30,14 @@ function BottomActionFooterContainer() {
   const flowers = useAtomValue(selectedFlowersAtom);
   const removeFlower = useSetAtom(removeFlowerAtom);
   const { handleMakeBouquet } = useMakeBouquet();
-  const isPc = useMediaQuery('(min-width: 1024px)');
+  const isPcUp = useMediaQuery(`(min-width: ${BREAKPOINTS.PC})`);
 
   useEffect(() => {
     resetSelectedFlowers();
   }, []);
 
+  // 꽃다발 만들기 버튼 표시 여부
+  // 꽃 사전 리스트 페이지 || 꽃 사전 리스트 > 꽃 상세 페이지
   const canCreateBouquet =
     pathname === '/flower-directory' || searchParams.get('can-create-bouquet') === 'true';
 
@@ -42,7 +45,7 @@ function BottomActionFooterContainer() {
 
   return (
     <ActionBar>
-      <SelectedFlowerChips flowers={flowers} onRemove={removeFlower} twoLineThreshold={isPc} />
+      <SelectedFlowerChips flowers={flowers} onRemove={removeFlower} twoLineThreshold={isPcUp} />
       <Button
         size='lg'
         className='pc:w-[360px] pc:shrink-0'
