@@ -1,5 +1,4 @@
 import StarIcon from '@/shared/assets/icons/star.svg';
-import Image from 'next/image';
 import PageScroll from '@/app/_ui/page-scroll';
 import GeneralAIInput from './_ui/general-ai-input';
 import SpecificAIButtons from './_ui/specific-ai-buttons';
@@ -8,7 +7,8 @@ import PopularFlowerRecommendation from './_ui/popular-flower-recommendation';
 import TodayFlowerContainer from './_ui/today-flower-container';
 import { getMainData } from '../api/main/getMainData';
 import NewUserModalTrigger from './_ui/new-user-modal-trigger';
-// 맞춤 추천 -> 따로 페이지 빼는 것이 아닌 컴포넌트 형태로 중첩해서 띄우기
+import HeroBackground from './_ui/hero-background';
+
 /**
  * 메인 페이지
  */
@@ -22,14 +22,7 @@ export default async function MainPage({ searchParams }: { searchParams: Promise
       <PageScroll className='relative w-full flex-1 min-h-0'>
         {/* 상단: 배경 이미지 + 히어로 영역 (스크롤 시 함께 올라가서 사라짐) */}
         <section className='relative shrink-0'>
-          <Image
-            src='/images/bg_main_top.webp'
-            alt=''
-            priority
-            width={360}
-            height={380}
-            className='absolute inset-0 w-full h-full object-cover object-[50%_-48px]'
-          />
+          <HeroBackground />
           <div className='relative px-4 py-5 tablet:px-6 pc:px-8'>
             <p className='px-1 text-title-lg text-white whitespace-pre-wrap'>
               {'어떤 꽃으로 마음을\n전하고 싶으신가요?'}

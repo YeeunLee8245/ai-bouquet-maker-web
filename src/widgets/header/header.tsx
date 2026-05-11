@@ -15,6 +15,8 @@ import { useSetAtom } from 'jotai';
 import Sidebar, { TNavItem } from '../sidebar/sidebar';
 import Link from 'next/link';
 import { useUserAuth } from '@/hooks/use-supabase-user';
+import { useMediaQuery } from '@/shared/hooks/useMediaQuery';
+import { BREAKPOINTS } from '@/shared/constants/breakpoints';
 
 const PRIMARY_PATHS = ['/main', '/info'];
 const WHITE_PATHS = ['/my-profile'];
@@ -29,6 +31,8 @@ const NAV_ITEMS: TNavItem[] = [
 function Header() {
   const pathname = usePathname();
   const { isLogin, isLoading: isLoginLoading } = useUserAuth();
+  const isTabletUp = useMediaQuery(`(min-width: ${BREAKPOINTS.TABLET})`);
+  const isPcUp = useMediaQuery(`(min-width: ${BREAKPOINTS.PC})`);
 
   let variant: TVariant = 'default';
   if (WHITE_PATHS.includes(pathname)) {
@@ -73,7 +77,13 @@ function Header() {
     >
       {variant === 'primary' && (
         <Image
-          src='/images/bg_main_top.webp'
+          src={
+            isPcUp
+              ? '/images/bg_main_top_pc.webp'
+              : isTabletUp
+                ? '/images/bg_main_top_tablet.webp'
+                : '/images/bg_main_top_mobile.webp'
+          }
           alt='header-background'
           width={360}
           height={72}
