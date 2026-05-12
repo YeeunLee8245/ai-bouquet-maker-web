@@ -16,7 +16,7 @@ import {
   BOUQUET_FROM_AI_PARAM,
 } from '@features/bouquet-form';
 import { selectedFlowersAtom } from '@/entities/flower/model/selected-flowers';
-import { aiRecommendationResultAtom } from '@/app/main/ai-prompt/_model/recommendation-result.atoms';
+import { aiRecommendationResultAtom } from '@/entities/recommendation/model/recommendation-result.atoms';
 
 function MakeBouquetPage() {
   const router = useRouter();

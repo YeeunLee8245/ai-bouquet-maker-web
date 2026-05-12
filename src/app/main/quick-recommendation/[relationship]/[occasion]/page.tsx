@@ -12,7 +12,7 @@ import { FlowerCardSkeleton } from '@/shared/ui/skeleton';
 import { useSetAtom } from 'jotai';
 import { SelectButton } from '@features/select-flower';
 import { useEffect } from 'react';
-import { aiRecommendationResultAtom } from '@/app/main/ai-prompt/_model/recommendation-result.atoms';
+import { aiRecommendationResultAtom } from '@/entities/recommendation/model/recommendation-result.atoms';
 
 function QuickRecommendationOccasionPage() {
   const { relationship, occasion } = useParams<{ relationship: TRelationship; occasion: TOccasion }>();

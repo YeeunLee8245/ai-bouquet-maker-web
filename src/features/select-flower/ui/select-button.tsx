@@ -3,8 +3,7 @@
 import { useAtomValue, useSetAtom } from 'jotai';
 import { Button } from '@/shared/ui/button';
 import { selectedFlowersAtom, toggleFlowerAtom } from '@/entities/flower/model/selected-flowers';
-import { openModalAtom } from '@/shared/model/modal';
-import LoginRequiredModal, { LOGIN_REQUIRED_MODAL_ID } from '@/app/main/_ui/login-required-modal';
+import { loginRequiredAtom } from '@/shared/model/login/login-guard.atoms';
 import { useUserAuth } from '@/hooks/use-supabase-user';
 
 type TProps = {
@@ -15,17 +14,13 @@ type TProps = {
 function SelectButton({ flowerId, flowerName }: TProps) {
   const selectedFlowers = useAtomValue(selectedFlowersAtom);
   const toggleFlower = useSetAtom(toggleFlowerAtom);
-  const openModal = useSetAtom(openModalAtom);
+  const setLoginRequired = useSetAtom(loginRequiredAtom);
   const { isLogin } = useUserAuth();
   const isSelected = selectedFlowers.some((f) => f.id === flowerId);
 
   const handleClick = () => {
     if (!isLogin) {
-      openModal({
-        id: LOGIN_REQUIRED_MODAL_ID,
-        position: 'center',
-        component: <LoginRequiredModal modalId={LOGIN_REQUIRED_MODAL_ID} />,
-      });
+      setLoginRequired({ isRequired: true });
       return;
     }
     toggleFlower({ id: flowerId, name: flowerName });

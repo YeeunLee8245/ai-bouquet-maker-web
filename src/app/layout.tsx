@@ -4,6 +4,7 @@ import Header from '@/widgets/header/header';
 import AppProviders from '@/shared/providers/app-providers';
 import ModalHost from '@/shared/model/modal/modal-host';
 import ToastHost from '@/shared/model/toast/toast-host';
+import LoginGuardHandler from '@/app/_ui/login-guard-handler';
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -38,6 +39,7 @@ export default function RootLayout({
           </main>
           <ModalHost />
           <ToastHost />
+          <LoginGuardHandler />
         </body>
       </html>
     </AppProviders>

@@ -7,7 +7,7 @@ import ChevronDownIcon from '@/shared/assets/icons/chevron_down.svg';
 import { FlowerCard } from '@/entities/flower/ui';
 import LikeButton from '@/features/like/ui/like-button';
 import { SelectButton } from '@features/select-flower';
-import { aiRecommendationResultAtom } from '../_model/recommendation-result.atoms';
+import { aiRecommendationResultAtom } from '@/entities/recommendation/model/recommendation-result.atoms';
 
 const AiPromptResultPage = () => {
   const router = useRouter();

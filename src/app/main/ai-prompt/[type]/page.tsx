@@ -11,7 +11,7 @@ import AIPromptInput from './_ui/ai-prompt-input';
 import { Button } from '@/shared/ui/button';
 import AIPromptGuideContainer from './_ui/ai-prompt-guide-container';
 import { useSetAtom } from 'jotai';
-import { aiRecommendationResultAtom } from '../_model/recommendation-result.atoms';
+import { aiRecommendationResultAtom } from '@/entities/recommendation/model/recommendation-result.atoms';
 import { showToastAtom } from '@/shared/model/toast';
 import { openModalAtom, closeModalAtom } from '@/shared/model/modal';
 import AIAnalyzingModal, { AI_ANALYZING_MODAL_ID } from './_ui/ai-analyzing-modal';
