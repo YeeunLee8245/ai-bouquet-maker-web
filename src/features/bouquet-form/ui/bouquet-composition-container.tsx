@@ -4,7 +4,7 @@ import { Button } from '@/shared/ui/button';
 import React from 'react';
 import PlusIcon from '@/shared/assets/icons/plus.svg';
 import FlowerCompositionItem from './flower-composition-item';
-import { openModalAtom } from '@/shared/model/modal';
+import { ResponsiveModalTrigger } from '@/shared/ui/modal';
 import { useAtomValue, useSetAtom } from 'jotai';
 import FlowerAddModal from './modals/flower-add-modal/flower-add-modal';
 import { showToastAtom } from '@/shared/model/toast';
@@ -21,7 +21,6 @@ import {
 export default function BouquetCompositionContainer() {
   const flowers = useAtomValue(bouquetFlowersAtom);
   // -- Action Atoms --
-  const openModal = useSetAtom(openModalAtom);
   const showToast = useSetAtom(showToastAtom);
   const removeFlower = useSetAtom(removeBouquetFlowerByIdAtom);
   const removeColor = useSetAtom(removeFlowerColorAtom);
@@ -38,18 +37,16 @@ export default function BouquetCompositionContainer() {
     removeFlower(id);
   };
 
-  const handleAddFlower = () => {
-    openModal({ id: 'flower-add-modal', component: <FlowerAddModal /> });
-  };
-
   return (
     <div className='relative mt-4 p-4 border-1 border-gray-100 rounded-5 bg-white'>
       <div className='flex justify-between'>
         <p className='text-title-md'>꽃 구성</p>
-        <Button size='sm' className='pl-1' onClick={handleAddFlower}>
-          <span className='mx-[3.5px]'><PlusIcon className='w-[13px] h-[13px]' /></span>
-          <span className='text-ui-cta-sm'>꽃 추가</span>
-        </Button>
+        <ResponsiveModalTrigger modalId='flower-add-modal' modal={<FlowerAddModal />}>
+          <Button size='sm' className='pl-1'>
+            <span className='mx-[3.5px]'><PlusIcon className='w-[13px] h-[13px]' /></span>
+            <span className='text-ui-cta-sm'>꽃 추가</span>
+          </Button>
+        </ResponsiveModalTrigger>
       </div>
       <div className='mt-3 flex flex-col'>
         {flowers.map((item, idx) => (

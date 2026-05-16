@@ -3,7 +3,7 @@
 import CautionIcon from '@/shared/assets/icons/caution.svg';
 import Button from '@/shared/ui/button/button';
 
-export default function Error({ reset }: { error: Error; reset: () => void }) {
+export default function Error({ reset }: { error: Error; reset: () => void; unstable_retry?: () => void }) {
   return (
     <div className='flex flex-col items-center h-full px-4 pt-11 gap-11'>
       <div className='flex flex-col items-center gap-5'>

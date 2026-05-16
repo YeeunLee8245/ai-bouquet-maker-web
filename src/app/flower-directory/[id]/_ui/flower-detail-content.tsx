@@ -20,20 +20,22 @@ export default function FlowerDetailContent({ id }: TProps) {
 
   return (
     <div className='relative flex-1 overflow-y-auto hide-scrollbar'>
-      <FlowerImagesContainer images={data.images} prevPath={prevPath} />
-      <FlowerDescContainer
-        id={data.id}
-        title={data.title}
-        description={data.description}
-        isLiked={data.isLiked}
-      />
+      <div className='tablet:flex tablet:flex-row tablet:items-start tablet:gap-6 pc:gap-8 tablet:px-6 pc:px-8 tablet:py-6 pc:py-8'>
+        <FlowerImagesContainer images={data.images} prevPath={prevPath} />
+        <FlowerDescContainer
+          id={data.id}
+          title={data.title}
+          description={data.description}
+          isLiked={data.isLiked}
+        />
+      </div>
       <FlowerTabContainer
         meanings={data.meanings}
         floweringTimes={data.floweringTimes}
         management={data.management}
       />
       <div className='w-full h-micro bg-gray-100' />
-      <FlowerSimilarContainer similarFlowers={data.similarFlowers} searchParams={allSearchParams} />
+      <FlowerSimilarContainer similarFlowers={data.similarFlowers} searchParams={allSearchParams} replace={!!prevPath} />
     </div>
   );
 }

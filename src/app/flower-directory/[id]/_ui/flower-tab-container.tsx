@@ -35,14 +35,14 @@ function FlowerTabContainer({ meanings, floweringTimes, management }: TProps) {
 
   return (
     <div>
-      <Tabs value={currentValue} onValueChange={setCurrentValue} className='px-4 pb-5'>
+      <Tabs value={currentValue} onValueChange={setCurrentValue} className='px-4 pb-5 tablet:px-6 pc:px-8'>
         <Tabs.List ref={listRef} className='relative flex gap-2'>
           {flowerTabItems.map(({ value, label }) => (
             <Tabs.Trigger
               key={value}
               value={value}
               ref={(el) => { triggerRefs.current[value] = el; }}
-              className='relative py-3 text-center flex-1'
+              className='relative py-3 tablet:py-4 text-center flex-1'
             >
               <p className='text-ui-tap-lg text-primary-600'>{label}</p>
             </Tabs.Trigger>

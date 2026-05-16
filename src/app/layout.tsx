@@ -4,6 +4,7 @@ import Header from '@/widgets/header/header';
 import AppProviders from '@/shared/providers/app-providers';
 import ModalHost from '@/shared/model/modal/modal-host';
 import ToastHost from '@/shared/model/toast/toast-host';
+import LoginGuardHandler from '@/app/_ui/login-guard-handler';
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -31,13 +32,14 @@ export default function RootLayout({
   return (
     <AppProviders>
       <html lang='ko'>
-        <body className='flex flex-col h-dvh overflow-hidden w-[360px] mx-auto'>
+        <body className='flex flex-col h-dvh overflow-hidden'>
           <Header />
-          <main className='max-h-[calc(100%-48px)] h-full overscroll-contain overflow-y-auto scrollbar-hide'>
+          <main className='max-h-[calc(100%-48px)] pc:max-h-[calc(100%-72px)] h-full overscroll-contain overflow-y-auto scrollbar-hide'>
             {children}
           </main>
           <ModalHost />
           <ToastHost />
+          <LoginGuardHandler />
         </body>
       </html>
     </AppProviders>

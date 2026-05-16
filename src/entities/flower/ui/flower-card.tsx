@@ -17,6 +17,7 @@ type TProps = {
   actionButton?: React.ReactNode;
   likeButton?: React.ReactNode;
   searchParams?: Record<string, string>;
+  replace?: boolean;
   onLinkPrefetch?: (href: string) => void;
 } & React.HTMLAttributes<HTMLDivElement>;
 
@@ -31,19 +32,26 @@ const flowerCardImageSizes: Record<TProps['size'], { width: number; height: numb
   },
 };
 
-function FlowerCard({ size, imageUrl, id, name, colors, tags, priority = false, actionButton, likeButton, searchParams, onLinkPrefetch, className, ...props }: TProps) {
+function FlowerCard({ size, imageUrl, id, name, colors, tags, priority = false, actionButton, likeButton, searchParams, replace, onLinkPrefetch, className, ...props }: TProps) {
   const [imageWidth, imageHeight] = [flowerCardImageSizes[size].width, flowerCardImageSizes[size].height];
   const query = searchParams ? `?${new URLSearchParams(searchParams).toString()}` : '';
   const href = `/flower-directory/${id}${query}`;
   return (
-    <div className={cn('flex flex-col', `min-w-[${imageWidth}px]`, className)} {...props}>
+    <div
+      className={cn('flex flex-col',
+        size === 'md' ? 'min-w-[122px] tablet:min-w-[156px]' : 'w-full',
+        className,
+      )}
+      {...props}
+    >
       <Link
         aria-label={`${name} 상세 페이지 보기`}
         href={href}
+        replace={replace}
         prefetch={false}
         onMouseEnter={() => onLinkPrefetch?.(href)}
         onTouchStart={() => onLinkPrefetch?.(href)}
-        className={cn('relative')}>
+        className={cn('relative', size === 'lg' && 'block w-full')}>
         <Image
           priority={priority}
           src={imageUrl}
@@ -52,13 +60,9 @@ function FlowerCard({ size, imageUrl, id, name, colors, tags, priority = false, 
           height={imageHeight}
           className={cn('object-cover',
             'max-w-none',
-            size === 'md' && 'rounded-4 border-1 border-gray-100',
-            size === 'lg' && 'rounded-3',
+            size === 'md' && 'w-[122px] h-[156px] tablet:w-[156px] tablet:h-[200px] rounded-4 border-1 border-gray-100',
+            size === 'lg' && 'w-full h-auto aspect-[156/200] rounded-3',
           )}
-          style={{
-            width: imageWidth,
-            height: imageHeight,
-          }}
         />
         {likeButton && (
           <div className='absolute top-2 right-2' onClick={(e) => e.preventDefault()}>

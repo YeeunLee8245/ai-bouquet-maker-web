@@ -1,9 +1,13 @@
+import PageScroll from '@/app/_ui/page-scroll';
+
 /**
  * 맞춤 추천 페이지
  */
 const RecommendPage = ({ params }: { params: { type: string } }) => {
   return (
-    <div>Recommend Page {params.type}</div>
+    <PageScroll>
+      <div>Recommend Page {params.type}</div>
+    </PageScroll>
   );
 };
 

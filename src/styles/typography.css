@@ -1,201 +1,242 @@
 @theme {
   /**
-   * Typography - Font Sizes
+   * Typography - Font Sizes (mobile / tablet+ 값)
+   * Tablet+ 값은 본 파일 하단의 @media 블록에서 오버라이드됨
    */
-  --font-size-ui-xxxsm: 12px;
-  --font-size-ui-xxsm: 12px;
-  --font-size-ui-xsm: 14px;
-  --font-size-ui-sm: 14px;
-  --font-size-ui-md: 16px;
-  --font-size-ui-lg: 17px;
-  --font-size-title-md: 18px;
-  --font-size-title-lg: 20px;
-  --font-size-body-xsm: 14px;
-  --font-size-body-sm: 14px;
-  --font-size-body-md: 16px;
-  --font-size-body-lg: 16px;
+  --font-size-ui-xsm: 14px;       /* mobile: 14 / tablet,pc: 16 */
+  --font-size-ui-sm: 14px;        /* mobile: 14 / tablet,pc: 16 */
+  --font-size-ui-md: 16px;        /* mobile: 16 / tablet,pc: 18 */
+  --font-size-ui-lg: 17px;        /* mobile: 17 / tablet,pc: 19 */
+  --font-size-title-md: 18px;     /* mobile: 18 / tablet,pc: 20 */
+  --font-size-title-lg: 20px;     /* mobile: 20 / tablet,pc: 24 */
+  --font-size-body-xxsm: 12px;    /* mobile: 12 / tablet,pc: 14 */
+  --font-size-body-xsm: 14px;     /* mobile: 14 / tablet,pc: 16 */
+  --font-size-body-sm: 14px;      /* mobile: 14 / tablet,pc: 16 */
+  --font-size-body-md: 16px;      /* mobile: 16 / tablet,pc: 18 */
+  --font-size-body-lg: 16px;      /* mobile: 16 / tablet,pc: 18 */
 
   /**
-   * Typography - Font Weights
+   * Typography - Font Weights (디바이스 무관 고정)
    */
   --font-weight-regular: 400;
   --font-weight-medium: 500;
+  --font-weight-semibold: 600;
 
   /**
-   * Typography - Line Heights / Spacing
+   * Typography - Line Heights / Spacing (mobile / tablet+ 값)
    */
-  --font-spacing-xsm: 16px;
-  --font-spacing-sm: 20px;
-  --font-spacing-md: 24px;
-  --line-title-lg: 28px;
+  --font-spacing-xsm: 16px;       /* mobile: 16 / tablet,pc: 20 */
+  --font-spacing-sm: 20px;        /* mobile: 20 / tablet,pc: 24 */
+  --font-spacing-md: 24px;        /* mobile: 24 / tablet,pc: 28 */
+  --font-spacing-lg: 28px;        /* mobile: 28 / tablet,pc: 36 */
 }
 
-/* UI Typography Styles */
+/**
+ * Tablet/PC 오버라이드 (≥ 768px)
+ * Figma "typo tablet/PC" 프레임 기준. tablet 과 pc 는 동일 스케일.
+ */
+@layer base {
+  @media (min-width: 768px) {
+    :root {
+      --font-size-ui-xsm: 16px;
+      --font-size-ui-sm: 16px;
+      --font-size-ui-md: 18px;
+      --font-size-ui-lg: 19px;
+      --font-size-title-md: 20px;
+      --font-size-title-lg: 24px;
+      --font-size-body-xxsm: 14px;
+      --font-size-body-xsm: 16px;
+      --font-size-body-sm: 16px;
+      --font-size-body-md: 18px;
+      --font-size-body-lg: 18px;
+
+      --font-spacing-xsm: 20px;
+      --font-spacing-sm: 24px;
+      --font-spacing-md: 28px;
+      --font-spacing-lg: 36px;
+    }
+  }
+}
+
+/* ----------------------------------------------------------------- */
+/* UI Typography Styles                                              */
+/* ----------------------------------------------------------------- */
 
 @utility text-ui-tag {
-  font-size: var(--font-size-ui-xxsm);
+  /* mobile: 12/16 / tablet,pc: 14/20 */
+  font-size: var(--font-size-body-xxsm);
   font-style: normal;
   font-weight: var(--font-weight-medium);
-  line-height: var(--font-spacing-xsm); /* 133.333% */
+  line-height: var(--font-spacing-xsm);
 }
 
 @utility text-ui-placeholder {
+  /* mobile: 16/24 / tablet,pc: 18/28 */
   font-size: var(--font-size-ui-md);
   font-style: normal;
   font-weight: var(--font-weight-regular);
-  line-height: var(--font-spacing-md); /* 150% */
+  line-height: var(--font-spacing-md);
 }
 
 @utility text-ui-notice {
-  font-size: var(--font-size-ui-xxxsm);
+  /* mobile: 12/16 / tablet,pc: 14/20 */
+  font-size: var(--font-size-body-xxsm);
   font-style: normal;
   font-weight: var(--font-weight-regular);
-  line-height: var(--font-spacing-xsm); /* 133.333% */
+  line-height: var(--font-spacing-xsm);
 }
 
 @utility text-ui-label-md {
+  /* mobile: 16/24 / tablet,pc: 18/28 */
   font-size: var(--font-size-ui-md);
   font-style: normal;
   font-weight: var(--font-weight-regular);
-  line-height: var(--font-spacing-md); /* 150% */
+  line-height: var(--font-spacing-md);
 }
 
 @utility text-ui-label-sm {
+  /* mobile: 14/20 / tablet,pc: 16/24 */
   font-size: var(--font-size-ui-sm);
   font-style: normal;
   font-weight: var(--font-weight-medium);
-  line-height: var(--font-spacing-sm); /* 142.857% */
+  line-height: var(--font-spacing-sm);
 }
 
 @utility text-ui-filter-sm {
+  /* mobile: 14/20 / tablet,pc: 16/24 */
   font-size: var(--font-size-ui-xsm);
   font-style: normal;
   font-weight: var(--font-weight-regular);
-  line-height: var(--font-spacing-sm); /* 142.857% */
+  line-height: var(--font-spacing-sm);
 }
 
 @utility text-ui-textbtn-lg {
+  /* mobile: 16/24 / tablet,pc: 18/28 */
   font-size: var(--font-size-ui-md);
   font-style: normal;
   font-weight: var(--font-weight-medium);
-  line-height: var(--font-spacing-md); /* 150% */
+  line-height: var(--font-spacing-md);
 }
 
 @utility text-ui-textbtn-md {
+  /* mobile: 14/20 / tablet,pc: 16/24 */
   font-size: var(--font-size-ui-sm);
   font-style: normal;
   font-weight: var(--font-weight-medium);
-  line-height: var(--font-spacing-sm); /* 142.857% */
+  line-height: var(--font-spacing-sm);
 }
 
 @utility text-ui-textbtn-sm {
+  /* mobile: 14/20 / tablet,pc: 16/24 */
   font-size: var(--font-size-ui-xsm);
   font-style: normal;
   font-weight: var(--font-weight-regular);
-  line-height: var(--font-spacing-sm); /* 142.857% */
+  line-height: var(--font-spacing-sm);
 }
 
 @utility text-ui-cta-lg {
+  /* mobile: 17/24 / tablet,pc: 19/28 */
   font-size: var(--font-size-ui-lg);
   font-style: normal;
   font-weight: var(--font-weight-medium);
-  line-height: var(--font-spacing-md); /* 141.176% */
+  line-height: var(--font-spacing-md);
 }
 
 @utility text-ui-cta-md {
+  /* mobile: 14/20 / tablet,pc: 16/24 */
   font-size: var(--font-size-ui-sm);
   font-style: normal;
   font-weight: var(--font-weight-medium);
-  line-height: var(--font-spacing-sm); /* 142.857% */
+  line-height: var(--font-spacing-sm);
 }
 
 @utility text-ui-cta-sm {
+  /* mobile: 14/20 / tablet,pc: 16/24 */
   font-size: var(--font-size-ui-sm);
   font-style: normal;
   font-weight: var(--font-weight-medium);
-  line-height: var(--font-spacing-sm); /* 142.857% */
+  line-height: var(--font-spacing-sm);
 }
 
 @utility text-ui-step-lg {
+  /* mobile: 16/28 / tablet,pc: 18/36 */
   font-size: var(--font-size-ui-md);
   font-style: normal;
   font-weight: var(--font-weight-medium);
-  line-height: var(--line-title-lg); /* 140% */
+  line-height: var(--font-spacing-lg);
   letter-spacing: -0.08px;
 }
 
 @utility text-ui-tap-lg {
+  /* mobile: 16/24 / tablet,pc: 18/28 */
   font-size: var(--font-size-ui-md);
   font-style: normal;
   font-weight: var(--font-weight-medium);
-  line-height: var(--font-spacing-md); /* 150% */
+  line-height: var(--font-spacing-md);
 }
 
 @utility text-ui-tap-md {
+  /* mobile: 16/24 / tablet,pc: 18/28 */
   font-size: var(--font-size-ui-md);
   font-style: normal;
   font-weight: var(--font-weight-regular);
-  line-height: var(--font-spacing-md); /* 150% */
+  line-height: var(--font-spacing-md);
 }
 
-@utility text-ui-textbtn-md {
-  font-size: var(--font-size-ui-sm);
-  font-style: normal;
-  font-weight: var(--font-weight-medium);
-  line-height: var(--font-spacing-sm); /* 142.857% */
-}
-
-@utility text-ui-textbtn-sm {
-  font-size: var(--font-size-ui-xsm);
-  font-style: normal;
-  font-weight: var(--font-weight-regular);
-  line-height: var(--font-spacing-sm); /* 142.857% */
-}
-
-/* Title Typography Styles */
+/* ----------------------------------------------------------------- */
+/* Title Typography Styles                                           */
+/* ----------------------------------------------------------------- */
 
 @utility text-title-lg {
+  /* mobile: 20/28 / tablet,pc: 24/36 */
   font-size: var(--font-size-title-lg);
   font-style: normal;
   font-weight: var(--font-weight-medium);
-  line-height: var(--line-title-lg); /* 140% */
+  line-height: var(--font-spacing-lg);
   letter-spacing: -0.08px;
 }
 
 @utility text-title-md {
+  /* mobile: 18/24 / tablet,pc: 20/28 */
   font-size: var(--font-size-title-md);
   font-style: normal;
   font-weight: var(--font-weight-medium);
-  line-height: var(--font-spacing-md); /* 133.333% */
+  line-height: var(--font-spacing-md);
   letter-spacing: -0.08px;
 }
 
-/* Body Typography Styles */
+/* ----------------------------------------------------------------- */
+/* Body Typography Styles                                            */
+/* ----------------------------------------------------------------- */
 
 @utility text-body-lg {
+  /* mobile: 16/24 / tablet,pc: 18/28 */
   font-size: var(--font-size-body-lg);
   font-style: normal;
   font-weight: var(--font-weight-medium);
-  line-height: var(--font-spacing-md); /* 150% */
+  line-height: var(--font-spacing-md);
 }
 
 @utility text-body-md {
+  /* mobile: 16/24 / tablet,pc: 18/28 */
   font-size: var(--font-size-body-md);
   font-style: normal;
   font-weight: var(--font-weight-regular);
-  line-height: var(--font-spacing-md); /* 150% */
+  line-height: var(--font-spacing-md);
 }
 
 @utility text-body-sm {
+  /* mobile: 14/24 / tablet,pc: 16/28 */
   font-size: var(--font-size-body-sm);
   font-style: normal;
   font-weight: var(--font-weight-regular);
-  line-height: var(--font-spacing-md); /* 171.429% */
+  line-height: var(--font-spacing-md);
 }
 
 @utility text-body-xsm {
+  /* mobile: 14/20 / tablet,pc: 16/24 */
   font-size: var(--font-size-body-xsm);
   font-style: normal;
   font-weight: var(--font-weight-regular);
-  line-height: var(--font-spacing-sm); /* 142.857% */
+  line-height: var(--font-spacing-sm);
 }

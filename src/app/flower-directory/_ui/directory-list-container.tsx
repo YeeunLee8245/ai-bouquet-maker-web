@@ -97,7 +97,7 @@ function DirectoryListContainer({ eventHub }: TProps) {
           ))}
         </span>
       </div>
-      <div className='grid grid-cols-2 gap-x-4 gap-y-8 mt-3'>
+      <div className='grid grid-cols-2 tablet:grid-cols-4 gap-x-4 pc:gap-x-5 gap-y-8 tablet:gap-y-10 mt-3'>
         {flowers.map((flower) => (
           <FlowerCard
             key={flower.id}
@@ -144,7 +144,7 @@ function DirectoryListContainer({ eventHub }: TProps) {
       {/* 무한스크롤 트리거(센티넬) */}
       <div ref={sentinelRef} className='h-1' />
       {isFetchingNextPage && (
-        <div className='grid grid-cols-2 gap-x-4 gap-y-8 mt-3'>
+        <div className='grid grid-cols-2 tablet:grid-cols-4 gap-x-4 pc:gap-x-5 gap-y-8 tablet:gap-y-10 mt-3'>
           <FlowerCardSkeleton />
           <FlowerCardSkeleton />
         </div>

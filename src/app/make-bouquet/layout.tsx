@@ -1,11 +1,13 @@
+import PageScroll from '@/app/_ui/page-scroll';
+
 type TProps = {
   children: React.ReactNode;
 };
 
 export default function MakeBouquetLayout({ children }: TProps) {
   return (
-    <div className='relative h-full flex flex-col overflow-y-auto'>
+    <PageScroll className='relative h-full flex flex-col'>
       {children}
-    </div>
+    </PageScroll>
   );
 }

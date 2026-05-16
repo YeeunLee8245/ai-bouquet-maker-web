@@ -3,6 +3,7 @@ import Image from 'next/image';
 import React from 'react';
 import { TTodaysFlower } from '../_types';
 import Link from 'next/link';
+import TodayFlowerBackground from './today-flower-background';
 
 type TProps = {
   flower?: TTodaysFlower;
@@ -16,18 +17,16 @@ export default function TodayFlowerContainer({ flower }: TProps) {
   return (
     <div className='relative'>
       {/* 배경 이미지 */}
-      <Image
-        src='/images/bg_main_bottom.webp'
-        alt='main'
-        width={360}
-        height={324}
-        className='absolute z-[-1] bottom-0 left-0 w-full h-[324px] object-cover object-bottom'
-      />
+      <TodayFlowerBackground />
       <div className='relative flex flex-col gap-3 items-center border-t-2 border-gray-100 pt-5 pb-9'>
         <p className='text-title-md text-gray-700'>오늘의 추천 꽃</p>
 
         {/* cover 이미지 + 하단 그라데이션 오버레이 + 텍스트 */}
-        <Link href={`/flower-directory/${flower?.id}`} aria-label={`${name} 상세 페이지 보기`} className='relative w-[140px] h-[196px]'>
+        <Link
+          href={`/flower-directory/${flower?.id}`}
+          aria-label={`${name} 상세 페이지 보기`}
+          className='relative w-[140px] h-[196px] tablet:w-[200px] tablet:h-[280px]'
+        >
           <div className='absolute inset-0 rounded-[24px] overflow-hidden shadow-[0_6px_20px_rgba(0,0,0,0.12)]'>
             <Image
               src={imageUrl}

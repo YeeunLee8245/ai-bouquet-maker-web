@@ -10,7 +10,8 @@ import { showToastAtom } from '@/shared/model/toast';
 import { Button } from '@/shared/ui/button';
 import { fetchSelectedFlowers } from '@api/recipe-bouquet.api';
 import { isApiError } from '@/shared/api';
-import BottomActionFooter from '@/widgets/footer/bottom-action-footer';
+import { ActionBar } from '@/shared/ui/action-bar';
+import { SelectedFlowerChips } from '@/entities/flower/ui';
 import { TSelectedFlower } from '@/entities/flower/model/selected-flowers';
 
 function FlowerAddModal({ modalId }: TModalProps) {
@@ -99,8 +100,8 @@ function FlowerAddModal({ modalId }: TModalProps) {
   const selectedIds = selectedInModal.map((f) => f.id);
 
   return (
-    <div className='w-[360px] bg-gray-50 relative flex flex-col min-h-[624px] rounded-t-5'>
-      <div className='w-full flex-1 px-4 pt-4 rounded-t-5'>
+    <div className='w-[360px] bg-gray-50 relative flex flex-col min-h-[624px] rounded-t-5 tablet:rounded-5 overflow-hidden'>
+      <div className='w-full flex-1 px-4 pt-4 rounded-t-5 tablet:px-6 tablet:pt-6 tablet:rounded-none'>
         <div className='flex justify-between px-micro'>
           <p className='text-title-md'>꽃 추가</p>
           <button
@@ -122,14 +123,12 @@ function FlowerAddModal({ modalId }: TModalProps) {
           onToggle={handleToggleFlower}
         />
       </div>
-      <BottomActionFooter
-        flowers={totalSelectedFlowers}
-        onRemoveFlower={handleRemoveFlower}
-      >
+      <ActionBar variant='modal'>
+        <SelectedFlowerChips flowers={totalSelectedFlowers} onRemove={handleRemoveFlower} />
         <Button size='lg' onClick={handleConfirm} disabled={isConfirming}>
           {isConfirming ? '추가 중...' : '꽃다발 담기'}
         </Button>
-      </BottomActionFooter>
+      </ActionBar>
     </div>
   );
 }

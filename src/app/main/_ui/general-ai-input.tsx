@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSetAtom } from 'jotai';
 import { SearchInput } from '@/shared/ui/input';
-import { aiRecommendationResultAtom } from '@/app/main/ai-prompt/_model/recommendation-result.atoms';
+import { aiRecommendationResultAtom } from '@/entities/recommendation/model/recommendation-result.atoms';
 import { showToastAtom } from '@/shared/model/toast';
 import { openModalAtom, closeModalAtom } from '@/shared/model/modal';
 import AIAnalyzingModal, { AI_ANALYZING_MODAL_ID } from '@/app/main/ai-prompt/[type]/_ui/ai-analyzing-modal';

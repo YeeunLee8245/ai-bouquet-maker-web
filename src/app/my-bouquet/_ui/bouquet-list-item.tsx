@@ -50,7 +50,7 @@ export default function BouquetListItem({ bouquet, onDeleteSuccess, hub }: Props
   return (
     <Link
       href={`/my-bouquet/${bouquet.id}`}
-      className='info-border flex flex-col'
+      className='info-border pc:p-5 flex flex-col'
       data-bouquet-id={bouquet.id}
       onClick={(e) => {
         const container = e.currentTarget.closest('[data-select-mode="true"]');

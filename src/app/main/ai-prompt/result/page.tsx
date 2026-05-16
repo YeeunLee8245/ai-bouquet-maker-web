@@ -7,7 +7,7 @@ import ChevronDownIcon from '@/shared/assets/icons/chevron_down.svg';
 import { FlowerCard } from '@/entities/flower/ui';
 import LikeButton from '@/features/like/ui/like-button';
 import { SelectButton } from '@features/select-flower';
-import { aiRecommendationResultAtom } from '../_model/recommendation-result.atoms';
+import { aiRecommendationResultAtom } from '@/entities/recommendation/model/recommendation-result.atoms';
 
 const AiPromptResultPage = () => {
   const router = useRouter();
@@ -39,7 +39,7 @@ const AiPromptResultPage = () => {
   return (
     <div className='flex flex-col h-full overflow-y-auto hide-scrollbar'>
       {/* 추천 정보 헤더 */}
-      <div className='pt-4 px-4 pb-2 flex flex-col items-center'>
+      <div className='pt-4 px-4 tablet:px-6 pc:px-8 pb-2 flex flex-col items-center'>
         <p className='text-title-lg'>{title}</p>
         {subtitle && (
           <div className='flex items-center gap-1 mt-1'>
@@ -67,7 +67,7 @@ const AiPromptResultPage = () => {
       </div>
 
       {/* 꽃 목록 */}
-      <div className='p-4 grid grid-cols-2 gap-x-4 gap-y-8'>
+      <div className='p-4 tablet:px-6 tablet:pt-6 tablet:pb-8 pc:px-8 grid grid-cols-2 tablet:grid-cols-4 gap-x-4 pc:gap-x-5 gap-y-8 tablet:gap-y-10'>
         {recommendations.map((flower) => (
           <FlowerCard
             key={flower.id}

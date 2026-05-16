@@ -16,7 +16,7 @@ import {
   BOUQUET_FROM_AI_PARAM,
 } from '@features/bouquet-form';
 import { selectedFlowersAtom } from '@/entities/flower/model/selected-flowers';
-import { aiRecommendationResultAtom } from '@/app/main/ai-prompt/_model/recommendation-result.atoms';
+import { aiRecommendationResultAtom } from '@/entities/recommendation/model/recommendation-result.atoms';
 
 function MakeBouquetPage() {
   const router = useRouter();
@@ -48,19 +48,25 @@ function MakeBouquetPage() {
 
   return (
     <div>
-      <div className='pt-4 pb-2 mx-4 px-1'>
+      <div className='pt-4 pb-2 mx-4 px-1 tablet:mx-6 pc:mx-8'>
         <p className='text-title-lg'>꽃다발 만들기</p>
         <p className='mt-1 text-body-md text-gray-400 whitespace-pre-wrap'>
           {'특별한 마음을 담은 꽃다발을 직접\n구성해 보세요.'}
         </p>
       </div>
-      <div className='pt-4 pb-8 px-4'>
-        <BouquetInfoContainer />
-        <BouquetCompositionContainer />
-        <BouquetPackagingContainer />
-        <BouquetSummaryContainer />
-        <BouquetPreviewContainer />
-        <MakeBouquetButton />
+      <div className='pt-4 pb-8 px-4 tablet:px-6 pc:px-8'>
+        <div className='tablet:grid tablet:grid-cols-2 tablet:gap-4 tablet:items-start'>
+          <div>
+            <BouquetInfoContainer />
+            <BouquetCompositionContainer />
+            <BouquetPackagingContainer />
+          </div>
+          <div className='flex flex-col'>
+            <div className='tablet:order-2'><BouquetSummaryContainer /></div>
+            <div className='tablet:order-1'><BouquetPreviewContainer /></div>
+            <div className='tablet:order-3'><MakeBouquetButton /></div>
+          </div>
+        </div>
       </div>
     </div>
   );

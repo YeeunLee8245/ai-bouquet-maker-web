@@ -8,7 +8,7 @@ function Carousel({ index, length, onIndexChange, children }: CarouselProps) {
   const swipeProps = useSwipeDrag({ onPrev: goPrev, onNext: goNext });
 
   return (
-    <div className='overflow-hidden select-none'>
+    <div className='w-full overflow-hidden select-none'>
       <div
         className='flex'
         style={{
@@ -18,7 +18,7 @@ function Carousel({ index, length, onIndexChange, children }: CarouselProps) {
         {...swipeProps}
       >
         {items.map((child, i) => (
-          <div key={i} className='flex-shrink-0'>
+          <div key={i} className='w-full flex-shrink-0'>
             {cloneElement(child as React.ReactElement, { draggable: false } as React.HTMLAttributes<HTMLElement>)}
           </div>
         ))}

@@ -18,26 +18,28 @@ function ProfileDescriptionContainer() {
 
   return (
     <div className='flex flex-col py-4'>
-      <div className='flex flex-col gap-4 px-micro'>
-        {descriptionFields.map(({ id, label, value }) => (
-          <div key={id}>
-            <div className='text-ui-label-sm text-gray-400'>{label}</div>
-            <div className='text-body-md mt-1'>{value}</div>
-          </div>
-        ))}
-      </div>
-      <div className='flex flex-col mt-6 gap-3'>
-        {bouquetCards.map(({ id, label, content, canClick }) =>
-          canClick ? (
-            <Link key={id} href='/my-bouquet' className='p-3 border-1 border-gray-100 rounded-5 cursor-pointer active:bg-gray-50'>
-              <ProfileBouquetCard label={label} content={content} canClick={canClick} />
-            </Link>
-          ) : (
-            <div key={id} className='p-3 border-1 border-gray-100 rounded-5'>
-              <ProfileBouquetCard label={label} content={content} />
+      <div className='flex flex-col tablet:flex-row tablet:gap-6'>
+        <div className='flex flex-col gap-4 px-micro tablet:flex-1'>
+          {descriptionFields.map(({ id, label, value }) => (
+            <div key={id}>
+              <div className='text-ui-label-sm text-gray-400'>{label}</div>
+              <div className='text-body-md mt-1'>{value}</div>
             </div>
-          ),
-        )}
+          ))}
+        </div>
+        <div className='flex flex-col mt-6 gap-3 tablet:mt-0 tablet:w-[320px] tablet:shrink-0'>
+          {bouquetCards.map(({ id, label, content, canClick }) =>
+            canClick ? (
+              <Link key={id} href='/my-bouquet' className='p-3 border-1 border-gray-100 rounded-5 cursor-pointer active:bg-gray-50'>
+                <ProfileBouquetCard label={label} content={content} canClick={canClick} />
+              </Link>
+            ) : (
+              <div key={id} className='p-3 border-1 border-gray-100 rounded-5'>
+                <ProfileBouquetCard label={label} content={content} />
+              </div>
+            ),
+          )}
+        </div>
       </div>
       <button onClick={signOut} className='text-ui-textbtn-lg text-gray-400 mt-4'>
         로그아웃

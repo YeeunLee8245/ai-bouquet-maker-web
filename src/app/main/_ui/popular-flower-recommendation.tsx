@@ -19,10 +19,16 @@ export default function PopularFlowerRecommendation({ flowers }: TProps) {
 
   return (
     <div className='flex flex-col gap-3 pt-4 pb-5 border-t-2 border-gray-100'>
-      <p className='text-title-md px-4'>인기 꽃 추천</p>
+      <p className='text-title-md px-4 tablet:px-6 pc:px-8'>인기 꽃 추천</p>
       <div className='flex gap-2 overflow-x-auto'>
         {items.map((item) => (
-          <FlowerCard key={item.id} priority {...item} size='md' className='first:ml-4 last:mr-4' />
+          <FlowerCard
+            key={item.id}
+            priority
+            {...item}
+            size='md'
+            className='first:ml-4 last:mr-4 tablet:first:ml-6 tablet:last:mr-6 pc:first:ml-8 pc:last:mr-8'
+          />
         ))}
       </div>
     </div>

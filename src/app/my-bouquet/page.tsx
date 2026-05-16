@@ -1,4 +1,5 @@
 import { Suspense } from 'react';
+import PageScroll from '@/app/_ui/page-scroll';
 
 export const dynamic = 'force-dynamic';
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
@@ -27,10 +28,12 @@ export default async function MyBouquetPage() {
   }
 
   return (
-    <HydrationBoundary state={dehydrate(queryClient)}>
-      <Suspense fallback={<BouquetListSkeleton />}>
-        <BouquetListContent />
-      </Suspense>
-    </HydrationBoundary>
+    <PageScroll>
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        <Suspense fallback={<BouquetListSkeleton />}>
+          <BouquetListContent />
+        </Suspense>
+      </HydrationBoundary>
+    </PageScroll>
   );
 }

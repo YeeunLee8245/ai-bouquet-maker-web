@@ -53,7 +53,7 @@ export default function AIPromptInput({ placeholder, eventHub, disabled, onLogin
       <div
         ref={textCountRef}
         data-count='0'
-        className='mt-auto text-[12px] text-gray-400 before:content-[attr(data-count)]'
+        className='mt-auto text-ui-notice text-gray-400 before:content-[attr(data-count)]'
       >
         /1000자 이내
       </div>

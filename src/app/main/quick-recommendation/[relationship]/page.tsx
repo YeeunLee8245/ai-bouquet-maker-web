@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import PageScroll from '@/app/_ui/page-scroll';
 import { QUICK_PERSON_TARGET_RECOMMENDATION_LIST } from '../../_datas';
 import { notFound, useParams } from 'next/navigation';
 import { QUICK_RECOMMENDATION_DATA_MAP } from './_datas';
@@ -25,8 +26,8 @@ function QuickRecommendationPage() {
   });
 
   return (
-    <div>
-      <div className='px-5 pt-4 pb-2'>
+    <PageScroll>
+      <div className='px-5 pt-4 pb-2 tablet:pl-6 tablet:pr-4'>
         <div className='text-title-lg'>
           {`${QUICK_RECOMMENDATION_DATA_MAP[relationship]}에게 전할 꽃`}
         </div>
@@ -34,14 +35,14 @@ function QuickRecommendationPage() {
           어떤 상황에 전달할 꽃인가요?
         </div>
       </div>
-      <div className='grid grid-cols-2 gap-4 px-4 pt-4 pb-8'>
+      <div className='grid grid-cols-2 tablet:grid-cols-4 gap-4 px-4 tablet:px-6 pt-4 pb-8'>
         {isPending
           ? Array.from({ length: 4 }).map((_, i) => <OccasionItemSkeleton key={i} />)
           : occasions?.map((item) => (
             <OccasionItem key={item.value} relationship={relationship} type={item.value as TOccasion} />
           ))}
       </div>
-    </div>
+    </PageScroll>
   );
 }
 

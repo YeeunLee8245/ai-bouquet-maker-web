@@ -17,6 +17,7 @@ import BouquetDetailSkeleton from '../_ui/bouquet-detail-skeleton';
 import ModifyBouquetButton from './_ui/modify-bouquet-button';
 import { Button } from '@/shared/ui/button';
 import Link from 'next/link';
+import PageScroll from '@/app/_ui/page-scroll';
 
 const MyBouquetModifyPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -52,7 +53,7 @@ const MyBouquetModifyPage = () => {
   }
 
   return (
-    <div>
+    <PageScroll>
       <div className='pt-4 pb-2 mx-4 px-1'>
         <p className='text-title-lg'>꽃다발 수정</p>
         <p className='mt-1 text-body-md text-gray-400 whitespace-pre-wrap'>
@@ -67,7 +68,7 @@ const MyBouquetModifyPage = () => {
         <BouquetPreviewContainer />
         <ModifyBouquetButton id={id} />
       </div>
-    </div>
+    </PageScroll>
   );
 };
 
