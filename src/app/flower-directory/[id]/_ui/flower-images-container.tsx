@@ -19,8 +19,8 @@ function FlowerImagesContainer({ images, prevPath }: TProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   return (
-    <div className='tablet:flex-shrink-0'>
-      <div className='relative'>
+    <div className='tablet:flex-shrink-0 tablet:w-[440px] pc:w-[512px]'>
+      <div className='relative tablet:rounded-[8px] tablet:overflow-hidden'>
         <Carousel
           index={currentIndex}
           length={images.length}
@@ -38,7 +38,7 @@ function FlowerImagesContainer({ images, prevPath }: TProps) {
           ))}
         </Carousel>
         <CarouselIndicator
-          className='absolute bottom-[12px] left-[50%] transform -translate-x-1/2 pc:hidden'
+          className='absolute bottom-[12px] left-[50%] transform -translate-x-1/2'
           count={images.length}
           activeIndex={currentIndex}
         />
@@ -56,9 +56,10 @@ function FlowerImagesContainer({ images, prevPath }: TProps) {
           <button
             key={idx}
             onClick={() => setCurrentIndex(idx)}
-            className={`w-[76px] h-[76px] flex-shrink-0 overflow-hidden rounded-2 border-2 transition-colors ${currentIndex === idx ? 'border-primary-400' : 'border-transparent'}`}
+            className='group relative w-[76px] h-[76px] flex-shrink-0 overflow-hidden rounded-[8px]'
           >
             <Image src={url} alt={name} width={76} height={76} className='object-cover w-full h-full' />
+            <div className={`absolute inset-0 rounded-[8px] transition-colors group-hover:bg-[rgba(0,0,0,0.2)] ${currentIndex === idx ? 'bg-[rgba(0,0,0,0.2)]' : ''}`} />
           </button>
         ))}
       </div>
