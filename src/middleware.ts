@@ -70,7 +70,6 @@ export default async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  runtime: 'experimental-edge', // Cloudflare Workers (Edge Runtime) 지원
   matcher: [
     /*
      * Match all request paths except for the ones starting with:
