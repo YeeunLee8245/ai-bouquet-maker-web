@@ -1,21 +1,3 @@
-export const FEATURES = [
-  {
-    title: 'AI 맞춤 추천',
-    description: '감정이나 상황 등을 알려주시면\nAI가 적합한 꽃을 찾아드려요.',
-    href: '/main',
-  },
-  {
-    title: '꽃 사전',
-    description: '다양한 꽃의 의미와 관리법을 알아보고\n계절별 꽃 정보를 확인해 보세요.',
-    href: '/flower-directory',
-  },
-  {
-    title: '꽃다발 만들기',
-    description: '특별한 마음을 담은 꽃다발을\n직접 구성해 보세요.',
-    href: '/make-bouquet',
-  },
-] as const;
-
 export const PRIVACY_POLICY = `## 개인정보의 보유 및 이용기간
 
 수집목적 또는 제공받은 목적이 달성된 경우에도 전자상거래 등에서의 소비자보호에 관한 법률, 개인정보보호법, 상법, 국세기본법 등 법령의 규정에 의하여 보존할 필요성이 있는 경우에는 다음과 같이 일정기간 이용자의 개인정보를 보유할 수 있습니다.

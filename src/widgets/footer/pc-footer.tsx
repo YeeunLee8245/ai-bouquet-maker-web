@@ -1,5 +1,6 @@
 import LogoIcon from '@/shared/assets/icons/logo.svg';
 import PrimaryTitleIcon from '@/shared/assets/icons/primary_title.svg';
+import Link from 'next/link';
 
 function PcFooter() {
   return (
@@ -9,7 +10,7 @@ function PcFooter() {
         <PrimaryTitleIcon />
       </div>
       <div className='flex flex-col gap-1'>
-        <p className='text-ui-textbtn-lg text-gray-700'>서비스 소개</p>
+        <Link href='/info' className='text-ui-textbtn-lg text-gray-700'>서비스 소개</Link>
         <div className='flex items-center gap-2'>
           <p className='text-ui-textbtn-lg text-gray-700'>문의</p>
           <p className='text-ui-textbtn-md text-gray-400'>contact@todaysflower.com</p>

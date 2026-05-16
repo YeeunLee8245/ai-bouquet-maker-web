@@ -54,7 +54,7 @@ export default async function middleware(request: NextRequest) {
   const { user, response } = await updateSession(request);
 
   // 보호된 라우트: 미로그인 시 /login redirect
-  const protectedPaths = ['/my-bouquet', '/my-profile'];
+  const protectedPaths = ['/my-bouquet', '/my-profile', '/make-bouquet'];
   if (protectedPaths.some((path) => pathname.startsWith(path))) {
     if (!user) {
       return NextResponse.redirect(new URL('/login', request.url));
