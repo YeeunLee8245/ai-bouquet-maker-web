@@ -2,7 +2,6 @@
 
 import { useEffect } from 'react';
 import { useAtomValue, useSetAtom } from 'jotai';
-import { useRouter } from 'next/navigation';
 import MakeBouquetButton from './_ui/make-bouquet-button';
 import {
   BouquetInfoContainer,
@@ -15,22 +14,15 @@ import {
   resetBouquetFormAtom,
   BOUQUET_FROM_AI_PARAM,
 } from '@features/bouquet-form';
-import { selectedFlowersAtom } from '@/entities/flower/model/selected-flowers';
 import { aiRecommendationResultAtom } from '@/entities/recommendation/model/recommendation-result.atoms';
 
 function MakeBouquetPage() {
-  const router = useRouter();
-  const selectedFlowers = useAtomValue(selectedFlowersAtom);
   const aiResult = useAtomValue(aiRecommendationResultAtom);
   const initBouquetFlowers = useSetAtom(initBouquetFlowersAtom);
   const applyAiResultToBouquet = useSetAtom(applyAiResultToBouquetAtom);
   const resetBouquetForm = useSetAtom(resetBouquetFormAtom);
 
   useEffect(() => {
-    if (selectedFlowers.length === 0) {
-      router.replace('/flower-directory');
-      return;
-    }
     initBouquetFlowers();
     // AI 추천 결과로 꽃다발 폼 정보 적용
     const fromAi = new URLSearchParams(window.location.search).has(BOUQUET_FROM_AI_PARAM);

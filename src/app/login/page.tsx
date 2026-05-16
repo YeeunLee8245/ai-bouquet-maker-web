@@ -10,7 +10,7 @@ const LoginPage = () => {
 
   return (
     <PageScroll>
-      <div className='px-4 pt-4 pc:pt-8 pb-8 flex flex-col items-center'>
+      <div className='px-4 pt-4 pc:pt-8 pb-8 flex flex-col items-center pc:min-h-[70vh]'>
         <p className='text-title-lg'>로그인</p>
         <p className='text-body-md text-gray-400 mt-1 whitespace-pre-wrap text-center'>
           {'꽃다발 레시피에 로그인하고\n맞춤 추천을 받아 보세요.'}

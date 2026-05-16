@@ -1,7 +1,7 @@
-import Link from 'next/link';
 import PageScroll from '@/app/_ui/page-scroll';
-import { FEATURES, PRIVACY_POLICY, WITHDRAWAL_TERMS } from './_datas/info-content';
+import { PRIVACY_POLICY, WITHDRAWAL_TERMS } from './_datas/info-content';
 import HeroBackground from '../main/_ui/hero-background';
+import InfoRouteCards from './_ui/info-route-cards';
 
 export default function InfoPage() {
   return (
@@ -13,24 +13,7 @@ export default function InfoPage() {
           <h1 className='text-title-lg text-white px-1'>서비스 소개</h1>
         </div>
         {/* 기능 카드 목록 */}
-        <div className='relative flex flex-col gap-3 px-4 pb-4 tablet:px-6 pc:px-8 tablet:pb-6 pc:pb-8'>
-          {FEATURES.map((feature) => (
-            <Link
-              key={feature.title}
-              href={feature.href}
-              className='block w-full rounded-[12px] border border-gray-100 bg-white px-5 py-4'
-            >
-              <div className='flex flex-col gap-1 py-[2px]'>
-                <p className='text-title-md text-gray-700'>
-                  {feature.title}
-                </p>
-                <p className='text-body-lg text-gray-400 whitespace-pre-line'>
-                  {feature.description}
-                </p>
-              </div>
-            </Link>
-          ))}
-        </div>
+        <InfoRouteCards />
       </section>
 
       {/* 약관 영역 */}
