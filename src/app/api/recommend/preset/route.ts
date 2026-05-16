@@ -2,7 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@shared/supabase/server';
 import { getUser } from '@/lib/users/auth';
 import { getCardRecommendations } from '@/lib/recommend/card-recommendation';
-import { getRelationshipLabel, getOccasionLabel } from '@/lib/recommend/relationship-templates';
+import { generateCardMessage } from '@/lib/recommend/card-message';
+import { getRelationshipLabel, getOccasionLabel, getRelationshipRecommendation } from '@/lib/recommend/relationship-templates';
 import { toSupabaseResizedImageUrl } from '@shared/utils/image-url';
 
 /**
@@ -269,13 +270,25 @@ export async function GET(request: NextRequest) {
     // AI 추천과의 응답 형식 통일을 위해 추가
     const relationshipLabel = getRelationshipLabel(relationship);
     const occasionLabel = getOccasionLabel(occasion);
+    const recommendationGuide = getRelationshipRecommendation(relationship, occasion);
+    const message = generateCardMessage({
+      mode: 'preset',
+      recipient: relationshipLabel,
+      occasion: occasionLabel,
+      tags: {
+        relation_tags: relationshipLabel ? [relationshipLabel] : [],
+        situation_tags: occasionLabel ? [occasionLabel] : [],
+        emotion_tags: recommendationGuide.combinedTraits.slice(0, 2),
+        style_tags: recommendationGuide.template?.preferredStyles.slice(0, 1) ?? [],
+      },
+    });
 
     return NextResponse.json({
       success: true,
       recommendationId,
       totalCount: standardizedRecommendations.length,
       title: `${relationshipLabel}에게 전하는 ${occasionLabel} 꽃다발`,
-      message: '',
+      message,
       recipient: relationshipLabel,
       occasion: occasionLabel,
       recommendations: standardizedRecommendations,
