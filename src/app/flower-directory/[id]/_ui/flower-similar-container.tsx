@@ -12,9 +12,10 @@ type TProps = {
     tags: string[];
   }[];
   searchParams?: Record<string, string>;
+  replace?: boolean;
 };
 
-function FlowerSimilarContainer({ similarFlowers, searchParams }: TProps) {
+function FlowerSimilarContainer({ similarFlowers, searchParams, replace }: TProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
@@ -59,6 +60,7 @@ function FlowerSimilarContainer({ similarFlowers, searchParams }: TProps) {
               size='md'
               {...flower}
               searchParams={searchParams}
+              replace={replace}
               className='first:ml-4 last:mr-4 pc:first:ml-0 pc:last:mr-0'
             />
           ))}

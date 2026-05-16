@@ -43,7 +43,7 @@ function FlowerImagesContainer({ images, prevPath }: TProps) {
           activeIndex={currentIndex}
         />
         <button
-          onClick={() => prevPath ? router.push(prevPath) : router.back()}
+          onClick={() => window.history.length <= 1 ? router.push(prevPath ?? '/main') : router.back()}
           aria-label='뒤로가기'
           className='w-[24px] h-[24px] absolute top-[16px] left-[16px] transform rotate-[-90deg] ml-[0.6px] justify-items-center'
         >

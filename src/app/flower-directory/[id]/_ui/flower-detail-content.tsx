@@ -35,7 +35,7 @@ export default function FlowerDetailContent({ id }: TProps) {
         management={data.management}
       />
       <div className='w-full h-micro bg-gray-100' />
-      <FlowerSimilarContainer similarFlowers={data.similarFlowers} searchParams={allSearchParams} />
+      <FlowerSimilarContainer similarFlowers={data.similarFlowers} searchParams={allSearchParams} replace={!!prevPath} />
     </div>
   );
 }

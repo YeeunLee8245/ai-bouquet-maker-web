@@ -17,6 +17,7 @@ type TProps = {
   actionButton?: React.ReactNode;
   likeButton?: React.ReactNode;
   searchParams?: Record<string, string>;
+  replace?: boolean;
   onLinkPrefetch?: (href: string) => void;
 } & React.HTMLAttributes<HTMLDivElement>;
 
@@ -31,7 +32,7 @@ const flowerCardImageSizes: Record<TProps['size'], { width: number; height: numb
   },
 };
 
-function FlowerCard({ size, imageUrl, id, name, colors, tags, priority = false, actionButton, likeButton, searchParams, onLinkPrefetch, className, ...props }: TProps) {
+function FlowerCard({ size, imageUrl, id, name, colors, tags, priority = false, actionButton, likeButton, searchParams, replace, onLinkPrefetch, className, ...props }: TProps) {
   const [imageWidth, imageHeight] = [flowerCardImageSizes[size].width, flowerCardImageSizes[size].height];
   const query = searchParams ? `?${new URLSearchParams(searchParams).toString()}` : '';
   const href = `/flower-directory/${id}${query}`;
@@ -46,6 +47,7 @@ function FlowerCard({ size, imageUrl, id, name, colors, tags, priority = false, 
       <Link
         aria-label={`${name} 상세 페이지 보기`}
         href={href}
+        replace={replace}
         prefetch={false}
         onMouseEnter={() => onLinkPrefetch?.(href)}
         onTouchStart={() => onLinkPrefetch?.(href)}
