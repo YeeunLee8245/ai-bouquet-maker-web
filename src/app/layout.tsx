@@ -32,7 +32,7 @@ export default function RootLayout({
   return (
     <AppProviders>
       <html lang='ko'>
-        <body className='flex flex-col h-dvh overflow-hidden w-full'>
+        <body className='flex flex-col h-dvh overflow-hidden'>
           <Header />
           <main className='max-h-[calc(100%-48px)] pc:max-h-[calc(100%-72px)] h-full overscroll-contain overflow-y-auto scrollbar-hide'>
             {children}

@@ -29,9 +29,15 @@
   --breakpoint-pc: 1024px;
 }
 
+html {
+  background: var(--color-gray-50);
+}
+
 body {
-  /* 폭 정책: min 360px, max 제한 없음 (PC fluid full-width). docs/responsive-design.md 참조 */
+  /* 폭 정책: min 360px, max 1024px (PC centered). */
   min-width: 360px;
+  max-width: 1024px;
+  margin: 0 auto;
   background: var(--color-background);
   color: var(--color-foreground);
   /* 모바일 웹브라우저 최적화 (폰트 렌더링 개선, 세로 스크롤만 허용, 바운스 효과 제거)*/
