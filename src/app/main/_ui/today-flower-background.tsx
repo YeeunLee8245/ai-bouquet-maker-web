@@ -22,7 +22,7 @@ export default function TodayFlowerBackground() {
       width={360}
       height={324}
       className={
-        cn('absolute z-[-1] bottom-0 left-0 w-full h-[338px] object-cover object-bottom',
+        cn('absolute bottom-0 left-0 w-full h-[338px] object-cover object-bottom',
           isTabletUp && 'h-[428px]',
         )}
     />
