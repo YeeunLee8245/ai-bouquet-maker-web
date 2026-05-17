@@ -14,7 +14,7 @@ import { toSupabaseResizedImageUrl } from '@shared/utils/image-url';
  *       - Recommend
  *     summary: AI 기본 추천
  *     description: |
- *       사용자의 자연어 입력을 AI가 분석하여 모든 태그 유형(emotion/situation/relation/style)에
+ *       사용자의 자연어 입력을 로컬 태그 분석으로 해석하여 모든 태그 유형(emotion/situation/relation/style)에
  *       동일한 가중치를 적용해 꽃을 추천합니다.
  *
  *       **토큰 차감:** 성공 시 1토큰이 차감됩니다.
