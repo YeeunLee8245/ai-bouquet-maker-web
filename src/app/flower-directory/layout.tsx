@@ -64,7 +64,7 @@ export default function FlowerDirectoryLayout({ children, modal }: TProps) {
   return (
     <Suspense fallback={null}>
       <div className='relative h-full flex flex-col'>
-        <PageScroll className='relative flex flex-1' hidePcFooter>
+        <PageScroll hidePcFooter className='relative flex flex-1'>
           {children}
           {modal}
         </PageScroll>

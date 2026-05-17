@@ -20,7 +20,7 @@ function AiPromptResultLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <div className='relative h-full flex flex-col'>
-      <PageScroll className='relative flex flex-1'>
+      <PageScroll hidePcFooter className='relative flex flex-1' >
         {children}
       </PageScroll>
       <SelectedFlowersInitializer />

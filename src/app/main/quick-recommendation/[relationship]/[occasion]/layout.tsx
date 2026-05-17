@@ -20,7 +20,7 @@ function QuickRecommendationOccasionLayout({ children }: { children: React.React
 
   return (
     <div className='relative h-full flex flex-col'>
-      <PageScroll className='relative flex flex-1'>
+      <PageScroll hidePcFooter className='relative flex flex-1'>
         {children}
       </PageScroll>
       <SelectedFlowersInitializer />

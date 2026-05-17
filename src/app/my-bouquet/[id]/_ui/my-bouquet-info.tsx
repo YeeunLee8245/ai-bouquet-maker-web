@@ -27,7 +27,7 @@ export default function MyBouquetInfo({ occasion, recipient, message }: IMyBouqu
               value={valueMap[id] ?? ''}
               disabled
               wrapperClassName='mt-2 w-full h-[42px] px-3 py-2 bg-gray-50 rounded-4'
-              className='px-micro pb-micro text-body-md'
+              className='w-full px-micro pb-micro text-body-md'
             />
           </div>
         ))}
