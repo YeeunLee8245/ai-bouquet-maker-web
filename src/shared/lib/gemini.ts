@@ -83,7 +83,7 @@ export async function callGemini(prompt: string, text: string): Promise<string> 
     return await callGeminiWithModel(MODEL, prompt, text);
   } catch (error) {
     const errorMsg = error instanceof Error ? error.message : String(error);
-    
+
     // 429 Too Many Requests, RESOURCE_EXHAUSTED, quota 초과 에러 감지 시 폴백 적용
     if (errorMsg.includes('429') || errorMsg.includes('RESOURCE_EXHAUSTED') || errorMsg.includes('quota')) {
       console.warn(`[Gemini Fallback] ${MODEL} 무료 할당량 초과. ${FALLBACK_MODEL} 모델로 우회 호출을 시도합니다...`);
@@ -94,8 +94,7 @@ export async function callGemini(prompt: string, text: string): Promise<string> 
         throw fallbackError;
       }
     }
-    
+
     throw error;
   }
 }
-
