@@ -21,9 +21,9 @@ function BouquetFormPreviewModal({ modalId }: TModalProps) {
   }, []);
 
   return (
-    <div className='relative flex flex-col w-[360px] bg-gray-50 rounded-t-5'>
+    <div className='relative flex flex-col w-[360px] bg-gray-50 rounded-t-5 tablet:rounded-5'>
       {/* 헤더 */}
-      <div className='flex justify-between items-center px-4 pt-4 pb-2'>
+      <div className='flex justify-between items-center px-4 pt-4 pb-2 tablet:px-6 tablet:pt-6'>
         <p className='text-title-md px-micro'>꽃다발 미리보기</p>
         <button
           type='button'

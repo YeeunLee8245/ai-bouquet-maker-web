@@ -2,13 +2,15 @@
 
 import { useSetAtom } from 'jotai';
 import { openModalAtom } from '@/shared/model/modal';
+import { useMediaQuery } from '@/shared/hooks/useMediaQuery';
 import BouquetFormPreviewModal from './modals/bouquet-preview-modal/bouquet-preview-modal';
 
 export default function BouquetPreviewContainer() {
   const openModal = useSetAtom(openModalAtom);
+  const isTabletUp = useMediaQuery('(min-width: 768px)');
 
   const handleClick = () => {
-    openModal({ id: 'bouquet-preview-modal', component: <BouquetFormPreviewModal />, position: 'bottom' });
+    openModal({ id: 'bouquet-preview-modal', component: <BouquetFormPreviewModal />, position: isTabletUp ? 'center' : 'bottom' });
   };
 
   return (

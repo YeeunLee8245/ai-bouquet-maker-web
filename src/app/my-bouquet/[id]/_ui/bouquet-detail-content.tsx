@@ -2,6 +2,7 @@
 
 import { useSetAtom } from 'jotai';
 import Link from 'next/link';
+import { useMediaQuery } from '@/shared/hooks/useMediaQuery';
 import MyBouquetInfo from './my-bouquet-info';
 import MyBouquetComposition from './my-bouquet-composition';
 import MyBouquetPackaging from './my-bouquet-packaging';
@@ -19,6 +20,7 @@ export default function BouquetDetailContent({ id }: TProps) {
   const { data } = useBouquetDetailQuery(id);
   const openModal = useSetAtom(openModalAtom);
   const showToast = useSetAtom(showToastAtom);
+  const isTabletUp = useMediaQuery('(min-width: 768px)');
 
   const createdDate = new Date(data.created_at);
   const formattedDate = createdDate.toLocaleDateString('ko-KR', {
@@ -45,7 +47,7 @@ export default function BouquetDetailContent({ id }: TProps) {
   const handlePreviewClick = () => {
     openModal({
       id: 'bouquet-preview-modal',
-      position: 'bottom',
+      position: isTabletUp ? 'center' : 'bottom',
       canCloseOnBackgroundClick: true,
       component: <BouquetDetailPreviewModal flowers={data.flowers} layout={data.layout} />,
     });
