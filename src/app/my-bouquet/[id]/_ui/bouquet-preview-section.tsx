@@ -1,11 +1,10 @@
+/* eslint-disable @next/next/no-img-element */
 'use client';
 
 import { useMemo } from 'react';
-import { useSvgContent } from '@/shared/lib/use-svg-content';
 import {
-  FLOWER_SVG_MAP,
   FLOWER_SIZE,
-  DEFAULT_SVG,
+  getFlowerSvgUrl,
   computePositions,
 } from '@entities/flower/model/bouquet-layout';
 import type { IBouquetDetailData, IBouquetDetailFlower } from '../_types';
@@ -15,17 +14,12 @@ import type { IBouquetDetailData, IBouquetDetailFlower } from '../_types';
 type TFlowerItem = {
   id: string;
   svgUrl: string;
-  color: string;
   x: number;
   y: number;
   size: number;
 };
 
-function StaticFlower({ svgUrl, color, x, y, size }: Omit<TFlowerItem, 'id'>) {
-  const svgContent = useSvgContent(svgUrl, color);
-
-  if (!svgContent) {return null;}
-
+function StaticFlower({ svgUrl, x, y, size }: Omit<TFlowerItem, 'id'>) {
   return (
     <div
       className='absolute pointer-events-none'
@@ -36,7 +30,7 @@ function StaticFlower({ svgUrl, color, x, y, size }: Omit<TFlowerItem, 'id'>) {
         top: y - size / 2,
       }}
     >
-      <div dangerouslySetInnerHTML={{ __html: svgContent }} />
+      <img src={svgUrl} width={size} height={size} alt='' draggable={false} />
     </div>
   );
 }
@@ -54,24 +48,22 @@ export default function BouquetPreviewSection({ flowers, layout }: TProps) {
       return layout.items.map((item, i) => {
         const flower = flowers.find((f) => f.flower_id === item.flower_id);
         const name = flower?.flower_name ?? '';
-        const { svgUrl = DEFAULT_SVG, size = FLOWER_SIZE } = FLOWER_SVG_MAP[name] ?? {};
+        const color = item.color ?? flower?.color_and_quantity?.[0]?.color ?? '#ff69b4';
         return {
           id: `${item.flower_id}-${i}`,
-          svgUrl,
-          color: item.color ?? flower?.color_and_quantity?.[0]?.color ?? '#ff69b4',
+          svgUrl: getFlowerSvgUrl(name, color),
           x: item.x,
           y: item.y,
-          size,
+          size: FLOWER_SIZE,
         };
       });
     }
 
-    const flat: { svgUrl: string; color: string; size: number }[] = [];
+    const flat: { svgUrl: string; size: number }[] = [];
     for (const flower of flowers) {
-      const { svgUrl = DEFAULT_SVG, size = FLOWER_SIZE } = FLOWER_SVG_MAP[flower.flower_name] ?? {};
       for (const { color, quantity } of flower.color_and_quantity) {
         for (let i = 0; i < quantity; i++) {
-          flat.push({ svgUrl, color, size });
+          flat.push({ svgUrl: getFlowerSvgUrl(flower.flower_name, color), size: FLOWER_SIZE });
         }
       }
     }
@@ -88,24 +80,49 @@ export default function BouquetPreviewSection({ flowers, layout }: TProps) {
   return (
     <div className='flex justify-center'>
       <div
-        className='relative overflow-hidden rounded-4 border-1 border-gray-100 bg-amber-100'
-        style={{ width: 330, height: 330 }}
+        className='relative overflow-hidden rounded-4 border-1 border-gray-100 bg-amber-200'
+        style={{ width: 330, height: 330, isolation: 'isolate' }}
       >
+        {/* 포장지 뒷면 (z: -1) */}
+        <img
+          src='/svgs/bouquet-wrap-back.svg'
+          className='absolute left-0 w-full pointer-events-none'
+          style={{ zIndex: -1 }}
+          alt=''
+        />
+
+        {/* 꽃 (z: 0) */}
         {items.map((item) => (
           <StaticFlower
             key={item.id}
             svgUrl={item.svgUrl}
-            color={item.color}
             x={item.x}
             y={item.y}
             size={item.size}
           />
         ))}
+
         {items.length === 0 && (
-          <div className='flex items-center justify-center h-full text-body-md text-gray-300'>
+          <div className='absolute inset-0 flex items-center justify-center text-body-md text-gray-300' style={{ zIndex: 3 }}>
             꽃을 추가해 주세요
           </div>
         )}
+
+        {/* 포장지 앞면 (z: 1) */}
+        <img
+          src='/svgs/bouquet-wrap-front.svg'
+          className='absolute bottom-0 left-0 w-full pointer-events-none'
+          style={{ zIndex: 1 }}
+          alt=''
+        />
+
+        {/* 리본 (z: 2) */}
+        <img
+          src='/svgs/bouquet-ribbon.svg'
+          className='absolute bottom-[48px] left-1/2 -translate-x-1/2 pointer-events-none'
+          style={{ zIndex: 2, width: 114 }}
+          alt=''
+        />
       </div>
     </div>
   );
