@@ -2,13 +2,13 @@
 
 import { useSetAtom } from 'jotai';
 import { openModalAtom } from '@/shared/model/modal';
-import BouquetPreviewModal from './modals/bouquet-preview-modal/bouquet-preview-modal';
+import BouquetFormPreviewModal from './modals/bouquet-preview-modal/bouquet-preview-modal';
 
 export default function BouquetPreviewContainer() {
   const openModal = useSetAtom(openModalAtom);
 
   const handleClick = () => {
-    openModal({ id: 'bouquet-preview-modal', component: <BouquetPreviewModal />, position: 'bottom' });
+    openModal({ id: 'bouquet-preview-modal', component: <BouquetFormPreviewModal />, position: 'bottom' });
   };
 
   return (

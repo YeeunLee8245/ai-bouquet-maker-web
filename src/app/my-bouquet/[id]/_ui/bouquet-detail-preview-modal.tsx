@@ -10,7 +10,7 @@ type TProps = TModalProps & {
   layout: IBouquetDetailData['layout'];
 };
 
-export default function BouquetPreviewModal({ modalId, flowers, layout }: TProps) {
+export default function BouquetDetailPreviewModal({ modalId, flowers, layout }: TProps) {
   const closeModal = useSetAtom(closeModalAtom);
 
   return (

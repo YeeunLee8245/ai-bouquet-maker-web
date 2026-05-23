@@ -5,7 +5,7 @@ import Link from 'next/link';
 import MyBouquetInfo from './my-bouquet-info';
 import MyBouquetComposition from './my-bouquet-composition';
 import MyBouquetPackaging from './my-bouquet-packaging';
-import BouquetPreviewModal from './bouquet-preview-modal';
+import BouquetDetailPreviewModal from './bouquet-detail-preview-modal';
 import { Button } from '@/shared/ui/button';
 import { useBouquetDetailQuery } from '../_model/use-bouquet-detail-query';
 import { openModalAtom } from '@/shared/model/modal/modal.actions';
@@ -47,7 +47,7 @@ export default function BouquetDetailContent({ id }: TProps) {
       id: 'bouquet-preview-modal',
       position: 'bottom',
       canCloseOnBackgroundClick: true,
-      component: <BouquetPreviewModal flowers={data.flowers} layout={data.layout} />,
+      component: <BouquetDetailPreviewModal flowers={data.flowers} layout={data.layout} />,
     });
   };
 

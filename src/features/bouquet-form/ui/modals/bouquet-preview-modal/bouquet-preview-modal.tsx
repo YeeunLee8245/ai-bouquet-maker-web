@@ -7,7 +7,7 @@ import { useBouquetLayout, TPreviewFlower } from './use-bouquet-layout';
 import DraggableFlower from './draggable-flower';
 import InlineColorPicker from './inline-color-picker';
 
-function BouquetPreviewModal({ modalId }: TModalProps) {
+function BouquetFormPreviewModal({ modalId }: TModalProps) {
   const closeModal = useSetAtom(closeModalAtom);
   const initialFlowers = useBouquetLayout();
 
@@ -102,4 +102,4 @@ function BouquetPreviewModal({ modalId }: TModalProps) {
   );
 }
 
-export default BouquetPreviewModal;
+export default BouquetFormPreviewModal;
