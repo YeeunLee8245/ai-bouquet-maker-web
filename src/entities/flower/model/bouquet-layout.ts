@@ -139,6 +139,27 @@ export function getFlowerSvgUrl(name: string, hex: string): string {
   return `/svgs/flowers/${category}/${color}.svg`;
 }
 
+// Wrap-front SVG: viewBox 296.06×176.88, rendered w-full (330px), anchored bottom-0
+// Inner V-boundary key points (canvas coords): (0,133)→(89,240)→(165,251)→(241,240)→(330,133)
+const _WF_SCALE = CANVAS / 296.06;
+const _WF_SVG_TOP = CANVAS - 176.88 * _WF_SCALE;        // ≈ 133
+const _WF_KNEE_X = 79.71 * _WF_SCALE;                   // ≈ 89 (canvas x of knee)
+const _WF_KNEE_Y = _WF_SVG_TOP + 96.05 * _WF_SCALE;     // ≈ 240 (canvas y of knee)
+const _WF_CENTER_V_Y = _WF_SVG_TOP + 105.54 * _WF_SCALE; // ≈ 251 (canvas y of V bottom)
+const _WF_KNEE_ABS_X = CENTER - _WF_KNEE_X;             // absX from center to knee ≈ 76
+
+/** wrap-front 내부 경계선의 y 좌표 (드래그 y 최대값 계산용) */
+export function wrapFrontTopY(canvasX: number): number {
+  const absX = Math.abs(canvasX - CENTER);
+  if (absX >= CENTER) { return _WF_SVG_TOP; }
+  if (absX <= _WF_KNEE_ABS_X) {
+    const t = absX / _WF_KNEE_ABS_X;
+    return _WF_CENTER_V_Y - t * (_WF_CENTER_V_Y - _WF_KNEE_Y);
+  }
+  const t = (absX - _WF_KNEE_ABS_X) / (CENTER - _WF_KNEE_ABS_X);
+  return _WF_KNEE_Y - t * (_WF_KNEE_Y - _WF_SVG_TOP);
+}
+
 export function computePositions(count: number, sizes: number[]): { x: number; y: number }[] {
   if (count === 0) {return [];}
   if (count === 1) {return [{ x: CENTER, y: CENTER }];}

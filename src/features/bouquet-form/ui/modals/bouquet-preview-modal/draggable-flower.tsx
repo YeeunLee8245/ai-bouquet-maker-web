@@ -3,12 +3,14 @@
 
 import { useRef, useCallback, useState } from 'react';
 import {
+  CANVAS,
   STEM_BUILT_IN_CATEGORIES,
   STEM_COLOR,
   STEM_HEIGHT,
   STEM_WIDTH,
   Z_FLOWER_MAX,
   flowerZIndex,
+  wrapFrontTopY,
 } from '@entities/flower/model/bouquet-layout';
 
 type TProps = {
@@ -18,8 +20,6 @@ type TProps = {
   size: number;
   onMove: (x: number, y: number) => void;
 };
-
-const CANVAS = 330;
 
 function getCategory(svgUrl: string): string {
   return (svgUrl.split('/')[3] ?? '').replace('.svg', '');
@@ -31,7 +31,9 @@ export default function DraggableFlower({ svgUrl, size, x, y, onMove }: TProps) 
   const dragging = useRef(false);
   const offset = useRef({ dx: 0, dy: 0 });
 
-  const clamp = (s: number, val: number) => Math.max(s / 2, Math.min(CANVAS - s / 2, val));
+  const clampX = (s: number, val: number) => Math.max(s / 2, Math.min(CANVAS - s / 2, val));
+  const clampY = (s: number, cx: number, val: number) =>
+    Math.max(s / 2, Math.min(wrapFrontTopY(cx) - s / 2, val));
 
   const handlePointerDown = useCallback(
     (e: React.PointerEvent) => {
@@ -53,8 +55,8 @@ export default function DraggableFlower({ svgUrl, size, x, y, onMove }: TProps) 
     (e: React.PointerEvent) => {
       if (!dragging.current) {return;}
       const rect = (e.currentTarget.parentElement as HTMLElement).getBoundingClientRect();
-      const newX = clamp(size, e.clientX - rect.left - offset.current.dx);
-      const newY = clamp(size, e.clientY - rect.top - offset.current.dy);
+      const newX = clampX(size, e.clientX - rect.left - offset.current.dx);
+      const newY = clampY(size, newX, e.clientY - rect.top - offset.current.dy);
       onMove(newX, newY);
     },
     [onMove, size],
