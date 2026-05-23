@@ -52,6 +52,12 @@ export const FLOWER_CATEGORY_MAP: Record<string, string> = {
 
 const SINGLE_COLOR_CATEGORIES = new Set(['eucalyptus', 'cotton', 'lagurus']);
 
+/** SVG 자체에 줄기가 포함된 카테고리 — 별도 CSS 줄기 불필요 */
+export const STEM_BUILT_IN_CATEGORIES = new Set(['eucalyptus', 'lagurus', 'cotton', 'rice', 'astilbe']);
+export const STEM_COLOR = '#96bd86';
+export const STEM_HEIGHT = 40;
+export const STEM_WIDTH = 4;
+
 const CATEGORY_COLORS: Record<string, FlowerColor[]> = {
   rose: ['blue', 'green', 'orange', 'pink', 'purple', 'red', 'white', 'yellow'],
   lily: ['blue', 'green', 'orange', 'pink', 'purple', 'red', 'white', 'yellow'],

@@ -6,6 +6,10 @@ import {
   FLOWER_SIZE,
   getFlowerSvgUrl,
   computePositions,
+  STEM_BUILT_IN_CATEGORIES,
+  STEM_COLOR,
+  STEM_HEIGHT,
+  STEM_WIDTH,
 } from '@entities/flower/model/bouquet-layout';
 import type { IBouquetDetailData, IBouquetDetailFlower } from '../_types';
 
@@ -19,7 +23,13 @@ type TFlowerItem = {
   size: number;
 };
 
+function getCategory(svgUrl: string): string {
+  return (svgUrl.split('/')[3] ?? '').replace('.svg', '');
+}
+
 function StaticFlower({ svgUrl, x, y, size }: Omit<TFlowerItem, 'id'>) {
+  const showStem = !STEM_BUILT_IN_CATEGORIES.has(getCategory(svgUrl));
+
   return (
     <div
       className='absolute pointer-events-none'
@@ -30,7 +40,21 @@ function StaticFlower({ svgUrl, x, y, size }: Omit<TFlowerItem, 'id'>) {
         top: y - size / 2,
       }}
     >
-      <img src={svgUrl} width={size} height={size} alt='' draggable={false} />
+      <img src={svgUrl} width={size} height={size} alt='' draggable={false} style={{ position: 'relative', zIndex: 1 }} />
+      {showStem && (
+        <div
+          style={{
+            position: 'absolute',
+            zIndex: 0,
+            width: STEM_WIDTH,
+            height: STEM_HEIGHT,
+            backgroundColor: STEM_COLOR,
+            left: (size - STEM_WIDTH) / 2,
+            top: size - 10,
+            borderRadius: '0 0 2px 2px',
+          }}
+        />
+      )}
     </div>
   );
 }

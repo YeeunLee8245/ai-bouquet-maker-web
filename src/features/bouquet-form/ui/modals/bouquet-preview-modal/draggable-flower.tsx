@@ -2,6 +2,7 @@
 'use client';
 
 import { useRef, useCallback } from 'react';
+import { STEM_BUILT_IN_CATEGORIES, STEM_COLOR, STEM_HEIGHT, STEM_WIDTH } from '@entities/flower/model/bouquet-layout';
 
 type TProps = {
   svgUrl: string;
@@ -13,7 +14,12 @@ type TProps = {
 
 const CANVAS = 330;
 
+function getCategory(svgUrl: string): string {
+  return (svgUrl.split('/')[3] ?? '').replace('.svg', '');
+}
+
 export default function DraggableFlower({ svgUrl, size, x, y, onMove }: TProps) {
+  const showStem = !STEM_BUILT_IN_CATEGORIES.has(getCategory(svgUrl));
   const divRef = useRef<HTMLDivElement>(null);
   const dragging = useRef(false);
   const offset = useRef({ dx: 0, dy: 0 });
@@ -72,7 +78,21 @@ export default function DraggableFlower({ svgUrl, size, x, y, onMove }: TProps) 
       onPointerMove={handlePointerMove}
       onPointerUp={handlePointerUp}
     >
-      <img src={svgUrl} width={size} height={size} alt='' draggable={false} />
+      <img src={svgUrl} width={size} height={size} alt='' draggable={false} style={{ position: 'relative', zIndex: 1 }} />
+      {showStem && (
+        <div
+          style={{
+            position: 'absolute',
+            zIndex: 0,
+            width: STEM_WIDTH,
+            height: STEM_HEIGHT,
+            backgroundColor: STEM_COLOR,
+            left: (size - STEM_WIDTH) / 2,
+            top: size - 10,
+            borderRadius: '0 0 2px 2px',
+          }}
+        />
+      )}
     </div>
   );
 }
