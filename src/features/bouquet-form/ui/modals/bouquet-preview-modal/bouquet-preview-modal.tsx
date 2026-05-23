@@ -6,6 +6,7 @@ import { useSetAtom } from 'jotai';
 import { closeModalAtom, TModalProps } from '@/shared/model/modal';
 import { useBouquetLayout, TPreviewFlower } from './use-bouquet-layout';
 import DraggableFlower from './draggable-flower';
+import { Z_WRAP_BACK, Z_WRAP_FRONT, Z_RIBBON } from '@entities/flower/model/bouquet-layout';
 
 function BouquetFormPreviewModal({ modalId }: TModalProps) {
   const closeModal = useSetAtom(closeModalAtom);
@@ -39,15 +40,15 @@ function BouquetFormPreviewModal({ modalId }: TModalProps) {
           className='relative overflow-hidden rounded-4 border-1 border-gray-100 bg-amber-200'
           style={{ width: 330, height: 330, isolation: 'isolate' }}
         >
-          {/* 포장지 뒷면 (z: -1) */}
+          {/* 포장지 뒷면 */}
           <img
             src='/svgs/bouquet-wrap-back.svg'
             className='absolute left-0 w-full pointer-events-none'
-            style={{ zIndex: -1 }}
+            style={{ zIndex: Z_WRAP_BACK }}
             alt=''
           />
 
-          {/* 꽃 (z: 0) */}
+          {/* 꽃 (y 기반 z-index, 아래일수록 앞) */}
           {flowers.map((flower, index) => (
             <DraggableFlower
               key={flower.id}
@@ -68,19 +69,19 @@ function BouquetFormPreviewModal({ modalId }: TModalProps) {
             </div>
           )}
 
-          {/* 포장지 앞면 (z: 1) */}
+          {/* 포장지 앞면 */}
           <img
             src='/svgs/bouquet-wrap-front.svg'
             className='absolute bottom-0 left-0 w-full pointer-events-none'
-            style={{ zIndex: 1 }}
+            style={{ zIndex: Z_WRAP_FRONT }}
             alt=''
           />
 
-          {/* 리본 (z: 2) */}
+          {/* 리본 */}
           <img
             src='/svgs/bouquet-ribbon.svg'
             className='absolute bottom-[48px] left-1/2 -translate-x-1/2 pointer-events-none'
-            style={{ zIndex: 2, width: 114 }}
+            style={{ zIndex: Z_RIBBON, width: 114 }}
             alt=''
           />
         </div>

@@ -1,8 +1,15 @@
 /* eslint-disable @next/next/no-img-element */
 'use client';
 
-import { useRef, useCallback } from 'react';
-import { STEM_BUILT_IN_CATEGORIES, STEM_COLOR, STEM_HEIGHT, STEM_WIDTH } from '@entities/flower/model/bouquet-layout';
+import { useRef, useCallback, useState } from 'react';
+import {
+  STEM_BUILT_IN_CATEGORIES,
+  STEM_COLOR,
+  STEM_HEIGHT,
+  STEM_WIDTH,
+  Z_FLOWER_MAX,
+  flowerZIndex,
+} from '@entities/flower/model/bouquet-layout';
 
 type TProps = {
   svgUrl: string;
@@ -20,7 +27,7 @@ function getCategory(svgUrl: string): string {
 
 export default function DraggableFlower({ svgUrl, size, x, y, onMove }: TProps) {
   const showStem = !STEM_BUILT_IN_CATEGORIES.has(getCategory(svgUrl));
-  const divRef = useRef<HTMLDivElement>(null);
+  const [isDragging, setIsDragging] = useState(false);
   const dragging = useRef(false);
   const offset = useRef({ dx: 0, dy: 0 });
 
@@ -32,7 +39,7 @@ export default function DraggableFlower({ svgUrl, size, x, y, onMove }: TProps) 
       e.stopPropagation();
       (e.target as HTMLElement).setPointerCapture(e.pointerId);
       dragging.current = true;
-      if (divRef.current) {divRef.current.style.zIndex = '10';}
+      setIsDragging(true);
       const rect = (e.currentTarget.parentElement as HTMLElement).getBoundingClientRect();
       offset.current = {
         dx: e.clientX - rect.left - x,
@@ -57,12 +64,11 @@ export default function DraggableFlower({ svgUrl, size, x, y, onMove }: TProps) 
     e.stopPropagation();
     (e.target as HTMLElement).releasePointerCapture(e.pointerId);
     dragging.current = false;
-    if (divRef.current) {divRef.current.style.zIndex = '0';}
+    setIsDragging(false);
   }, []);
 
   return (
     <div
-      ref={divRef}
       role='button'
       tabIndex={0}
       className='absolute touch-none'
@@ -72,7 +78,7 @@ export default function DraggableFlower({ svgUrl, size, x, y, onMove }: TProps) 
         left: x - size / 2,
         top: y - size / 2,
         cursor: 'grab',
-        zIndex: 0,
+        zIndex: isDragging ? Z_FLOWER_MAX : flowerZIndex(y),
       }}
       onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}
@@ -88,7 +94,7 @@ export default function DraggableFlower({ svgUrl, size, x, y, onMove }: TProps) 
             height: STEM_HEIGHT,
             backgroundColor: STEM_COLOR,
             left: (size - STEM_WIDTH) / 2,
-            top: size - 10,
+            top: size - (size / 10 + 5),
             borderRadius: '0 0 2px 2px',
           }}
         />

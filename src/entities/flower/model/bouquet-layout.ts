@@ -11,6 +11,25 @@ export const FLOWER_SIZE = 60;
 export const CANVAS = 330;
 export const CENTER = CANVAS / 2;
 
+/** 캔버스 레이어 z-index */
+export const Z_WRAP_BACK = 0;
+export const Z_FLOWER_MAX = CANVAS + 1; // 드래그 중 꽃 최대값
+export const Z_WRAP_FRONT = CANVAS + 2;
+export const Z_RIBBON = CANVAS + 3;
+
+/** y 위치 기반 꽃 z-index (아래 = 앞) */
+export function flowerZIndex(y: number): number {
+  return Math.round(y) + 1;
+}
+
+/** 꽃 수에 반비례하는 크기 계산 */
+export function computeFlowerSize(count: number): number {
+  if (count <= 2) { return 100; }
+  if (count <= 5) { return 80; }
+  if (count <= 10) { return 65; }
+  return FLOWER_SIZE;
+}
+
 type FlowerColor = 'blue' | 'green' | 'orange' | 'pink' | 'purple' | 'red' | 'white' | 'yellow';
 
 export const FLOWER_CATEGORY_MAP: Record<string, string> = {

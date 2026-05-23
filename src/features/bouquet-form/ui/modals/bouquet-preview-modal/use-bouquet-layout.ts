@@ -4,9 +4,9 @@ import { useMemo } from 'react';
 import { useAtomValue } from 'jotai';
 import { bouquetFlowersAtom } from '../../../model/bouquet-form.atoms';
 import {
-  FLOWER_SIZE,
   getFlowerSvgUrl,
   computePositions,
+  computeFlowerSize,
 } from '@entities/flower/model/bouquet-layout';
 
 export type { TPreviewFlower } from '@entities/flower/model/bouquet-layout';
@@ -15,7 +15,7 @@ export function useBouquetLayout() {
   const bouquetFlowers = useAtomValue(bouquetFlowersAtom);
 
   return useMemo(() => {
-    const flatFlowers: { svgUrl: string; name: string; size: number }[] = [];
+    const flatFlowers: { svgUrl: string; name: string }[] = [];
 
     for (const flower of bouquetFlowers) {
       for (const ci of flower.colorInfos) {
@@ -23,13 +23,13 @@ export function useBouquetLayout() {
           flatFlowers.push({
             svgUrl: getFlowerSvgUrl(flower.name, ci.hex),
             name: flower.name,
-            size: FLOWER_SIZE,
           });
         }
       }
     }
 
-    const positions = computePositions(flatFlowers.length, flatFlowers.map((f) => f.size));
+    const size = computeFlowerSize(flatFlowers.length);
+    const positions = computePositions(flatFlowers.length, flatFlowers.map(() => size));
 
     return flatFlowers.map((f, i) => ({
       id: `flower-${i}`,
@@ -37,7 +37,7 @@ export function useBouquetLayout() {
       x: positions[i].x,
       y: positions[i].y,
       name: f.name,
-      size: f.size,
+      size,
     }));
   }, [bouquetFlowers]);
 }
