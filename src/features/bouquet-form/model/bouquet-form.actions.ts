@@ -7,6 +7,7 @@ import {
   bouquetFlowersAtom,
   bouquetPackagingColorAtom,
   bouquetRibbonColorAtom,
+  bouquetLayoutAtom,
 } from './bouquet-form.atoms';
 import { selectedFlowersAtom } from '@/entities/flower/model/selected-flowers';
 import type { TFlowerCompositionItem, TBouquetDetailInitData } from './bouquet-form.types';
@@ -74,6 +75,13 @@ export const initBouquetFormFromDetailAtom = atom(null, async (_get, set, detail
   set(bouquetMessageAtom, detail.message ?? '');
   set(bouquetPackagingColorAtom, detail.wrapping.wrappingColor ?? '');
   set(bouquetRibbonColorAtom, detail.wrapping.ribbonColor ?? '');
+  set(bouquetLayoutAtom, detail.layout?.items?.map((item) => ({
+    flower_id: item.flower_id,
+    flower_meaning_id: item.flower_meaning_id,
+    x: item.x,
+    y: item.y,
+    color: item.color ?? '',
+  })) ?? null);
 
   // 꽃 즉시 세팅 (meaningId·imageUrl 임시값)
   const bouquetFlowers: TFlowerCompositionItem[] = detail.flowers.map((f) => ({
@@ -176,4 +184,5 @@ export const resetBouquetFormAtom = atom(null, (_get, set) => {
   set(bouquetFlowersAtom, []);
   set(bouquetPackagingColorAtom, '');
   set(bouquetRibbonColorAtom, '');
+  set(bouquetLayoutAtom, null);
 });

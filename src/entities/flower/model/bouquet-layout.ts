@@ -5,6 +5,9 @@ export type TPreviewFlower = {
   x: number;
   y: number;
   name: string;
+  flowerId: string;
+  meaningId: string;
+  color: string;
 };
 
 export const FLOWER_SIZE = 60;

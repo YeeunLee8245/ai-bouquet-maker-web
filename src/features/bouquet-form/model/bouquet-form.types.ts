@@ -23,6 +23,14 @@ export type TFlowerCompositionItem = {
   availableColors: TAvailableColor[];
 };
 
+export type TBouquetLayoutItem = {
+  flower_id: string;
+  flower_meaning_id: string;
+  x: number;
+  y: number;
+  color: string;
+};
+
 /**
  * initBouquetFormFromDetailAtom에 필요한 detail 데이터 구조.
  * BouquetDetailData와 구조적으로 호환되며, features → app 의존성 없이 독립 정의.
@@ -42,4 +50,13 @@ export type TBouquetDetailInitData = {
     wrappingColor: string | null;
     ribbonColor: string | null;
   };
+  layout?: {
+    items: Array<{
+      flower_id: string;
+      flower_meaning_id: string;
+      x: number;
+      y: number;
+      color?: string | null;
+    }>;
+  } | null;
 };

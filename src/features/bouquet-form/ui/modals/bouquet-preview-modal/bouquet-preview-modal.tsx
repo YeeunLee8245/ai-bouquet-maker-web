@@ -4,12 +4,17 @@
 import { useState, useCallback } from 'react';
 import { useSetAtom } from 'jotai';
 import { closeModalAtom, TModalProps } from '@/shared/model/modal';
+import { showToastAtom } from '@/shared/model/toast';
+import { bouquetLayoutAtom } from '../../../model/bouquet-form.atoms';
 import { useBouquetLayout, TPreviewFlower } from './use-bouquet-layout';
 import DraggableFlower from './draggable-flower';
 import { Z_WRAP_BACK, Z_WRAP_FRONT, Z_RIBBON } from '@entities/flower/model/bouquet-layout';
+import { Button } from '@/shared/ui/button';
 
 function BouquetFormPreviewModal({ modalId }: TModalProps) {
   const closeModal = useSetAtom(closeModalAtom);
+  const showToast = useSetAtom(showToastAtom);
+  const setLayout = useSetAtom(bouquetLayoutAtom);
   const initialFlowers = useBouquetLayout();
 
   const [flowers, setFlowers] = useState<TPreviewFlower[]>(initialFlowers);
@@ -19,6 +24,18 @@ function BouquetFormPreviewModal({ modalId }: TModalProps) {
       prev.map((f, i) => (i === index ? { ...f, x, y } : f)),
     );
   }, []);
+
+  const handleSave = () => {
+    setLayout(flowers.map((f) => ({
+      flower_id: f.flowerId,
+      flower_meaning_id: f.meaningId,
+      x: f.x,
+      y: f.y,
+      color: f.color,
+    })));
+    showToast({ message: '꽃 위치 수정이 완료되었어요.' });
+    closeModal(modalId);
+  };
 
   return (
     <div className='relative flex flex-col w-[360px] bg-gray-50 rounded-t-5 tablet:rounded-5'>
@@ -87,7 +104,11 @@ function BouquetFormPreviewModal({ modalId }: TModalProps) {
         </div>
       </div>
 
-      <div className='pb-6' />
+      <div className='px-4 pb-6 tablet:px-6'>
+        <Button size='lg' className='w-full' onClick={handleSave}>
+          저장
+        </Button>
+      </div>
     </div>
   );
 }

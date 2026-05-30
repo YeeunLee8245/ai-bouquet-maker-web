@@ -12,6 +12,7 @@ import {
   bouquetFlowersAtom,
   bouquetPackagingColorAtom,
   bouquetRibbonColorAtom,
+  bouquetLayoutAtom,
   canSaveBouquetAtom,
   bouquetValidationErrorAtom,
 } from '@features/bouquet-form';
@@ -32,6 +33,7 @@ export default function MakeBouquetButton() {
   const flowers = useAtomValue(bouquetFlowersAtom);
   const ribbonColor = useAtomValue(bouquetRibbonColorAtom);
   const packagingColor = useAtomValue(bouquetPackagingColorAtom);
+  const layout = useAtomValue(bouquetLayoutAtom);
   const resetSelectedFlowers = useSetAtom(resetSelectedFlowersAtom);
 
   const handleSave = async () => {
@@ -59,6 +61,7 @@ export default function MakeBouquetButton() {
         flowers: recipeFlowers,
         wrapping: { ribbonColor, wrappingColor: packagingColor },
       },
+      ...(layout && { layout: { items: layout } }),
     });
     resetSelectedFlowers();
     showToast({ message: '꽃다발이 저장되었습니다.' });

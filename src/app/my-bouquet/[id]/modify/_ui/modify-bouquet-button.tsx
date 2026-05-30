@@ -12,6 +12,7 @@ import {
   bouquetFlowersAtom,
   bouquetPackagingColorAtom,
   bouquetRibbonColorAtom,
+  bouquetLayoutAtom,
   canSaveBouquetAtom,
   bouquetValidationErrorAtom,
 } from '@features/bouquet-form';
@@ -33,6 +34,7 @@ export default function ModifyBouquetButton({ id }: TProps) {
   const flowers = useAtomValue(bouquetFlowersAtom);
   const ribbonColor = useAtomValue(bouquetRibbonColorAtom);
   const packagingColor = useAtomValue(bouquetPackagingColorAtom);
+  const layout = useAtomValue(bouquetLayoutAtom);
 
   const handleSave = async () => {
     if (!canSave) {
@@ -58,6 +60,7 @@ export default function ModifyBouquetButton({ id }: TProps) {
         flowers: recipeFlowers,
         wrapping: { ribbonColor, wrappingColor: packagingColor },
       },
+      ...(layout && { layout: { items: layout } }),
     });
 
     showToast({ message: '꽃다발이 수정되었습니다.' });
