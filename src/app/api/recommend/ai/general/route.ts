@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@shared/supabase/server';
 import { getPublicUser } from '@/lib/users/auth';
 import { analyzeGeneral } from '@services/general-analysis';
+import { analyzeTextLocally } from '@services/local-tag-analysis';
 import { getRecommendationsFromAnalysis } from '@/lib/recommend/recommendation';
 import { spendToken, getUserBalance } from '@/lib/users/wallet';
 import { toSupabaseResizedImageUrl } from '@shared/utils/image-url';
@@ -181,12 +182,7 @@ export async function POST(request: NextRequest) {
     }
 
     const balance = await getUserBalance(publicUser.id);
-    if (balance < 1) {
-      return NextResponse.json(
-        { error: '사용 가능한 토큰 부족' },
-        { status: 403 },
-      );
-    }
+    const isFree = balance < 1;
 
     const supabase = await createClient();
 
@@ -213,7 +209,9 @@ export async function POST(request: NextRequest) {
     const recommendationId = pendingRecommendation.id;
 
     try {
-      const analysis = await analyzeGeneral(text);
+      const analysis = isFree
+        ? await analyzeTextLocally(text, 'general')
+        : await analyzeGeneral(text);
       const { recommendations, ranked } = await getRecommendationsFromAnalysis(analysis, 'general');
 
       await supabase
@@ -228,29 +226,31 @@ export async function POST(request: NextRequest) {
         })
         .eq('id', recommendationId);
 
-      try {
-        await spendToken(
-          publicUser.id,
-          recommendationId,
-          'recommendations',
-          'uuid',
-          'AI 기본 꽃 추천',
-        );
-      } catch (tokenError: unknown) {
-        const errorMessage = tokenError instanceof Error ? tokenError.message : '토큰 차감 실패';
-        await supabase
-          .from('recommendations')
-          .update({
-            status: 'failed',
-            error_msg: errorMessage,
-            updated_at: new Date().toISOString(),
-          })
-          .eq('id', recommendationId);
+      if (!isFree) {
+        try {
+          await spendToken(
+            publicUser.id,
+            recommendationId,
+            'recommendations',
+            'uuid',
+            'AI 기본 꽃 추천',
+          );
+        } catch (tokenError: unknown) {
+          const errorMessage = tokenError instanceof Error ? tokenError.message : '토큰 차감 실패';
+          await supabase
+            .from('recommendations')
+            .update({
+              status: 'failed',
+              error_msg: errorMessage,
+              updated_at: new Date().toISOString(),
+            })
+            .eq('id', recommendationId);
 
-        return NextResponse.json(
-          { error: errorMessage },
-          { status: 403 },
-        );
+          return NextResponse.json(
+            { error: errorMessage },
+            { status: 403 },
+          );
+        }
       }
 
       // 중복 꽃 제거를 위한 Set
@@ -296,6 +296,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({
         success: true,
         recommendationId,
+        isFree,
         totalCount: standardizedRecommendations.length,
         title: analysis.title,
         message: analysis.message,
