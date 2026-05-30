@@ -33,11 +33,11 @@ export default function ModifyBouquetContent({ id }: TProps) {
       initForm(data);
       setIsInitialized(true);
     }
-    return () => {
-      resetForm();
-      setIsInitialized(false);
-    };
   }, [data]);
+
+  useEffect(() => {
+    return () => resetForm();
+  }, []);
 
   if (!isInitialized) {
     return <BouquetDetailSkeleton />;
