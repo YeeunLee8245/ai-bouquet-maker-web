@@ -13,7 +13,7 @@ export type RecommendedFlower = {
 
 export type AIRecommendationResult = {
   recommendationId: string;
-  isFree: boolean;
+  isFree?: boolean;
   title: string;
   message: string;
   recipient: string | null;
