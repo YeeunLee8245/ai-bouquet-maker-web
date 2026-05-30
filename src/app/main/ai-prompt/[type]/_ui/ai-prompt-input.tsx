@@ -5,13 +5,12 @@ import { updateTextCount } from '@/shared/utils/dom';
 interface IProps {
   placeholder: string;
   eventHub: IAIPromptEventHub;
-  disabled?: boolean;
   onLoginRequired?: () => void;
 }
 
 const MAX_TEXT_LENGTH = 1000;
 
-export default function AIPromptInput({ placeholder, eventHub, disabled, onLoginRequired }: IProps) {
+export default function AIPromptInput({ placeholder, eventHub, onLoginRequired }: IProps) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const textCountRef = useRef<HTMLDivElement>(null);
 
@@ -35,11 +34,6 @@ export default function AIPromptInput({ placeholder, eventHub, disabled, onLogin
 
   return (
     <div className='relative w-full h-[240px] bg-white rounded-4 pt-2 pb-3 px-[14px] flex flex-col'>
-      {disabled && (
-        <div className='absolute inset-0 rounded-4 bg-white/80 flex items-center justify-center z-10'>
-          <span className='text-body-md text-gray-400 text-center'>일일 토큰이 모두 소진 되었어요. <br />자정 이후 토큰이 자동 충전됩니다.</span>
-        </div>
-      )}
       <textarea
         className='flex-1 text-body-md placeholder:text-gray-400 before:content-[attr(data-value)]'
         placeholder={placeholder}
@@ -48,7 +42,6 @@ export default function AIPromptInput({ placeholder, eventHub, disabled, onLogin
         onClick={onLoginRequired}
         readOnly={!!onLoginRequired}
         maxLength={MAX_TEXT_LENGTH}
-        disabled={disabled}
       />
       <div
         ref={textCountRef}

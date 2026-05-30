@@ -32,12 +32,17 @@ const AiPromptResultPage = () => {
 
   if (!result) { return null; }
 
-  const { title, message, recipient, occasion, recommendations } = result ?? {};
+  const { isFree, title, message, recipient, occasion, recommendations } = result;
 
   const subtitle = occasion ?? (recipient ? `${recipient}에게 전하는 꽃다발` : null);
 
   return (
     <div className='flex flex-col h-full overflow-y-auto hide-scrollbar'>
+      {isFree && (
+        <div className='mx-4 mt-4 tablet:mx-6 pc:mx-8 px-3 py-2 border-l-2 border-gray-300'>
+          <span className='text-ui-notice text-gray-400'>오늘의 AI 추천 횟수를 모두 사용했어요. 자체 추천 시스템으로 꽃을 추천해 드렸어요. 자정 이후 AI 추천 횟수가 자동으로 충전돼요.</span>
+        </div>
+      )}
       {/* 추천 정보 헤더 */}
       <div className='pt-4 px-4 tablet:px-6 pc:px-8 pb-2 flex flex-col items-center'>
         <p className='text-title-lg'>{title}</p>

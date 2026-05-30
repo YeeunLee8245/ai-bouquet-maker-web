@@ -9,8 +9,6 @@ import { showToastAtom } from '@/shared/model/toast';
 import { openModalAtom, closeModalAtom } from '@/shared/model/modal';
 import AIAnalyzingModal, { AI_ANALYZING_MODAL_ID } from '@/app/main/ai-prompt/[type]/_ui/ai-analyzing-modal';
 import LoginRequiredModal, { LOGIN_REQUIRED_MODAL_ID } from './login-required-modal';
-import { useWalletBalance } from '@/shared/hooks/useWalletBalance';
-
 export default function GeneralAIInput() {
   const [value, setValue] = useState('');
   const router = useRouter();
@@ -18,15 +16,9 @@ export default function GeneralAIInput() {
   const showToast = useSetAtom(showToastAtom);
   const openModal = useSetAtom(openModalAtom);
   const closeModal = useSetAtom(closeModalAtom);
-  const { isTokenEmpty } = useWalletBalance();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    if (isTokenEmpty) {
-      showToast({ message: '일일 토큰이 모두 소진 되었어요. 자정 이후 토큰이 자동 충전됩니다.' });
-      return;
-    }
 
     const text = value.trim();
 
@@ -66,6 +58,7 @@ export default function GeneralAIInput() {
 
       setRecommendationResult({
         recommendationId: data.recommendationId,
+        isFree: data.isFree,
         title: data.title,
         message: data.message,
         recipient: data.recipient,

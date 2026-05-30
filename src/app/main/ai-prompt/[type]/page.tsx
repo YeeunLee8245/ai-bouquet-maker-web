@@ -15,7 +15,6 @@ import { aiRecommendationResultAtom } from '@/entities/recommendation/model/reco
 import { showToastAtom } from '@/shared/model/toast';
 import { openModalAtom, closeModalAtom } from '@/shared/model/modal';
 import AIAnalyzingModal, { AI_ANALYZING_MODAL_ID } from './_ui/ai-analyzing-modal';
-import { useWalletBalance } from '@/shared/hooks/useWalletBalance';
 import { useUserAuth } from '@/hooks/use-supabase-user';
 import LoginRequiredModal, { LOGIN_REQUIRED_MODAL_ID } from '../../_ui/login-required-modal';
 import PageScroll from '@/app/_ui/page-scroll';
@@ -38,7 +37,6 @@ function AIPromptPage() {
   const openModal = useSetAtom(openModalAtom);
   const closeModal = useSetAtom(closeModalAtom);
   const { isLogin } = useUserAuth();
-  const { isTokenEmpty } = useWalletBalance();
 
   if (!AI_PROMPT_DATAS.includes(type)) {
     notFound();
@@ -101,6 +99,7 @@ function AIPromptPage() {
 
       setRecommendationResult({
         recommendationId: data.recommendationId,
+        isFree: data.isFree,
         title: data.title,
         message: data.message,
         recipient: data.recipient,
@@ -138,8 +137,8 @@ function AIPromptPage() {
           </div>
         </div>
         <div className='pt-4 pb-8 flex flex-col gap-4 pc:max-w-[720px] pc:mx-auto'>
-          <AIPromptInput eventHub={eventHub} placeholder={placeholder} disabled={isTokenEmpty} onLoginRequired={handleLoginRequired} />
-          <Button size='lg' onClick={handleRecommend} disabled={isTokenEmpty}>꽃 추천 받기</Button>
+          <AIPromptInput eventHub={eventHub} placeholder={placeholder} onLoginRequired={handleLoginRequired} />
+          <Button size='lg' onClick={handleRecommend}>꽃 추천 받기</Button>
         </div>
       </div>
       <AIPromptGuideContainer eventHub={eventHub} guide={guide} onLoginRequired={handleLoginRequired} />
