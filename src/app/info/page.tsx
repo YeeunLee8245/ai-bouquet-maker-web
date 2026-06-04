@@ -1,4 +1,5 @@
 import PageScroll from '@/app/_ui/page-scroll';
+import { Markdown } from '@/shared/ui/markdown';
 import { PRIVACY_POLICY, WITHDRAWAL_TERMS } from './_datas/info-content';
 import HeroBackground from '../main/_ui/hero-background';
 import InfoRouteCards from './_ui/info-route-cards';
@@ -29,9 +30,7 @@ export default function InfoPage() {
               <h2 className='text-title-md text-gray-700'>
                 개인정보 처리방침
               </h2>
-              <p className='text-body-md text-gray-400 whitespace-pre-wrap'>
-                {PRIVACY_POLICY}
-              </p>
+              <Markdown>{PRIVACY_POLICY}</Markdown>
             </div>
           </div>
 
@@ -40,9 +39,7 @@ export default function InfoPage() {
               <h2 className='text-title-md text-gray-700'>
                 회원탈퇴 약관 조항
               </h2>
-              <p className='text-body-md text-gray-400 whitespace-pre-wrap'>
-                {WITHDRAWAL_TERMS}
-              </p>
+              <Markdown>{WITHDRAWAL_TERMS}</Markdown>
             </div>
           </div>
         </section>
