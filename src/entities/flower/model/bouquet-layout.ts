@@ -10,7 +10,6 @@ export type TPreviewFlower = {
   color: string;
 };
 
-export const FLOWER_SIZE = 60;
 export const CANVAS = 330;
 export const CENTER = CANVAS / 2;
 
@@ -27,10 +26,10 @@ export function flowerZIndex(y: number): number {
 
 /** 꽃 수에 반비례하는 크기 계산 */
 export function computeFlowerSize(count: number): number {
-  if (count <= 2) { return 100; }
-  if (count <= 5) { return 80; }
-  if (count <= 10) { return 65; }
-  return FLOWER_SIZE;
+  if (count <= 2) { return 130; }
+  if (count <= 5) { return 110; }
+  if (count <= 10) { return 90; }
+  return 80;
 }
 
 type FlowerColor = 'blue' | 'green' | 'orange' | 'pink' | 'purple' | 'red' | 'white' | 'yellow';
