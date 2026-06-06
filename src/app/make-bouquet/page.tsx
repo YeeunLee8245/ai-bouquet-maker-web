@@ -8,7 +8,7 @@ import {
   BouquetCompositionContainer,
   BouquetPackagingContainer,
   BouquetSummaryContainer,
-  BouquetPreviewContainer,
+  BouquetPreviewInline,
   initBouquetFlowersAtom,
   applyAiResultToBouquetAtom,
   resetBouquetFormAtom,
@@ -66,16 +66,16 @@ function MakeBouquetPage() {
         </p>
       </div>
       <div className='pt-4 pb-8 px-4 tablet:px-6 pc:px-8'>
-        <div className='tablet:grid tablet:grid-cols-2 tablet:gap-4 tablet:items-start'>
+        <div className='tablet:grid tablet:grid-cols-2 tablet:gap-6 tablet:items-start'>
           <div>
             <BouquetInfoContainer />
             <BouquetCompositionContainer />
             <BouquetPackagingContainer />
           </div>
           <div className='flex flex-col'>
-            <div className='tablet:order-2'><BouquetSummaryContainer /></div>
-            <div className='tablet:order-1'><BouquetPreviewContainer /></div>
-            <div className='tablet:order-3'><MakeBouquetButton /></div>
+            <BouquetPreviewInline />
+            <BouquetSummaryContainer />
+            <MakeBouquetButton />
           </div>
         </div>
       </div>

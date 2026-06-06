@@ -7,7 +7,7 @@ import {
   BouquetCompositionContainer,
   BouquetPackagingContainer,
   BouquetSummaryContainer,
-  BouquetPreviewContainer,
+  BouquetPreviewInline,
   initBouquetFormFromDetailAtom,
   resetBouquetFormAtom,
 } from '@features/bouquet-form';
@@ -63,12 +63,18 @@ export default function ModifyBouquetContent({ id }: TProps) {
         </p>
       </div>
       <div className='pt-4 pb-8 px-4'>
-        <BouquetInfoContainer />
-        <BouquetCompositionContainer />
-        <BouquetPackagingContainer />
-        <BouquetSummaryContainer />
-        <BouquetPreviewContainer />
-        <ModifyBouquetButton id={id} />
+        <div className='tablet:grid tablet:grid-cols-2 tablet:gap-6 tablet:items-start'>
+          <div>
+            <BouquetInfoContainer />
+            <BouquetCompositionContainer />
+            <BouquetPackagingContainer />
+          </div>
+          <div className='flex flex-col'>
+            <BouquetPreviewInline />
+            <BouquetSummaryContainer />
+            <ModifyBouquetButton id={id} />
+          </div>
+        </div>
       </div>
     </PageScroll>
   );
