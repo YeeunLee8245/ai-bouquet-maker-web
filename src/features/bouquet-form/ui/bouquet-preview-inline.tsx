@@ -3,16 +3,15 @@
 
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { useAtomValue, useSetAtom } from 'jotai';
-import { showToastAtom } from '@/shared/model/toast';
 import { bouquetFlowersAtom, bouquetLayoutAtom } from '../model/bouquet-form.atoms';
 import { useBouquetLayout, TPreviewFlower } from './modals/bouquet-preview-modal/use-bouquet-layout';
 import DraggableFlower from './modals/bouquet-preview-modal/draggable-flower';
 import { Z_WRAP_BACK, Z_WRAP_FRONT, Z_RIBBON } from '@entities/flower/model/bouquet-layout';
-import { Button } from '@/shared/ui/button';
 
+// TODO: yeeun 교체
 function DragHintIcon() {
   return (
-    <svg width='30' height='30' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2' strokeLinecap='round' strokeLinejoin='round'>
+    <svg width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2' strokeLinecap='round' strokeLinejoin='round'>
       <path d='M18 11V6a2 2 0 0 0-4 0v1' />
       <path d='M14 7V4a2 2 0 0 0-4 0v3' />
       <path d='M10 7.5a2 2 0 0 0-4 0V17a6 6 0 0 0 12 0v-5a2 2 0 0 0-4 0' />
@@ -21,7 +20,6 @@ function DragHintIcon() {
 }
 
 export default function BouquetPreviewInline() {
-  const showToast = useSetAtom(showToastAtom);
   const setLayout = useSetAtom(bouquetLayoutAtom);
   const bouquetFlowers = useAtomValue(bouquetFlowersAtom);
   const initialFlowers = useBouquetLayout();
@@ -51,9 +49,16 @@ export default function BouquetPreviewInline() {
     setFlowers(loadTimeFlowersRef.current);
   };
 
-  const handleSave = () => {
+  // 드래그 종료 시 bouquetLayoutAtom에 자동 반영
+  const flowersRef = useRef(flowers);
+
+  useEffect(() => {
+    flowersRef.current = flowers;
+  }, [flowers]);
+
+  const handleMoveEnd = useCallback(() => {
     setLayout(
-      flowers.map((f) => ({
+      flowersRef.current.map((f) => ({
         flower_id: f.flowerId,
         flower_meaning_id: f.meaningId,
         x: f.x,
@@ -61,8 +66,7 @@ export default function BouquetPreviewInline() {
         color: f.color,
       })),
     );
-    showToast({ message: '꽃 위치 수정이 완료되었어요.' });
-  };
+  }, [setLayout]);
 
   return (
     <div className='mt-4 tablet:mt-0 border-1 border-gray-100 rounded-5 bg-white'>
@@ -73,21 +77,11 @@ export default function BouquetPreviewInline() {
         </p>
       </div>
 
-      <div className='flex justify-center px-4 py-3'>
+      <div className='flex justify-center px-4 pt-3'>
         <div
           className='relative overflow-hidden rounded-4 border-1 border-gray-100 bg-amber-200'
           style={{ width: 330, height: 330, isolation: 'isolate' }}
         >
-          {/* 드래그 힌트 뱃지 */}
-          {flowers.length > 0 && (
-            <div className='absolute top-2.5 left-1/2 -translate-x-1/2 z-[998] pointer-events-none'>
-              <span className='inline-flex items-center gap-1.5 rounded-full border text-nowrap  border-gray-200 bg-white/85 px-3 py-1 text-ui-textbtn-sm text-gray-500 shadow-sm backdrop-blur-sm'>
-                <DragHintIcon />
-                드래그해서 배치를 바꿔보세요
-              </span>
-            </div>
-          )}
-
           <img
             src='/svgs/bouquet-wrap-back.svg'
             className='absolute left-0 w-full pointer-events-none'
@@ -103,6 +97,7 @@ export default function BouquetPreviewInline() {
               y={flower.y}
               size={flower.size}
               onMove={(x, y) => handleMove(index, x, y)}
+              onMoveEnd={handleMoveEnd}
             />
           ))}
 
@@ -131,17 +126,22 @@ export default function BouquetPreviewInline() {
         </div>
       </div>
 
-      <div className='flex items-center gap-2 px-4 pb-4'>
+      <div className='flex items-center justify-between px-4 pb-4 pt-2'>
+        {flowers.length > 0 ? (
+          <span className='flex items-center gap-1.5 text-ui-textbtn-sm text-gray-400'>
+            <DragHintIcon />
+            드래그해서 배치를 바꿔보세요
+          </span>
+        ) : (
+          <span />
+        )}
         <button
           type='button'
           onClick={handleReset}
-          className='shrink-0 px-3 text-ui-textbtn-md text-gray-400 hover:text-gray-500'
+          className='text-ui-textbtn-md text-gray-400 hover:text-gray-500'
         >
           초기화
         </button>
-        <Button size='lg' className='flex-1' onClick={handleSave}>
-          배치 저장
-        </Button>
       </div>
     </div>
   );

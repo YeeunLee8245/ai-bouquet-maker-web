@@ -19,13 +19,14 @@ type TProps = {
   y: number;
   size: number;
   onMove: (x: number, y: number) => void;
+  onMoveEnd?: () => void;
 };
 
 function getCategory(svgUrl: string): string {
   return (svgUrl.split('/')[3] ?? '').replace('.svg', '');
 }
 
-export default function DraggableFlower({ svgUrl, size, x, y, onMove }: TProps) {
+export default function DraggableFlower({ svgUrl, size, x, y, onMove, onMoveEnd }: TProps) {
   const showStem = !STEM_BUILT_IN_CATEGORIES.has(getCategory(svgUrl));
   const [isDragging, setIsDragging] = useState(false);
   const dragging = useRef(false);
@@ -67,7 +68,8 @@ export default function DraggableFlower({ svgUrl, size, x, y, onMove }: TProps) 
     (e.target as HTMLElement).releasePointerCapture(e.pointerId);
     dragging.current = false;
     setIsDragging(false);
-  }, []);
+    onMoveEnd?.();
+  }, [onMoveEnd]);
 
   return (
     <div
