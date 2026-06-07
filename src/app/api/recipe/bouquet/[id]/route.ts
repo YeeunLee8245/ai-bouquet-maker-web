@@ -3,15 +3,41 @@ import { createClient } from '@shared/supabase/server';
 import { BouquetRecipeContent, BouquetLayout } from '@/types/recommendation';
 import { getPublicUser } from '@/lib/users/auth';
 
-function toTagsFromMeaning(meaning: string | null | undefined): string[] {
-  if (!meaning) {
+const TAG_TOTAL_CHAR_LIMIT = 8;
+const TAG_MAX_COUNT = 3;
+
+function normalizeTags(rawTags: string[] | null | undefined): string[] {
+  if (!Array.isArray(rawTags)) {
     return [];
   }
 
-  return meaning
-    .split(',')
+  return rawTags
     .map(tag => tag.trim())
     .filter(Boolean);
+}
+
+function mergeTagsWithTotalCharLimit(
+  emotionTags: string[],
+  styleTags: string[],
+): string[] {
+  const merged = [...new Set([...emotionTags, ...styleTags])];
+  const result: string[] = [];
+  let totalChars = 0;
+
+  for (const tag of merged) {
+    if (result.length >= TAG_MAX_COUNT) {
+      break;
+    }
+
+    const nextTotal = totalChars + tag.length;
+    if (nextTotal > TAG_TOTAL_CHAR_LIMIT) {
+      continue;
+    }
+    result.push(tag);
+    totalChars = nextTotal;
+  }
+
+  return result;
 }
 
 /**
@@ -314,17 +340,33 @@ export async function GET(
       }
     }
 
-    // 꽃말 맵 (icon_color + meaning)
-    let meaningMap: Record<string, { icon_color: string | null; meaning: string | null }> = {};
+    // 꽃말 맵 (icon_color + meaning + emotion_tags + style_tags)
+    let meaningMap: Record<
+      string,
+      {
+        icon_color: string | null;
+        meaning: string | null;
+        emotion_tags: string[] | null;
+        style_tags: string[] | null;
+      }
+    > = {};
     if (meaningIds.length > 0) {
       const { data: meanings } = await supabase
         .from('flower_meanings')
-        .select('id, icon_color, meaning')
+        .select('id, icon_color, meaning, emotion_tags, style_tags')
         .in('id', meaningIds);
 
       if (meanings) {
         meaningMap = Object.fromEntries(
-          meanings.map(m => [String(m.id), { icon_color: m.icon_color, meaning: m.meaning }]),
+          meanings.map(m => [
+            String(m.id),
+            {
+              icon_color: m.icon_color,
+              meaning: m.meaning,
+              emotion_tags: m.emotion_tags,
+              style_tags: m.style_tags,
+            },
+          ]),
         );
       }
     }
@@ -333,36 +375,41 @@ export async function GET(
     const flowersGrouped = new Map<string, {
       flower_id: string;
       flower_name: string;
-      tags: string[];
+      rawEmotionTags: string[];
+      rawStyleTags: string[];
       color_and_quantity: Array<{ color: string; quantity: number; meaningId: string | null }>;
     }>();
 
     for (const f of flowersInRecipe) {
       const meaningInfo = f.flower_meaning_id ? meaningMap[String(f.flower_meaning_id)] : null;
       const color = f.color || meaningInfo?.icon_color || '#CCCCCC';
-      const meaningTags = toTagsFromMeaning(meaningInfo?.meaning);
+      const emotionTags = normalizeTags(meaningInfo?.emotion_tags);
+      const styleTags = normalizeTags(meaningInfo?.style_tags);
 
       if (flowersGrouped.has(f.flower_id)) {
         const existing = flowersGrouped.get(f.flower_id)!;
         // color_and_quantity 배열에 추가
         existing.color_and_quantity.push({ color, quantity: f.quantity, meaningId: f.flower_meaning_id || null });
-        // 중복되지 않는 태그 추가
-        for (const tag of meaningTags) {
-          if (!existing.tags.includes(tag)) {
-            existing.tags.push(tag);
-          }
-        }
+        existing.rawEmotionTags.push(...emotionTags);
+        existing.rawStyleTags.push(...styleTags);
       } else {
         flowersGrouped.set(f.flower_id, {
           flower_id: f.flower_id,
           flower_name: flowerMap[f.flower_id] || '알 수 없음',
-          tags: [...meaningTags],
+          rawEmotionTags: [...emotionTags],
+          rawStyleTags: [...styleTags],
           color_and_quantity: [{ color, quantity: f.quantity, meaningId: f.flower_meaning_id || null }],
         });
       }
     }
 
-    const flowers = Array.from(flowersGrouped.values());
+    const flowers = Array.from(flowersGrouped.values()).map(f => {
+      const { rawEmotionTags, rawStyleTags, ...rest } = f;
+      return {
+        ...rest,
+        tags: mergeTagsWithTotalCharLimit(rawEmotionTags, rawStyleTags),
+      };
+    });
 
     const responseData = {
       id: bouquet.id,
