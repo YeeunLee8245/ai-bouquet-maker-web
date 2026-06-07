@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 'use client';
 
-import { useMemo } from 'react';
+import { useMemo, useRef, useState, useEffect } from 'react';
 import {
   getFlowerSvgUrl,
   computePositions,
@@ -14,6 +14,7 @@ import {
   STEM_COLOR,
   STEM_HEIGHT,
   STEM_WIDTH,
+  CANVAS,
 } from '@entities/flower/model/bouquet-layout';
 import type { IBouquetDetailData, IBouquetDetailFlower } from '../_types';
 
@@ -72,6 +73,21 @@ type TProps = {
 };
 
 export default function BouquetPreviewSection({ flowers, layout }: TProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [canvasSize, setCanvasSize] = useState(CANVAS);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) {return;}
+    const update = () => setCanvasSize(Math.min(CANVAS, el.clientWidth));
+    update();
+    const observer = new ResizeObserver(update);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  const posScale = canvasSize / CANVAS;
+
   const items = useMemo<TFlowerItem[]>(() => {
     if (layout?.items.length) {
       const size = computeFlowerSize(layout.items.length);
@@ -110,10 +126,10 @@ export default function BouquetPreviewSection({ flowers, layout }: TProps) {
   }, [flowers, layout]);
 
   return (
-    <div className='flex justify-center'>
+    <div ref={containerRef} style={{ width: '100%', maxWidth: CANVAS, margin: '0 auto' }}>
       <div
         className='relative overflow-hidden rounded-4 border-1 border-gray-100 bg-amber-200'
-        style={{ width: 330, height: 330, isolation: 'isolate' }}
+        style={{ width: canvasSize, height: canvasSize, isolation: 'isolate' }}
       >
         {/* 포장지 뒷면 */}
         <img
@@ -128,9 +144,9 @@ export default function BouquetPreviewSection({ flowers, layout }: TProps) {
           <StaticFlower
             key={item.id}
             svgUrl={item.svgUrl}
-            x={item.x}
-            y={item.y}
-            size={item.size}
+            x={item.x * posScale}
+            y={item.y * posScale}
+            size={item.size * posScale}
           />
         ))}
 
@@ -151,8 +167,8 @@ export default function BouquetPreviewSection({ flowers, layout }: TProps) {
         {/* 리본 */}
         <img
           src='/svgs/bouquet-ribbon.svg'
-          className='absolute bottom-[48px] left-1/2 -translate-x-1/2 pointer-events-none'
-          style={{ zIndex: Z_RIBBON, width: 114 }}
+          className='absolute left-1/2 -translate-x-1/2 pointer-events-none'
+          style={{ zIndex: Z_RIBBON, width: 114 * posScale, bottom: 48 * posScale }}
           alt=''
         />
       </div>

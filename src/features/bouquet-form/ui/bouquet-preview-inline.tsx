@@ -6,7 +6,7 @@ import { useAtomValue, useSetAtom } from 'jotai';
 import { bouquetFlowersAtom, bouquetLayoutAtom } from '../model/bouquet-form.atoms';
 import { useBouquetLayout, TPreviewFlower } from './modals/bouquet-preview-modal/use-bouquet-layout';
 import DraggableFlower from './modals/bouquet-preview-modal/draggable-flower';
-import { Z_WRAP_BACK, Z_WRAP_FRONT, Z_RIBBON } from '@entities/flower/model/bouquet-layout';
+import { Z_WRAP_BACK, Z_WRAP_FRONT, Z_RIBBON, CANVAS } from '@entities/flower/model/bouquet-layout';
 
 // TODO: yeeun 교체
 function DragHintIcon() {
@@ -20,6 +20,21 @@ function DragHintIcon() {
 }
 
 export default function BouquetPreviewInline() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [canvasSize, setCanvasSize] = useState(CANVAS);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) {return;}
+    const update = () => setCanvasSize(Math.min(CANVAS, el.clientWidth));
+    update();
+    const observer = new ResizeObserver(update);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  const posScale = canvasSize / CANVAS;
+
   const setLayout = useSetAtom(bouquetLayoutAtom);
   const bouquetFlowers = useAtomValue(bouquetFlowersAtom);
   const initialFlowers = useBouquetLayout();
@@ -41,8 +56,19 @@ export default function BouquetPreviewInline() {
     }
   }, [compositionKey, initialFlowers]);
 
-  const handleMove = useCallback((index: number, x: number, y: number) => {
-    setFlowers((prev) => prev.map((f, i) => (i === index ? { ...f, x, y } : f)));
+  // DraggableFlower가 캔버스 물리 좌표(canvasSize)로 onMove를 전달하므로
+  // flowers 상태는 항상 330px 기준 좌표로 역변환해 저장
+  const posScaleRef = useRef(posScale);
+  useEffect(() => {
+    posScaleRef.current = posScale;
+  }, [posScale]);
+
+  const handleMove = useCallback((index: number, scaledX: number, scaledY: number) => {
+    setFlowers((prev) =>
+      prev.map((f, i) =>
+        i === index ? { ...f, x: scaledX / posScaleRef.current, y: scaledY / posScaleRef.current } : f,
+      ),
+    );
   }, []);
 
   const handleReset = () => {
@@ -77,52 +103,54 @@ export default function BouquetPreviewInline() {
         </p>
       </div>
 
-      <div className='flex justify-center px-4 pt-3'>
-        <div
-          className='relative overflow-hidden rounded-4 border-1 border-gray-100 bg-amber-200'
-          style={{ width: 330, height: 330, isolation: 'isolate' }}
-        >
-          <img
-            src='/svgs/bouquet-wrap-back.svg'
-            className='absolute left-0 w-full pointer-events-none'
-            style={{ zIndex: Z_WRAP_BACK }}
-            alt=''
-          />
-
-          {flowers.map((flower, index) => (
-            <DraggableFlower
-              key={flower.id}
-              svgUrl={flower.svgUrl}
-              x={flower.x}
-              y={flower.y}
-              size={flower.size}
-              onMove={(x, y) => handleMove(index, x, y)}
-              onMoveEnd={handleMoveEnd}
+      <div className='pt-3'>
+        <div ref={containerRef} style={{ width: '100%', maxWidth: CANVAS, margin: '0 auto' }}>
+          <div
+            className='relative overflow-hidden rounded-4 border-1 border-gray-100 bg-amber-200'
+            style={{ width: canvasSize, height: canvasSize, isolation: 'isolate' }}
+          >
+            <img
+              src='/svgs/bouquet-wrap-back.svg'
+              className='absolute left-0 w-full pointer-events-none'
+              style={{ zIndex: Z_WRAP_BACK }}
+              alt=''
             />
-          ))}
 
-          {flowers.length === 0 && (
-            <div
-              className='absolute inset-0 flex items-center justify-center text-body-md text-gray-300'
-              style={{ zIndex: 3 }}
-            >
-              꽃을 추가해 주세요
-            </div>
-          )}
+            {flowers.map((flower, index) => (
+              <DraggableFlower
+                key={flower.id}
+                svgUrl={flower.svgUrl}
+                x={flower.x * posScale}
+                y={flower.y * posScale}
+                size={flower.size * posScale}
+                onMove={(x, y) => handleMove(index, x, y)}
+                onMoveEnd={handleMoveEnd}
+              />
+            ))}
 
-          <img
-            src='/svgs/bouquet-wrap-front.svg'
-            className='absolute bottom-0 left-0 w-full pointer-events-none'
-            style={{ zIndex: Z_WRAP_FRONT }}
-            alt=''
-          />
+            {flowers.length === 0 && (
+              <div
+                className='absolute inset-0 flex items-center justify-center text-body-md text-gray-300'
+                style={{ zIndex: 3 }}
+              >
+                꽃을 추가해 주세요
+              </div>
+            )}
 
-          <img
-            src='/svgs/bouquet-ribbon.svg'
-            className='absolute bottom-[48px] left-1/2 -translate-x-1/2 pointer-events-none'
-            style={{ zIndex: Z_RIBBON, width: 114 }}
-            alt=''
-          />
+            <img
+              src='/svgs/bouquet-wrap-front.svg'
+              className='absolute bottom-0 left-0 w-full pointer-events-none'
+              style={{ zIndex: Z_WRAP_FRONT }}
+              alt=''
+            />
+
+            <img
+              src='/svgs/bouquet-ribbon.svg'
+              className='absolute left-1/2 -translate-x-1/2 pointer-events-none'
+              style={{ zIndex: Z_RIBBON, width: 114 * posScale, bottom: 48 * posScale }}
+              alt=''
+            />
+          </div>
         </div>
       </div>
 
