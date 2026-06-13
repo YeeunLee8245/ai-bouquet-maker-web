@@ -1,5 +1,8 @@
+'use client';
+
 import { useAtomValue } from 'jotai';
-import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
+import { useSuspenseInfiniteQuery, useQueryClient } from '@tanstack/react-query';
+import { useEffect } from 'react';
 import {
   directoryColorsAtom,
   directorySeasonsAtom,
@@ -25,6 +28,7 @@ export const directoryDefaultQueryParams = {
 };
 
 export function useDirectoryQuery() {
+  const queryClient = useQueryClient();
   const colors = useAtomValue(directoryColorsAtom);
   const seasons = useAtomValue(directorySeasonsAtom);
   const search = useAtomValue(directorySearchAtom);
@@ -32,6 +36,12 @@ export function useDirectoryQuery() {
 
   const colorArr = [...colors];
   const seasonArr = [...seasons];
+
+  useEffect(() => {
+    return () => {
+      queryClient.removeQueries({ queryKey: ['flower-directory'] });
+    };
+  }, [queryClient]);
 
   return useSuspenseInfiniteQuery({
     queryKey: directoryQueryKey({ colors: colorArr, seasons: seasonArr, search, sort }),
