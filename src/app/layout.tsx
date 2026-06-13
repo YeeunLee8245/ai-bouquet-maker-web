@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: '꽃다발 레시피',
     description: '마음을 전하는 꽃다발, AI가 함께 만들어드려요.',
-    // images: ['/og-image.png'], // TODO: yeeun 추후 추가
+    images: ['/og.png'],
   },
 };
 
