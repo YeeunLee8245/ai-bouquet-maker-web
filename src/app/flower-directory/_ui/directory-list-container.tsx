@@ -63,9 +63,7 @@ function DirectoryListContainer({ eventHub }: TProps) {
 
   useEffect(() => {
     flowers.forEach((flower) => {
-      if (flower.isLiked !== undefined) {
-        initLikeFromServer({ store, liked: flower.isLiked, id: flower.id, type: 'flower' });
-      }
+      initLikeFromServer({ store, liked: flower.isLiked ?? false, id: flower.id, type: 'flower' });
     });
   }, [flowers, store]);
 
@@ -109,10 +107,7 @@ function DirectoryListContainer({ eventHub }: TProps) {
             tags={flower.tags}
             searchParams={{ 'can-create-bouquet': 'true', 'prev-path': '/flower-directory' }}
             onLinkPrefetch={(href) => router.prefetch(href)}
-            likeButton={flower.isLiked !== undefined
-              ? <LikeButton type='flower' id={flower.id} initialLiked={flower.isLiked} variant='outline' size='lg' />
-              : undefined
-            }
+            likeButton={<LikeButton type='flower' id={flower.id} initialLiked={flower.isLiked ?? false} variant='outline' size='lg' />}
             actionButton={
               (() => {
                 const isSelected = selectedFlowers.some(f => f.id === flower.id);

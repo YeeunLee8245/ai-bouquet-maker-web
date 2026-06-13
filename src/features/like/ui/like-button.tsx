@@ -15,8 +15,8 @@ const buttonSizes: Record<TProps['size'], string> = {
   lg: 'w-[20px] h-[20px]',
 };
 
-function LikeButton({type, id, variant, size, className, queryKeyToPatch, patchQueryData}: TProps) {
-  const {liked, pending, toggle} = useLike({type, id, queryKeyToPatch, patchQueryData});
+function LikeButton({type, id, initialLiked, variant, size, className, queryKeyToPatch, patchQueryData}: TProps) {
+  const {liked, pending, toggle} = useLike({type, id, initialLiked, queryKeyToPatch, patchQueryData});
   const buttonSize = buttonSizes[size];
 
   const Icon = variant === 'outline' ? OutlineHeartIcon : FillHeartIcon;

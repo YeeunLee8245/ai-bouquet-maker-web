@@ -44,39 +44,40 @@ function FlowerCard({ size, imageUrl, id, name, colors, tags, priority = false, 
       )}
       {...props}
     >
-      <Link
-        aria-label={`${name} 상세 페이지 보기`}
-        href={href}
-        replace={replace}
-        prefetch={false}
-        onMouseEnter={() => onLinkPrefetch?.(href)}
-        onTouchStart={() => onLinkPrefetch?.(href)}
-        className={cn('relative', size === 'lg' && 'block w-full')}>
-        <Image
-          priority={priority}
-          src={imageUrl}
-          alt={name}
-          width={imageWidth}
-          height={imageHeight}
-          className={cn('object-cover',
-            'max-w-none',
-            size === 'md' && 'w-[122px] h-[156px] tablet:w-[156px] tablet:h-[200px] rounded-4 border-1 border-gray-100',
-            size === 'lg' && 'w-full h-auto aspect-[156/200] rounded-3',
+      <div className={cn('relative', size === 'lg' && 'block w-full')}>
+        <Link
+          aria-label={`${name} 상세 페이지 보기`}
+          href={href}
+          replace={replace}
+          prefetch={false}
+          onMouseEnter={() => onLinkPrefetch?.(href)}
+          onTouchStart={() => onLinkPrefetch?.(href)}>
+          <Image
+            priority={priority}
+            src={imageUrl}
+            alt={name}
+            width={imageWidth}
+            height={imageHeight}
+            className={cn('object-cover',
+              'max-w-none',
+              size === 'md' && 'w-[122px] h-[156px] tablet:w-[156px] tablet:h-[200px] rounded-4 border-1 border-gray-100',
+              size === 'lg' && 'w-full h-auto aspect-[156/200] rounded-3',
+            )}
+          />
+          {colors && (
+            <div className={cn('absolute bottom-0 right-0 p-2 w-full backdrop-blur-[1px] bg-gradient-to-b from-[#CECECE]/0 to-black/12',
+              size === 'md' && 'rounded-4', size === 'lg' && 'rounded-3',
+            )}>
+              <ColorChipGroup colors={colors} className='justify-end' />
+            </div>
           )}
-        />
+        </Link>
         {likeButton && (
-          <div className='absolute top-2 right-2' onClick={(e) => e.preventDefault()}>
+          <div className='absolute top-2 right-2'>
             {likeButton}
           </div>
         )}
-        {colors && (
-          <div className={cn('absolute bottom-0 right-0 p-2 w-full backdrop-blur-[1px] bg-gradient-to-b from-[#CECECE]/0 to-black/12',
-            size === 'md' && 'rounded-4', size === 'lg' && 'rounded-3',
-          )}>
-            <ColorChipGroup colors={colors} className='justify-end' />
-          </div>
-        )}
-      </Link>
+      </div>
       <div className={cn(size === 'md' && 'mt-1', size === 'lg' && 'mt-2')}>
         <p className={cn('text-body-lg', size === 'md' && 'pt-micro')}>{name}</p>
         <div className={cn('flex mt-2', size === 'md' && 'gap-1', size === 'lg' && 'gap-2')}>

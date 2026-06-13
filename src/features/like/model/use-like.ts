@@ -1,9 +1,10 @@
-import { useAtomValue, useStore } from 'jotai';
+import { useAtomValue, useSetAtom, useStore } from 'jotai';
 import { LikeType } from './types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { getLikeAtom, makeLikeKey } from './atoms';
 import { deleteLike, postLike } from '../api/like-api';
 import { isUnauthorizedError } from '@/shared/api/error';
+import { loginRequiredAtom } from '@/shared/model/login/login-guard.atoms';
 
 export type TUseLikeParams = {
   type: LikeType;
@@ -16,6 +17,7 @@ export type TUseLikeParams = {
 export function useLike({type, id, initialLiked, queryKeyToPatch, patchQueryData}: TUseLikeParams) {
   const store = useStore();
   const queryClient = useQueryClient();
+  const setLoginRequired = useSetAtom(loginRequiredAtom);
 
   const key = makeLikeKey(type, id);
   const atom = getLikeAtom(key, initialLiked);
@@ -51,7 +53,7 @@ export function useLike({type, id, initialLiked, queryKeyToPatch, patchQueryData
       }
 
       if (isUnauthorizedError(err)) {
-        // TODO: yeeun 401 오류 -> 로그인 요청 모달 띄우기
+        setLoginRequired({ isRequired: true });
       }
     },
     onSuccess: (data) => {
