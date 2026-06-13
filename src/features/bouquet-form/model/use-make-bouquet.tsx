@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { selectedFlowersAtom } from '@/entities/flower/model/selected-flowers';
 import { aiRecommendationResultAtom } from '@/entities/recommendation/model/recommendation-result.atoms';
@@ -16,6 +16,7 @@ type TOptions = {
 
 export function useMakeBouquet({ fromAiPrompt }: TOptions = {}) {
   const router = useRouter();
+  const pathname = usePathname();
   const selectedFlowers = useAtomValue(selectedFlowersAtom);
   const aiResult = useAtomValue(aiRecommendationResultAtom);
   const showToast = useSetAtom(showToastAtom);
@@ -24,7 +25,7 @@ export function useMakeBouquet({ fromAiPrompt }: TOptions = {}) {
 
   const handleMakeBouquet = () => {
     if (!isLogin) {
-      setLoginRequired({ isRequired: true });
+      setLoginRequired({ isRequired: true, nextPath: pathname });
       return;
     }
 

@@ -1,6 +1,7 @@
 'use client';
 
 import { useAtomValue, useSetAtom } from 'jotai';
+import { usePathname } from 'next/navigation';
 import { Button } from '@/shared/ui/button';
 import { selectedFlowersAtom, toggleFlowerAtom } from '@/entities/flower/model/selected-flowers';
 import { loginRequiredAtom } from '@/shared/model/login/login-guard.atoms';
@@ -16,11 +17,12 @@ function SelectButton({ flowerId, flowerName }: TProps) {
   const toggleFlower = useSetAtom(toggleFlowerAtom);
   const setLoginRequired = useSetAtom(loginRequiredAtom);
   const { isLogin } = useUserAuth();
+  const pathname = usePathname();
   const isSelected = selectedFlowers.some((f) => f.id === flowerId);
 
   const handleClick = () => {
     if (!isLogin) {
-      setLoginRequired({ isRequired: true });
+      setLoginRequired({ isRequired: true, nextPath: pathname });
       return;
     }
     toggleFlower({ id: flowerId, name: flowerName });

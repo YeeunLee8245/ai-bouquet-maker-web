@@ -53,11 +53,13 @@ export default async function middleware(request: NextRequest) {
   // 모든 요청에서 세션 갱신 (token rotation 처리)
   const { user, response } = await updateSession(request);
 
-  // 보호된 라우트: 미로그인 시 /login redirect
+  // 보호된 라우트: 미로그인 시 /login redirect (로그인 후 원래 경로로 돌아오도록 next 파라미터 포함)
   const protectedPaths = ['/my-bouquet', '/my-profile', '/make-bouquet'];
   if (protectedPaths.some((path) => pathname.startsWith(path))) {
     if (!user) {
-      return NextResponse.redirect(new URL('/login', request.url));
+      const loginUrl = new URL('/login', request.url);
+      loginUrl.searchParams.set('next', pathname);
+      return NextResponse.redirect(loginUrl);
     }
   }
 

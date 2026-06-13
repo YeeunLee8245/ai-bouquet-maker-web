@@ -3,10 +3,15 @@ import LoginButton from './_ui/login-button';
 import { cn } from '@/shared/utils/styles';
 import PageScroll from '@/app/_ui/page-scroll';
 
+type TProps = {
+  searchParams: Promise<{ next?: string }>;
+};
+
 /**
  * 로그인 페이지
  */
-const LoginPage = () => {
+const LoginPage = async ({ searchParams }: TProps) => {
+  const { next } = await searchParams;
 
   return (
     <PageScroll>
@@ -22,6 +27,7 @@ const LoginPage = () => {
               <LoginButton
                 key={id}
                 provider={provider}
+                nextPath={next}
                 className={
                   cn(
                     id === 'google' && 'border border-gray-100 rounded-4 transition hover:border-primary-400 hover:shadow-sm [&>span]:left-[11.33px]',

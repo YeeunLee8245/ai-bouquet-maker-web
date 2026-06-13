@@ -1,4 +1,5 @@
 import { useAtomValue, useSetAtom, useStore } from 'jotai';
+import { usePathname } from 'next/navigation';
 import { LikeType } from './types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { getLikeAtom, makeLikeKey } from './atoms';
@@ -18,6 +19,7 @@ export function useLike({type, id, initialLiked, queryKeyToPatch, patchQueryData
   const store = useStore();
   const queryClient = useQueryClient();
   const setLoginRequired = useSetAtom(loginRequiredAtom);
+  const pathname = usePathname();
 
   const key = makeLikeKey(type, id);
   const atom = getLikeAtom(key, initialLiked);
@@ -53,7 +55,7 @@ export function useLike({type, id, initialLiked, queryKeyToPatch, patchQueryData
       }
 
       if (isUnauthorizedError(err)) {
-        setLoginRequired({ isRequired: true });
+        setLoginRequired({ isRequired: true, nextPath: pathname });
       }
     },
     onSuccess: (data) => {

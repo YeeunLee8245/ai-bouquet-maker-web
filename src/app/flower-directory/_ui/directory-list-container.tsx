@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useEffect, useMemo, useTransition } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { useSetAtom, useAtom, useAtomValue, useStore } from 'jotai';
 import { IDirectoryEventHub } from '../_types';
 import { directoryDefaultSortOptions } from '../_datas';
@@ -30,6 +30,7 @@ function DirectoryListContainer({ eventHub }: TProps) {
   const openModal = useSetAtom(openModalAtom);
   const { isLogin } = useUserAuth();
   const router = useRouter();
+  const pathname = usePathname();
   const [sort, setSort] = useAtom(directorySortAtom);
   const [isPending, startTransition] = useTransition();
 
@@ -120,7 +121,7 @@ function DirectoryListContainer({ eventHub }: TProps) {
                         openModal({
                           id: LOGIN_REQUIRED_MODAL_ID,
                           position: 'center',
-                          component: <LoginRequiredModal modalId={LOGIN_REQUIRED_MODAL_ID} />,
+                          component: <LoginRequiredModal modalId={LOGIN_REQUIRED_MODAL_ID} nextPath={pathname} />,
                         });
                         return;
                       }

@@ -35,7 +35,7 @@ function Sidebar({ modalId, navItems, isLogin }: ISidebarProps) {
     if (isLoginRequired && !isLogin) {
       e.preventDefault();
       showToast({ message: '로그인이 필요합니다.' });
-      router.push('/login');
+      router.push(`/login?next=${encodeURIComponent(href)}`);
     }
     closeModal(modalId);
   };

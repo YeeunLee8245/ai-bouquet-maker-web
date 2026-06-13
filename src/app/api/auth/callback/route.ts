@@ -74,7 +74,8 @@ export async function GET(request: NextRequest) {
   const supabase = await createClient();
 
   const code = request.nextUrl.searchParams.get('code');
-  const next = request.nextUrl.searchParams.get('next');
+  // cookie 우선 (OAuth 플로우에서 custom query param이 유실될 수 있음), 없으면 query param fallback
+  const next = request.cookies.get('auth_next')?.value ?? request.nextUrl.searchParams.get('next');
   const providerError =
     request.nextUrl.searchParams.get('error_description') ??
     request.nextUrl.searchParams.get('error');
@@ -87,7 +88,9 @@ export async function GET(request: NextRequest) {
   // code 없으면 그냥 next로 이동
   if (!code) {
     const destination = resolveNextDestination(request.url, next, '/');
-    return NextResponse.redirect(new URL(destination));
+    const noCodeResponse = NextResponse.redirect(new URL(destination));
+    noCodeResponse.cookies.delete('auth_next');
+    return noCodeResponse;
   }
 
   // 2️⃣ OAuth code → session 교환
@@ -151,5 +154,9 @@ export async function GET(request: NextRequest) {
     redirectUrl.searchParams.set('is_new_user', 'true');
   }
 
-  return NextResponse.redirect(redirectUrl);
+  const finalResponse = NextResponse.redirect(redirectUrl);
+  // next 경로 cookie 소비 후 삭제
+  finalResponse.cookies.delete('auth_next');
+
+  return finalResponse;
 }

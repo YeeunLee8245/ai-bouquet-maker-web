@@ -54,7 +54,19 @@ export async function GET(request: NextRequest) {
       throw new Error(error?.message ?? '로그인을 시작할 수 없어요.');
     }
 
-    return NextResponse.redirect(data.url, { status: 302 });
+    const redirectResponse = NextResponse.redirect(data.url, { status: 302 });
+
+    // OAuth 플로우에서 redirectTo의 query param이 유실될 수 있어 cookie로 next 경로를 별도 보존
+    if (next) {
+      redirectResponse.cookies.set('auth_next', next, {
+        httpOnly: true,
+        sameSite: 'lax',
+        path: '/',
+        maxAge: 60 * 10, // 10분
+      });
+    }
+
+    return redirectResponse;
   } catch (error) {
     const message =
       error instanceof Error ? error.message : '로그인 요청을 처리할 수 없어요.';

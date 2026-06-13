@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { useSetAtom } from 'jotai';
 import { SearchInput } from '@/shared/ui/input';
 import { aiRecommendationResultAtom } from '@/entities/recommendation/model/recommendation-result.atoms';
@@ -9,9 +9,12 @@ import { showToastAtom } from '@/shared/model/toast';
 import { openModalAtom, closeModalAtom } from '@/shared/model/modal';
 import AIAnalyzingModal, { AI_ANALYZING_MODAL_ID } from '@/app/main/ai-prompt/[type]/_ui/ai-analyzing-modal';
 import LoginRequiredModal, { LOGIN_REQUIRED_MODAL_ID } from './login-required-modal';
+import { useUserAuth } from '@/hooks/use-supabase-user';
 export default function GeneralAIInput() {
   const [value, setValue] = useState('');
   const router = useRouter();
+  const pathname = usePathname();
+  const { isLogin } = useUserAuth();
   const setRecommendationResult = useSetAtom(aiRecommendationResultAtom);
   const showToast = useSetAtom(showToastAtom);
   const openModal = useSetAtom(openModalAtom);
@@ -48,7 +51,7 @@ export default function GeneralAIInput() {
           openModal({
             id: LOGIN_REQUIRED_MODAL_ID,
             position: 'center',
-            component: <LoginRequiredModal modalId={LOGIN_REQUIRED_MODAL_ID} />,
+            component: <LoginRequiredModal modalId={LOGIN_REQUIRED_MODAL_ID} nextPath={pathname} />,
           });
         } else {
           showToast({ message: data.error ?? '추천 중 오류가 발생했습니다.' });
@@ -76,6 +79,16 @@ export default function GeneralAIInput() {
     }
   };
 
+  const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+    if (isLogin) { return; }
+    e.target.blur();
+    openModal({
+      id: LOGIN_REQUIRED_MODAL_ID,
+      position: 'center',
+      component: <LoginRequiredModal modalId={LOGIN_REQUIRED_MODAL_ID} nextPath={pathname} />,
+    });
+  };
+
   return (
     <form onSubmit={handleSubmit} className='relative mt-2 w-full'>
       {value.length > 0 && (
@@ -89,6 +102,7 @@ export default function GeneralAIInput() {
       <SearchInput
         value={value}
         onChange={(e) => setValue(e.target.value)}
+        onFocus={handleFocus}
         placeholder='친구의 새로운 시작을 응원하고 싶어요.'
         className='h-[40px]'
         enterKeyHint='search'
