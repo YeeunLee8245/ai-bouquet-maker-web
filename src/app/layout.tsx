@@ -5,6 +5,7 @@ import AppProviders from '@/shared/providers/app-providers';
 import ModalHost from '@/shared/model/modal/modal-host';
 import ToastHost from '@/shared/model/toast/toast-host';
 import LoginGuardHandler from '@/app/_ui/login-guard-handler';
+import KakaoRedirectHandler from '@/app/_ui/kakao-redirect-handler';
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -40,6 +41,7 @@ export default function RootLayout({
           <ModalHost />
           <ToastHost />
           <LoginGuardHandler />
+          <KakaoRedirectHandler />
         </body>
       </html>
     </AppProviders>
