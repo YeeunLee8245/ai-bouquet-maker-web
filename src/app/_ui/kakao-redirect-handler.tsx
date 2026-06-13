@@ -21,14 +21,14 @@ export default function KakaoRedirectHandler() {
       const currentUrl = window.location.href;
 
       // Attempt redirect immediately
-      const redirectUrl = `kakaotalk://web/openExternalApp?url=${encodeURIComponent(currentUrl)}`;
+      const redirectUrl = `kakaotalk://web/openExternal?url=${encodeURIComponent(currentUrl)}`;
       window.location.href = redirectUrl;
     }
   }, []);
 
   const handleOpenExternal = () => {
     const currentUrl = window.location.href;
-    const redirectUrl = `kakaotalk://web/openExternalApp?url=${encodeURIComponent(currentUrl)}`;
+    const redirectUrl = `kakaotalk://web/openExternal?url=${encodeURIComponent(currentUrl)}`;
     window.location.href = redirectUrl;
   };
 
