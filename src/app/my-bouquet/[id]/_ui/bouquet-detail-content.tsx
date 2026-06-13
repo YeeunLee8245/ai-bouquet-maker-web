@@ -32,11 +32,12 @@ export default function BouquetDetailContent({ id }: TProps) {
 
   const handleShareClick = async () => {
     const url = `${window.location.origin}/my-bouquet/${id}`;
-    if (navigator.share) {
+    const isDesktop = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    if (!isDesktop && navigator.share) {
       await navigator.share({ title: data.name, url });
     } else {
       await navigator.clipboard.writeText(url);
-      showToast({ message: '공유 주소 복사 완료!' });
+      showToast({ message: '주소가 복사되었어요' });
     }
   };
 
