@@ -245,13 +245,13 @@ export async function GET(request: NextRequest) {
           .filter(tag => tag.length <= 3)
           .slice(0, 3);
 
-        // color가 null이면 기본 색상(회색)이므로 제외
-        const colors = rec.flower.colors || [...new Set(
+        // color가 null이거나 기본 색상(#9E9E9E)이면 제외
+        const colors = (rec.flower.colors || [...new Set(
           (rec.flower.flower_meanings || [])
             .filter(m => m.color != null && m.icon_color)
             .map(m => m.icon_color)
             .filter((color): color is string => Boolean(color)),
-        )];
+        )]).filter(color => color.toUpperCase() !== '#9E9E9E');
 
         return {
           id: rec.flower.id,
