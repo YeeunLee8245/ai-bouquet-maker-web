@@ -3,7 +3,7 @@ export const dynamic = 'force-dynamic';
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 import { createServerQueryClient } from '@/shared/lib/server-query';
 import { queryDirectory } from '@/lib/flowers/query-directory';
-import { directoryQueryKey, directoryDefaultQueryParams } from './_model/use-directory-query';
+import { directoryQueryKey, directoryDefaultQueryParams } from './_model/directory-query-key';
 import DirectoryPageContent from './_ui/directory-page-content';
 
 /**
