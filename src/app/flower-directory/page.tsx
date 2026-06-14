@@ -22,8 +22,9 @@ export default async function FlowerDirectoryPage() {
       }),
       initialPageParam: 1,
     });
-  } catch {
+  } catch (error) {
     // prefetch 실패 시 클라이언트에서 Suspense로 처리
+    console.error('[flower-directory] prefetchInfiniteQuery 실패:', error);
   }
 
   return (

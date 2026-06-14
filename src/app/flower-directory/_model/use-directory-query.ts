@@ -39,7 +39,7 @@ export function useDirectoryQuery() {
 
   useEffect(() => {
     return () => {
-      queryClient.removeQueries({ queryKey: ['flower-directory'] });
+      queryClient.resetQueries({ queryKey: ['flower-directory'] });
     };
   }, [queryClient]);
 
