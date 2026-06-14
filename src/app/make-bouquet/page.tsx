@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useAtomValue, useSetAtom } from 'jotai';
 import MakeBouquetButton from './_ui/make-bouquet-button';
 import {
@@ -12,10 +12,13 @@ import {
   initBouquetFlowersAtom,
   applyAiResultToBouquetAtom,
   resetBouquetFormAtom,
+  initBouquetFormFromDetailAtom,
   BOUQUET_FROM_AI_PARAM,
 } from '@features/bouquet-form';
 import { aiRecommendationResultAtom } from '@/entities/recommendation/model/recommendation-result.atoms';
 import { selectedFlowersAtom } from '@/entities/flower/model/selected-flowers';
+import { fetchBouquetDetail } from '@api/recipe-bouquet.api';
+import BouquetDetailSkeleton from '@/app/my-bouquet/[id]/_ui/bouquet-detail-skeleton';
 
 const FLOWERS_PARAM = 'flowers';
 
@@ -27,8 +30,41 @@ function MakeBouquetPage() {
   const resetBouquetForm = useSetAtom(resetBouquetFormAtom);
   const setSelectedFlowers = useSetAtom(selectedFlowersAtom);
 
+  const [isLoadingCopy, setIsLoadingCopy] = useState(false);
+  const initFormFromDetail = useSetAtom(initBouquetFormFromDetailAtom);
+
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
+    const copyId = params.get('copy');
+    const sig = params.get('sig') || undefined;
+
+    async function loadCopiedBouquet(id: string) {
+      setIsLoadingCopy(true);
+      try {
+        const detail = await fetchBouquetDetail(id, sig);
+        const copiedDetail = {
+          ...detail,
+          name: detail.name ? `${detail.name} (복사본)` : '복사본',
+        };
+        await initFormFromDetail(copiedDetail);
+        
+        // 초기화 후 URL에서 copy, sig 파라미터 제거
+        params.delete('copy');
+        params.delete('sig');
+        const nextUrl = window.location.pathname + (params.toString() ? `?${params.toString()}` : '');
+        window.history.replaceState(null, '', nextUrl);
+      } catch (error) {
+        console.error('Failed to load copied bouquet:', error);
+      } finally {
+        setIsLoadingCopy(false);
+      }
+    }
+
+    if (copyId) {
+      loadCopiedBouquet(copyId);
+      return;
+    }
+
     const flowerIdsFromUrl = params.get(FLOWERS_PARAM)?.split(',').filter(Boolean) ?? [];
 
     if (flowerIdsFromUrl.length > 0 && selectedFlowers.length === 0) {
@@ -56,6 +92,19 @@ function MakeBouquetPage() {
     return () => { resetBouquetForm(); };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  if (isLoadingCopy) {
+    return (
+      <div>
+        <div className='pt-4 pb-2 mx-4 px-1 tablet:mx-6 pc:mx-8'>
+          <p className='text-title-lg'>꽃다발 복사 중...</p>
+        </div>
+        <div className='pt-4 pb-8 px-4 tablet:px-6 pc:px-8'>
+          <BouquetDetailSkeleton />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div>

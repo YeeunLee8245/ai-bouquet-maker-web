@@ -33,6 +33,9 @@ export interface IBouquetDetailData {
   } | null;
   created_at: string;
   updated_at: string;
+  isOwner?: boolean;
+  messageSignature?: string;
+  is_public?: boolean;
 }
 
 export interface IBouquetDetailResponse {
