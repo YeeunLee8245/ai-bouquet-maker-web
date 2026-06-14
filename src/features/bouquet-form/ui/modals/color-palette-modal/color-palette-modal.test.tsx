@@ -21,25 +21,43 @@ describe('ColorAddModal', () => {
 
   afterEach(() => cleanup());
 
+  const mockAvailableColors = PRESET_COLORS.map(color => ({
+    hex: color,
+    tags: [],
+    meaningId: '',
+  }));
+
   it('색상 스와치 6개를 렌더링한다', () => {
-    renderWithStore(<ColorPaletteModal colorInfos={[]} onConfirm={onConfirm} />);
+    renderWithStore(
+      <ColorPaletteModal
+        colorInfos={[]}
+        availableColors={mockAvailableColors}
+        onConfirm={onConfirm}
+      />
+    );
     expect(screen.getAllByRole('button')).toHaveLength(6);
   });
 
   it('중복되지 않는 색상 클릭 시 onConfirm을 호출한다', () => {
-    renderWithStore(<ColorPaletteModal colorInfos={[]} onConfirm={onConfirm} />);
+    renderWithStore(
+      <ColorPaletteModal
+        colorInfos={[]}
+        availableColors={mockAvailableColors}
+        onConfirm={onConfirm}
+      />
+    );
     fireEvent.click(screen.getByLabelText(PRESET_COLORS[0]));
-    expect(onConfirm).toHaveBeenCalledWith(PRESET_COLORS[0]);
+    expect(onConfirm).toHaveBeenCalledWith(mockAvailableColors[0]);
   });
 
   it('중복 색상 클릭 시 onConfirm을 호출하지 않는다', () => {
     renderWithStore(
       <ColorPaletteModal
         colorInfos={[{ hex: PRESET_COLORS[0], quantity: 1, meaningId: '', tags: [] }]}
+        availableColors={mockAvailableColors}
         onConfirm={onConfirm}
       />,
     );
-    // debug: check prop is received
     expect(screen.getByLabelText(PRESET_COLORS[0])).toBeTruthy();
     fireEvent.click(screen.getByLabelText(PRESET_COLORS[0]));
     expect(onConfirm).not.toHaveBeenCalled();
@@ -50,6 +68,7 @@ describe('ColorAddModal', () => {
     renderWithStore(
       <ColorPaletteModal
         colorInfos={[{ hex: PRESET_COLORS[0], quantity: 1, meaningId: '', tags: [] }]}
+        availableColors={mockAvailableColors}
         onConfirm={onConfirm}
       />,
       store,

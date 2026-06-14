@@ -50,6 +50,7 @@ export default function ColorPaletteModal({ modalId, colorInfos, availableColors
             data-state={isAdded ? 'on' : undefined}
             style={{ backgroundColor: color.hex }}
             onClick={() => handleColorClick(color)}
+            aria-label={color.hex}
           />
         );
       })}

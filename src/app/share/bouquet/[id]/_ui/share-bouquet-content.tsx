@@ -1,26 +1,19 @@
 'use client';
 
 import Link from 'next/link';
-import MyBouquetInfo from './my-bouquet-info';
-import MyBouquetComposition from './my-bouquet-composition';
-import MyBouquetPackaging from './my-bouquet-packaging';
-import BouquetPreviewSection from './bouquet-preview-section';
+import MyBouquetInfo from '@/app/my-bouquet/[id]/_ui/my-bouquet-info';
+import MyBouquetComposition from '@/app/my-bouquet/[id]/_ui/my-bouquet-composition';
+import MyBouquetPackaging from '@/app/my-bouquet/[id]/_ui/my-bouquet-packaging';
+import BouquetPreviewSection from '@/app/my-bouquet/[id]/_ui/bouquet-preview-section';
 import { Button } from '@/shared/ui/button';
-import { useBouquetDetailQuery } from '../_model/use-bouquet-detail-query';
-import { useSetAtom } from 'jotai';
-import { showToastAtom } from '@/shared/model/toast';
-import { openModalAtom } from '@/shared/model/modal';
-import { shareBouquet } from '@api/recipe-bouquet.api';
-import ShareModal from './share-modal';
+import type { IBouquetDetailData } from '@/app/my-bouquet/[id]/_types';
 
 type TProps = {
-  id: string;
+  data: IBouquetDetailData;
+  sig: string;
 };
 
-export default function BouquetDetailContent({ id }: TProps) {
-  const { data } = useBouquetDetailQuery(id);
-  const showToast = useSetAtom(showToastAtom);
-
+export default function ShareBouquetContent({ data, sig }: TProps) {
   const createdDate = new Date(data.created_at);
   const formattedDate = createdDate.toLocaleDateString('ko-KR', {
     year: 'numeric',
@@ -33,31 +26,10 @@ export default function BouquetDetailContent({ id }: TProps) {
     hour12: false,
   });
 
-  const openModal = useSetAtom(openModalAtom);
-
-  const handleShareClick = async () => {
-    try {
-      // 1. API를 호출해 공개 상태(is_public = true)로 전환
-      await shareBouquet(id);
-
-      // 2. 모달을 띄워 카드 메시지 포함 여부 및 공유 링크 복사 제공
-      openModal({
-        id: 'share-bouquet',
-        component: (
-          <ShareModal
-            modalId='share-bouquet'
-            bouquetId={id}
-            bouquetName={data.name}
-            messageSignature={data.messageSignature}
-          />
-        ),
-        position: 'center',
-      });
-    } catch (error) {
-      console.error('Failed to share bouquet:', error);
-      showToast({ message: '공유 설정 중 오류가 발생했습니다.' });
-    }
-  };
+  // 복사 생성용 링크 조립
+  const copyUrl = sig
+    ? `/make-bouquet?copy=${data.id}&sig=${sig}`
+    : `/make-bouquet?copy=${data.id}`;
 
   return (
     <div className='bg-gray-50 min-h-screen'>
@@ -74,7 +46,7 @@ export default function BouquetDetailContent({ id }: TProps) {
             <MyBouquetInfo
               occasion={data.occasion}
               recipient={data.recipient}
-              message={data.message}
+              message={data.message === null ? '비공개 메시지입니다.' : data.message}
             />
             <MyBouquetComposition flowers={data.flowers} />
             <MyBouquetPackaging wrapping={data.wrapping} />
@@ -91,16 +63,17 @@ export default function BouquetDetailContent({ id }: TProps) {
                 <BouquetPreviewSection flowers={data.flowers} layout={data.layout} />
               </div>
             </div>
-            <div className='flex flex-col gap-3 items-center'>
+            <div className='flex flex-col gap-3 items-center w-full'>
               <Button size='lg' className='w-full' asChild>
-                <Link href={`/my-bouquet/${id}/modify`}>꽃다발 수정</Link>
+                <Link href={copyUrl}>이 꽃다발 복사해서 만들기</Link>
               </Button>
-              <button
-                className='w-fit px-2 text-gray-400 text-ui-textbtn-lg hover:text-primary-600 hover:bg-gray-100 hover:rounded-4'
-                onClick={handleShareClick}
+              <Button 
+                size='lg' 
+                className='bg-white text-primary-400 border-1 border-primary-400 hover:bg-primary-50 hover:text-primary-600 w-full' 
+                asChild
               >
-                공유하기
-              </button>
+                <Link href='/make-bouquet'>나만의 꽃다발 만들기</Link>
+              </Button>
             </div>
           </div>
         </div>
