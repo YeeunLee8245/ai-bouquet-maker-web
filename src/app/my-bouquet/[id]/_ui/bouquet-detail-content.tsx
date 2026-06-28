@@ -88,7 +88,12 @@ export default function BouquetDetailContent({ id }: TProps) {
                 </p>
               </div>
               <div className='mt-3'>
-                <BouquetPreviewSection flowers={data.flowers} layout={data.layout} />
+                <BouquetPreviewSection
+                  flowers={data.flowers}
+                  layout={data.layout}
+                  wrappingColor={data.wrapping.wrappingColor}
+                  ribbonColor={data.wrapping.ribbonColor}
+                />
               </div>
             </div>
             <div className='flex flex-col gap-3 items-center'>

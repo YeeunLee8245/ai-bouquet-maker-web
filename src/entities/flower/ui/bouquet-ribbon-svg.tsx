@@ -1,0 +1,38 @@
+import { deriveRibbonShades } from '@shared/utils/color-derive';
+
+const DEFAULT_CLS1 = '#ed708d';
+const DEFAULT_CLS2 = '#f487a6';
+const DEFAULT_CLS3 = '#f27c99';
+
+type TProps = {
+  color?: string;
+  className?: string;
+  style?: React.CSSProperties;
+};
+
+export default function BouquetRibbonSvg({ color, className, style }: TProps) {
+  const [cls1, cls2, cls3] = color
+    ? deriveRibbonShades(color)
+    : [DEFAULT_CLS1, DEFAULT_CLS2, DEFAULT_CLS3];
+
+  return (
+    <svg
+      xmlns='http://www.w3.org/2000/svg'
+      viewBox='0 0 114.51 46.65'
+      className={className}
+      style={style}
+    >
+      <g>
+        <g>
+          <path fill={cls1} d='M46.49,10.84L.77,25.7c-.61.16-.94.83-.67,1.41l3.13,6.88c.49,1.07.85,2.2,1.09,3.35l1.74,8.51c.14.66.87,1.01,1.46.7l31.1-16.17c1.8-.94,3.47-2.12,4.95-3.51l7.46-7.01-4.53-9.02Z' />
+          <path fill={cls1} d='M68.02,10.84l45.72,14.85c.61.16.94.83.67,1.41l-3.13,6.88c-.49,1.07-.85,2.2-1.09,3.35l-1.74,8.51c-.14.66-.87,1.01-1.46.7l-31.1-16.17c-1.8-.94-3.47-2.12-4.95-3.51l-7.46-7.01,4.53-9.02Z' />
+        </g>
+        <g>
+          <path fill={cls3} d='M56.54,18.57l-29.13,8.46c-1.77.42-3.56.78-5.36,1.07l-13.44,2.17c-.34.05-.67-.15-.77-.48L1.85,10.27c-.1-.33.06-.69.38-.83l6.96-3.06c1.81-.79,3.73-1.28,5.7-1.44L53.84,1.59l2.7,16.99Z' />
+          <path fill={cls3} d='M57.98,18.57l29.13,8.46c1.77.42,3.56.78,5.36,1.07l13.44,2.17c.34.05.67-.15.77-.48l5.99-19.53c.1-.33-.06-.69-.38-.83l-6.96-3.06c-1.81-.79-3.73-1.28-5.7-1.44L60.67,1.59l-2.7,16.99Z' />
+        </g>
+        <path fill={cls2} d='M52.66.26l-5.98.68c-.29.03-.49.27-.45.52l3.1,19.83c.04.23.25.4.51.4h14.84c.26,0,.48-.17.51-.4l3.1-19.83c.04-.25-.16-.49-.45-.52l-5.98-.68c-3.05-.35-6.15-.35-9.2,0Z' />
+      </g>
+    </svg>
+  );
+}

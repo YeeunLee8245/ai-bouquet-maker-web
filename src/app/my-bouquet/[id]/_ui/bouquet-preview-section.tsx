@@ -16,6 +16,7 @@ import {
   STEM_WIDTH,
   CANVAS,
 } from '@entities/flower/model/bouquet-layout';
+import { BouquetWrapBackSvg, BouquetWrapFrontSvg, BouquetRibbonSvg } from '@entities/flower/ui';
 import type { IBouquetDetailData, IBouquetDetailFlower } from '../_types';
 
 // ── StaticFlower ──────────────────────────────────────────────
@@ -70,9 +71,11 @@ function StaticFlower({ svgUrl, x, y, size }: Omit<TFlowerItem, 'id'>) {
 type TProps = {
   flowers: IBouquetDetailFlower[];
   layout: IBouquetDetailData['layout'];
+  wrappingColor?: string | null;
+  ribbonColor?: string | null;
 };
 
-export default function BouquetPreviewSection({ flowers, layout }: TProps) {
+export default function BouquetPreviewSection({ flowers, layout, wrappingColor, ribbonColor }: TProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [canvasSize, setCanvasSize] = useState(CANVAS);
 
@@ -132,11 +135,10 @@ export default function BouquetPreviewSection({ flowers, layout }: TProps) {
         style={{ width: canvasSize, height: canvasSize, isolation: 'isolate' }}
       >
         {/* 포장지 뒷면 */}
-        <img
-          src='/svgs/bouquet-wrap-back.svg'
+        <BouquetWrapBackSvg
+          color={wrappingColor || undefined}
           className='absolute left-0 w-full pointer-events-none'
           style={{ zIndex: Z_WRAP_BACK }}
-          alt=''
         />
 
         {/* 꽃 (y 기반 z-index, 아래일수록 앞) */}
@@ -157,19 +159,17 @@ export default function BouquetPreviewSection({ flowers, layout }: TProps) {
         )}
 
         {/* 포장지 앞면 */}
-        <img
-          src='/svgs/bouquet-wrap-front.svg'
+        <BouquetWrapFrontSvg
+          color={wrappingColor || undefined}
           className='absolute bottom-0 left-0 w-full pointer-events-none'
           style={{ zIndex: Z_WRAP_FRONT }}
-          alt=''
         />
 
         {/* 리본 */}
-        <img
-          src='/svgs/bouquet-ribbon.svg'
+        <BouquetRibbonSvg
+          color={ribbonColor || undefined}
           className='absolute left-1/2 -translate-x-1/2 pointer-events-none'
           style={{ zIndex: Z_RIBBON, width: 114 * posScale, bottom: 48 * posScale }}
-          alt=''
         />
       </div>
     </div>

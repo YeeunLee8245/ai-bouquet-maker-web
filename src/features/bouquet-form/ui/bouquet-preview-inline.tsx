@@ -1,12 +1,12 @@
-/* eslint-disable @next/next/no-img-element */
 'use client';
 
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { useAtomValue, useSetAtom } from 'jotai';
-import { bouquetFlowersAtom, bouquetLayoutAtom } from '../model/bouquet-form.atoms';
+import { bouquetFlowersAtom, bouquetLayoutAtom, bouquetPackagingColorAtom, bouquetRibbonColorAtom } from '../model/bouquet-form.atoms';
 import { useBouquetLayout, TPreviewFlower } from './modals/bouquet-preview-modal/use-bouquet-layout';
 import DraggableFlower from './modals/bouquet-preview-modal/draggable-flower';
 import { Z_WRAP_BACK, Z_WRAP_FRONT, Z_RIBBON, CANVAS } from '@entities/flower/model/bouquet-layout';
+import { BouquetWrapBackSvg, BouquetWrapFrontSvg, BouquetRibbonSvg } from '@entities/flower/ui';
 import HandeDragIcon from '@/shared/assets/icons/hande_drag.svg';
 
 export default function BouquetPreviewInline() {
@@ -27,6 +27,8 @@ export default function BouquetPreviewInline() {
 
   const setLayout = useSetAtom(bouquetLayoutAtom);
   const bouquetFlowers = useAtomValue(bouquetFlowersAtom);
+  const wrappingColor = useAtomValue(bouquetPackagingColorAtom);
+  const ribbonColor = useAtomValue(bouquetRibbonColorAtom);
   const initialFlowers = useBouquetLayout();
   const [flowers, setFlowers] = useState<TPreviewFlower[]>(initialFlowers);
   // 로드 시 초기 배치 기억 — 초기화 버튼의 기준점
@@ -99,11 +101,10 @@ export default function BouquetPreviewInline() {
             className='relative overflow-hidden rounded-4 border-1 border-gray-100 bg-amber-200'
             style={{ width: canvasSize, height: canvasSize, isolation: 'isolate' }}
           >
-            <img
-              src='/svgs/bouquet-wrap-back.svg'
+            <BouquetWrapBackSvg
+              color={wrappingColor || undefined}
               className='absolute left-0 w-full pointer-events-none'
               style={{ zIndex: Z_WRAP_BACK }}
-              alt=''
             />
 
             {flowers.map((flower, index) => (
@@ -127,18 +128,16 @@ export default function BouquetPreviewInline() {
               </div>
             )}
 
-            <img
-              src='/svgs/bouquet-wrap-front.svg'
+            <BouquetWrapFrontSvg
+              color={wrappingColor || undefined}
               className='absolute bottom-0 left-0 w-full pointer-events-none'
               style={{ zIndex: Z_WRAP_FRONT }}
-              alt=''
             />
 
-            <img
-              src='/svgs/bouquet-ribbon.svg'
+            <BouquetRibbonSvg
+              color={ribbonColor || undefined}
               className='absolute left-1/2 -translate-x-1/2 pointer-events-none'
               style={{ zIndex: Z_RIBBON, width: 114 * posScale, bottom: 48 * posScale }}
-              alt=''
             />
           </div>
         </div>

@@ -8,13 +8,14 @@ import { useSetAtom } from 'jotai';
 
 type TProps = TModalProps & {
   onConfirm?: (color: string) => void;
+  initialLightness?: number;
 };
 
 /** 색상 선택(HSL) 모달 */
-function ColorHSLPickModal({ modalId, onConfirm }: TProps) {
+function ColorHSLPickModal({ modalId, onConfirm, initialLightness = 50 }: TProps) {
   const [hue, setHue] = useState(0);
   const [saturation, setSaturation] = useState(100);
-  const [lightness, setLightness] = useState(50);
+  const [lightness, setLightness] = useState(initialLightness);
   const closeModal = useSetAtom(closeModalAtom);
 
   const selectedColor = hslString(hue, saturation, lightness);
@@ -56,7 +57,7 @@ function ColorHSLPickModal({ modalId, onConfirm }: TProps) {
             type='range'
             min='0'
             max='360'
-            // value={hue}
+            value={hue}
             onChange={(e) => setHue(Number(e.target.value))}
             className='input-range w-full h-3 rounded-6'
             style={{
@@ -71,7 +72,7 @@ function ColorHSLPickModal({ modalId, onConfirm }: TProps) {
             type='range'
             min='0'
             max='100'
-            // value={saturation}
+            value={saturation}
             onChange={(e) => setSaturation(Number(e.target.value))}
             className='input-range w-full h-3 rounded-6'
             style={{
@@ -87,7 +88,7 @@ function ColorHSLPickModal({ modalId, onConfirm }: TProps) {
             type='range'
             min='0'
             max='100'
-            // value={lightness}
+            value={lightness}
             onChange={(e) => setLightness(Number(e.target.value))}
             className='input-range w-full h-3 rounded-6'
             style={{

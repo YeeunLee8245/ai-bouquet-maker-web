@@ -60,16 +60,21 @@ export default function ShareBouquetContent({ data, sig }: TProps) {
                 </p>
               </div>
               <div className='mt-3'>
-                <BouquetPreviewSection flowers={data.flowers} layout={data.layout} />
+                <BouquetPreviewSection
+                  flowers={data.flowers}
+                  layout={data.layout}
+                  wrappingColor={data.wrapping.wrappingColor}
+                  ribbonColor={data.wrapping.ribbonColor}
+                />
               </div>
             </div>
             <div className='flex flex-col gap-3 items-center w-full'>
               <Button size='lg' className='w-full' asChild>
                 <Link href={copyUrl}>이 꽃다발 복사해서 만들기</Link>
               </Button>
-              <Button 
-                size='lg' 
-                className='bg-white text-primary-400 border-1 border-primary-400 hover:bg-primary-50 hover:text-primary-600 w-full' 
+              <Button
+                size='lg'
+                className='bg-white text-primary-400 border-1 border-primary-400 hover:bg-primary-50 hover:text-primary-600 w-full'
                 asChild
               >
                 <Link href='/make-bouquet'>나만의 꽃다발 만들기</Link>

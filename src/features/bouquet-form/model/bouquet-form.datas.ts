@@ -8,12 +8,12 @@ export const MAKE_BOUQUET_INFO_DATAS: TMakeBouquetInfoData[] = [
 ];
 
 export const MAKE_BOUQUET_PACKAGING_DEFAULT_COLORS: string[] = [
-  '#A1262C',
-  '#FF8D3E',
-  '#FFE000',
-  '#00C240',
-  '#3359DC',
-  '#9B59B6',
-  '#FFB6C1',
+  '#F4C2C2',
+  '#FADADD',
+  '#FDE8D0',
+  '#FFFACD',
+  '#D5F0D0',
+  '#C5D8F0',
+  '#D8CCE8',
   '#FFFFFF',
 ];
