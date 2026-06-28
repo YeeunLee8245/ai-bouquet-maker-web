@@ -5,22 +5,29 @@ import { Button } from '@/shared/ui/button';
 import { getColorNameFromHsl, hslString } from '@/shared/utils/color';
 import { closeModalAtom, TModalProps } from '@/shared/model/modal';
 import { useSetAtom } from 'jotai';
+import { showToastAtom } from '@/shared/model/toast';
 
 type TProps = TModalProps & {
   onConfirm?: (color: string) => void;
   initialLightness?: number;
+  existingColors?: string[];
 };
 
 /** 색상 선택(HSL) 모달 */
-function ColorHSLPickModal({ modalId, onConfirm, initialLightness = 50 }: TProps) {
+function ColorHSLPickModal({ modalId, onConfirm, initialLightness = 50, existingColors = [] }: TProps) {
   const [hue, setHue] = useState(0);
   const [saturation, setSaturation] = useState(100);
   const [lightness, setLightness] = useState(initialLightness);
   const closeModal = useSetAtom(closeModalAtom);
+  const showToast = useSetAtom(showToastAtom);
 
   const selectedColor = hslString(hue, saturation, lightness);
 
   const handleConfirm = () => {
+    if (existingColors.includes(selectedColor)) {
+      showToast({ message: '이미 옵션에 포함되어있는 색상이에요.' });
+      return;
+    }
     onConfirm?.(selectedColor);
     closeModal(modalId);
   };

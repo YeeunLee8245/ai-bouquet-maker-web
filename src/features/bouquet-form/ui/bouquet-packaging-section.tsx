@@ -50,7 +50,7 @@ export default function BouquetPackagingSection({ title, colorAtom }: TProps) {
         ))}
         <ResponsiveModalTrigger
           modalId='color-pick-modal'
-          modal={<ColorHSLPickModal initialLightness={85} onConfirm={(color) => setColors((prev) => [...prev, color])} />}
+          modal={<ColorHSLPickModal initialLightness={85} existingColors={colors} onConfirm={(color) => { setColors((prev) => [...prev, color]); setSelectedColor(color); }} />}
         >
           <ColorPicker
             data-state='default'
