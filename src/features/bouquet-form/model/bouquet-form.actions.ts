@@ -95,14 +95,26 @@ export const initBouquetFormFromDetailAtom = atom(null, async (_get, set, detail
   }));
   set(bouquetFlowersAtom, bouquetFlowers);
 
-  // 백그라운드: fetchSelectedFlowers로 meaningId·imageUrl 업데이트
+  // 백그라운드: fetchSelectedFlowers로 meaningId·imageUrl·tags 업데이트
   try {
     const ids = detail.flowers.map((f) => Number(f.flower_id));
     const fetched = await fetchSelectedFlowers(ids);
     const detailMap = new Map(fetched.map((d) => [d.id, d]));
     set(bouquetFlowersAtom, bouquetFlowers.map((f) => {
       const d = detailMap.get(f.id);
-      return d ? { ...f, meaningId: d.colorInfos[0]?.meaningId ?? f.meaningId, imageUrl: d.imageUrl ?? '', keywords: [...new Set(d.colorInfos.flatMap((c) => c.tags))], availableColors: d.colorInfos.map(({ hex, tags, meaningId }) => ({ hex, tags, meaningId })) } : f;
+      if (!d) { return f; }
+      const colorTagMap = new Map(d.colorInfos.map((c) => [c.hex, { tags: c.tags, meaningId: c.meaningId }]));
+      return {
+        ...f,
+        meaningId: d.colorInfos[0]?.meaningId ?? f.meaningId,
+        imageUrl: d.imageUrl ?? '',
+        keywords: [...new Set(d.colorInfos.flatMap((c) => c.tags))],
+        availableColors: d.colorInfos.map(({ hex, tags, meaningId }) => ({ hex, tags, meaningId })),
+        colorInfos: f.colorInfos.map((ci) => {
+          const colorData = colorTagMap.get(ci.hex);
+          return colorData ? { ...ci, tags: colorData.tags, meaningId: colorData.meaningId } : ci;
+        }),
+      };
     }));
   } catch {
     // 실패 시 임시값 유지 (meaningId='', imageUrl='')

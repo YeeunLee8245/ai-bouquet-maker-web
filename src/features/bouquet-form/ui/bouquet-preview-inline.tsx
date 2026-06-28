@@ -7,17 +7,7 @@ import { bouquetFlowersAtom, bouquetLayoutAtom } from '../model/bouquet-form.ato
 import { useBouquetLayout, TPreviewFlower } from './modals/bouquet-preview-modal/use-bouquet-layout';
 import DraggableFlower from './modals/bouquet-preview-modal/draggable-flower';
 import { Z_WRAP_BACK, Z_WRAP_FRONT, Z_RIBBON, CANVAS } from '@entities/flower/model/bouquet-layout';
-
-// TODO: yeeun 교체
-function DragHintIcon() {
-  return (
-    <svg width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2' strokeLinecap='round' strokeLinejoin='round'>
-      <path d='M18 11V6a2 2 0 0 0-4 0v1' />
-      <path d='M14 7V4a2 2 0 0 0-4 0v3' />
-      <path d='M10 7.5a2 2 0 0 0-4 0V17a6 6 0 0 0 12 0v-5a2 2 0 0 0-4 0' />
-    </svg>
-  );
-}
+import HandeDragIcon from '@/shared/assets/icons/hande_drag.svg';
 
 export default function BouquetPreviewInline() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -156,9 +146,9 @@ export default function BouquetPreviewInline() {
 
       <div className='flex items-center justify-between px-4 pb-4 pt-2'>
         {flowers.length > 0 ? (
-          <span className='flex items-center gap-1.5 text-ui-textbtn-sm text-gray-400'>
-            <DragHintIcon />
-            드래그해서 배치를 바꿔보세요
+          <span className='flex items-center gap-1.5'>
+            <HandeDragIcon className='w-[16px] h-[22px] fill-primary-300' />
+            <span className='text-ui-textbtn-sm text-gray-400'>드래그해서 배치를 바꿔보세요</span>
           </span>
         ) : (
           <span />

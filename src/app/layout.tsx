@@ -16,11 +16,14 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://bouquet-recipe.com'),
   title: '꽃다발 레시피',
   description: '마음을 담은 꽃다발, 어떤 꽃을 고를지 모르겠다면 AI에게 물어보세요.',
   openGraph: {
     title: '꽃다발 레시피',
     description: '마음을 전하는 꽃다발, AI가 함께 만들어드려요.',
+    url: 'https://bouquet-recipe.com',
+    type: 'website',
     images: ['/og.png'],
   },
 };

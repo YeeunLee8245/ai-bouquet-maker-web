@@ -1,16 +1,20 @@
 'use client';
 
+import { useRef } from 'react';
 import PlusIcon from '@/shared/assets/icons/plus.svg';
 import XIcon from '@/shared/assets/icons/x.svg';
 import { ColorSwitchToggle } from '@/shared/ui/button';
 import { openModalAtom } from '@/shared/model/modal';
 import { useSetAtom } from 'jotai';
-import ColorHSLPickModal from './modals/color-hsl-pick-modal/color-hsl-pick-modal';
+import ColorPaletteModal from './modals/color-palette-modal/color-palette-modal';
+import type { TFlowerColorInfo, TAvailableColor } from '../model';
 
 type TProps = {
   color: string;
   quantity: number;
   tags: string[];
+  colorInfos: TFlowerColorInfo[];
+  availableColors: TAvailableColor[];
   flowerIndex: number;
   colorIndex: number;
   onPlus: (flowerIndex: number, colorIndex: number) => void;
@@ -20,17 +24,24 @@ type TProps = {
 };
 
 export default function ColorCompositionItem({
-  color, quantity, tags, flowerIndex, colorIndex, onPlus, onMinus, onDelete, onUpdateColor,
+  color, quantity, tags, colorInfos, availableColors, flowerIndex, colorIndex, onPlus, onMinus, onDelete, onUpdateColor,
 }: TProps) {
   const openModal = useSetAtom(openModalAtom);
+  const colorToggleRef = useRef<HTMLDivElement>(null);
 
   const handleOpenColorPickModal = () => {
     openModal({
       id: `color-pick-modal-update-${flowerIndex}-${colorIndex}`,
       component: (
-        <ColorHSLPickModal onConfirm={(newColor) => onUpdateColor(flowerIndex, colorIndex, newColor)} />
+        <ColorPaletteModal
+          colorInfos={colorInfos}
+          availableColors={availableColors}
+          onConfirm={(selectedColor) => onUpdateColor(flowerIndex, colorIndex, selectedColor.hex)}
+        />
       ),
-      position: 'bottom',
+      position: 'anchor',
+      anchor: { el: colorToggleRef.current, position: 'bottom-right', gap: 4 },
+      canCloseOnBackgroundClick: true,
     });
   };
 
@@ -40,7 +51,9 @@ export default function ColorCompositionItem({
         <button type='button' onClick={() => onDelete(flowerIndex, colorIndex)} className='m-1'>
           <XIcon className='w-[16px] h-[16px] fill-gray-200' />
         </button>
-        <ColorSwitchToggle colorHex={color} onClick={handleOpenColorPickModal} />
+        <div ref={colorToggleRef}>
+          <ColorSwitchToggle colorHex={color} onClick={handleOpenColorPickModal} />
+        </div>
         <div className='flex gap-1 flex-wrap'>
           {tags.map((tag) => (
             <span key={tag} className='text-ui-tag bg-gray-100 rounded-3 px-2 py-1 text-gray-400'>{tag}</span>

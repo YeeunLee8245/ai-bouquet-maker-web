@@ -71,6 +71,8 @@ export default function FlowerCompositionItem({
             color={hex}
             quantity={quantity}
             tags={tags}
+            colorInfos={colorInfos}
+            availableColors={availableColors}
             flowerIndex={flowerIndex}
             colorIndex={colorIndex}
             onPlus={onPlusColor}
