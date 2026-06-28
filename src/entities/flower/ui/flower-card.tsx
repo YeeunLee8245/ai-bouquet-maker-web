@@ -81,8 +81,8 @@ function FlowerCard({ size, imageUrl, id, name, colors, tags, priority = false, 
       <div className={cn(size === 'md' && 'mt-1', size === 'lg' && 'mt-2')}>
         <p className={cn('text-body-lg', size === 'md' && 'pt-micro')}>{name}</p>
         <div className={cn('flex mt-2', size === 'md' && 'gap-1', size === 'lg' && 'gap-2')}>
-          {tags.map((tag) => (
-            <span key={tag} className='tag-chip'>{tag}</span>
+          {tags.map((tag, index) => (
+            <span key={tag} className={cn('tag-chip', index === tags.length - 1 && 'overflow-hidden text-ellipsis min-w-0')}>{tag}</span>
           ))}
         </div>
       </div>
