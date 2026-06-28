@@ -29,6 +29,18 @@ export default function BouquetCompositionContainer() {
   const addColor = useSetAtom(addFlowerColorAtom);
   const updateColor = useSetAtom(updateFlowerColorAtom);
 
+  const totalQuantity = flowers.reduce(
+    (sum, f) => sum + f.colorInfos.reduce((s, ci) => s + ci.quantity, 0), 0,
+  );
+
+  const handlePlusQuantity = (flowerIndex: number, colorIndex: number) => {
+    if (totalQuantity >= 100) {
+      showToast({ message: '100 송이까지 추가할 수 있어요.' });
+      return;
+    }
+    plusQuantity({ flowerIndex, colorIndex });
+  };
+
   const handleDelete = (id: string) => () => {
     if (flowers.length <= 1) {
       showToast({ message: '한 개 이상의 꽃을 추가해 주세요.' });
@@ -57,7 +69,7 @@ export default function BouquetCompositionContainer() {
               flowerIndex={idx}
               onDelete={handleDelete(item.id)}
               onDeleteColor={(fi, ci) => removeColor({ flowerIndex: fi, colorIndex: ci })}
-              onPlusColor={(fi, ci) => plusQuantity({ flowerIndex: fi, colorIndex: ci })}
+              onPlusColor={(fi, ci) => handlePlusQuantity(fi, ci)}
               onMinusColor={(fi, ci) => minusQuantity({ flowerIndex: fi, colorIndex: ci })}
               onAddColor={(fi, color) => addColor({ flowerIndex: fi, ...color })}
               onUpdateColor={(fi, ci, color) => updateColor({ flowerIndex: fi, colorIndex: ci, color })}
